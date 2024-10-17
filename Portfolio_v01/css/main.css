@@ -1,0 +1,382 @@
+/*General */
+
+html {
+    scroll-behavior: smooth;
+}
+
+a {
+    cursor: pointer;
+}
+
+img { 
+    transition: filter 0.25s ease-in-out;
+    filter: grayscale(100%);
+}
+img:hover {
+    filter: none;
+}
+
+video {
+    pointer-events: none;
+}
+
+h1 {
+    color: white;
+    font-family: monospace;
+}
+
+
+/* Navigation Bar */
+
+.header-main {
+    position: sticky;
+    top: 0px;
+    width: 100%;
+    background-color: rgb(0, 0, 0);
+    color: snow;
+    font-family: Helvetica, sans-serif, Arial;
+    font-style: italic;
+    z-index: 100;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+            .nav-items {
+                display: flex;
+                align-items: center;
+                height: 100%;
+                max-width: 1200px;
+                margin: 0 auto;
+                width: 100%;
+            }
+
+            .header-pb {
+                width: 50px;
+                height: 50px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+            }
+
+                    .header-pb img {
+                        width: 50%;
+                        height: 50%;
+                        object-fit: cover; 
+                    }
+
+            .header-jona-melvin-grobe, .header-contact {
+                flex-grow: 1; 
+                white-space: nowrap;
+                
+            }
+
+            .header-jona-melvin-grobe {
+                margin-left: -10px;
+            }
+
+            .header-contact {
+                text-align: right;
+                padding-right: 10px;
+            }
+
+
+
+
+
+/* Site Background Color */
+
+.background {
+    background-color: #101010;
+}
+
+
+/* Random Functions */
+.center {
+
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+
+}
+
+
+.more-projects-container {       
+    bottom: 0;              
+    left: 0;
+    right: 0;
+    padding: 0px;          
+    text-align: center;     
+    width: 100%;            
+    box-sizing: border-box;
+}
+
+.more-projects {
+    font-family: monospace, sans-serif;
+    font-size: 50px;
+    color: white;
+    z-index: 100;
+}
+
+
+.list {
+    columns: 800px;
+}
+
+
+.nav-selected {
+
+    color: gray;
+    font-weight: bold;
+
+}
+
+
+
+.white {
+    color: white;
+}
+
+.nav {
+    height: 50px;
+    position: fixed;
+    background-color: gray;
+
+
+}
+
+.background-image {
+    width: 100%;
+    height: 30cqmax;
+    background-image: url(../img/projects/NoNeedToRushLife/Thumbnail.jpeg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: brightness(0.3) contrast(0.9) grayscale(100%);
+    
+
+
+}
+
+.project-heading {
+    text-align: center;
+    font-family: monospace, sans-serif;
+    font-size: 3vmax;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    font-size: 70px;
+    filter: drop-shadow(0px 0px 5px #0c0c0c);
+    
+}
+@media (max-width: 1200px) {
+    .project-heading {
+        font-size: 35px;
+    }
+}
+
+.position-project-heading {
+    position: relative;
+    top: 70%;
+    bottom: 165px;
+    
+}
+
+.sub-heading {
+    font-size: 20px;
+    color: gray;
+}
+
+
+.detail {
+    display: flex;
+    flex-direction: column;
+
+}
+
+@media (max-width: 1200px) {
+    .detail {
+        flex-direction: column;
+        justify-content: right;
+        align-items: center;    /* Centers the flex items horizontally */
+        max-width: 600px;       /* Optional: Sets a max width so it doesn't stretch too far */
+        margin: 0 auto;   
+    }
+}
+
+
+.details {
+    display: flex;
+    width: 100%;
+    color: white;
+    font-family: monospace, sans-serif;
+    font-size: 15px;
+    justify-content: space-evenly;
+    flex-direction: row;
+    gap: 50px;
+    margin-top: -75px;
+
+}
+
+@media (max-width: 1200px) {
+    .details {
+        flex-direction: column;
+        justify-content: right;
+        align-items: center;    /* Centers the flex items horizontally */
+        max-width: 600px;       /* Optional: Sets a max width so it doesn't stretch too far */
+        margin: 0 auto;
+        margin-top: -65px;   
+    }
+}
+
+.details-description {
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.details-description-secondary {
+    color: grey;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+
+.sub-title {
+    display: flex;
+    color: white;
+    font-size: 25px;
+    align-content: center;
+}
+
+.project-description {
+    position: relative;
+    width: 100%;
+    height: 1000px;
+    font-family: monospace;
+    padding-left: 13%;
+    padding-right: 13%;
+}
+
+.align-right {
+    position:fixed;
+    width: 50%;
+    right: 30%;
+}
+
+.text {
+    color: white;
+    font-weight: lighter;
+    font-size: 18px;
+}
+
+.random-block {
+    background-color: blue;
+}
+
+.site-layout {
+    display: flex;
+    justify-content: space-between;
+}
+
+.collumn {
+    display: flex;
+    flex-direction: column;
+}
+
+.showreel-container {
+    position: relative;
+    filter: grayscale();
+    height: 100vh;
+    width: 100%;
+    min-height: 100%;
+    overflow: hidden;
+    
+}
+
+.showreel {
+    position: absolute;
+    width: auto;
+    height: auto;
+    min-width: 100%;
+    min-height: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+/* About Me */
+
+.about-me-heading {
+    padding-top: 25px;
+    text-align: center;
+    font-size: 100px;
+    font-family: monospace;
+    color: white;
+}
+
+@media (max-width: 1200px) {
+    .about-me-heading {
+        font-size: 75px;
+    }
+}
+
+.about-me-text-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 100vw;
+    width: 80%;
+    margin: 0 auto;
+    justify-content: center;
+}
+
+.about-me-text {
+
+    font-family: monospace;
+    color: white;
+    font-size: 50px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+
+/* Responsive Styles */
+@media (max-width: 1200px) {
+    .about-me-text {
+        font-size: 25px;
+        padding: 8px;
+    }
+}
+
+
+
+
+
+/* Contact page */
+
+
+.contact-text-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.contact-text {
+    font-size: 50px;
+    color: white;
+    margin-top: 75px;
+    text-align: center;
+    font-family: monospace;
+}
+
+@media (max-width: 1200px) {
+    .contact-text {
+        font-size: 25px;
+        padding: 8px;
+        margin-top: 50px
+    }
+}
