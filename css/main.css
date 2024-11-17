@@ -114,9 +114,10 @@ h1 {
 
 .more-projects {
     font-family: monospace, sans-serif;
-    font-size: 50px;
+    font-size: 25px;
     color: white;
     z-index: 100;
+    padding: 50px;
 }
 
 
