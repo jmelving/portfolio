@@ -10,7 +10,7 @@ b {
     justify-content: center;
     padding: 2rem; /* Adjustable for responsiveness */
     margin: 0 auto;
-    max-width: 1000px; /* Restricts overly wide content */
+    max-width: 1100px; /* Restricts overly wide content */
     font-family: monospace;
     color: white;
     background: linear-gradient(145deg, #111111, #191919); /* Adds some subtle style */
