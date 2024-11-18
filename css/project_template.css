@@ -1,0 +1,47 @@
+b {
+    font-weight: bold;
+}
+
+
+.project-description {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem; /* Adjustable for responsiveness */
+    margin: 0 auto;
+    max-width: 1000px; /* Restricts overly wide content */
+    font-family: monospace;
+    color: white;
+    background: linear-gradient(145deg, #111111, #191919); /* Adds some subtle style */
+    border-radius: 15px;
+}
+
+.project_subtitle {
+    color: #414141; /* Stand-out color for the subtitle */
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.project_text {
+    font-size: 1rem;
+    line-height: 1.6;
+    text-align: justify; /* For better readability */
+    padding: 0 1rem; /* Padding for mobile readability */
+    font-family: monospace;
+}
+
+@media (max-width: 768px) {
+    .project-description {
+        padding: 1rem;
+    }
+    .project_subtitle {
+        font-size: 1.5rem;
+    }
+    .project_text {
+        font-size: 0.9rem;
+    }
+}
+
