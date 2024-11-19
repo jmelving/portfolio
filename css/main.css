@@ -113,7 +113,7 @@ h1 {
 }
 
 .more-projects {
-    font-family: monospace, sans-serif;
+    font-family: Courier, monospace;
     font-size: 25px;
     color: white;
     z-index: 100;
@@ -171,18 +171,24 @@ h1 {
     filter: drop-shadow(0px 0px 5px #0c0c0c);
     
 }
-@media (max-width: 1200px) {
-    .project-heading {
-        font-size: 35px;
-    }
-}
 
 .position-project-heading {
     position: relative;
     top: 70%;
     bottom: 165px;
-    
 }
+
+
+@media (max-width: 1200px) {
+    .project-heading {
+        font-size: 35px;
+    }
+
+    .position-project-heading{
+        bottom: 140px;
+    }
+}
+
 
 .sub-heading {
     font-size: 20px;
