@@ -68,7 +68,7 @@ body {
   }
   
   /* Responsive adjustments */
-  @media (max-width: 1920px) {
+  @media (max-width: 1200px) {
     .gallery {
       flex-direction: column;
       align-items: center;
