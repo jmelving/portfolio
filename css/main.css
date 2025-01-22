@@ -387,6 +387,8 @@ h1 {
   
   .btn-marquee {
     font-weight: 600;
+    font-family: monospace;
+    font-size: large;
     border: 2px solid rgb(12, 12, 12);
     background-color: rgb(12, 12, 12); 
     color: white;
