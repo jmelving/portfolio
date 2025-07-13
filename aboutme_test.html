@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>*about_me</title>
+  <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/main.css">
+
+
+  
+  <style>
+    body {
+      background-color: #101010;
+      margin: 0;
+      font-family: monospace;
+      color: white;
+    }
+
+    /* Navigation */
+    .header-main {
+      background: black;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .nav-items {
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+
+    .header-pb img {
+      height: 40px;
+    }
+
+    .header-jona-melvin-grobe,
+    .header-contact {
+      flex-grow: 1;
+      text-align: center;
+    }
+
+    .header-contact {
+      text-align: right;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+.intro {
+  width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 3px solid #ffffff;
+  animation: typing 3s steps(28) forwards, blinkCaret 0.75s step-end infinite;
+  margin: 50px auto 20px;
+  font-size: 1.8rem;
+  text-align: center;
+  font-family: monospace;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 28ch; }
+}
+
+@keyframes blinkCaret {
+  0%, 100% { border-color: transparent; }
+  50% { border-color: #ffffff; }
+}
+
+
+    /* Layout */
+    .about-content {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 50px;
+      padding: 40px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .column {
+      flex: 1 1 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .profile-image-wrapper {
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .profile-image {
+      width: 100%;
+      border-radius: 12px;
+      display: block;
+      object-fit: cover;
+    }
+
+    /* Cards with fade+slide-in */
+    .card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 20px;
+      border-radius: 12px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease, background 0.3s ease;
+      opacity: 0;
+      transform: translateY(15px);
+      animation: fadeSlideIn 0.8s ease forwards;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    /* Stagger animation delay for cards */
+    .card:nth-child(1) { animation-delay: 3.8s; }
+    .card:nth-child(2) { animation-delay: 4.0s; }
+    .card:nth-child(3) { animation-delay: 4.2s; }
+    .card:nth-child(4) { animation-delay: 4.4s; }
+
+    /* Card headers fade in */
+    .card h3 {
+      font-size: 20px;
+      margin-bottom: 10px;
+      opacity: 0;
+      animation: fadeSlideIn 0.8s ease forwards;
+      animation-fill-mode: forwards;
+      animation-delay: inherit;
+    }
+
+    /* Card paragraphs and list items fade in slightly delayed */
+    .card p, .card li {
+      color: #ccc;
+      font-size: 16px;
+      line-height: 1.6;
+      opacity: 0;
+      animation: fadeSlideIn 0.8s ease forwards;
+      animation-delay: calc(var(--delay, 0s) + 1.2s);
+      animation-fill-mode: forwards;
+    }
+
+    @keyframes fadeSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Button */
+    .centered-button-container {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .btn-marquee {
+      font-family: monospace;
+      font-size: large;
+      border: 2px solid rgb(40, 40, 40);
+      background-color: rgb(20, 20, 20); 
+      color: white;
+      border-radius: 30px; 
+      padding: 20px 30px;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .btn-marquee:hover {
+      transform: scale(1.05);
+      border-color: #ffffff;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .intro {
+        font-size: 1.2rem;
+        padding: 40px 10px 10px;
+        width: 100%; /* let it wrap on small screens */
+        border-right: none;
+        animation: none;
+        overflow: visible;
+        white-space: normal;
+      }
+
+      .about-content {
+        flex-direction: column;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>*about_me</title>
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/reset.css">
+</head>
+
+
+<body class="background">
+
+
+
+    <!--NAV BAR-->
+    <header class="header-main">
+        <nav class="nav-items">
+            <div class="header-pb"><a href="about-me.html"><img src="img/pb.gif" alt="profile picture"></a></div>
+            <div class="header-jona-melvin-grobe"><a href="index.html">jona_melvin_grobe</a></div>
+            <div class="header-contact"> <a href="index.html">_back</a></div>
+
+        </nav>
+
+    </header>
+
+<!--UNDER CONSTRUCTION
+<p style="text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0; color: orange;">
+    As I am currently writing this site on my own, to not pay a lot of money each month for Adobe/Wix, it’s currently under construction. 
+    So, please be lenient with any performance issues, weird text blocks, bad layout—the list goes on. 
+    <br>Apart from that, have a beautiful day on my portfolio. Hope you find something inspiring!
+</p>
+-->
+
+  <!-- INTRO -->
+  <div class="intro">I’m Melvin — a dot of many. </div>
+
+  <!-- MAIN CONTENT -->
+  <section class="about-content">
+
+    <!-- PROFILE IMAGE -->
+    <div class="column">
+      <div class="profile-image-wrapper">
+        <img src="img/me.jpg" alt="Melvin Portrait" class="profile-image">
+      </div>
+    </div>
+
+    <!-- ABOUT ME CARDS -->
+    <div class="column">
+      <div class="card">
+        <h3>What I Do</h3>
+        <p>
+            Self-taught technical artist crafting tools and automating tasks to supercharge project creation. 
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Fun Facts</h3>
+        <ul>
+          <li>🎸 Music fuels my vision.</li>
+          <li>🧠 Odd brain, unhinged.</li>
+          <li>💻 Addicted to Houdini, nothing else.</li>
+          <li>✨ Done is better than perfect.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Core Skills</h3>
+        <ul>
+          <li>CG / Toolbuilding (Houdini, Blender, Unreal Engine 5)</li>
+          <li>Compositing / Motion Graphics (Nuke, After Effects)</li>
+          <li>Video Editing (Davinci Resolve, Premiere, Audition)</li>
+          <li>Project Management (Shotgrid, Notion)</li>
+
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>🎬YouTube Channel</h3>
+        <p>
+          I share movies, breakdowns, and quick tips on visual effects.
+          <br><br>
+          👉 <a href="https://youtube.com/c/jmelving" target="_blank" style="color:#2b90d9;">Check it out</a>
+        </p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- BACK BUTTON -->
+    <div class="centered-button-container">
+    <a href="/projects/"><button class="btn btn-marquee">
+        <span data-text="← take me back">← take me back</span>
+    </button></a>
+    </div>
+
+</body>
+</html>

@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/reset.css">
     <link rel="stylesheet" href="../css/homegallery.css">
+    <link rel="stylesheet" href="../css/effects.css">
+
  
 </head>
 
@@ -21,12 +23,13 @@
         </nav>
     </header>
     <br>
-
+<!-- Info Message-->
     <p style="text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0; color: orange;">
         As I am currently writing this site on my own, to not pay a lot of money each month for Adobe/Wix, it's currently under construction. 
         So, please be lenient with any performance issues, weird text blocks, bad layout—the list goes on. 
         <br>Apart from that, have a beautiful day on my portfolio. Hope you find something inspiring!
     </p>
+    
 
     <!--Filter Buttons-->
     <div class="filter-container">
@@ -39,139 +42,207 @@
     </div>
 
     <!--Projects--> 
-    <div class="gallery">
-        <a href="../projects/Echoes/" class="gallery-item" data-category="motion collaberation">
-            <div class="project-container">
-                <img src="../projects/Echoes/img/Thumbnail_tba.webp" alt="Image 1">
-                <div class="project-info">
-                    <div class="project-title">ECHOES</div>
-                    <div class="work-description">Short | Master Project 1</div>
-                </div>
-            </div>
-        </a>
+  <div class="gallery">
 
-        <a href="../projects/Deviant/" class="gallery-item" data-category="motion">
-            <div class="project-container">
-                <img src="../projects/Deviant/img/Thumbnail.webp" alt="Deviant Thumbnail">
-                <div class="project-info">
-                    <div class="project-title">DEVIANT</div>
-                    <div class="work-description">Music Video Snippet</div>
-                </div>
-            </div>
-        </a>
-        
-        <a href="../projects/PaintingGreys/" class="gallery-item" data-category="motion collaberation">
-            <div class="project-container">
-                <img src="../projects/PaintingGreys/img/Thumbnail.webp" alt="Painting Greys Thumbnail">
-                <div class="project-info">
-                    <div class="project-title">PAINTING GREYS</div>
-                    <div class="work-description">Multimedia Music Video | Bachelor Project 3</div>
-                </div>
-            </div>
-        </a>
+<!-- ECHOES -->     
+    <a href="../projects/Echoes/" class="gallery-item" data-category="motion collaberation">
+      <div class="project-container grainy hover-cycle">
+        <div class="image-stack">
+          <img src="../projects/Echoes/img/Thumbnail_tba.webp" alt="Echoes" class="active">
+          <img src="../img/PENDING.png" alt="Echoes 2">
+          <img src="../projects/Echoes/img/Thumbnail_tba.webp" alt="Echoes 3">
+        </div>
+        <div class="project-info">
+          <div class="project-title">ECHOES</div>
+          <div class="work-description">Short | Master Project 1</div>
+        </div>
+      </div>
+    </a>
 
-        <a href="../projects/NoNeedToRushLife/" class="gallery-item" data-category="motion collaberation">
-            <div class="project-container">
-                <img src="../projects/NoNeedToRushLife/img/Thumbnail.webp" alt="Image 3">
-                <div class="project-info">
-                    <div class="project-title">NO NEED TO RUSH LIFE</div>
-                    <div class="work-description">Bachelor Project 1</div>
-                </div>
-            </div>
-        </a>
+<!-- DEVIANT -->     
+    <a href="../projects/Deviant/" class="gallery-item" data-category="motion">
+      <div class="project-container grainy hover-cycle">
+        <div class="image-stack">
+          <img src="../projects/Deviant/img/Thumbnail.webp" alt="Deviant" class="active">
+          <img src="../img/PENDING.png" alt="Deviant 2">
+          <img src="../img/PENDING.png" alt="Deviant 3">
+        </div>
+        <div class="project-info">
+          <div class="project-title">DEVIANT</div>
+          <div class="work-description">Music Video Snippet</div>
+        </div>
+      </div>
+    </a>
 
-        <a href="../projects/Vestige/" class="gallery-item" data-category="curiosities">
-            <div class="project-container">
-                <img src="../projects/Vestige/img/Thumbnail.webp" alt="Image 3">
-                <div class="project-info">
-                    <div class="project-title">VESTIGE</div>
-                    <div class="work-description">Unreal Engine 5 | Environment</div>
-                </div>
-            </div>
-        </a>
-        
+    <!-- PAINTING GREYS --> 
+    <a href="../projects/PaintingGreys/" class="gallery-item" data-category="motion collaberation">
+      <div class="project-container grainy hover-cycle">
+        <div class="image-stack">
+          <img src="../projects/PaintingGreys/img/Thumbnail.webp" alt="Painting Greys" class="active">
+          <img src="../img/PENDING.png" alt="PG 2">
+          <img src="../img/PENDING.png" alt="PG 3">
+        </div>
+        <div class="project-info">
+          <div class="project-title">PAINTING GREYS</div>
+          <div class="work-description">Multimedia Music Video | Bachelor Project 3</div>
+        </div>
+      </div>
+    </a>
 
-        <a href="../projects/WheelofSuffering/" class="gallery-item" data-category="motion">
-            <div class="project-container">
-                <img src="../projects/WheelofSuffering/img/Thumbnail.webp" alt="Image 3">
-                <div class="project-info">
-                    <div class="project-title">WHEEL OF SUFFERING</div>
-                    <div class="work-description">Pwnisher Challenge | Top 100</div>
-                </div>
-            </div>
-        </a>
+<!-- NO NEED TO RUSH LIFE -->  
+    <a href="../projects/NoNeedToRushLife/" class="gallery-item" data-category="motion collaberation">
+      <div class="project-container grainy hover-cycle">
+        <div class="image-stack">
+          <img src="../projects/NoNeedToRushLife/img/Thumbnail.webp" alt="No Need" class="active">
+          <img src="../img/PENDING.png" alt="NNTRL 2">
+          <img src="../img/PENDING.png" alt="NNTRL 3">
+        </div>
+        <div class="project-info">
+          <div class="project-title">NO NEED TO RUSH LIFE</div>
+          <div class="work-description">Bachelor Project 1</div>
+        </div>
+      </div>
+    </a>
 
-        <a href="../projects/InGritWeTrust/" class="gallery-item" data-category="collaberation">
-            <div class="project-container">
-                <img src="../projects/InGritWeTrust/img/Thumbnail.webp" alt="Image 3">
-                <div class="project-info">
-                    <div class="project-title">IN GRIT WE TRUST</div>
-                    <div class="work-description">Commercial Visual</div>
-                </div>
-            </div>
-        </a>
+<!-- VESTIGE -->    
+    <a href="../projects/Vestige/" class="gallery-item" data-category="curiosities">
+      <div class="project-container grainy hover-cycle">
+        <div class="image-stack">
+          <img src="../projects/Vestige/img/Thumbnail.webp" alt="Vestige" class="active">
+          <img src="../img/PENDING.png" alt="Vestige 2">
+          <img src="../img/PENDING.png" alt="Vestige 3">
+        </div>
+        <div class="project-info">
+          <div class="project-title">VESTIGE</div>
+          <div class="work-description">Unreal Engine 5 | Environment</div>
+        </div>
+      </div>
+    </a>
 
-        <a href="../projects/Numb/" class="gallery-item" data-category="movies">
-            <div class="project-container">
-                <img src="../projects/Numb/img/Thumbnail.webp" alt="Image 3">
-                <div class="project-info">
-                    <div class="project-title">NUMB</div>
-                    <div class="work-description">Toolbuilding & Lighting Study</div>
-                </div>
-            </div>
-        </a>
-
-        
-        <a href="../projects/WheelofSuffering/" class="gallery-item" data-category="curiosities">
-            <div class="project-container">
-                <img src="../img/PENDING.png" alt="Image 3">
-                <div class="project-info">
-                    <div class="project-title">GOTCHA</div>
-                    <div class="work-description">Retargeting & Motion Study</div>
-                </div>
-            </div>
-        </a>
-
-        <a href="../projects/InGritWeTrust/" class="gallery-item" data-category="collaberation">
-            <div class="project-container">
-                <img src="./TheUSBParadox/img/thumbnail.webp" alt="Image 3">
-                <div class="project-info">
-                    <div class="project-title">THE USB PARADOX</div>
-                    <div class="work-description">Research & Development</div>
-                </div>
-            </div>
-        </a>
-
-        <a href="../projects/WheelofSuffering/" class="gallery-item" data-category="collaberation">
-            <div class="project-container">
-                <img src="./Porsche/img/thumbnail.webp" alt="Image 3">
-                <div class="project-info">
-                    <div class="project-title">PORSCHE</div>
-                    <div class="work-description">Compositing & Retouch</div>
-                </div>
-            </div>
-        </a>
-
-        <a href="../projects/InGritWeTrust/" class="gallery-item" data-category="curiosities, collaberation">
-            <div class="project-container">
-                <img src="./IRegret/img/thumbnail.webp" alt="Image 3">
-                <div class="project-info">
-                    <div class="project-title">I REGRET</div>
-                    <div class="work-description">Music Video | VFX</div>
-                </div>
-            </div>
-        </a>
-
-        <a href="../projects/InGritWeTrust/" class="gallery-item" data-category="collaberation">
-            <div class="project-container">
-                <img src="../img/PENDING.png" alt="Image 3">
-                <div class="project-info">
-                    <div class="project-title">ELLIE-03</div>
-                    <div class="work-description">VFX / Cleanup</div>
-                </div>
-            </div>
-        </a>
+<!-- WHEEL OF SUFFERING -->
+<a href="../projects/WheelofSuffering/" class="gallery-item" data-category="motion">
+  <div class="project-container grainy hover-cycle">
+    <div class="image-stack">
+      <img src="../projects/WheelofSuffering/img/Thumbnail.webp" alt="Wheel of Suffering" class="active">
+      <img src="../img/PENDING.png" alt="Wheel alt 1">
+      <img src="../img/PENDING.png" alt="Wheel alt 2">
     </div>
+    <div class="project-info">
+      <div class="project-title">WHEEL OF SUFFERING</div>
+      <div class="work-description">Pwnisher Challenge | Top 100</div>
+    </div>
+  </div>
+</a>
+
+<!-- IN GRIT WE TRUST -->
+<a href="../projects/InGritWeTrust/" class="gallery-item" data-category="collaberation">
+  <div class="project-container grainy hover-cycle">
+    <div class="image-stack">
+      <img src="../projects/InGritWeTrust/img/Thumbnail.png" alt="In Grit" class="active">
+      <img src="../img/PENDING.png" alt="In Grit alt 1">
+      <img src="../img/PENDING.png" alt="In Grit alt 2">
+    </div>
+    <div class="project-info">
+      <div class="project-title">IN GRIT WE TRUST</div>
+      <div class="work-description">Commercial Visual</div>
+    </div>
+  </div>
+</a>
+
+<!-- NUMB -->
+<a href="../projects/Numb/" class="gallery-item" data-category="movies">
+  <div class="project-container grainy hover-cycle">
+    <div class="image-stack">
+      <img src="../projects/Numb/img/Thumbnail.webp" alt="Numb" class="active">
+      <img src="../img/PENDING.png" alt="Numb alt 1">
+      <img src="../img/PENDING.png" alt="Numb alt 2">
+    </div>
+    <div class="project-info">
+      <div class="project-title">NUMB</div>
+      <div class="work-description">Toolbuilding & Lighting Study</div>
+    </div>
+  </div>
+</a>
+
+<!-- GOTCHA -->
+<a href="../projects/WheelofSuffering/" class="gallery-item" data-category="curiosities">
+  <div class="project-container grainy hover-cycle">
+    <div class="image-stack">
+      <img src="../img/PENDING.png" alt="Gotcha" class="active">
+      <img src="../img/PENDING.png" alt="Gotcha alt 1">
+      <img src="../img/PENDING.png" alt="Gotcha alt 2">
+    </div>
+    <div class="project-info">
+      <div class="project-title">GOTCHA</div>
+      <div class="work-description">Retargeting & Motion Study</div>
+    </div>
+  </div>
+</a>
+
+<!-- THE USB PARADOX -->
+<a href="../projects/InGritWeTrust/" class="gallery-item" data-category="collaberation">
+  <div class="project-container grainy hover-cycle">
+    <div class="image-stack">
+      <img src="./TheUSBParadox/img/thumbnail.webp" alt="USB Paradox" class="active">
+      <img src="../img/PENDING.png" alt="USB alt 1">
+      <img src="../img/PENDING.png" alt="USB alt 2">
+    </div>
+    <div class="project-info">
+      <div class="project-title">THE USB PARADOX</div>
+      <div class="work-description">Research & Development</div>
+    </div>
+  </div>
+</a>
+
+<!-- PORSCHE -->
+<a href="../projects/WheelofSuffering/" class="gallery-item" data-category="collaberation">
+  <div class="project-container grainy hover-cycle">
+    <div class="image-stack">
+      <img src="./Porsche/img/thumbnail.webp" alt="Porsche" class="active">
+      <img src="../img/PENDING.png" alt="Porsche alt 1">
+      <img src="../img/PENDING.png" alt="Porsche alt 2">
+    </div>
+    <div class="project-info">
+      <div class="project-title">PORSCHE</div>
+      <div class="work-description">Compositing & Retouch</div>
+    </div>
+  </div>
+</a>
+
+<!-- I REGRET -->
+<a href="../projects/InGritWeTrust/" class="gallery-item" data-category="curiosities, collaberation">
+  <div class="project-container grainy hover-cycle">
+    <div class="image-stack">
+      <img src="./IRegret/img/thumbnail.webp" alt="I Regret" class="active">
+      <img src="../img/PENDING.png" alt="Regret alt 1">
+      <img src="../img/PENDING.png" alt="Regret alt 2">
+    </div>
+    <div class="project-info">
+      <div class="project-title">I REGRET</div>
+      <div class="work-description">Music Video | VFX</div>
+    </div>
+  </div>
+</a>
+
+<!-- ELLIE-03 -->
+<a href="../projects/InGritWeTrust/" class="gallery-item" data-category="collaberation">
+  <div class="project-container grainy hover-cycle">
+    <div class="image-stack">
+      <img src="../img/PENDING.png" alt="Ellie-03" class="active">
+      <img src="../img/PENDING.png" alt="Ellie alt 1">
+      <img src="../img/PENDING.png" alt="Ellie alt 2">
+    </div>
+    <div class="project-info">
+      <div class="project-title">ELLIE-03</div>
+      <div class="work-description">VFX / Cleanup</div>
+    </div>
+  </div>
+</a>
+
+
+  </div>
+
+
 
     <!--DISCLAIMER--> 
     <p style="text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; font-family: monospace;font-size: large; margin: 0; color: rgb(255, 255, 255);">
@@ -200,6 +271,9 @@
     </p>
     <br>
 
+
+
+    <!-- GALLERY ORGANIZATION SCRIPT -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Get all filter buttons and gallery items
@@ -233,5 +307,37 @@
             });
         });
     </script>
+
+
+    <!-- Image Flipbook -->
+
+
+    <script>
+    document.querySelectorAll('.hover-cycle').forEach(container => {
+      const images = container.querySelectorAll('.image-stack img');
+      let currentIndex = 0;
+      let interval;
+
+      container.addEventListener('mouseenter', () => {
+        interval = setInterval(() => {
+          images[currentIndex].classList.remove('active');
+          currentIndex = (currentIndex + 1) % images.length;
+          images[currentIndex].classList.add('active');
+        }, 800);
+      });
+
+      container.addEventListener('mouseleave', () => {
+        clearInterval(interval);
+        images[currentIndex].classList.remove('active');
+        currentIndex = 0;
+        images[currentIndex].classList.add('active');
+      });
+    });
+  </script>
+
+
+
+
+
 </body>
 </html>
