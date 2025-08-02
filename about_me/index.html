@@ -14,6 +14,11 @@
             margin: 0;
             font-family: monospace;
             color: white;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        html {
+            overflow-x: hidden; /* Prevent horizontal scroll on html too */
         }
 
         /* Original Navigation Styles - Fixed */
@@ -83,6 +88,7 @@
             font-size: 1.8rem;
             text-align: center;
             font-family: monospace;
+            max-width: 100%; /* Prevent overflow */
         }
 
         @keyframes typing {
@@ -211,6 +217,7 @@
                 font-size: 1.2rem;
                 padding: 40px 10px 10px;
                 width: 100%; /* let it wrap on small screens */
+                max-width: calc(100vw - 20px); /* Account for padding */
                 border-right: none;
                 animation: none;
                 overflow: visible;
@@ -220,6 +227,17 @@
             .about-content {
                 flex-direction: column;
                 padding: 20px;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .header-main {
+                padding: 0 15px; /* Reduce padding on mobile */
+            }
+
+            .nav-items {
+                max-width: 100%;
+                width: 100%;
             }
         }
     </style>
