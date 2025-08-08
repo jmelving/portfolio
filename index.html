@@ -16,170 +16,579 @@
     <!-- Open Graph Metadata -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="Jona Melvin Grobe | Portfolio">
-    <meta property="og:description" content="Dive into Melvin’s world: Where art meets code, efficiency meets creativity, and 3D gets weird!">
+    <meta property="og:description" content="Dive into Melvin's world: Where art meets code, efficiency meets creativity, and 3D gets weird!">
     <meta property="og:image" content="https://mir-s3-cdn-cf.behance.net/projects/404/881ee8164415761.Y3JvcCw5OTksNzgyLDAsOTQ.png">
     <meta property="og:url" content="https://jmelving.de">
 
-
     <title>Jona Melvin Grobe</title>
 
-    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/homegallery.css">
-     <link rel="stylesheet" href="css/effects.css">
+    <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/homegallery.css">
+    <link rel="stylesheet" href="../css/effects.css">
+    
+    <style>
+        /* Integrated Showreel Styles */
+        .showreel-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            cursor: none;
+        }
+
+        .bg-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+            filter: brightness(0.8) contrast(1.1) grayscale(0.1);
+            transition: filter 0.3s ease, opacity 1s ease;
+        }
+
+        /* Image Slideshow Styles */
+        .image-slideshow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+        }
+
+        .slide-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            filter: brightness(0.8) contrast(1.1) grayscale(0.1);
+            transition: opacity 1s ease;
+        }
+
+        .slide-image.active {
+            opacity: 1;
+        }
+
+        .showreel-container:hover .bg-video {
+            filter: brightness(0.6) contrast(1.1) grayscale(0.1);
+        }
+
+        .vignette-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, transparent 30%, rgba(0,0,0,0.4) 100%);
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .content-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 6;
+            pointer-events: none;
+        }
+
+        .brand-title {
+            font-size: 4rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+            letter-spacing: 2px;
+            color: white;
+        }
+
+        .brand-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
+            color: white;
+        }
+
+        /* Custom Cursor */
+        .custom-cursor {
+            position: fixed;
+            width: 120px;
+            height: 120px;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            line-height: 1.2;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.5);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            letter-spacing: 0.5px;
+            color: white;
+        }
+
+        .showreel-container:hover .custom-cursor {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            height: 0;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            transform: scale(0.8);
+            transition: transform 0.4s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .vimeo-iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .close-button {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .close-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.6);
+            transform: scale(1.1);
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .brand-title {
+                font-size: 2.5rem;
+            }
+
+            .brand-subtitle {
+                font-size: 1rem;
+            }
+
+            .custom-cursor {
+                width: 100px;
+                height: 100px;
+                font-size: 11px;
+            }
+
+            .modal-content {
+                max-width: 95%;
+            }
+
+            .close-button {
+                display: none;
+            }
+        }
+
+        /* Mobile tap instruction */
+        .mobile-tap-hint {
+            position: absolute;
+            bottom: 150px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 7;
+            text-align: center;
+            opacity: 0.8;
+            animation: fadeInOut 3s ease-in-out infinite;
+        }
+
+        .mobile-tap-hint .tap-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .mobile-tap-hint .tap-text {
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+            color: white;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        /* Hide mobile hint on desktop */
+        @media (min-width: 769px) {
+            .mobile-tap-hint {
+                display: none;
+            }
+        }
+    </style>
 </head>
 
-
-
 <body class="background">
-
-
     <!--NAV BAR-->
     <header class="header-main">
         <nav class="nav-items">
-            <div class="header-pb"><a href="/about_me/"><img src="img/pb.gif" alt="profile picture"></a></div>
+            <div class="header-pb"><a href="/about_me/"><img src="../img/pb.gif" alt="profile picture"></a></div>
             <div class="header-jona-melvin-grobe"><a href="/about_me/">jona_melvin_grobe</a></div>
             <div class="header-contact"> <a href="/about_me/">_about_me</a></div>
-
         </nav>
     </header>
 
-<!--UNDER CONSTRUCTION
-<br>
-<p style="text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0; color: orange;">
-    As I am currently writing this site on my own, to not pay a lot of money each month for Adobe/Wix, it’s currently under construction. 
-    So, please be lenient with any performance issues, weird text blocks, bad layout—the list goes on. 
-    <br>Apart from that, have a beautiful day on my portfolio. Hope you find something inspiring!
-</p>
-<br>
--->
-
     <!--SHOWREEL-->
-        <div class="showreel-container">
-            <video class="showreel" class="grainy" class="vignette" playsinline muted autoplay loop
-
-                src="vid/SHOWREEL2025_Low.mp4">
-                
-                src="vid/Showreel.mov"
-                
-                 
-            </video>
+    <div class="showreel-container" id="showreelContainer">
+        <!-- High-Res Image Slideshow -->
+        <div class="image-slideshow" id="imageSlideshow">
+            <img class="slide-image active" src="../projects/Deviant/img/Thumbnail.webp" alt="Showreel Frame 1">
+            <img class="slide-image" src="../projects/NoNeedToRushLife/img/Thumbnail_1_NNTRL.jpg" alt="Showreel Frame 2">
+            <img class="slide-image" src="../projects//Porsche/img/thumbnail.webp" alt="Showreel Frame 3">
         </div>
 
-<!--
-    <div class="more-projects-container">
-        <div class="selected-works"><span style="margin: 0 20px">S E L E C T E D</span> W O R K S </p></div>
+        <!-- Background Video (loads after images) -->
+        <video class="bg-video" 
+               id="backgroundVideo"
+               playsinline 
+               muted 
+               autoplay 
+               loop 
+               style="opacity: 0;">
+            <source src="../vid/SHOWREEL2025_Low.mp4" type="video/mp4">
+            <source src="vid/showreel.webm" type="video/webm">
+        </video>
+
+        <!-- Vignette Effect -->
+        <div class="vignette-overlay"></div>
+
+        <!-- Content Overlay -->
+        <div class="content-overlay">
+            <h1 class="brand-title">JONA MELVIN GROBE</h1>
+            <p class="brand-subtitle">generalist & technical artist</p>
+        </div>
+
+        <!-- Mobile Tap Hint -->
+        <div class="mobile-tap-hint" id="mobileTapHint">
+            <span class="tap-icon">👆</span>
+            <span class="tap-text">TAP TO PLAY SHOWREEL</span>
+        </div>
+
+        <!-- Custom Cursor -->
+        <div class="custom-cursor" id="customCursor">
+            PLAY<br>SHOWREEL
+        </div>
     </div>
-      -->      
+
+    <!-- Vimeo Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <button class="close-button" id="closeButton">×</button>
+            <iframe class="vimeo-iframe" 
+                    id="vimeoIframe"
+                    src=""
+                    allow="autoplay; fullscreen; picture-in-picture">
+            </iframe>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     <!--Image Gallery-->
+    <div class="gallery">
+        <!-- ECHOES -->     
+        <a href="../projects/Echoes/" class="gallery-item" data-category="motion collaberation">
+          <div class="project-container grainy hover-cycle">
+            <div class="image-stack">
+              <img src="../projects/Echoes/img/Thumbnail_tba.webp" alt="Echoes" class="active">
+              <img src="../img/PENDING.png" alt="Echoes 2">
+              <img src="../projects/Echoes/img/Thumbnail_tba.webp" alt="Echoes 3">
+            </div>
+            <div class="project-info">
+              <div class="project-title">ECHOES</div>
+              <div class="work-description">Short | Master Project 1</div>
+            </div>
+          </div>
+        </a>
 
-  <div class="gallery">
+        <!-- DEVIANT -->     
+        <a href="../projects/Deviant/" class="gallery-item" data-category="motion">
+          <div class="project-container grainy hover-cycle">
+            <div class="image-stack">
+              <img src="../projects/Deviant/img/Thumbnail.webp" alt="Deviant" class="active">
+              <img src="../img/PENDING.png" alt="Deviant 2">
+              <img src="../img/PENDING.png" alt="Deviant 3">
+            </div>
+            <div class="project-info">
+              <div class="project-title">DEVIANT</div>
+              <div class="work-description">Music Video Snippet</div>
+            </div>
+          </div>
+        </a>
 
-<!-- ECHOES -->     
-    <a href="../projects/Echoes/" class="gallery-item" data-category="motion collaberation">
-      <div class="project-container grainy hover-cycle">
-        <div class="image-stack">
-          <img src="../projects/Echoes/img/Thumbnail_tba.webp" alt="Echoes" class="active">
-          <img src="../img/PENDING.png" alt="Echoes 2">
-          <img src="../projects/Echoes/img/Thumbnail_tba.webp" alt="Echoes 3">
-        </div>
-        <div class="project-info">
-          <div class="project-title">ECHOES</div>
-          <div class="work-description">Short | Master Project 1</div>
-        </div>
-      </div>
-    </a>
-<!-- DEVIANT -->     
-    <a href="../projects/Deviant/" class="gallery-item" data-category="motion">
-      <div class="project-container grainy hover-cycle">
-        <div class="image-stack">
-          <img src="../projects/Deviant/img/Thumbnail.webp" alt="Deviant" class="active">
-          <img src="../img/PENDING.png" alt="Deviant 2">
-          <img src="../img/PENDING.png" alt="Deviant 3">
-        </div>
-        <div class="project-info">
-          <div class="project-title">DEVIANT</div>
-          <div class="work-description">Music Video Snippet</div>
-        </div>
-      </div>
-    </a>
-
-    <!-- PAINTING GREYS --> 
-    <a href="../projects/PaintingGreys/" class="gallery-item" data-category="motion collaberation">
-      <div class="project-container grainy hover-cycle">
-        <div class="image-stack">
-          <img src="../projects/PaintingGreys/img/Thumbnail.webp" alt="Painting Greys" class="active">
-          <img src="../img/PENDING.png" alt="PG 2">
-          <img src="../img/PENDING.png" alt="PG 3">
-        </div>
-        <div class="project-info">
-          <div class="project-title">PAINTING GREYS</div>
-          <div class="work-description">Multimedia Music Video | Bachelor Project 3</div>
-        </div>
-      </div>
-    </a>
+        <!-- PAINTING GREYS --> 
+        <a href="../projects/PaintingGreys/" class="gallery-item" data-category="motion collaberation">
+          <div class="project-container grainy hover-cycle">
+            <div class="image-stack">
+              <img src="../projects/PaintingGreys/img/Thumbnail.webp" alt="Painting Greys" class="active">
+              <img src="../img/PENDING.png" alt="PG 2">
+              <img src="../img/PENDING.png" alt="PG 3">
+            </div>
+            <div class="project-info">
+              <div class="project-title">PAINTING GREYS</div>
+              <div class="work-description">Multimedia Music Video | Bachelor Project 3</div>
+            </div>
+          </div>
+        </a>
     </div>
-
-
-
-
-    <!--MORE PROJECTS
-    <div class="more-projects-container">
-        <div class="marquee">
-        <div class="marquee"><a href="projects.html"><h1 class="more-projects">MORE...</h1></a>
-        </div>
-        </div>
-    </div>-->
 
     <div class="centered-button-container">
         <a href="/projects/"><button class="btn btn-marquee">
           <span data-text="SHOW MORE PROJECTS">SHOW MORE PROJECTS</span>
         </button></a>
-      </div>
-      
-
-
-
-
-
-
-</div>
-
-
-    <!-- Image Flipbook -->
-
+    </div>
 
     <script>
-    document.querySelectorAll('.hover-cycle').forEach(container => {
-      const images = container.querySelectorAll('.image-stack img');
-      let currentIndex = 0;
-      let interval;
+        // Configuration - Replace with your actual Vimeo video ID
+        const VIMEO_VIDEO_ID = '1054508072'; // Your Vimeo video ID
+        const VIMEO_EMBED_URL = `https://player.vimeo.com/video/${802238375}?autoplay=1&color=ffffff&title=0&byline=0&portrait=0`;
 
-      container.addEventListener('mouseenter', () => {
-        interval = setInterval(() => {
-          images[currentIndex].classList.remove('active');
-          currentIndex = (currentIndex + 1) % images.length;
-          images[currentIndex].classList.add('active');
-        }, 800);
-      });
+        // Slideshow configuration
+        const SLIDE_DURATION = 2500; // Time each image shows (2.5 seconds)
+        const TOTAL_CYCLES = 1; // Number of times to cycle through images before video
 
-      container.addEventListener('mouseleave', () => {
-        clearInterval(interval);
-        images[currentIndex].classList.remove('active');
-        currentIndex = 0;
-        images[currentIndex].classList.add('active');
-      });
-    });
-  </script>
+        // Elements
+        const showreelContainer = document.getElementById('showreelContainer');
+        const customCursor = document.getElementById('customCursor');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const vimeoIframe = document.getElementById('vimeoIframe');
+        const closeButton = document.getElementById('closeButton');
+        const backgroundVideo = document.getElementById('backgroundVideo');
+        const imageSlideshow = document.getElementById('imageSlideshow');
+        const slideImages = document.querySelectorAll('.slide-image');
 
+        // Slideshow state
+        let currentSlide = 0;
+        let cycleCount = 0;
+        let slideshowInterval;
+        let videoTransitioned = false;
+
+        // Slideshow functions
+        function nextSlide() {
+            slideImages[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slideImages.length;
+            
+            // Check if we've completed a full cycle
+            if (currentSlide === 0) {
+                cycleCount++;
+                if (cycleCount >= TOTAL_CYCLES && !videoTransitioned) {
+                    transitionToVideo();
+                    return;
+                }
+            }
+            
+            slideImages[currentSlide].classList.add('active');
+        }
+
+        function transitionToVideo() {
+            videoTransitioned = true;
+            clearInterval(slideshowInterval);
+            
+            // Start video loading
+            backgroundVideo.load();
+            
+            backgroundVideo.addEventListener('loadeddata', () => {
+                backgroundVideo.play().then(() => {
+                    // Fade out slideshow, fade in video
+                    backgroundVideo.style.opacity = '1';
+                    imageSlideshow.style.transition = 'opacity 1s ease';
+                    imageSlideshow.style.opacity = '0';
+                    
+                    setTimeout(() => {
+                        imageSlideshow.style.display = 'none';
+                    }, 1000);
+                });
+            });
+        }
+
+        function startSlideshow() {
+            slideshowInterval = setInterval(nextSlide, SLIDE_DURATION);
+        }
+
+        // Custom cursor tracking
+        let mouseX = 0;
+        let mouseY = 0;
+
+        showreelContainer.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            customCursor.style.left = mouseX + 'px';
+            customCursor.style.top = mouseY + 'px';
+        });
+
+        // Open modal on click
+        showreelContainer.addEventListener('click', () => {
+            document.body.style.overflow = 'hidden';
+            vimeoIframe.src = VIMEO_EMBED_URL;
+            modalOverlay.classList.add('active');
+        });
+
+        // Close modal functions
+        function closeModal() {
+            modalOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            // Stop video by clearing src
+            setTimeout(() => {
+                vimeoIframe.src = '';
+            }, 400);
+        }
+
+        // Close on button click
+        closeButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeModal();
+        });
+
+        // Close on overlay click (outside video)
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                closeModal();
+            }
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+                closeModal();
+            }
+        });
+
+        // Background video loading (removed auto-loading logic)
+        backgroundVideo.addEventListener('error', () => {
+            console.log('Video failed to load, continuing with slideshow');
+        });
+
+        // Touch support for mobile
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        showreelContainer.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        });
+
+        showreelContainer.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].clientX;
+            const touchEndY = e.changedTouches[0].clientY;
+            const touchDistance = Math.sqrt(
+                Math.pow(touchEndX - touchStartX, 2) + 
+                Math.pow(touchEndY - touchStartY, 2)
+            );
+
+            // Only trigger if it's a tap (not a scroll)
+            if (touchDistance < 10) {
+                document.body.style.overflow = 'hidden';
+                vimeoIframe.src = VIMEO_EMBED_URL;
+                modalOverlay.classList.add('active');
+            }
+        });
+
+        // Initialize slideshow
+        startSlideshow();
+
+        // Original gallery hover effect
+        document.querySelectorAll('.hover-cycle').forEach(container => {
+          const images = container.querySelectorAll('.image-stack img');
+          let currentIndex = 0;
+          let interval;
+
+          container.addEventListener('mouseenter', () => {
+            interval = setInterval(() => {
+              images[currentIndex].classList.remove('active');
+              currentIndex = (currentIndex + 1) % images.length;
+              images[currentIndex].classList.add('active');
+            }, 800);
+          });
+
+          container.addEventListener('mouseleave', () => {
+            clearInterval(interval);
+            images[currentIndex].classList.remove('active');
+            currentIndex = 0;
+            images[currentIndex].classList.add('active');
+          });
+        });
+    </script>
 </body>
-
-
-
-
-
 
 <p style="text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center;font-size: small;font-family: monospace; margin: 0; color: rgb(255, 255, 255);">
     © Jona Melvin Grobe — 2025
