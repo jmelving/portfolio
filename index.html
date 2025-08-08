@@ -75,38 +75,52 @@
 
     <!--Image Gallery-->
 
+  <div class="gallery">
 
+<!-- ECHOES -->     
+    <a href="../projects/Echoes/" class="gallery-item" data-category="motion collaberation">
+      <div class="project-container grainy hover-cycle">
+        <div class="image-stack">
+          <img src="../projects/Echoes/img/Thumbnail_tba.webp" alt="Echoes" class="active">
+          <img src="../img/PENDING.png" alt="Echoes 2">
+          <img src="../projects/Echoes/img/Thumbnail_tba.webp" alt="Echoes 3">
+        </div>
+        <div class="project-info">
+          <div class="project-title">ECHOES</div>
+          <div class="work-description">Short | Master Project 1</div>
+        </div>
+      </div>
+    </a>
+<!-- DEVIANT -->     
+    <a href="../projects/Deviant/" class="gallery-item" data-category="motion">
+      <div class="project-container grainy hover-cycle">
+        <div class="image-stack">
+          <img src="../projects/Deviant/img/Thumbnail.webp" alt="Deviant" class="active">
+          <img src="../img/PENDING.png" alt="Deviant 2">
+          <img src="../img/PENDING.png" alt="Deviant 3">
+        </div>
+        <div class="project-info">
+          <div class="project-title">DEVIANT</div>
+          <div class="work-description">Music Video Snippet</div>
+        </div>
+      </div>
+    </a>
 
-        <div class="gallery">
-            <a href="../projects/Echoes/" class="gallery-item" data-category="experiments">
-                <div class="project-container grainy">
-                    <img src="./projects/Echoes/img/Thumbnail.webp" alt="Echoes Project">
-                    <div class="project-info">
-                        <div class="project-title">ECHOES</div>
-                        <div class="work-description">Short | Master Project 1</div>
-                    </div>
-                </div>
-            </a>
-    
-            <a href="../projects/Deviant/" class="gallery-item" data-category="movies">
-                <div class="project-container grainy">
-                    <img src="../projects/Deviant/img/Thumbnail.webp" alt="Image 1">
-                    <div class="project-info">
-                        <div class="project-title">DEVIANT</div>
-                        <div class="work-description">Music Video Snippet</div>
-                    </div>
-                </div>
-            </a>
-            
-            <a href="../projects/PaintingGreys/" class="gallery-item" data-category="movies">
-            <div class="project-container grainy">
-                <img src="../projects/PaintingGreys/img/Thumbnail.webp" alt="Image 2" />
-                <div class="project-info">
-                <div class="project-title">PAINTING GREYS</div>
-                <div class="work-description">Multimedia Music Video | Bachelor Project 3</div>
-                </div>
-            </div>
-            </a>
+    <!-- PAINTING GREYS --> 
+    <a href="../projects/PaintingGreys/" class="gallery-item" data-category="motion collaberation">
+      <div class="project-container grainy hover-cycle">
+        <div class="image-stack">
+          <img src="../projects/PaintingGreys/img/Thumbnail.webp" alt="Painting Greys" class="active">
+          <img src="../img/PENDING.png" alt="PG 2">
+          <img src="../img/PENDING.png" alt="PG 3">
+        </div>
+        <div class="project-info">
+          <div class="project-title">PAINTING GREYS</div>
+          <div class="work-description">Multimedia Music Video | Bachelor Project 3</div>
+        </div>
+      </div>
+    </a>
+    </div>
 
 
 
@@ -132,6 +146,33 @@
 
 
 </div>
+
+
+    <!-- Image Flipbook -->
+
+
+    <script>
+    document.querySelectorAll('.hover-cycle').forEach(container => {
+      const images = container.querySelectorAll('.image-stack img');
+      let currentIndex = 0;
+      let interval;
+
+      container.addEventListener('mouseenter', () => {
+        interval = setInterval(() => {
+          images[currentIndex].classList.remove('active');
+          currentIndex = (currentIndex + 1) % images.length;
+          images[currentIndex].classList.add('active');
+        }, 800);
+      });
+
+      container.addEventListener('mouseleave', () => {
+        clearInterval(interval);
+        images[currentIndex].classList.remove('active');
+        currentIndex = 0;
+        images[currentIndex].classList.add('active');
+      });
+    });
+  </script>
 
 </body>
 
