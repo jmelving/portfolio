@@ -22,7 +22,7 @@
 
     <title>Jona Melvin Grobe</title>
 
-    <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/reset.css">
     <link rel="stylesheet" href="../css/homegallery.css">
@@ -38,6 +38,13 @@
             cursor: none;
         }
 
+        /* Hide cursor on mobile */
+        @media (max-width: 768px) {
+            .showreel-container {
+                cursor: default;
+            }
+        }
+
         .bg-video {
             position: absolute;
             top: 0;
@@ -47,7 +54,8 @@
             object-fit: cover;
             z-index: 1;
             filter: brightness(0.8) contrast(1.1) grayscale(0.1);
-            transition: filter 0.3s ease, opacity 1s ease;
+            transition: filter 0.3s ease, opacity 0.8s ease;
+            will-change: opacity, filter;
         }
 
         /* Image Slideshow Styles */
@@ -69,7 +77,8 @@
             object-fit: cover;
             opacity: 0;
             filter: brightness(0.8) contrast(1.1) grayscale(0.1);
-            transition: opacity 1s ease;
+            transition: opacity 0.8s ease;
+            will-change: opacity;
         }
 
         .slide-image.active {
@@ -117,7 +126,7 @@
             color: white;
         }
 
-        /* Custom Cursor */
+        /* Custom Cursor - Desktop Only */
         .custom-cursor {
             position: fixed;
             width: 120px;
@@ -137,14 +146,24 @@
             backdrop-filter: blur(5px);
             opacity: 0;
             transform: translate(-50%, -50%) scale(0.5);
-            transition: opacity 0.3s ease, transform 0.3s ease;
+            transition: opacity 0.2s ease, transform 0.2s ease;
             letter-spacing: 0.5px;
             color: white;
+            will-change: transform, opacity;
         }
 
-        .showreel-container:hover .custom-cursor {
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
+        @media (min-width: 769px) {
+            .showreel-container:hover .custom-cursor {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        /* Hide cursor completely on mobile */
+        @media (max-width: 768px) {
+            .custom-cursor {
+                display: none;
+            }
         }
 
         /* Modal Styles */
@@ -161,7 +180,7 @@
             justify-content: center;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.4s ease, visibility 0.4s ease;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
             padding: 20px;
         }
 
@@ -176,8 +195,9 @@
             max-width: 1200px;
             height: 0;
             padding-bottom: 56.25%; /* 16:9 aspect ratio */
-            transform: scale(0.8);
-            transition: transform 0.4s ease;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            will-change: transform;
         }
 
         .modal-overlay.active .modal-content {
@@ -248,7 +268,7 @@
         /* Mobile tap instruction */
         .mobile-tap-hint {
             position: absolute;
-            bottom: 150px;
+            bottom: 160px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 7;
@@ -299,9 +319,9 @@
     <div class="showreel-container" id="showreelContainer">
         <!-- High-Res Image Slideshow -->
         <div class="image-slideshow" id="imageSlideshow">
-            <img class="slide-image active" src="../projects/Deviant/img/Thumbnail.webp" alt="Showreel Frame 1">
-            <img class="slide-image" src="../projects/NoNeedToRushLife/img/Thumbnail_1_NNTRL.jpg" alt="Showreel Frame 2">
-            <img class="slide-image" src="../projects//Porsche/img/thumbnail.webp" alt="Showreel Frame 3">
+            <img class="slide-image active" src="../projects/Numb/img/Thumbnail.webp" alt="Showreel Frame 1">
+            <img class="slide-image" src="../projects/PaintingGreys/img/PaintingGreys_4.webp" alt="Showreel Frame 2">
+            <img class="slide-image" src="../projects/Porsche/img/thumbnail.webp" alt="Showreel Frame 3">
         </div>
 
         <!-- Background Video (loads after images) -->
@@ -348,21 +368,6 @@
             </iframe>
         </div>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     <!--Image Gallery-->
     <div class="gallery">
@@ -420,11 +425,11 @@
 
     <script>
         // Configuration - Replace with your actual Vimeo video ID
-        const VIMEO_VIDEO_ID = '1054508072'; // Your Vimeo video ID
-        const VIMEO_EMBED_URL = `https://player.vimeo.com/video/${802238375}?autoplay=1&color=ffffff&title=0&byline=0&portrait=0`;
+        const VIMEO_VIDEO_ID = '802238375'; // Your Vimeo video ID
+        const VIMEO_EMBED_URL = `https://player.vimeo.com/video/${VIMEO_VIDEO_ID}?autoplay=1&color=ffffff&title=0&byline=0&portrait=0`;
 
         // Slideshow configuration
-        const SLIDE_DURATION = 2500; // Time each image shows (2.5 seconds)
+        const SLIDE_DURATION = 1500; // Time each image shows (2.5 seconds)
         const TOTAL_CYCLES = 1; // Number of times to cycle through images before video
 
         // Elements
@@ -471,12 +476,12 @@
                 backgroundVideo.play().then(() => {
                     // Fade out slideshow, fade in video
                     backgroundVideo.style.opacity = '1';
-                    imageSlideshow.style.transition = 'opacity 1s ease';
+                    imageSlideshow.style.transition = 'opacity 0.8s ease';
                     imageSlideshow.style.opacity = '0';
                     
                     setTimeout(() => {
                         imageSlideshow.style.display = 'none';
-                    }, 1000);
+                    }, 800);
                 });
             });
         }
@@ -485,16 +490,19 @@
             slideshowInterval = setInterval(nextSlide, SLIDE_DURATION);
         }
 
-        // Custom cursor tracking
+        // Custom cursor tracking - Desktop only
         let mouseX = 0;
         let mouseY = 0;
+        let isDesktop = window.innerWidth > 768;
 
-        showreelContainer.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            customCursor.style.left = mouseX + 'px';
-            customCursor.style.top = mouseY + 'px';
-        });
+        if (isDesktop) {
+            showreelContainer.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                customCursor.style.left = mouseX + 'px';
+                customCursor.style.top = mouseY + 'px';
+            });
+        }
 
         // Open modal on click
         showreelContainer.addEventListener('click', () => {
@@ -510,7 +518,7 @@
             // Stop video by clearing src
             setTimeout(() => {
                 vimeoIframe.src = '';
-            }, 400);
+            }, 300);
         }
 
         // Close on button click
