@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-
-
     <!--Metadata-->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,8 +10,7 @@
     high-quality 3D visualizations, Houdini generalist work, realistic 3D rendering, VFX and simulations,
     digital sculpting portfolio, game asset creation, painting greys">
     <meta name="author" content="Jona Melvin Grobe">
-    <meta name="robots" content="index, follow"> <!--allows link following for algos-->
-    
+    <meta name="robots" content="index, follow">
     
     <!-- Open Graph Metadata -->
     <meta property="og:type" content="website">
@@ -23,261 +19,228 @@
     <meta property="og:image" content="https://jmelving.de/projects/PaintingGreys/img/Thumbnail.webp">
     <meta property="og:url" content="https://jmelving.de">
 
-
     <title>Painting Greys</title>
 
-
     <link rel="icon" href="../../img/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../../css/main.css">
-    <link rel="stylesheet" href="../../css/reset.css">
-    <link rel="stylesheet" href="../../css/project_template.css">
-    <link rel="stylesheet" href="../../css/videocontainer.css">
+
+        <!-- External CSS File -->
+    <link rel="stylesheet" href="../../css/project.css">
+    
 </head>
 
-
-<!--Background Color Website-->
-<body class="background">
-
-
-
-<!--NAV BAR-->
+<body>
+    <!-- Navigation Bar -->
     <header class="header-main">
         <nav class="nav-items">
             <div class="header-pb"><a href="../../index.html"><img src="../../img/pb.gif" alt="profile picture"></a></div>
             <div class="header-jona-melvin-grobe"><a href="../../index.html">jona_melvin_grobe</a></div>
-            <div class="header-contact"> <a href="../../projects">x</a></div>
+            <div class="header-contact"><a href="../../projects">x</a></div>
         </nav>
-
     </header>
 
+    <!-- Hero Section -->
+    <section class="hero-section" id="heroSection">
+        <!-- Image Slideshow -->
+        <div class="image-slideshow" id="imageSlideshow">
+            <img class="slide-image active" src="./img/PaintingGreys_2.webp" alt="Painting Greys Frame 1">
+            <img class="slide-image" src="./img/PaintingGreys_3.webp" alt="Painting Greys Frame 2">
+            <img class="slide-image" src="./img/PaintingGreys_1.webp" alt="Painting Greys Frame 3">
+        </div>
+        
+        <!-- Background Image/Video (optional) -->
+        <div class="background-image" id="backgroundImage" style="background-image: url('./img/Thumbnail.webp');"></div>
+        
+        <div class="hero-overlay"></div>
+        
+        <div class="project-heading">
+            <h1>PAINTING GREYS</h1>
+            <h2 class="sub-heading">Music Video</h2>
+        </div>
 
+        <!-- Mobile Tap Hint -->
+        <div class="mobile-tap-hint">
+            <span class="tap-icon">👆</span>
+            <span class="tap-text">TAP TO PLAY VIDEO</span>
+        </div>
 
+        <!-- Custom Cursor -->
+        <div class="custom-cursor" id="customCursor">
+            PLAY<br>VIDEO
+        </div>
+    </section>
 
-<!--Background Video with Heading-->
-    <div class="background-image" style="--bg-url: 
-                url('/projects/PaintingGreys/img/Thumbnail.webp');">
+    <!-- Video Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <button class="close-button" id="closeButton">×</button>
+            <iframe class="video-iframe" 
+                    id="videoIframe"
+                    src=""
+                    allow="autoplay; fullscreen; picture-in-picture"
+                    allowfullscreen>
+            </iframe>
+        </div>
     </div>
 
-    
-        <!--Project Heading-->
-        <div class="position-project-heading">
-                <div class="project-heading">
-                     <h1>PAINTING GREYS</h1>
-                    <h2 class="sub-heading">Music Video</h2>
-                </div>
-             </div>
-        <div>
-
-<br>
-<br>
-
-            <!--Details--> 
-            <div> 
-                <div class="details">    
-                
-                        <!--Role--> 
-                    <div class="detail">
-                            <h4>Role</h4>
-                            <p class="details-description">3D Generalist</p>
-
-                    </div>
-                    <!--Collaberators--> 
-                    <div class="detail">
-                        <h4>Collaberators</h4>
-                            <p class="details-description"><a href="https://open.spotify.com/intl-de/artist/3VVLqeEqQQqTgT8YhfY9Z6" target="_blank">Emmit Fenn</a></p>
-                            <p class="details-description"><a href="https://rampitschhannah.com/" target="_blank" >Hannah Rampitsch</a></p>
-                            <p class="details-description"><a href="https://lenaschibany.com/" target="_blank">Lena Schibany</a></p>
-                            <p class="details-description"><a href="https://supersbergerm.myportfolio.com/" target="_blank">Mona Supersberger</a></p>
-                            </div>
-                    <div class="detail">
-                        <h4>Music & Performances</h4>
-                            <p class="details-description"><a href="https://open.spotify.com/intl-de/artist/3VVLqeEqQQqTgT8YhfY9Z6" target="_blank">Emmit Fenn</a></p>
-                            <p class="details-description"> <a href="https://sinaistanders.myportfolio.com/" target="_blank"></a>Sina Anders</p>
-                            <p class="details-description">Christina Ottoson</p>
-                            <p class="details-description">Danijel Jamal Wolf</p>
-                            </div>
-                    
-                    <!--Duration-->
-                    <div class="detail">
-                        <h4>Duration</h4>
-                            <p class="details-description">1 year</p>
-                            <p class="details-description-secondary">2023-2024</p>
-
-                    </div>
-                
-                    <!--Tools-->
-                    <div class="detail">
-                            <h4>Tools</h4>
-                            <p class="details-description">Houdini</p>
-                            <p class="details-description">Nuke</p>
-                            <p class="details-description">Premiere Pro</p>
-                            <p class="details-description">Optitrack</p>
-
-                </div>
+    <!-- Details Section -->
+    <section class="details-container fade-in">
+        <div class="details-table">
+            <div class="detail">
+                <h4>Role</h4>
+                <p class="details-description">3D Generalist</p>
             </div>
             
+            <div class="detail">
+                <h4>Collaborators</h4>
+                <p class="details-description"><a href="https://open.spotify.com/intl-de/artist/3VVLqeEqQQqTgT8YhfY9Z6" target="_blank">Emmit Fenn</a></p>
+                <p class="details-description"><a href="https://rampitschhannah.com/" target="_blank">Hannah Rampitsch</a></p>
+                <p class="details-description"><a href="https://lenaschibany.com/" target="_blank">Lena Schibany</a></p>
+                <p class="details-description"><a href="https://supersbergerm.myportfolio.com/" target="_blank">Mona Supersberger</a></p>
+            </div>
+            
+            <div class="detail">
+                <h4>Music & Performances</h4>
+                <p class="details-description"><a href="https://open.spotify.com/intl-de/artist/3VVLqeEqQQqTgT8YhfY9Z6" target="_blank">Emmit Fenn</a></p>
+                <p class="details-description"><a href="https://sinaistanders.myportfolio.com/" target="_blank">Sina Anders</a></p>
+                <p class="details-description">Christina Ottoson</p>
+                <p class="details-description">Danijel Jamal Wolf</p>
+            </div>
+            
+            <div class="detail">
+                <h4>Duration</h4>
+                <p class="details-description">1 year</p>
+                <p class="details-description-secondary">2023-2024</p>
+            </div>
+            
+            <div class="detail">
+                <h4>Tools</h4>
+                <p class="details-description">Houdini</p>
+                <p class="details-description">Nuke</p>
+                <p class="details-description">Premiere Pro</p>
+                <p class="details-description">Optitrack</p>
+            </div>
         </div>
-    </div>
+    </section>
 
-<!--Video Container-->
+    <!-- Video Section -->
+    <section class="video-section fade-in">
+        <div class="center-container">
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/zH8ladtiEsE" 
+                        title="Painting Greys Music Video" 
+                        allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+    </section>
 
-<div class="center-container">
-    <div class="video-container">
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/zH8ladtiEsE?si=F71qgInJUjuuTsX9" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-    </div>
-</div>
-
-
-
-
-<!--Project Description-->
-
-
-<div>
-    <div class="project-description">
-        <h2 class="project_subtitle"> § Project Description</h2>
+    <!-- Project Description -->
+    <section class="content-section">
+        <div class="project-description fade-in">
+            <h2 class="project_subtitle">§ Project Description</h2>
             <p class="project_text">
-                In the music video for <b>“Painting Greys”</b> by Emmit Fenn, the protagonist is a glamorous yet tormented editor-in-chief grappling with her perfectionism. 
+                In the music video for <b>"Painting Greys"</b> by Emmit Fenn, the protagonist is a glamorous yet tormented editor-in-chief grappling with her perfectionism. 
                 Her vivid dreams reveal a subconscious yearning for joy, gradually overtaking her meticulous habits. In these dreams, 
                 she briefly experiences carefree happiness before the harsh reality of her imperfections shatters the illusion.
-                For the project, motion capture was utilized, featuring dance performances by Christina Ottoson and Danijel Jamal Wolf. <br><br>
+                For the project, motion capture was utilized, featuring dance performances by Christina Ottoson and Danijel Jamal Wolf.
+            </p>
+            
+            <p class="project_text">
+                - <a href="https://lenaschibany.com/" target="_blank"><u>Lena Schibany</u></a> (Art Direction, Textures, 2D Animation)<br>
+                - <a href="https://supersbergerm.myportfolio.com/" target="_blank"><u>Mona Supersberger</u></a> (Graphic Design, Stopmotion)<br>
+                - <a href="https://rampitschhannah.com/" target="_blank"><u>Hannah Rampitsch</u></a> (3D Visuals, Compositing)<br>
+                - <a href="https://letmegooglethat.com/?q=Jona+Melvin+Grobe" target="_blank"><u>Jona Melvin Grobe</u></a> (3D Visuals, Compositing)
+            </p>
 
-
-                <ol class="project_text">
-
-                    - <a href="https://lenaschibany.com/" target="_blank"><u>Lena Schibany</u></a> (Art Direction, Textures, 2D Animation)<br><br>
-                    - <a href="https://supersbergerm.myportfolio.com/" target="_blank"><u>Mona Supersberger</u></a>  (Graphic Design, Stopmotion) <br><br>
-                    - <a href="https://rampitschhannah.com/" target="_blank"><u>Hannah Rampitsch</u></a>  (3D Visuals, Compositing)<br><br>
-                    - <a href="https://letmegooglethat.com/?q=Jona+Melvin+Grobe" target="_blank"><u>Jona Melvin Grobe</u></a>  (3D Visuals, Compositing)<br><br>
-                </ol>
-
-            <p class="project_text"> After 9 months of working on the concept and some previs shots, we decided to scrap a lot of it, and start a new Project. As the project had a very limited amount of time left, we decided that each person would be assigned their own type of shots. 
-                This way, we split the entire video into more manageable chunks, allowing everyone to contribute a bit to every aspect.</p>
-
+            <p class="project_text">
+                After 9 months of working on the concept and some previs shots, we decided to scrap a lot of it, and start a new Project. As the project had a very limited amount of time left, we decided that each person would be assigned their own type of shots. 
+                This way, we split the entire video into more manageable chunks, allowing everyone to contribute a bit to every aspect.
             </p>
         </div>
-</div>
-<br><br>
+    </section>
 
-
-
-<!--Stills-->
-  <div class="image-collection-wrapper">
-      <div class="image-collection">
-        <img src="./img/PaintingGreys_2.webp" alt="Placeholder 1">
-        <img src="./img/PaintingGreys_3.webp" alt="Placeholder 1">
-        <img src="./img/PaintingGreys_1.webp" alt="Placeholder 1">
+    <!-- Image Gallery -->
+    <div class="image-collection-wrapper fade-in">
+        <div class="image-collection">
+            <img src="./img/PaintingGreys_2.webp" alt="Painting Greys Still 1">
+            <img src="./img/PaintingGreys_3.webp" alt="Painting Greys Still 2">
+            <img src="./img/PaintingGreys_1.webp" alt="Painting Greys Still 3">
+        </div>
     </div>
-  </div>
-  <div class="image-collection-wrapper">
-    <div class="image-collection">
-      <img src="./img/PaintingGreys_4.webp" alt="Placeholder 1">
-      <img src="./img/PaintingGreys_8.webp" alt="Placeholder 1">
-      <img src="./img/PaintingGreys_12.webp" alt="Placeholder 1">
+    
+    <div class="image-collection-wrapper fade-in">
+        <div class="image-collection">
+            <img src="./img/PaintingGreys_4.webp" alt="Painting Greys Still 4">
+            <img src="./img/PaintingGreys_8.webp" alt="Painting Greys Still 5">
+            <img src="./img/PaintingGreys_12.webp" alt="Painting Greys Still 6">
+        </div>
+    </div>
 
-  </div>
-</div>
-
-<br><br>
-  
-
-
-
-
-
-<!--Concept-->
-
-
-<div>
-    <div class="project-description">
-        <h2 class="project_subtitle"> § Concept</h2>
+    <!-- Concept Section -->
+    <section class="content-section">
+        <div class="project-description fade-in">
+            <h2 class="project_subtitle">§ Concept</h2>
             <p class="project_text">
                 Our goal was to create a music video that would both enhance our own expertise and provide new experiences with different styles and tools. The final product aims to feature a music video with varied pacing. The verse is intended to be slow and calm, while the bridge acts as a build-up to the drop, offering an opportunity to convey the intended message in various styles and to transition between them. Throughout the creative process, we aimed to improve our technical and creative skills on multiple levels.
-
-
             </p>
         </div>
-</div>
+    </section>
 
-<br>
-
-
-<!--Process-->
-
-
-<div>
-    <div class="project-description">
-        <h2 class="project_subtitle"> § Process</h2>
+    <!-- Process Section -->
+    <section class="content-section">
+        <div class="project-description fade-in">
+            <h2 class="project_subtitle">§ Process</h2>
             <p class="project_text">
-                The project began with storyboarding and choreography to synchronize the narrative with the song’s emotional rhythm. 
-                We used Optitrack’s motion capture system to record expressive performances, which were then imported into Houdini for animation 
-                refinement. Textures were designed in Substance Painter and Photoshop. Finally, the video was rendered with Houdini’s KarmaX renderer, followed by color grading to unify the tone and 
+                The project began with storyboarding and choreography to synchronize the narrative with the song's emotional rhythm. 
+                We used Optitrack's motion capture system to record expressive performances, which were then imported into Houdini for animation 
+                refinement. Textures were designed in Substance Painter and Photoshop. Finally, the video was rendered with Houdini's KarmaX renderer, followed by color grading to unify the tone and 
                 enhance the storytelling. All elements, environments, and effects were composited and blended together using After 
                 Effects and Nuke.
             </p>
         </div>
-</div>
-<br>
+    </section>
 
-
-
-<!--BETHIND THE SCENES-->
-<div class="image-collection-wrapper">
-    <div class="image-collection">
-
-        <img src="./img/bts/PaintingGreys_bts_6.webp" alt="Placeholder 1"> <!--1100x1350px Resolution (aspect ratio) -->
-        <img src="./img/bts/PaintingGreys_bts_5.webp" alt="Placeholder 1"> <!--1100x1350px Resolution -->
-        <img src="./img/bts/PaintingGreys_bts_4.webp" alt="Placeholder 1"> <!--1100x1350px Resolution -->
-    </div>
-  </div>
-
-  <div class="image-collection-wrapper">
-    <div class="image-collection">
-        <img src="./img/bts/PaintingGreys_bts_7.webp" alt="Placeholder 1"> <!--1100x1350px Resolution -->
-        <img src="./img/bts/PaintingGreys_bts_8.webp" alt="Placeholder 1"> <!--1100x1350px Resolution -->
-        <img src="./img/bts/PaintingGreys_bts_9.webp" alt="Placeholder 1"> <!--1100x1350px Resolution -->
-    </div>
-  </div>
-
-
-<!--Breakdown-->
-
-
-
-<!--Learning-->
-
-
-<div>
-    <div class="project-description">
-        <h2 class="project_subtitle"> § Learnings</h2>
-
-        <p class="project_text" > <b>Project Management </b> </p>
-            <p class="project_text">
-                ○ Stick to your goals <br>
-                ○ Don`t overscope
-            </p>
-<br><br><br>
-            <p class="project_text" > <b>Houdini </b> </p>
-            <ol class="project_text"> 
-                ○ KineFX CleanUp & Retargetting <br>
-                ○ Working with USD <br>
-                ○ Rendering with KarmaX <br>
-
-
-            </ol>
+    <!-- Behind the Scenes Images -->
+    <div class="image-collection-wrapper fade-in">
+        <div class="image-collection">
+            <img src="./img/bts/PaintingGreys_bts_6.webp" alt="Behind the Scenes 1">
+            <img src="./img/bts/PaintingGreys_bts_5.webp" alt="Behind the Scenes 2">
+            <img src="./img/bts/PaintingGreys_bts_4.webp" alt="Behind the Scenes 3">
         </div>
-</div>
-<br>
+    </div>
 
+    <div class="image-collection-wrapper fade-in">
+        <div class="image-collection">
+            <img src="./img/bts/PaintingGreys_bts_7.webp" alt="Behind the Scenes 4">
+            <img src="./img/bts/PaintingGreys_bts_8.webp" alt="Behind the Scenes 5">
+            <img src="./img/bts/PaintingGreys_bts_9.webp" alt="Behind the Scenes 6">
+        </div>
+    </div>
 
-<!--Music-->
-
-
-<div>
-    <div class="project-description">
-        <h2 class="project_subtitle"> § Music</h2>
-            <br>
+    <!-- Learnings Section -->
+    <section class="content-section">
+        <div class="project-description fade-in">
+            <h2 class="project_subtitle">§ Learnings</h2>
             
+            <p class="project_text"><b>Project Management</b></p>
+            <p class="project_text">
+                ○ Stick to your goals<br>
+                ○ Don't overscope
+            </p>
+
+            <p class="project_text"><b>Houdini</b></p>
+            <p class="project_text">
+                ○ KineFX CleanUp & Retargetting<br>
+                ○ Working with USD<br>
+                ○ Rendering with KarmaX
+            </p>
+        </div>
+    </section>
+
+    <!-- Music Section -->
+    <section class="content-section">
+        <div class="project-description music-section fade-in">
+            <h2 class="project_subtitle">§ Music</h2>
             <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/2Eh0J9SM2SzKnw5spcHJ1B?utm_source=generator&theme=0" 
             width="100%" 
             height="352" 
@@ -286,28 +249,188 @@
             allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
             loading="lazy"></iframe>
         </div>
-</div>
+    </section>
 
+    <!-- Copyright -->
+    <div class="copyright">
+        © Jona Melvin Grobe
+    </div>
 
-<br>
-<br>
+    <script>
+        // VIDEO CONFIGURATION - Updated for better YouTube integration
+        
+        // For YouTube: Use the video ID from the URL
+        const YOUTUBE_VIDEO_ID = 'zH8ladtiEsE'; // Your YouTube video ID
+        const USE_YOUTUBE = true; // Set to false if you want to use Vimeo instead
+        
+        // For Vimeo: Use the video ID from the URL  
+        const VIMEO_VIDEO_ID = '802238375'; // Your Vimeo video ID (if using Vimeo)
+        
+        // Generate embed URLs - CLEAN YouTube URLs for full functionality
+        const YOUTUBE_EMBED_URL = `https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?autoplay=1`;
+        const VIMEO_EMBED_URL = `https://player.vimeo.com/video/${VIMEO_VIDEO_ID}?autoplay=1&color=ffffff&title=0&byline=0&portrait=0`;
+        
+        const VIDEO_EMBED_URL = USE_YOUTUBE ? YOUTUBE_EMBED_URL : VIMEO_EMBED_URL;
 
-<!-- Copyright -->
-<p style="text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center;font-size: small;font-family: monospace; margin: 0; color: rgb(255, 255, 255);">
-    © Jona Melvin Grobe
-</p>
-<br>
+        // Slideshow configuration
+        const SLIDE_DURATION = 2000; // Time each image shows (2 seconds)
+        const TOTAL_CYCLES = 2; // Number of times to cycle through images
+
+        // Elements
+        const heroSection = document.getElementById('heroSection');
+        const customCursor = document.getElementById('customCursor');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const videoIframe = document.getElementById('videoIframe');
+        const closeButton = document.getElementById('closeButton');
+        const imageSlideshow = document.getElementById('imageSlideshow');
+        const backgroundImage = document.getElementById('backgroundImage');
+        const slideImages = document.querySelectorAll('.slide-image');
+
+        // Slideshow state
+        let currentSlide = 0;
+        let cycleCount = 0;
+        let slideshowInterval;
+        let backgroundTransitioned = false;
+
+        // Slideshow functions
+        function nextSlide() {
+            slideImages[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slideImages.length;
+            
+            // Check if we've completed a full cycle
+            if (currentSlide === 0) {
+                cycleCount++;
+                if (cycleCount >= TOTAL_CYCLES && !backgroundTransitioned) {
+                    transitionToBackground();
+                    return;
+                }
+            }
+            
+            slideImages[currentSlide].classList.add('active');
+        }
+
+        function transitionToBackground() {
+            backgroundTransitioned = true;
+            clearInterval(slideshowInterval);
+            
+            // Fade out slideshow, show background image
+            backgroundImage.classList.add('video-loaded');
+            imageSlideshow.style.transition = 'opacity 0.8s ease';
+            imageSlideshow.style.opacity = '0';
+            
+            setTimeout(() => {
+                imageSlideshow.style.display = 'none';
+            }, 800);
+        }
+
+        function startSlideshow() {
+            slideshowInterval = setInterval(nextSlide, SLIDE_DURATION);
+        }
+
+        // Custom cursor tracking - Desktop only
+        let mouseX = 0;
+        let mouseY = 0;
+        let isDesktop = window.innerWidth > 768;
+
+        if (isDesktop) {
+            heroSection.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                customCursor.style.left = mouseX + 'px';
+                customCursor.style.top = mouseY + 'px';
+            });
+        }
+
+        // Open modal on click
+        heroSection.addEventListener('click', () => {
+            document.body.style.overflow = 'hidden';
+            videoIframe.src = VIDEO_EMBED_URL;
+            modalOverlay.classList.add('active');
+        });
+
+        // Close modal functions
+        function closeModal() {
+            modalOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            // Stop video by clearing src
+            setTimeout(() => {
+                videoIframe.src = '';
+            }, 300);
+        }
+
+        // Close on button click
+        closeButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeModal();
+        });
+
+        // Close on overlay click (outside video)
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                closeModal();
+            }
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+                closeModal();
+            }
+        });
+
+        // Touch support for mobile
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        heroSection.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        });
+
+        heroSection.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].clientX;
+            const touchEndY = e.changedTouches[0].clientY;
+            const touchDistance = Math.sqrt(
+                Math.pow(touchEndX - touchStartX, 2) + 
+                Math.pow(touchEndY - touchStartY, 2)
+            );
+
+            // Only trigger if it's a tap (not a scroll)
+            if (touchDistance < 10) {
+                document.body.style.overflow = 'hidden';
+                videoIframe.src = VIDEO_EMBED_URL;
+                modalOverlay.classList.add('active');
+            }
+        });
+
+        // Simple scroll animations without parallax
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationDelay = Math.random() * 0.2 + 's';
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, observerOptions);
+
+        // Initialize animations when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            fadeElements.forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.animationDelay = (index * 0.05) + 's';
+                observer.observe(el);
+            });
+        });
+
+        // Initialize slideshow
+        startSlideshow();
+    </script>
 </body>
-
-
-
-</body>
-
-
-
-
-
-
-
-
 </html>
