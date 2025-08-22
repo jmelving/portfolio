@@ -23,9 +23,18 @@
 
     <link rel="icon" href="../../img/favicon.ico" type="image/x-icon">
 
-        <!-- External CSS File -->
+    <!-- External CSS Files -->
     <link rel="stylesheet" href="../../css/project.css">
+    <link rel="stylesheet" href="../../css/project_image_gallery.css">
     
+    <style>
+        /* Helper classes for different column layouts */
+        .ig-gallery-1col { --gallery-columns: 1; }
+        .ig-gallery-2col { --gallery-columns: 2; }
+        .ig-gallery-3col { --gallery-columns: 3; }
+        .ig-gallery-4col { --gallery-columns: 4; }
+        .ig-gallery-5col { --gallery-columns: 5; }
+    </style>
 </head>
 
 <body>
@@ -159,20 +168,25 @@
         </div>
     </section>
 
-    <!-- Image Gallery -->
-    <div class="image-collection-wrapper fade-in">
-        <div class="image-collection">
-            <img src="./img/PaintingGreys_2.webp" alt="Painting Greys Still 1">
-            <img src="./img/PaintingGreys_3.webp" alt="Painting Greys Still 2">
-            <img src="./img/PaintingGreys_1.webp" alt="Painting Greys Still 3">
+    <!-- New Image Gallery -->
+    <div class="ig-gallery ig-gallery-2col fade-in">
+        <div class="ig-gallery-item">
+            <img src="./img/PaintingGreys_2.webp" alt="Painting Greys Still 1" data-caption="Mixed Media Star Sequence done by Mona Supersberger, using a mixture of Stopmotion and After Effects." loading="lazy">
         </div>
-    </div>
-    
-    <div class="image-collection-wrapper fade-in">
-        <div class="image-collection">
-            <img src="./img/PaintingGreys_4.webp" alt="Painting Greys Still 4">
-            <img src="./img/PaintingGreys_8.webp" alt="Painting Greys Still 5">
-            <img src="./img/PaintingGreys_12.webp" alt="Painting Greys Still 6">
+        <div class="ig-gallery-item">
+            <img src="./img/PaintingGreys_3.webp" alt="Painting Greys Still 2" data-caption="Beautiful cloth wrap shot, by Hannah Rampitsch." loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/PaintingGreys_1.webp" alt="Painting Greys Still 3" data-caption="Digital 2D Animation done by Lena Schibany." loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/PaintingGreys_4.webp" alt="Painting Greys Still 4" data-caption="One of my many dance shots. Played a lot with light filters and volumes to give it a dreamy look." loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/PaintingGreys_8.webp" alt="Painting Greys Still 5" data-caption="Pretty proud of this one, fairly unrealistic, but every time I look at it I think it looks pretty cool and abstract." loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/PaintingGreys_12.webp" alt="Painting Greys Still 6" data-caption="Another Dance Sequence. Here I started to play with the Cameras Shutter speed to get theese trails of people walking arround the dancer." loading="lazy">
         </div>
     </div>
 
@@ -193,27 +207,33 @@
             <p class="project_text">
                 The project began with storyboarding and choreography to synchronize the narrative with the song's emotional rhythm. 
                 We used Optitrack's motion capture system to record expressive performances, which were then imported into Houdini for animation 
-                refinement. Textures were designed in Substance Painter and Photoshop. Finally, the video was rendered with Houdini's KarmaX renderer, followed by color grading to unify the tone and 
+                refinement. Textures were designed in Substance Designer/Painter and Photoshop mainly by our amazing Art Director <b>Lena Schibany</b>. Some of her Materials are shown below as I thought it would
+                be sad not to include them here. Finally, the video was rendered with Houdini's KarmaX renderer, followed by color grading to unify the tone and 
                 enhance the storytelling. All elements, environments, and effects were composited and blended together using After 
                 Effects and Nuke.
             </p>
         </div>
     </section>
 
-    <!-- Behind the Scenes Images -->
-    <div class="image-collection-wrapper fade-in">
-        <div class="image-collection">
-            <img src="./img/bts/PaintingGreys_bts_6.webp" alt="Behind the Scenes 1">
-            <img src="./img/bts/PaintingGreys_bts_5.webp" alt="Behind the Scenes 2">
-            <img src="./img/bts/PaintingGreys_bts_4.webp" alt="Behind the Scenes 3">
+    <!-- Behind the Scenes Gallery -->
+    <div class="ig-gallery ig-gallery-3col fade-in">
+        <div class="ig-gallery-item">
+            <img src="./img/bts/PaintingGreys_bts_6.webp" alt="Behind the Scenes 1" data-caption="Christina Ottoson dancing in a Optitrack Mocap Suit." loading="lazy">
         </div>
-    </div>
-
-    <div class="image-collection-wrapper fade-in">
-        <div class="image-collection">
-            <img src="./img/bts/PaintingGreys_bts_7.webp" alt="Behind the Scenes 4">
-            <img src="./img/bts/PaintingGreys_bts_8.webp" alt="Behind the Scenes 5">
-            <img src="./img/bts/PaintingGreys_bts_9.webp" alt="Behind the Scenes 6">
+        <div class="ig-gallery-item">
+            <img src="./img/bts/PaintingGreys_bts_5.webp" alt="Behind the Scenes 2" data-caption="Recording some choke scene, for the scrapped version." loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/bts/PaintingGreys_bts_4.webp" alt="Behind the Scenes 3" data-caption="Me activating my superhuman capabilities to counter attack any moving motion capture threats." loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/bts/PaintingGreys_bts_7.webp" alt="Behind the Scenes 4" data-caption="Bathroom tile Material by Lena Schibany, for the previous version of the project that later was scrapped." loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/bts/PaintingGreys_bts_8.webp" alt="Behind the Scenes 5" data-caption="Fish skin Material by Lena Schibany" loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/bts/PaintingGreys_bts_9.webp" alt="Behind the Scenes 6" data-caption="Wood floor Material by Lena Schibany" loading="lazy">
         </div>
     </div>
 
@@ -231,8 +251,8 @@
             <p class="project_text"><b>Houdini</b></p>
             <p class="project_text">
                 ○ KineFX CleanUp & Retargetting<br>
-                ○ Working with USD<br>
-                ○ Rendering with KarmaX
+                ○ First time working with USD<br>
+                ○ Rendering with KarmaXPU
             </p>
         </div>
     </section>
@@ -251,12 +271,24 @@
         </div>
     </section>
 
+    <!-- Lightbox Modal for Image Gallery -->
+    <div class="ig-lightbox" id="ig-lightbox">
+        <div class="ig-lightbox-content">
+            <button class="ig-lightbox-nav ig-lightbox-prev" id="ig-lightbox-prev">‹</button>
+            <img id="ig-lightbox-img" src="" alt="">
+            <button class="ig-lightbox-nav ig-lightbox-next" id="ig-lightbox-next">›</button>
+            <div class="ig-lightbox-caption" id="ig-lightbox-caption">Caption text goes here</div>
+            <div class="ig-lightbox-counter" id="ig-lightbox-counter">1 / 12</div>
+        </div>
+    </div>
+
     <!-- Copyright -->
     <div class="copyright">
         © Jona Melvin Grobe
     </div>
 
-    <!-- External JavaScript File -->
+    <!-- External JavaScript Files -->
     <script src="../../js/project.js"></script>
+    <script src="../../js/project_image_gallery.js"></script>
 </body>
 </html>

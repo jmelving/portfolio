@@ -394,7 +394,7 @@ body {
    ================================================================== */
 .video-section {
     padding: 2rem;
-    margin: 2rem 0;
+    margin: 1.5rem 0; /* Reduced from 2rem to 1.5rem */
 }
 
 .center-container {
@@ -435,14 +435,14 @@ body {
 .content-section {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 1rem 2rem; /* Reduced top/bottom padding from 2rem to 1rem */
 }
 
 .project-description {
     background: rgba(255, 255, 255, 0.03);
     border-radius: 20px;
     padding: 2rem;
-    margin: 2rem 0;
+    margin: 1rem 0; /* Reduced from 2rem to 1rem */
     border: 1px solid rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
 }
@@ -494,7 +494,7 @@ body {
    IMAGE GALLERY
    ================================================================== */
 .image-collection-wrapper {
-    margin: 2rem 0;
+    margin: 1.5rem 0; /* Reduced from 2rem to 1.5rem */
     padding: 0 2rem;
 }
 
@@ -528,7 +528,7 @@ body {
    ================================================================== */
 .music-section {
     padding: 2rem;
-    margin: 2rem 0;
+    margin: 1rem 0; /* Reduced from 2rem to 1rem */
     border-radius: 20px;
 }
 
@@ -607,7 +607,7 @@ body {
     }
     
     .content-section {
-        padding: 2rem 1rem;
+        padding: 1rem; /* Reduced padding for mobile */
     }
 }
 
