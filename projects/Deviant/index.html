@@ -1,260 +1,283 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-
-
     <!--Metadata-->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="'DEVIANT'  is a short music video snippet by Jona Melvin Grobe about a mysterious being hunted by police—only for the tables to turn as it fights back.">
+    <meta name="description" content="'DEVIANT' is a short music video snippet by Jona Melvin Grobe about a mysterious being hunted by police—only for the tables to turn as it fights back.">
 
     <meta name="keywords" content="Jona Melvin Grobe, 3D generalist portfolio, 3D artist showcase, procedural 3D art, 
     high-quality 3D visualizations, Houdini generalist work, realistic 3D rendering, VFX and simulations,
     digital sculpting portfolio, game asset creation">
     <meta name="author" content="Jona Melvin Grobe">
-    <meta name="robots" content="index, follow"> <!--allows link following for algos-->
-    
+    <meta name="robots" content="index, follow">
     
     <!-- Open Graph Metadata -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="DEVIANT | Jona Melvin Grobe | Portfolio">
-    <meta property="og:description" content="Dive into Melvin’s world: Where art meets code, efficiency meets creativity, and 3D gets weird!">
-    <meta property="og:image" content="https://jmelving.github.io/portfolio/projects/NoNeedToRushLife/img/Thumbnail_3_NNTRL.jpg">
+    <meta property="og:description" content="Dive into Melvin's world: Where art meets code, efficiency meets creativity, and 3D gets weird!">
+    <meta property="og:image" content="https://jmelving.github.io/portfolio/projects/Deviant/img/Thumbnail.png">
     <meta property="og:url" content="https://jmelving.de">
 
-
-    <title>No Need To Rush Life</title>
-
+    <title>DEVIANT</title>
 
     <link rel="icon" href="../../img/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../../css/main.css">
-    <link rel="stylesheet" href="../../css/reset.css">
-    <link rel="stylesheet" href="../../css/project_template.css">
-    <link rel="stylesheet" href="../../css/videocontainer.css">
+
+    <!-- External CSS Files -->
+    <link rel="stylesheet" href="../../css/project.css">
+    <link rel="stylesheet" href="../../css/project_image_gallery.css">
+    
+    <style>
+        /* Helper classes for different column layouts */
+        .ig-gallery-1col { --gallery-columns: 1; }
+        .ig-gallery-2col { --gallery-columns: 2; }
+        .ig-gallery-3col { --gallery-columns: 3; }
+        .ig-gallery-4col { --gallery-columns: 4; }
+        .ig-gallery-5col { --gallery-columns: 5; }
+    </style>
 </head>
 
-
-<!--Background Color Website-->
-<body class="background">
-
-
-
-<!--NAV BAR-->
+<body>
+    <!-- Navigation Bar -->
     <header class="header-main">
         <nav class="nav-items">
             <div class="header-pb"><a href="../../index.html"><img src="../../img/pb.gif" alt="profile picture"></a></div>
             <div class="header-jona-melvin-grobe"><a href="../../index.html">jona_melvin_grobe</a></div>
-            <div class="header-contact"> <a href="../../projects">x</a></div>
+            <div class="header-contact"><a href="../../projects">x</a></div>
         </nav>
-
     </header>
 
+    <!-- Hero Section -->
+    <section class="hero-section" id="heroSection" data-video-url="https://www.youtube.com/embed/AHEvWaszWiA?autoplay=1">
+        <!-- Image Slideshow -->
+        <div class="image-slideshow" id="imageSlideshow">
+            <img class="slide-image active" src="./img/Deviant_7.webp" alt="Deviant Frame 1">
+            <img class="slide-image" src="./img/Deviant_4.webp" alt="Deviant Frame 2">
+            <img class="slide-image" src="./img/Deviant_5.webp" alt="Deviant Frame 3">
+        </div>
+        
+        <!-- Background Image/Video (optional) -->
+        <div class="background-image" id="backgroundImage" style="background-image: url('./img/Deviant_6.webp');"></div>
+        
+        <div class="hero-overlay"></div>
+        
+        <div class="project-heading">
+            <h1>DEVIANT</h1>
+            <h2 class="sub-heading">Music Video Snippet</h2>
+        </div>
 
+        <!-- Mobile Tap Hint -->
+        <div class="mobile-tap-hint">
+            <span class="tap-icon">👆</span>
+            <span class="tap-text">TAP TO PLAY VIDEO</span>
+        </div>
 
+        <!-- Custom Cursor -->
+        <div class="custom-cursor" id="customCursor">
+            PLAY<br>VIDEO
+        </div>
+    </section>
 
-<!--Background Video with Heading-->
-    <div class="background-image" style="--bg-url: 
-                url('/projects/Deviant/img/Thumbnail.png');">
+    <!-- Video Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <button class="close-button" id="closeButton">×</button>
+            <iframe class="video-iframe" 
+                    id="videoIframe"
+                    src=""
+                    allow="autoplay; fullscreen; picture-in-picture"
+                    allowfullscreen>
+            </iframe>
+        </div>
     </div>
 
-    
-        <!--Project Heading-->
-        <div class="position-project-heading">
-                <div class="project-heading">
-                     <h1>DEVIANT</h1>
-                    <h2 class="sub-heading">Music Video Snippet</h2>
-                </div>
-             </div>
-        <div>
-
-<br>
-<br>
-
-            <!--Details--> 
-            <div> 
-                <div class="details">    
-                
-                        <!--Role--> 
-                    <div class="detail">
-                            <h4>Role</h4>
-                            <p class="details-description">3D Generalist</p>
-
-                    </div>
-                    <!--Collaberators--> 
-                    <div class="detail">
-                        <h4>Collaberators</h4>
-                            
-                            <p class="details-description">Out of Flux</p>
-                            
-                            </div>
-                    
-                    <!--Duration-->
-                    <div class="detail">
-                        <h4>Duration</h4>
-                            <p class="details-description">1 Month</p>
-                            <p class="details-description-secondary">Nov-Dez 2024</p>
-
-                    </div>
-                
-                    <!--Tools-->
-                    <div class="detail">
-                            <h4>Tools</h4>
-                            <p class="details-description">Houdini</p>
-                            <p class="details-description">Nuke</p>
-                            <p class="details-description">Davinci Resolve</p>
-
-                </div>
+    <!-- Details Section -->
+    <section class="details-container fade-in">
+        <div class="details-table">
+            <div class="detail">
+                <h4>Role</h4>
+                <p class="details-description">3D Generalist</p>
             </div>
             
+            <div class="detail">
+                <h4>Collaborators</h4>
+                <p class="details-description">Out of Flux</p>
+            </div>
+            
+            <div class="detail">
+                <h4>Duration</h4>
+                <p class="details-description">1 Month</p>
+                <p class="details-description-secondary">Nov-Dec 2024</p>
+            </div>
+            
+            <div class="detail">
+                <h4>Tools</h4>
+                <p class="details-description">Houdini</p>
+                <p class="details-description">Nuke</p>
+                <p class="details-description">Davinci Resolve</p>
+            </div>
         </div>
-    </div>
+    </section>
 
-<!--Video Container-->
+    <!-- Video Section -->
+    <section class="video-section fade-in">
+        <div class="center-container">
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/AHEvWaszWiA?si=-gB-cNBEISngisa-" 
+                        title="DEVIANT Music Video Snippet" 
+                        allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+    </section>
 
-<div class="center-container">
-    <div class="video-container">
-        <iframe 
-            src="https://www.youtube.com/embed/AHEvWaszWiA?si=-gB-cNBEISngisa-" 
-            title="YouTube video player" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-            referrerpolicy="strict-origin-when-cross-origin" 
-            allowfullscreen>
-        </iframe>
-    </div>
-</div>
-
-
-
-<!--Project Description-->
-
-
-<div>
-    <div class="project-description">
-        <h2 class="project_subtitle"> § Project Description</h2>
+    <!-- Project Description -->
+    <section class="content-section">
+        <div class="project-description fade-in">
+            <h2 class="project_subtitle">§ Project Description</h2>
             <p class="project_text">
                 This was an assignment for <b>Andreas Cattucci</b>, a lecturer at the FH Salzburg working at Panoply in London. He assigned us a task to find something 
-                we are interested in—an art piece, a style, or even a tool we wanted to develop, all in the spirit of curiosity—and create a project from it. <br><br>
-
+                we are interested in—an art piece, a style, or even a tool we wanted to develop, all in the spirit of curiosity—and create a project from it.
+            </p>
+            
+            <p class="project_text">
                 As I enjoy creating short animations best underlined by music, I immediately knew I was going to make a little music piece. 
                 However, I am always curious about optimizing workflows and achieving results as quickly as possible. 
-                So, I wanted to reduce the tedious process of importing characters from Mixamo, assigning textures, and so on. <br><br>
+                So, I wanted to reduce the tedious process of importing characters from Mixamo, assigning textures, and so on.
+            </p>
 
+            <p class="project_text">
                 Thus, I created the <u>Mixamo Importer</u>, which essentially imports an already downloaded model from Mixamo that has been run 
-                through a PDG process to rebake the textures, 
-                rename individual body parts, and more, 
-                ensuring they are all uniform. The Importer 
-                currently supports about 10 characters from 
-                Mixamo. The exciting part is that you can 
-                easily apply any Mixamo animation you find 
-                onto them, as they all share the same skeleton.
-                This makes adding animated characters into your
-                3D scene a way easier task.
-
-
+                through a PDG process to rebake the textures, rename individual body parts, and more, ensuring they are all uniform. The Importer 
+                currently supports about 10 characters from Mixamo. The exciting part is that you can easily apply any Mixamo animation you find 
+                onto them, as they all share the same skeleton. This makes adding animated characters into your 3D scene a way easier task.
             </p>
         </div>
-</div>
-<br>
-<!--Process-->
+    </section>
 
-
-<div>
-    <div class="project-description">
-        <h2 class="project_subtitle"> § Process</h2>
-            <p class="project_text">
-                The idea for the film came to me quite early. 
-                I was driving on the freeway when I came across multiple 
-                signs on the side of the road. I thought, 
-                "What if I drove so fast that the signs would almost 
-                feel like an animated movie?" Following this thought, 
-                I quickly sketched a short animated sequence to get a 
-                sense of the narrative and overall feel. This became 
-                the first previs for the movie.
-            </p>
+    <!-- Image Gallery Section -->
+    <div class="ig-gallery ig-gallery-2col fade-in">
+        <div class="ig-gallery-item">
+            <img src="./img/Deviant_7.webp" alt="Deviant Still 1" data-caption="Police siren indicating the arrival of law enforcement to the scene." loading="lazy">
         </div>
-</div>
-
-
-
-<!--Breakdown-->
-
-<div class="center-container">
-    <div class="video-container">
-        <iframe 
-            src="https://www.youtube.com/embed/AHEvWaszWiA?si=-gB-cNBEISngisa-" 
-            title="YouTube video player" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-            referrerpolicy="strict-origin-when-cross-origin" 
-            allowfullscreen>
-        </iframe>
+        <!-- <div class="ig-gallery-item">
+            <img src="./img/Deviant_2.webp" alt="Deviant Still 2" data-caption="Highway chase scene with dynamic lighting." loading="lazy">
+        </div>-->
+        <div class="ig-gallery-item">
+            <img src="./img/Deviant_1.webp" alt="Deviant Still 3" data-caption="Police entering suspicious place." loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/Deviant_3.webp" alt="Deviant Still 4" data-caption="POV of Police officer after beeing hit by the influence of the mysterious beeing." loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/Deviant_6.webp" alt="Deviant Still 5" data-caption="Glass of the Police gear exploding due to the impact of the mysterious force." loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/Deviant_4.webp" alt="Deviant Still 6" data-caption="Abstract shot of the police men getting smacked into a giant pillow." loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/Deviant_5.webp" alt="Deviant Still 7" data-caption="Final shot of the mysterious actress kneeling on the floor, having defeated the police and thus not beeing kept in captivity anymore." loading="lazy">
+        </div>
     </div>
-</div>
 
-<!--Learning-->
-
-
-<div>
-    <div class="project-description">
-        <h2 class="project_subtitle"> § Learnings</h2>
+    <!-- Process Section -->
+    <section class="content-section">
+        <div class="project-description fade-in">
+            <h2 class="project_subtitle">§ Process</h2>
             <p class="project_text">
-                - Rebaking Textures in Houdini <br>
-                - Fetching and Modifying Geometry Data using Python/VEX/TOPs <br>
-                - 3D Animation & basic Rigging <br>
-                - Using Layout Features of Solaris
-
+            The process for this project followed a pattern I often experience during my studies. I usually begin with the intention of creating a few tools, but this often evolves into a fully developed project.
+            For instance, I created two tools for this project: a JPlacement tool for COPs, which allowed me to port that functionality into Houdini, and a Mixamo importer. The latter proved especially useful in the final project, as it enabled me to quickly rig and animate both the policeman and the main character.
             </p>
         </div>
-</div>
-<br>
+
+        <!-- Behind the Scenes Video -->
+        <section class="video-section fade-in">
+        <div class="center-container">
+            <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+                <div class="video-wrapper">
+                    <video playsinline muted autoplay loop src="./vid/JMGPlacement.mp4" style="width: 100%; max-width: 1200px; height: auto; border-radius: 8px;"></video>
+                    <div class="video-caption">
+                        <b>JMG Displacement Tool </b><br> for fastly creating abstract patterns that can be used for e.g. Sci-Fi structures. Integrated Displacement and emmision'
+                    </div>
+                </div>
+            </div>
+        </div>
+        </section>
+
+        <!-- Behind the Scenes Video -->
+        <section class="video-section fade-in">
+        <div class="center-container">
+            <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+                <div class="video-wrapper">
+                    <video playsinline muted autoplay loop src="./vid/JMG_MixamoImporter.mp4" style="width: 100%; max-width: 1200px; height: auto; border-radius: 8px;"></video>
+                    <div class="video-caption">
+                    <b>Mixamo Import Tool.</b> <br>
+                    This tool accesses a library of pre-converted Mixamo models. Since Mixamo assets often come with messy material setups, fetching them live would have been even more difficult. Converting them once was enough work, but now the library is clean and ready to use.
+                    </div>
+                </div>
+            </div>
+        </div>
+        </section>
 
 
-<!--Music-->
+
+    </section>
 
 
-<div>
-    <div class="project-description">
-        <h2 class="project_subtitle"> § Music / Credits</h2>
+    <!-- Learnings Section -->
+    <section class="content-section">
+        <div class="project-description fade-in">
+            <h2 class="project_subtitle">§ Learnings</h2>
             <p class="project_text">
-                I went on Artlist for the music because it’s pretty easy to find tracks that fit the videos I want to create.
+                ○ Rebaking Textures in Houdini<br>
+                ○ Fetching and Modifying Geometry Data using Python/VEX/TOPs<br>
+                ○ 3D Animation & basic Rigging<br>
+                ○ Using Layout Features of Solaris
+            </p>
+        </div>
+    </section>
+
+    <!-- Music Section -->
+    <section class="content-section">
+        <div class="project-description fade-in">
+            <h2 class="project_subtitle">§ Music / Credits</h2>
+            <p class="project_text">
+                I went on Artlist for the music because it's pretty easy to find tracks that fit the videos I want to create.
                 I came across the track "The Lighthouse" and instantly had visuals in my head for what I wanted to create. So, credit goes to Out of Flux for this masterpiece.
-
             </p>
-            <br>
-
-
-            <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/2WdMtesBGsZgmwdSYwbPi4?utm_source=generator&theme=0" 
-                width="100%"
-                height="352" 
-                frameBorder="0" 
-                allowfullscreen="" 
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+            
+            <div style="margin-top: 2rem;">
+                <iframe style="border-radius:12px" 
+                        src="https://open.spotify.com/embed/track/2WdMtesBGsZgmwdSYwbPi4?utm_source=generator&theme=0" 
+                        width="100%"
+                        height="352" 
+                        frameBorder="0" 
+                        allowfullscreen="" 
+                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                        loading="lazy">
+                </iframe>
+            </div>
         </div>
-</div>
+    </section>
 
+    <!-- Lightbox Modal for Image Gallery -->
+    <div class="ig-lightbox" id="ig-lightbox">
+        <div class="ig-lightbox-content">
+            <button class="ig-lightbox-nav ig-lightbox-prev" id="ig-lightbox-prev">‹</button>
+            <img id="ig-lightbox-img" src="" alt="">
+            <button class="ig-lightbox-nav ig-lightbox-next" id="ig-lightbox-next">›</button>
+            <div class="ig-lightbox-caption" id="ig-lightbox-caption">Caption text goes here</div>
+            <div class="ig-lightbox-counter" id="ig-lightbox-counter">1 / 6</div>
+        </div>
+    </div>
 
+    <!-- Copyright -->
+    <div class="copyright">
+        © Jona Melvin Grobe
+    </div>
 
-<br>
-<br>
-
-
-
-<!-- Copyright -->
-<p style="text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center;font-size: small;font-family: monospace; margin: 0; color: rgb(255, 255, 255);">
-    © Jona Melvin Grobe
-</p>
-<br>
+    <!-- External JavaScript Files -->
+    <script src="../../js/project.js"></script>
+    <script src="../../js/project_image_gallery.js"></script>
 </body>
-
-</body>
-
-
-
-
-
-
-
-
 </html>
