@@ -97,7 +97,6 @@ class ImageGallery {
             this.lightboxImg.alt = this.galleryItems[this.currentIndex].alt;
             this.updateCounter();
             this.updateCaption();
-            this.updateCaption();
             
             // Clear previous animations and slide in from right
             this.clearImageAnimations();
@@ -123,6 +122,7 @@ class ImageGallery {
             this.lightboxImg.src = this.galleryItems[this.currentIndex].src;
             this.lightboxImg.alt = this.galleryItems[this.currentIndex].alt;
             this.updateCounter();
+            this.updateCaption(); // Added this missing line!
             
             // Clear previous animations and slide in from left
             this.clearImageAnimations();

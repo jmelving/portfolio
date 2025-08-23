@@ -20,11 +20,24 @@ const VIMEO_EMBED_URL = `https://player.vimeo.com/video/${VIMEO_VIDEO_ID}?autopl
 const VIDEO_EMBED_URL = USE_YOUTUBE ? YOUTUBE_EMBED_URL : VIMEO_EMBED_URL;
 
 // ===================================================================
+// HTML OVERRIDE SUPPORT
+// ===================================================================
+
+// Check if hero section has a custom video URL
+function getVideoUrl() {
+    const heroSection = document.getElementById('heroSection');
+    const customVideoUrl = heroSection?.getAttribute('data-video-url');
+    
+    // If custom URL is provided in HTML, use it; otherwise use the configured URL
+    return customVideoUrl || VIDEO_EMBED_URL;
+}
+
+// ===================================================================
 // SLIDESHOW CONFIGURATION
 // ===================================================================
 
 const SLIDE_DURATION = 2000; // Time each image shows (2 seconds)
-const TOTAL_CYCLES = 2; // Number of times to cycle through images
+const TOTAL_CYCLES = 1; // Number of times to cycle through images
 
 // ===================================================================
 // DOM ELEMENTS
@@ -110,7 +123,7 @@ if (isDesktop) {
 // Open modal on click
 heroSection.addEventListener('click', () => {
     document.body.style.overflow = 'hidden';
-    videoIframe.src = VIDEO_EMBED_URL;
+    videoIframe.src = getVideoUrl(); // Use the new function
     modalOverlay.classList.add('active');
 });
 
@@ -169,7 +182,7 @@ heroSection.addEventListener('touchend', (e) => {
     // Only trigger if it's a tap (not a scroll)
     if (touchDistance < 10) {
         document.body.style.overflow = 'hidden';
-        videoIframe.src = VIDEO_EMBED_URL;
+        videoIframe.src = getVideoUrl(); // Use the new function
         modalOverlay.classList.add('active');
     }
 });

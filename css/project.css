@@ -428,6 +428,38 @@ body {
     border: none;
     border-radius: 20px;
 }
+/* Video wrapper to contain both video and caption */
+.video-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    position: relative;
+}
+
+/* Video caption styling */
+.video-caption {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.9);
+    font-family: 'Courier New', monospace;
+    font-size: 1rem;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.025);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    font-style: italic;
+    letter-spacing: 0.5px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .video-caption {
+        font-size: 0.9rem;
+        margin-top: 0.1rem;
+    }
+}
+
+
 
 /* ===================================================================
    CONTENT SECTIONS
