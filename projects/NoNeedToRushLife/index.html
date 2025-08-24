@@ -1,233 +1,355 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-
-
     <!--Metadata-->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="'No Need to Rush Life' is an animated short film by Jona Melvin Grobe that explores the consequences of speeding">
 
-
     <meta name="keywords" content="Jona Melvin Grobe, 3D generalist portfolio, 3D artist showcase, procedural 3D art, 
     high-quality 3D visualizations, Houdini generalist work, realistic 3D rendering, VFX and simulations,
-    digital sculpting portfolio, game asset creation">
+    digital sculpting portfolio, game asset creation, no need to rush life, alpine roads, animation">
     <meta name="author" content="Jona Melvin Grobe">
-    <meta name="robots" content="index, follow"> <!--allows link following for algos-->
-    
+    <meta name="robots" content="index, follow">
     
     <!-- Open Graph Metadata -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="No Need To Rush Life | Jona Melvin Grobe | Portfolio">
     <meta property="og:description" content="Dive into the world of Jona Melvin Grobe: Where art meets code, efficiency meets creativity, and 3D gets weird!">
-    <meta property="og:image" content="https://jmelving.github.io/portfolio/projects/NoNeedToRushLife/img/Thumbnail_3_NNTRL.jpg">
+    <meta property="og:image" content="https://jmelving.de/projects/NoNeedToRushLife/img/Thumbnail_3_NNTRL.jpg">
     <meta property="og:url" content="https://jmelving.de">
-
 
     <title>No Need To Rush Life</title>
 
-
     <link rel="icon" href="../../img/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../../css/main.css">
-    <link rel="stylesheet" href="../../css/reset.css">
-    <link rel="stylesheet" href="../../css/project_template.css">
-    <link rel="stylesheet" href="../../css/videocontainer.css">
+
+    <!-- External CSS Files -->
+    <link rel="stylesheet" href="../../css/project.css">
+    <link rel="stylesheet" href="../../css/project_image_gallery.css">
+    
+    <style>
+        /* Helper classes for different column layouts */
+        .ig-gallery-1col { --gallery-columns: 1; }
+        .ig-gallery-2col { --gallery-columns: 2; }
+        .ig-gallery-3col { --gallery-columns: 3; }
+        .ig-gallery-4col { --gallery-columns: 4; }
+        .ig-gallery-5col { --gallery-columns: 5; }
+    </style>
 </head>
 
-
-<!--Background Color Website-->
-<body class="background">
-
-
-
-<!--NAV BAR-->
+<body>
+    <!-- Navigation Bar -->
     <header class="header-main">
         <nav class="nav-items">
-            <div class="header-pb"><a href="../../index.html"><img src="../../img/pb.gif" alt="profile picture"></a></div>
-            <div class="header-jona-melvin-grobe"><a href="../../index.html">jona_melvin_grobe</a></div>
-            <div class="header-contact"> <a href="../../projects">x</a></div>
+            <div class="header-pb"><a href="../../"><img src="../../img/pb.gif" alt="profile picture"></a></div>
+            <div class="header-jona-melvin-grobe"><a href="../../">jona_melvin_grobe</a></div>
+            <div class="header-contact"><a href="../../projects">x</a></div>
         </nav>
-
     </header>
 
+    <!-- Hero Section -->
+    <section class="hero-section" id="heroSection" data-video-url="https://www.youtube.com/embed/8Yy7zZ2v6sw?autoplay=1">
+        <!-- Image Slideshow -->
+        <div class="image-slideshow" id="imageSlideshow">
+            <img class="slide-image active" src="./img//NO_NEED_TO_RUSH_LIFE_1.webp" alt="No Need to Rush Life Frame 1">
+            <img class="slide-image" src="./img//NO_NEED_TO_RUSH_LIFE_2.webp" alt="No Need to Rush Life Frame 2">
+        </div>
+        
+        <!-- Background Image/Video (optional) -->
+        <div class="background-image" id="backgroundImage" style="background-image: url('./img//NO_NEED_TO_RUSH_LIFE_3.webp');"></div>
+        
+        <div class="hero-overlay"></div>
+        
+        <div class="project-heading">
+            <h1>NO NEED TO RUSH LIFE</h1>
+            <h2 class="sub-heading">Bachelor Project 1</h2>
+        </div>
 
+        <!-- Mobile Tap Hint -->
+        <div class="mobile-tap-hint">
+            <span class="tap-icon">👆</span>
+            <span class="tap-text">TAP TO PLAY VIDEO</span>
+        </div>
 
+        <!-- Custom Cursor -->
+        <div class="custom-cursor" id="customCursor">
+            PLAY<br>VIDEO
+        </div>
+    </section>
 
-<!--Background Video with Heading-->
-    <div class="background-image" style="--bg-url:url('/projects/NoNeedToRushLife/img/Thumbnail_3_NNTRL.jpg');"></div>
-    
-        <!--Project Heading-->
-        <div class="position-project-heading">
-                <div class="project-heading">
-                     <h1>NO NEED TO RUSH LIFE</h1>
-                    <h2 class="sub-heading">MMP1</h2>
-                </div>
-             </div>
-        <div>
-
-<br>
-<br>
-
-            <!--Details--> 
-            <div> 
-                <div class="details">    
-                
-                        <!--Role--> 
-                    <div class="detail">
-                            <h4>Role</h4>
-                            <p class="details-description">Visuals / Sound Design</p>
-
-                    </div>
-                    <!--Collaberators--> 
-                    <div class="detail">
-                        <h4>Collaberators</h4>
-                            <p class="details-description"><a href="">Kilian Konz</a></p>
-                            
-                            <p class="details-description">Stefan Wolf</p>
-                            
-                            </div>
-                    
-                    <!--Duration-->
-                    <div class="detail">
-                        <h4>Duration</h4>
-                            <p class="details-description">6 Months</p>
-                            <p class="details-description-secondary">2021-2022</p>
-
-                    </div>
-                
-                    <!--Tools-->
-                    <div class="detail">
-                            <h4>Tools</h4>
-                            <p class="details-description">Houdini</p>
-                            <p class="details-description">Blender</p>
-                            <p class="details-description">Nuke</p>
-                            <p class="details-description">FL Studio / Audition</p>
-                            <p class="details-description">Premiere Pro</p>
-
-                </div>
-            </div>
-            
+    <!-- Video Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <button class="close-button" id="closeButton">×</button>
+            <iframe class="video-iframe" 
+                    id="videoIframe"
+                    src=""
+                    allow="autoplay; fullscreen; picture-in-picture"
+                    allowfullscreen>
+            </iframe>
         </div>
     </div>
 
-<!--Video Container-->
+    <!-- Details Section -->
+    <section class="details-container fade-in">
+        <div class="details-table">
+            <div class="detail">
+                <h4>Role</h4>
+                <p class="details-description">Visuals / Sound Design</p>
+            </div>
+            
+            <div class="detail">
+                <h4>Collaborators</h4>
+                <p class="details-description"><a href="" target="_blank">Kilian Konz</a></p>
+                <p class="details-description">Stefan Wolf</p>
+            </div>
+            
+            <div class="detail">
+                <h4>Duration</h4>
+                <p class="details-description">6 months</p>
+                <p class="details-description-secondary">2021-2022</p>
+            </div>
+            
+            <div class="detail">
+                <h4>Tools</h4>
+                <p class="details-description">Houdini</p>
+                <p class="details-description">Blender</p>
+                <p class="details-description">Nuke</p>
+                <p class="details-description">FL Studio / Audition</p>
+                <p class="details-description">Premiere Pro</p>
+            </div>
+        </div>
+    </section>
 
-<div class="center-container">
-    <div class="video-container">
-        <iframe 
-            src="https://www.youtube.com/embed/8Yy7zZ2v6sw?si=kpbOcahlAXT4pPuk" 
-            title="YouTube video player" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-            referrerpolicy="strict-origin-when-cross-origin" 
-            allowfullscreen>
-        </iframe>
-    </div>
-</div>
+    <!-- Video Section -->
+    <section class="video-section fade-in">
+        <div class="center-container">
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/8Yy7zZ2v6sw" 
+                        title="No Need To Rush Life Short Film" 
+                        allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+    </section>
 
-
-
-<!--Project Description-->
-
-
-<div>
-    <div class="project-description">
-        <h2 class="project_subtitle"> § Project Description</h2>
+    <!-- Project Description -->
+    <section class="content-section">
+        <div class="project-description fade-in">
+            <h2 class="project_subtitle">§ Project Description</h2>
             <p class="project_text">
                 This was the biggest project I have undertaken so far at the University of Applied Sciences Salzburg. 
                 It is the first of three projects I am required to deliver during my three years of studying MultiMediaArt.
                 <b>"NO NEED TO RUSH LIFE"</b> was originally planned as a previsualization, but even before starting, I realized that with a bit of 
-                extra effort, I could turn it into a fully completed animated short.<br><br>
-
+                extra effort, I could turn it into a fully completed animated short.
+            </p>
+            
+            <p class="project_text">
                 The idea for this project had been on my list for over a year, and I was determined to make it happen. I wanted to seize the 
                 opportunity to have some fun and explore my creativity while I still could. The short film tells the story of a driver 
-                navigating the Austrian alpine roads who ignores every road sign—ultimately leading to him driving off a cliff. <br><br>
-                
+                navigating the Austrian alpine roads who ignores every road sign—ultimately leading to him driving off a cliff.
+            </p>
+
+            <p class="project_text">
                 I received some much-appreciated help with the sound design and music. A huge thanks to Kilian Konz for his 
-                professionalism in composing the music and bringing all my ideas to life. I’m also grateful to Stefan Wolf for 
-                helping me create the satisfying gear-shift sound using his car.<br><br>
-                
-                I hope all the stress of the past months was worth it and that you enjoy the final result!
+                professionalism in composing the music and bringing all my ideas to life. I'm also grateful to Stefan Wolf for 
+                helping me create the satisfying gear-shift sound using his car.
             </p>
         </div>
-</div>
+    </section>
 
-<!--Process-->
-
-
-<div>
-    <div class="project-description">
-        <h2 class="project_subtitle"> § Process</h2>
-            <p class="project_text">
-                The idea for the film came to me quite early. 
-                I was driving on the freeway when I came across multiple 
-                signs on the side of the road. I thought, 
-                "What if I drove so fast that the signs would almost 
-                feel like an animated movie?" Following this thought, 
-                I quickly sketched a short animated sequence to get a 
-                sense of the narrative and overall feel. This became 
-                the first previs for the movie.
-            </p>
+    <!-- Behind the Scenes Gallery -->
+    <div class="ig-gallery ig-gallery-3col fade-in">
+        <div class="ig-gallery-item">
+            <img src="./img/NO_NEED_TO_RUSH_LIFE_1.webp" alt="NNTRL Still 1" data-caption="Old man sitting on alpine bench sleeping." loading="lazy">
         </div>
-</div>
+        <div class="ig-gallery-item">
+            <img src="./img/NO_NEED_TO_RUSH_LIFE_2.webp" alt="NNTRL Still 2" data-caption="Sheep turning towards the camera noticing their chance to escape." loading="lazy">
+        </div>
 
-
-
-<!--First Previs Video-->
-
-<div class="center-container">
-    <div class="video-container">
-        <iframe 
-            src="https://www.youtube.com/embed/8Yy7zZ2v6sw?si=kpbOcahlAXT4pPuk" 
-            title="YouTube video player" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-            referrerpolicy="strict-origin-when-cross-origin" 
-            allowfullscreen>
-        </iframe>
+        <div class="ig-gallery-item">
+            <img src="./img/NO_NEED_TO_RUSH_LIFE_3.webp" alt="NNTRL Still 3" data-caption="Last shot after the wreckless driver fell down the cliff." loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/NNTRL_0.webp" alt="NNTRL Still 4" data-caption="Erdnut Pictures Logo I created for this project and our friendsgroup." loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/NNTRL_1.webp" alt="NNTRL Still 5" data-caption="Title Animation with bird flying through the cloudy title, made in Houdini." loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/NNTRL_2.webp" alt="NNTRL Still 6" data-caption="Top shot of the Sheep escaping their fence." loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/NNTRL_3.webp" alt="NNTRL Still 7" data-caption="Sheep dancing on the road before the car comes to smack them." loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/NNTRL_4.webp" alt="NNTRL Still 8" data-caption="Car driving agressively." loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/NNTRL_5.webp" alt="NNTRL Still 9" data-caption="Hand gear shifting." loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/NNTRL_6.webp" alt="NNTRL Still 10" data-caption="Pistons in the car trunk rumbling." loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/NNTRL_7.webp" alt="NNTRL Still 11" data-caption="Wide shot of the car driving down the alpine roads." loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/NNTRL_8.webp" alt="NNTRL Still 12" data-caption="Sqirrel sitting on the road." loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/NNTRL_9.webp" alt="NNTRL Still 13" data-caption="Squirrel got smacked by car and now sticks to the cameralens." loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/NNTRL_10.webp" alt="NNTRL Still 14" data-caption="Car driving past a 80km/h sign, but definetly not driving below that speed." loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/NNTRL_11.webp" alt="NNTRL Still 15" data-caption="Driver agressively concentrating on the road." loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/NNTRL_12.webp" alt="NNTRL Still 16" data-caption="Speeding past the soundbarrier, so to say..." loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/NNTRL_13.webp" alt="NNTRL Still 17" data-caption="Not even the lamas can read in peace when there are such wreckless drivers on the roads." loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/NNTRL_14.webp" alt="NNTRL Still 18" data-caption="Well, you've been warned." loading="lazy">
+        </div>
     </div>
-</div>
 
-<!--Process-->
-
-
-<div>
-    <div class="project-description">
-        <h2 class="project_subtitle"> § Learnings</h2>
+    <!-- Concept Section -->
+    <section class="content-section">
+        <div class="project-description fade-in">
+            <h2 class="project_subtitle">§ Concept</h2>
             <p class="project_text">
-                - 3D Modelling <br>
-                - tiny bit Houdini Smoke sim<br>
-                - 3D Animation & basic Rigging <br>
-                - Sound Design
-
+                The idea for the film came to me quite early. I was driving on the freeway when I came across multiple 
+                signs on the side of the road. I thought, "What if I drove so fast that the signs would almost 
+                feel like an animated movie?" Following this thought, I quickly sketched a short animated sequence to get a 
+                sense of the narrative and overall feel. This became the first previs for the movie.
             </p>
         </div>
-</div>
+    </section>
+    
+    <!-- Process Section -->
+    <section class="content-section">
+        <div class="project-description fade-in">
+            <h2 class="project_subtitle">§ Process</h2>
+            <p class="project_text">
+                The project began with extensive storyboarding and previsualization to establish the pacing and visual rhythm. 
+                I focused on creating a seamless flow from the initial driving sequence through to the dramatic conclusion. 
+                The 3D environments were built in Blender and Houdini, with particular attention to the Austrian alpine landscape 
+                and realistic road infrastructure. Sound design played a crucial role in immersing the audience in the driving experience, 
+                from engine sounds to the atmospheric mountain ambience.
+            </p>
+        </div>
+
+    <!-- Behind the Scenes Video -->
+    <section class="video-section fade-in">
+    <div class="center-container">
+        <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+            <div class="video-wrapper">
+                <video playsinline muted autoplay loop src="../NoNeedToRushLife/vid/First_3D_Previs.mp4" style="width: 100%; max-width: 1200px; height: auto; border-radius: 8px;"></video>
+                <div class="video-caption">
+                    First ever 3D Previs Blockout.
+                </div>
+            </div>
+        </div>
+    </div>
+    </section>
+
+    <!-- Behind the Scenes Video -->
+    <section class="video-section fade-in">
+    <div class="center-container">
+        <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+            <div class="video-wrapper">
+                <video playsinline muted autoplay loop src="../NoNeedToRushLife/vid/Previs No need to rush life_web.mp4" style="width: 100%; max-width: 1200px; height: auto; border-radius: 8px;"></video>
+                <div class="video-caption">
+                    Final Proxy Version. This version is basically the final render just with everything turned to it's proxy purpose. 
+                </div>
+            </div>
+        </div>
+    </div>
+    </section>
 
 
 
 
 
-<br>
-<br>
+
+    </section>
 
 
-<!-- Copyright -->
-<p style="text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center;font-size: small;font-family: monospace; margin: 0; color: rgb(255, 255, 255);">
-    © Jona Melvin Grobe
-</p>
-<br>
+
+    <!-- Technical Breakdown Section -->
+    <section class="content-section">
+        <div class="project-description fade-in">
+            <h2 class="project_subtitle">§ Technical Breakdown</h2>
+            <p class="project_text">
+                The animation pipeline involved extensive use of Houdini for procedural environment generation and Blender for detailed modeling and animation. 
+                The car rigging system was designed to handle realistic physics-based movement while maintaining artistic control over the dramatic moments. 
+                Nuke was used for compositing multiple render layers and adding atmospheric effects that enhanced the mountainous setting. 
+                The final edit in Premiere Pro synchronized the visual narrative with Kilian's musical composition and our custom sound design elements.
+            </p>
+        </div>
+        
+
+
+        <!-- Behind the Scenes Video -->
+        <section class="video-section fade-in">
+        <div class="center-container">
+            <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+                <div class="video-wrapper">
+                    <video playsinline muted autoplay loop src="../NoNeedToRushLife/vid/HOUDINI STRUGGLE.mp4" style="width: 100%; max-width: 1200px; height: auto; border-radius: 8px;"></video>
+                    <div class="video-caption">
+                        Just some GIF I found of me trying to get the smokesim working. I think I was struggling with it, quite a bit as it was my first contact with Houdini and I wanted the smoke not to dissipate as fast as it did.
+                    </div>
+                </div>
+            </div>
+        </div>
+        </section>
+    </section>
+
+    <!-- Learnings Section -->
+    <section class="content-section">
+        <div class="project-description fade-in">
+            <h2 class="project_subtitle">§ Learnings</h2>
+            
+            <p class="project_text"><b>Technical Skills</b></p>
+            <p class="project_text">
+                ○ Advanced 3D Modeling and Environment Creation<br>
+                ○ Houdini Smoke Simulation and Procedural Workflows<br>
+                ○ 3D Animation and Character/Vehicle Rigging<br>
+                ○ Professional Sound Design and Audio Post-Production
+            </p>
+
+            <p class="project_text"><b>Project Management</b></p>
+            <p class="project_text">
+                ○ Long-form project planning and execution<br>
+                ○ Collaboration with sound designers and composers<br>
+                ○ Balancing creative vision with technical constraints<br>
+                ○ Iterative development from previs to final product
+            </p>
+        </div>
+    </section>
+
+    <!-- Lightbox Modal for Image Gallery -->
+    <div class="ig-lightbox" id="ig-lightbox">
+        <div class="ig-lightbox-content">
+            <button class="ig-lightbox-nav ig-lightbox-prev" id="ig-lightbox-prev">‹</button>
+            <img id="ig-lightbox-img" src="" alt="">
+            <button class="ig-lightbox-nav ig-lightbox-next" id="ig-lightbox-next">›</button>
+            <div class="ig-lightbox-caption" id="ig-lightbox-caption">Caption text goes here</div>
+            <div class="ig-lightbox-counter" id="ig-lightbox-counter">1 / 6</div>
+        </div>
+    </div>
+
+    <!-- Copyright -->
+    <div class="copyright">
+        © Jona Melvin Grobe
+    </div>
+
+    <!-- External JavaScript Files -->
+    <script src="../../js/project.js"></script>
+    <script src="../../js/project_image_gallery.js"></script>
 </body>
-
-
-</body>
-
-
-
-
-
-
-
-
 </html>
