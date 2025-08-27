@@ -1,226 +1,224 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-
-
     <!--Metadata-->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Wheel of Suffering | Pwnisher Challenge Entry by Jona Melvin Grobe">
+    <meta name="description" content="Wheel of Suffering | Top 100 | Pwnisher Challenge Entry  by Jona Melvin Grobe">
 
     <meta name="keywords" content="Jona Melvin Grobe, 3D generalist portfolio, 3D artist showcase, procedural 3D art, 
-    high-quality 3D visualizations, Houdini generalist work, realistic 3D rendering, VFX and simulations, Unreal Engine 5, Realtime,
-    digital sculpting portfolio, game asset creation, Pwnisher, Challenge, Wheel of Suffering">
+    high-quality 3D visualizations, Houdini generalist work, realistic 3D rendering, VFX and simulations,
+    digital sculpting portfolio, game asset creation, wheel of suffering, pwnisher challenge, challenge, private project">
     <meta name="author" content="Jona Melvin Grobe">
-    <meta name="robots" content="index, follow"> <!--allows link following for algos-->
-    
+    <meta name="robots" content="index, follow">
     
     <!-- Open Graph Metadata -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Wheel of Suffering | Jona Melvin Grobe | Portfolio">
+    <meta property="og:title" content="Wheel of suffering | Jona Melvin Grobe | Portfolio">
     <meta property="og:description" content="Dive into the world of Jona Melvin Grobe: Where art meets code, efficiency meets creativity, and 3D gets weird!">
-    <meta property="og:image" content="https://jmelving.de/projects/WheelofSuffering/img/Thumbnail.webp">
+    <meta property="og:image" content="https://jmelving.de/projects/WheelofSuffering/Thumbnail.webp">
     <meta property="og:url" content="https://jmelving.de">
 
-
-    <title>Painting Greys</title>
-
+    <title>Wheel of Suffering</title>
 
     <link rel="icon" href="../../img/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../../css/main.css">
-    <link rel="stylesheet" href="../../css/reset.css">
-    <link rel="stylesheet" href="../../css/project_template.css">
-    <link rel="stylesheet" href="../../css/videocontainer.css">
+
+    <!-- External CSS Files -->
+    <link rel="stylesheet" href="../../css/project.css">
+    <link rel="stylesheet" href="../../css/project_image_gallery.css">
+    
+    <style>
+        /* Helper classes for different column layouts */
+        .ig-gallery-1col { --gallery-columns: 1; }
+        .ig-gallery-2col { --gallery-columns: 2; }
+        .ig-gallery-3col { --gallery-columns: 3; }
+        .ig-gallery-4col { --gallery-columns: 4; }
+        .ig-gallery-5col { --gallery-columns: 5; }
+    </style>
 </head>
 
-
-<!--Background Color Website-->
-<body class="background">
-
-
-
-<!--NAV BAR-->
+<body>
+    <!-- Navigation Bar -->
     <header class="header-main">
         <nav class="nav-items">
-            <div class="header-pb"><a href="../../index.html"><img src="../../img/pb.gif" alt="profile picture"></a></div>
-            <div class="header-jona-melvin-grobe"><a href="../../index.html">jona_melvin_grobe</a></div>
-            <div class="header-contact"> <a href="../../projects">x</a></div>
+            <div class="header-pb"><a href="../../"><img src="../../img/pb.gif" alt="profile picture"></a></div>
+            <div class="header-jona-melvin-grobe"><a href="../../">jona_melvin_grobe</a></div>
+            <div class="header-contact"><a href="../../projects">x</a></div>
         </nav>
-
     </header>
 
+    <!-- Hero Section -->
+    <section class="hero-section" id="heroSection" data-video-url="https://www.youtube.com/embed/xm8UOGH3hVY?autoplay=1">
+            <!-- For VIMEO  https://player.vimeo.com/video/VIDEO_ID?autoplay=1&color=ffffff&title=0&byline=0&portrait=0-->
 
 
+        <!-- Image Slideshow -->
+        <div class="image-slideshow" id="imageSlideshow">
+            <img class="slide-image active" src="./img/bts/WheelofSuffering_1.webp" alt="Frame 1">
+            <img class="slide-image" src="./img/bts/WheelofSuffering_2.webp" alt="Frame 2">
+            <img class="slide-image" src="./img/bts/WheelofSuffering_3.webp" alt="Frame 3">
+        </div>
+        
+        <!-- Background Image/Video (optional) -->
+        <div class="background-image" id="backgroundImage" style="background-image: url('./img/Thumbnail.webp');"></div>
+        
+        <div class="hero-overlay"></div>
+        
+        <div class="project-heading">
+            <h1>WHEEL OF SUFFERING</h1>
+            <h2 class="sub-heading">PWNISHER CHALLENGE</h2>
+        </div>
 
-<!--Background Video with Heading-->
-    <div class="background-image" style="--bg-url: 
-                url('/projects/WheelofSuffering/img/Thumbnail.webp');">
-    </div>
+        <!-- Mobile Tap Hint -->
+        <div class="mobile-tap-hint">
+            <span class="tap-icon">👆</span>
+            <span class="tap-text">TAP TO PLAY VIDEO</span>
+        </div>
 
-    
-        <!--Project Heading-->
-        <div class="position-project-heading">
-                <div class="project-heading">
-                     <h1>WHEEL OF SUFFERING</h1>
-                    <h2 class="sub-heading">TOP 70 | Pwnisher Challenge Entry</h2>
-                </div>
-             </div>
-        <div>
+        <!-- Custom Cursor -->
+        <div class="custom-cursor" id="customCursor">
+            PLAY<br>VIDEO
+        </div>
+    </section>
 
-<br>
-<br>
-
-            <!--Details--> 
-            <div> 
-                <div class="details">    
-                
-                        <!--Role--> 
-                    <div class="detail">
-                            <h4>Role</h4>
-                            <p class="details-description">3D Generalist</p>
-
-                    </div>
-                    
-                    <!--Duration-->
-                    <div class="detail">
-                        <h4>Duration</h4>
-                            <p class="details-description">2 weeks</p>
-                            <p class="details-description-secondary">2021</p>
-
-                    </div>
-                
-                    <!--Tools-->
-                    <div class="detail">
-                            <h4>Tools</h4>
-                            <p class="details-description">Blender</p>
-                            <p class="details-description">Photoshop</p>
-
-                </div>
-            </div>
-            
+    <!-- Video Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <button class="close-button" id="closeButton">×</button>
+            <iframe class="video-iframe" 
+                    id="videoIframe"
+                    src=""
+                    allow="autoplay; fullscreen; picture-in-picture"
+                    allowfullscreen>
+            </iframe>
         </div>
     </div>
 
-<!--Video Container (later maybe some stills rendered)-->
+    <!-- Details Section -->
+    <section class="details-container fade-in">
+        <div class="details-table">
+            <div class="detail">
+                <h4>Role</h4>
+                <p class="details-description">3D Generalist</p>
+            </div>
+            
+            <div class="detail">
+                <h4>Duration</h4>
+                <p class="details-description">14 days</p>
+                <p class="details-description-secondary">May 2021</p>
+            </div>
+            
+            <div class="detail">
+                <h4>Tools</h4>
+                <p class="details-description">Blender</p>
+            </div>
+        </div>
+    </section>
 
-<div class="center-container">
-    <div class="video-container">
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/xm8UOGH3hVY?si=nFoqGehVpophrPWz" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-    </div>
-</div>
+    <!-- Video Section -->
+    <section class="video-section fade-in">
+        <div class="center-container">
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/xm8UOGH3hVY" 
+                        title="Echoes Short Film" 
+                        allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+    </section>
 
-
-
-<!--Project Description-->
-
-<div>
-    <div class="project-description">
-        <h2 class="project_subtitle"> § Project Description</h2>
+    <!-- Project Description -->
+    <section class="content-section">
+        <div class="project-description fade-in">
+            <h2 class="project_subtitle">§ Project Description</h2>
             <p class="project_text">
                 I took part in the Alternate Realities competition by Pwnisher, which ended on June 1st 2021. This documents my one-month journey to completing my submission. 
                 My goal was to create a visually interesting and creative piece that utilized the competition template in an innovative way. 
                 For example, instead of simply using a giant moon in the background, I transformed it into a giant wheel that turns continuously. 
                 This element was meant to be symbolic, representative of the era of the Black Plague.
-            
+            </p>
         </div>
-</div>
-<br><br>
+    </section>
 
-
-
-
-
-<!--Stills-->
-<div class="image-collection-wrapper">
-    <div class="image-collection">
-      <img src="./img/Thumbnail.webp" alt="Placeholder 1">
-  </div>
-</div>
-
-
-
-
- <div>
-    <div class="project-description">
-        <h2 class="project_subtitle"> § Process</h2>
+    <!-- Process Section -->
+    <section class="content-section">
+        <div class="project-description fade-in">
+            <h2 class="project_subtitle">§ Process</h2>
             <p class="project_text">
                 The first thing that I do for these kind of projects is drawing a little concept art for it so I have Reference for all the Assets I need to gather and what the composition could look like. Ive had about 5 Ideas which I first scribbled out
                 and then painted some more detail into it.
-
-
             </p>
         </div>
-</div>
+    </section>
+
+    <!-- Behind the Scenes Gallery -->
+    <div class="ig-gallery ig-gallery-1col fade-in">
+        <div class="ig-gallery-item">
+            <img src="./img/WOS_0.webp" alt="Behind the Scenes 1" data-caption="First quick sketch done in Photoshop" loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/WOS_2.webp" data-caption="Concept Art to get a feel for the mood, done in Photoshop" loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/WOS_1.webp" alt="Behind the Scenes 3" data-caption="Template that was given to us by Pwnisher" loading="lazy">
+        </div>
+    </div>
+
+    <!-- Recap -->
+    <section class="content-section">
+        <div class="project-description fade-in">
+            <h2 class="project_subtitle">§ Afterthoughts</h2>
+            <p class="project_text">
+                This was one of the most fun projects I did over the course of my carreer. I was at the very start of my learning journey and having a set timeframe really to learn what ever it needed to bring this one scene alive really
+                made a difference. I learned so extremely much in such short time. Also putting up my work on YouTube was a really good decision. It got nearly 40k views and a lot of comments complimenting and criticising my work. And for 2
+                years straight I am getting freelance requests to do 3D work, just because people discovered my art through this challenge. So definetly worth it.            </p>
+        </div>
+    </section>
+    
 
 
 
 
 
-    <div class="image-collection-wrapper">
-        <div class="image-collection">
-            <img src="./img/bts/WheelofSuffering_2.webp" alt="Placeholder 1">
-            <img src="./img/bts/WheelofSuffering_1.webp" alt="Placeholder 1">
+    <!-- Learnings Section -->
+    <section class="content-section">
+        <div class="project-description fade-in">
+            <h2 class="project_subtitle">§ Learnings</h2>
             
-  </div>
-</div>
-<div class="image-collection-wrapper">
-    <div class="image-collection">
-        <img src="./img/bts/WheelofSuffering_3.webp" alt="Placeholder 1">
-        
-</div>
-</div>
-  
-
-
-
-<!--Learning-->
-
-
-<div>
-    <div class="project-description">
-        <h2 class="project_subtitle"> § Learnings</h2>
-
-        <p class="project_text" > <b>Blender</b> </p>
+            <p class="project_text"><b>Blender</b></p>
             <p class="project_text">
                 ○ Cloth Simulation <br>
                 ○ Using Images as Planes <br>
                 ○ Retargeting Animation to a custom self rigged Character <br>
                 ○ Rigid Body Physics
             </p>
-<br><br>
-            <p class="project_text" > <b>Personal</b> </p>
+
+            <p class="project_text"><b>General</b></p>
             <p class="project_text">
                 ○ Documentation of your work is worth it<br>
                 ○ Don't put time into things nobody will see
             </p>
         </div>
-</div>
-<br>
+    </section>
 
+    <!-- Lightbox Modal for Image Gallery -->
+    <div class="ig-lightbox" id="ig-lightbox">
+        <div class="ig-lightbox-content">
+            <button class="ig-lightbox-nav ig-lightbox-prev" id="ig-lightbox-prev">‹</button>
+            <img id="ig-lightbox-img" src="" alt="">
+            <button class="ig-lightbox-nav ig-lightbox-next" id="ig-lightbox-next">›</button>
+            <div class="ig-lightbox-caption" id="ig-lightbox-caption">Caption text goes here</div>
+            <div class="ig-lightbox-counter" id="ig-lightbox-counter">1 / 6</div>
+        </div>
+    </div>
 
+    <!-- Copyright -->
+    <div class="copyright">
+        © Jona Melvin Grobe
+    </div>
 
-<br>
-<br>
-
-<!-- Copyright -->
-<p style="text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center;font-size: small;font-family: monospace; margin: 0; color: rgb(255, 255, 255);">
-    © Jona Melvin Grobe
-</p>
-<br>
-
-
-
-
-
-
-
-
-
-
-
-
-
-</body>
+    <!-- External JavaScript Files -->
+    <script src="../../js/project.js"></script>
+    <script src="../../js/project_image_gallery.js"></script>
 </body>
 </html>
