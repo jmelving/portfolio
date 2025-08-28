@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--Metadata-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ECHOES by Jona Melvin Grobe, Hannah Rampitsch, Chris Raschke and Sina Anders">
+
+    <meta name="keywords" content="Jona Melvin Grobe, 3D generalist portfolio, 3D artist showcase, procedural 3D art, 
+    high-quality 3D visualizations, Houdini generalist work, realistic 3D rendering, VFX and simulations,
+    digital sculpting portfolio, game asset creation, Without You, Art Lead, Bachelor Project, FH Salzburg">
+    <meta name="author" content="Jona Melvin Grobe">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph Metadata -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Echoes | Jona Melvin Grobe | Portfolio">
+    <meta property="og:description" content="Dive into the world of Jona Melvin Grobe: Where art meets code, efficiency meets creativity, and 3D gets weird!">
+    <meta property="og:image" content="https://jmelving.de/projects/Echoes/img/Still_1.webp">
+    <meta property="og:url" content="https://jmelving.de">
+
+    <title>Without You</title>
+
+    <link rel="icon" href="../../img/favicon.ico" type="image/x-icon">
+
+    <!-- External CSS Files -->
+    <link rel="stylesheet" href="../../css/project.css">
+    <link rel="stylesheet" href="../../css/project_image_gallery.css">
+    
+    <style>
+        /* Helper classes for different column layouts */
+        .ig-gallery-1col { --gallery-columns: 1; }
+        .ig-gallery-2col { --gallery-columns: 2; }
+        .ig-gallery-3col { --gallery-columns: 3; }
+        .ig-gallery-4col { --gallery-columns: 4; }
+        .ig-gallery-5col { --gallery-columns: 5; }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <header class="header-main">
+        <nav class="nav-items">
+            <div class="header-pb"><a href="../../"><img src="../../img/pb.gif" alt="profile picture"></a></div>
+            <div class="header-jona-melvin-grobe"><a href="../../">jona_melvin_grobe</a></div>
+            <div class="header-contact"><a href="../../projects">x</a></div>
+        </nav>
+    </header>
+    <!-- Hero Section -->
+    <section class="hero-section" id="heroSection" data-video-url="https://player.vimeo.com/video/839891107?autoplay=1&color=ffffff&title=0&byline=0&portrait=0">
+            <!-- For VIMEO  https://player.vimeo.com/video/VIDEO_ID?autoplay=1&color=ffffff&title=0&byline=0&portrait=0-->
+
+
+        <!-- Image Slideshow -->
+        <div class="image-slideshow" id="imageSlideshow">
+            <img class="slide-image active" src="./img/Still_3.webp" alt="Frame 1">
+            <img class="slide-image" src="./img/Still_0.webp" alt="Frame 2">
+            <img class="slide-image" src="./img/Still_1.webp" alt="Frame 3">
+        </div>
+        
+        <!-- Background Image/Video (optional) -->
+        <div class="background-image" id="backgroundImage" style="background-image: url('./img/Still_4.webp');"></div>
+        
+        <div class="hero-overlay"></div>
+        
+        <div class="project-heading">
+            <h1>WITHOUT YOU</h1>
+            <h2 class="sub-heading">Bachelor Project 2</h2>
+        </div>
+
+        <!-- Mobile Tap Hint -->
+        <div class="mobile-tap-hint">
+            <span class="tap-icon">👆</span>
+            <span class="tap-text">TAP TO PLAY VIDEO</span>
+        </div>
+
+        <!-- Custom Cursor -->
+        <div class="custom-cursor" id="customCursor">
+            PLAY<br>VIDEO
+        </div>
+    </section>
+
+    <!-- Video Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <button class="close-button" id="closeButton">×</button>
+            <iframe class="video-iframe" 
+                    id="videoIframe"
+                    src=""
+                    allow="autoplay; fullscreen; picture-in-picture"
+                    allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+
+    <!-- Details Section -->
+    <section class="details-container fade-in">
+        <div class="details-table">
+            <div class="detail">
+                <h4>Role</h4>
+                <p class="details-description">3D Generalist</p>
+            </div>
+            
+            <div class="detail">
+                <h4>Collaborators</h4>
+                <p class="details-description"><a href="https://bernadette_erkinger.artstation.com/" target="_blank">Bernadette Erkinger</a></p>
+                <p class="details-description"><a href="https://christopherraschke.com/" target="_blank">Fabian Holzer</a></p>
+            </div>
+            
+            <div class="detail">
+                <h4>Duration</h4>
+                <p class="details-description">6 months</p>
+                <p class="details-description-secondary">2022-2023</p>
+            </div>
+            
+            <div class="detail">
+                <h4>Tools</h4>
+                <p class="details-description">Blender</p>
+                <p class="details-description">Houdini</p>
+                <p class="details-description">Nuke</p>
+                <p class="details-description">Davinci Resolve</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Section -->
+    <section class="video-section fade-in">
+        <div class="center-container">
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/b841bMnN5P4" 
+                        title="Echoes Short Film" 
+                        allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Description -->
+    <section class="content-section">
+        <div class="project-description fade-in">
+            <h2 class="project_subtitle">§ Project Description</h2>
+            <p class="project_text">
+                “Without You" is an animated short about human greed. Ants peacefully inhabit their world, until humans invade, determined to harvest their powerful mushrooms as an energy source. When humanity destroys the earth, the ants discover a way to get rid of the humans. The Project We wanted to create a stylized film that humerously takes up the topic of human greed, in combination with climate change and take the persepective of ants. The Look was highly inspired by the Game "Grounded". 
+            </p>
+        </div>
+    </section>
+
+
+
+    <!-- Behind the Scenes Gallery -->
+    <div class="ig-gallery ig-gallery-2col fade-in">
+        <div class="ig-gallery-item">
+            <img src="./img/Still_0.webp" alt="Behind the Scenes 1" data-caption="" loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/Still_1.webp" alt="Behind the Scenes 2" data-caption="" loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/Still_2.webp" alt="Behind the Scenes 3" data-caption="" loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/Still_3.webp" alt="Behind the Scenes 4" data-caption="" loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/Still_4.webp" alt="Behind the Scenes 5" data-caption='' loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/Still_5.webp" alt="Behind the Scenes 6" data-caption="" loading="lazy">
+        </div>
+    </div>
+    
+
+    <!-- Process Section -->
+    <section class="content-section">
+        <div class="project-description fade-in">
+            <h2 class="project_subtitle">§ Process</h2>
+            <p class="project_text">
+                After facing a major setback at the start of production and requiring to start nearly from scratch, we worked hard to achieve our goal of delivering a finished product. The story is now much better conveyed, thanks to Josef Schinwald`s assistance in constructing an epic adventure for our protagonist.
+            </p>
+        </div>
+    </section>
+
+    <!-- My Role -->
+    <section class="content-section">
+        <div class="project-description fade-in">
+            <h2 class="project_subtitle">§ My Role</h2>
+            <p class="project_text">
+                For the second Bachelor Project, unlike the first one, we were working as a team. Some students who had done particularly well in the first project were given the opportunity to take on a Lead position. In this project, I was given that responsibility, which meant guiding my teammates and helping to organize the workflow.  
+
+                I wanted to make sure that nobody felt overwhelmed, so I assigned specific roles to my peers and took on the remaining tasks myself. Midway through, the project was completely restructured, which made the semester very challenging for all of us.  
+                <br><br>
+                In the end, my main responsibilities included:  <br>
+                ○ Project Management<br>
+                ○ Feedback & Tutoring<br>
+                ○ Compositing<br>
+                ○ Animation / Layout / Rendering / Lighting / Simulations<br>
+                ○ A bit of Modeling & Texturing (with most of it handled by Bernadette Erkinger)<br>
+                ○ Communication with Audio / Voice actor <br>
+                ○ Singing with my beautiful voice for the credits :) <br>
+                <br>
+
+
+                It was certainly a lot of work, but I learned how important it is to balance leadership with collaboration. Even though the scope of the project was ambitious, everyone contributed in their own way, and I focused on keeping things moving forward so the team could finish successfully.
+
+
+            </p>
+        </div>
+    </section>
+
+    <!-- Learnings Section -->
+    <section class="content-section">
+        <div class="project-description fade-in">
+            <h2 class="project_subtitle">§ Learnings</h2>
+            
+            <p class="project_text"><b>Project Management</b></p>
+            <p class="project_text">
+                ○ First time managing a Project<br>
+                ○ Giving constructive Feedback
+                ○ Filestructures are Important
+
+            </p>
+
+            <p class="project_text"><b>3D</b></p>
+            <p class="project_text">
+                ○ First Houdini Destruction Simulation<br>
+                ○ Working in a Team to bring all assets together into a final scene<br>
+            </p>
+        </div>
+    </section>
+
+    <!-- Lightbox Modal for Image Gallery -->
+    <div class="ig-lightbox" id="ig-lightbox">
+        <div class="ig-lightbox-content">
+            <button class="ig-lightbox-nav ig-lightbox-prev" id="ig-lightbox-prev">‹</button>
+            <img id="ig-lightbox-img" src="" alt="">
+            <button class="ig-lightbox-nav ig-lightbox-next" id="ig-lightbox-next">›</button>
+            <div class="ig-lightbox-caption" id="ig-lightbox-caption">Caption text goes here</div>
+            <div class="ig-lightbox-counter" id="ig-lightbox-counter">1 / 6</div>
+        </div>
+    </div>
+
+    <!-- Copyright -->
+    <div class="copyright">
+        © Jona Melvin Grobe
+    </div>
+
+    <!-- External JavaScript Files -->
+    <script src="../../js/project.js"></script>
+    <script src="../../js/project_image_gallery.js"></script>
+</body>
+</html>
