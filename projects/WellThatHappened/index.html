@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--Metadata-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ECHOES by Jona Melvin Grobe, Hannah Rampitsch, Chris Raschke and Sina Anders">
+
+    <meta name="keywords" content="Jona Melvin Grobe, 3D generalist portfolio, 3D artist showcase, procedural 3D art, 
+    high-quality 3D visualizations, Houdini generalist work, realistic 3D rendering, VFX and simulations,
+    digital sculpting portfolio, game asset creation, echoes, war, missle">
+    <meta name="author" content="Jona Melvin Grobe">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph Metadata -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Echoes | Jona Melvin Grobe | Portfolio">
+    <meta property="og:description" content="Dive into the world of Jona Melvin Grobe: Where art meets code, efficiency meets creativity, and 3D gets weird!">
+    <meta property="og:image" content="https://jmelving.de/projects/TheUSBParadox/img/thumbnail.webp">
+    <meta property="og:url" content="https://jmelving.de">
+
+    <title>THE USB PARADOX</title>
+
+    <link rel="icon" href="../../img/favicon.ico" type="image/x-icon">
+
+    <!-- External CSS Files -->
+    <link rel="stylesheet" href="../../css/project.css">
+    <link rel="stylesheet" href="../../css/project_image_gallery.css">
+    
+    <style>
+        /* Helper classes for different column layouts */
+        .ig-gallery-1col { --gallery-columns: 1; }
+        .ig-gallery-2col { --gallery-columns: 2; }
+        .ig-gallery-3col { --gallery-columns: 3; }
+        .ig-gallery-4col { --gallery-columns: 4; }
+        .ig-gallery-5col { --gallery-columns: 5; }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <header class="header-main">
+        <nav class="nav-items">
+            <div class="header-pb"><a href="../../"><img src="../../img/pb.gif" alt="profile picture"></a></div>
+            <div class="header-jona-melvin-grobe"><a href="../../">jona_melvin_grobe</a></div>
+            <div class="header-contact"><a href="../../projects">x</a></div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section" id="heroSection" data-video-url="https://player.vimeo.com/video/1066698349?autoplay=1&color=ffffff&title=0&byline=0&portrait=0">
+            <!-- For VIMEO  https://player.vimeo.com/video/VIDEO_ID?autoplay=1&color=ffffff&title=0&byline=0&portrait=0-->
+
+
+        <!-- Image Slideshow -->
+        <div class="image-slideshow" id="imageSlideshow">
+            <img class="slide-image active" src="./img/USB_3.webp" alt="Echoes Frame 1">
+            <img class="slide-image" src="./img/USB_4.webp" alt="Echoes Frame 2">
+        </div>
+        
+        <!-- Background Image/Video (optional) -->
+        <div class="background-image" id="backgroundImage" style="background-image: url('./img/USB_1.webp');"></div>
+        
+        <div class="hero-overlay"></div>
+        
+        <div class="project-heading">
+            <h1>THE USB PARADOX</h1>
+            <h2 class="sub-heading">Advertisement</h2>
+        </div>
+
+        <!-- Mobile Tap Hint -->
+        <div class="mobile-tap-hint">
+            <span class="tap-icon">👆</span>
+            <span class="tap-text">TAP TO PLAY VIDEO</span>
+        </div>
+
+        <!-- Custom Cursor -->
+        <div class="custom-cursor" id="customCursor">
+            PLAY<br>VIDEO
+        </div>
+    </section>
+
+    <!-- Video Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <button class="close-button" id="closeButton">×</button>
+            <iframe class="video-iframe" 
+                    id="videoIframe"
+                    src=""
+                    allow="autoplay; fullscreen; picture-in-picture"
+                    allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+
+    <!-- Details Section -->
+    <section class="details-container fade-in">
+        <div class="details-table">
+            <div class="detail">
+                <h4>Role</h4>
+                <p class="details-description">3D Generalist / R&D</p>
+            </div>
+            
+            <div class="detail">
+                <h4>Collaborators</h4>
+                <p class="details-description"><a href="https://www.linkedin.com/in/felixfoltas/" target="_blank">Felix Foltas</a></p>
+                <p class="details-description"><a href="https://www.linkedin.com/in/rosemarie-haider-b279a72a4/" target="_blank">Rosemarie Haider</a></p>
+                <p class="details-description"><a href="https://www.linkedin.com/in/philipp-john-0ba89b223/" target="_blank">Philipp John</a></p>
+                <p class="details-description"><a href="https://www.linkedin.com/in/marco-mittendorfer/" target="_blank">Marco Mittendorfer</a></p>
+                <p class="details-description"><a href="https://www.linkedin.com/in/rntovfx/" target="_blank">Renato Nunes</a></p>
+                <p class="details-description"><a href="https://www.linkedin.com/in/jonas-perkmann-aab577254/" target="_blank">Jonas Perkmann</a></p>
+                <p class="details-description"><a href="https://www.linkedin.com/in/jan-pscheidt-332a6a304/" target="_blank">Jan Pscheidt</a></p>
+                <p class="details-description"><a  target="_blank">Bernhard Riedl</a></p>
+                <p class="details-description"><a href="https://www.linkedin.com/in/nico-urthale/" target="_blank">Nico Urthaler</a></p>
+                <p class="details-description"><a href="https://www.linkedin.com/in/clemenswilberger/" target="_blank">Clemens Willberger</a></p>
+                
+            </div>
+            
+            <div class="detail">
+                <h4>Duration</h4>
+                <p class="details-description">2 months</p>
+                <p class="details-description-secondary">2024</p>
+            </div>
+            
+            <div class="detail">
+                <h4>Tools</h4>
+                <p class="details-description">Houdini</p>
+                <p class="details-description">Nuke</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Section -->
+    <section class="video-section fade-in">
+        <div class="center-container">
+            <div class="video-container">
+                <iframe src="https://player.vimeo.com/video/1066698349?autoplay=0&color=ffffff&title=0&byline=0&portrait=0" 
+                        title="The USB Paradox Advertisement" 
+                        allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Description -->
+    <section class="content-section">
+        <div class="project-description fade-in">
+            <h2 class="project_subtitle">§ Project Description</h2>
+            <p class="project_text">
+                I was approached by Clemens Willberger to assist during the Research & Development phase of the project. My work focused on creating and refining key visual effects, including lightning strikes, water droplets, and volumetric effects, which helped define the project’s atmosphere.
+
+        </div>
+    </section>
+
+
+
+    <!-- Behind the Scenes Gallery -->
+    <div class="ig-gallery ig-gallery-2col fade-in">
+        <div class="ig-gallery-item">
+            <img src="./img/USB_0.webp" alt="Still 1" data-caption="" loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/USB_1.webp" alt="Still 2" data-caption="" loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/USB_2.webp" alt="Still 3" data-caption="" loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/USB_3.webp" alt="Still 4" data-caption="" loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/USB_4.webp" alt="Still 5" data-caption='' loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/USB_5.webp" alt="Still 6" data-caption="The water droplets effect was later done completely in 3D even though I developed a very performant and flexible solution using nuke" loading="lazy">
+        </div>
+    </div>
+
+    
+
+    <!-- Process Section -->
+    <section class="content-section">
+        <div class="project-description fade-in">
+            <h2 class="project_subtitle">§ Process</h2>
+            <p class="project_text">
+                I was assigned to various parts of the R&D Process. So my part of the project was not to create the final image, but find ways to create efficient workflows and assets that could speed up the production process. This included a way to render waterdroplets, lightning strikes, volumetric dome lighting for the spaceship lights aswell as HDRI's and cloud assets.
+            </p>
+        </div>
+    </section>
+
+
+    <!-- Displacement Effect -->
+    <section class="content-section">
+        <div class="project-description fade-in">
+            <h2 class="project_subtitle">§ Waterdroplets</h2>
+            <p class="project_text">
+            One of the first tasks that I was assigned was to find ways to create sliding waterdroplets on the surfaces of the spaceship. I started with a fully rendered approach but after I noticed that I could also fake it in Nuke and thus have a lot more control over all aspects of the image, I stayed with that approach. Even though, if you want the most realistic result out of the box and not the most efficient, then prolly rendering it, might be the better fit.
+            </p>
+        </div>
+        <!-- Behind the Scenes Video -->
+        <section class="video-section fade-in">
+        <div class="center-container">
+            <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+                <div class="video-wrapper">
+                    <video playsinline muted autoplay loop src="./vid/HydroGlide_Glass_Test.mp4" style="width: 100%; max-width: 1200px; height: auto; border-radius: 8px;"></video>
+                    <div class="video-caption">
+                        Hydro Glide Glass Dome Test, rendered in KarmaXPU.
+                    </div>
+                </div>
+            </div>
+        </div>
+        </section>
+
+        <!-- Behind the Scenes Video -->
+        <section class="video-section fade-in">
+        <div class="center-container">
+            <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+                <div class="video-wrapper">
+                    <video playsinline muted autoplay loop src="./vid/Inverted_Waterdrops_v3.mp4" style="width: 100%; max-width: 1200px; height: auto; border-radius: 8px;"></video>
+                    <div class="video-caption">
+                        Tried out the setup in a setup which more suited the actual usecas. I especially liked the details of the dried water I put on the windshield.
+                    </div>
+                </div>
+            </div>
+        </div>
+        </section>
+
+                <!-- Behind the Scenes Video -->
+        <section class="video-section fade-in">
+        <div class="center-container">
+            <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+                <div class="video-wrapper">
+                    <video playsinline muted autoplay loop src="./vid/InvertedHydroglide_v02.mp4" style="width: 100%; max-width: 1200px; height: auto; border-radius: 8px;"></video>
+                    <div class="video-caption">
+                        Expanded the scene a bit with 3D Pieces from the actual set and a quick environment, just to have something in the background.
+                    </div>
+                </div>
+            </div>
+        </div>
+        </section>
+
+                    <!-- Behind the Scenes Video -->
+        <section class="video-section fade-in">
+        <div class="center-container">
+            <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+                <div class="video-wrapper">
+                    <video playsinline muted autoplay loop src="./vid/Hydroglide_v5 1.mp4" style="width: 100%; max-width: 1200px; height: auto; border-radius: 8px;"></video>
+                    <div class="video-caption">
+                        Here the is barely visible, but this already uses Nuke Displacement to render out the raindrops in nearly realtime and also highly flexible using a st-map.
+                    </div>
+                </div>
+            </div>
+        </div>
+        </section>
+
+
+
+    <!-- Lightning Effects -->
+    <section class="content-section">
+        <div class="project-description fade-in">
+            <h2 class="project_subtitle">§ Lightning</h2>
+            <p class="project_text">
+            As you might have seen already, the shots of this short ad are full of lightning strikes and volumetrics. So my mission was to find a simple and effective way to render those. In the end I delivered
+            over 40 variations of lightning strikes to the rendering & compositing team. It all started with a point cloud and then one step after another added features like branching, and twitching.
+            </p>
+        </div>
+
+
+    <!-- Behind the Scenes Gallery -->
+    <div class="ig-gallery ig-gallery-3col fade-in">
+        <div class="ig-gallery-item">
+            <img src="./img/bts/BTS_2.webp" alt="Still 3" data-caption="Setup that searches for nearby points and then connects up a path. This was later enhanced by also branching off" loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/bts/BTS_3.webp" alt="Still 4" data-caption="" loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/bts/BTS_4.webp" alt="Still 5" data-caption='' loading="lazy">
+        </div>
+    </div>
+
+
+
+
+        <!-- Behind the Scenes Video -->
+        <section class="video-section fade-in">
+        <div class="center-container">
+            <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+                <div class="video-wrapper">
+                    <video playsinline muted autoplay loop src="./vid/LightningStrikes_Inverted_V1.mp4" style="width: 100%; max-width: 1200px; height: auto; border-radius: 8px;"></video>
+                    <div class="video-caption">
+                        First lightning render test animation in KarmaXPU hitting the ground, because at some point the lighting should hit the spaceship.
+                    </div>
+                </div>
+            </div>
+        </div>
+        </section>
+
+                <!-- Behind the Scenes Video -->
+        <section class="video-section fade-in">
+        <div class="center-container">
+            <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+                <div class="video-wrapper">
+                    <video playsinline muted autoplay loop src="./vid/Lightning_Inverted_v03.mp4" style="width: 100%; max-width: 1200px; height: auto; border-radius: 8px;"></video>
+                    <div class="video-caption">
+                        Added branches, and flickering to those, so they will not only check one path but multiple and occasionally switch between them.
+                    </div>
+                </div>
+            </div>
+        </div>
+        </section>
+
+        <!-- Behind the Scenes Video -->
+        <section class="video-section fade-in">
+        <div class="center-container">
+            <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+                <div class="video-wrapper">
+                    <video playsinline muted autoplay loop src="./vid/Lighting Comp Makeoff.mp4" style="width: 100%; max-width: 1200px; height: auto; border-radius: 8px;"></video>
+                    <div class="video-caption">
+                        Method to separately render the volume and lighting effects so be able to control its effect in compositing. 
+                    </div>
+                </div>
+            </div>
+        </div>
+        </section>
+
+
+
+                <!-- Behind the Scenes Video -->
+        <section class="video-section fade-in">
+        <div class="center-container">
+            <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+                <div class="video-wrapper">
+                    <video playsinline muted autoplay loop src="./vid/INV_S02_Lightning_V012.mp4" style="width: 100%; max-width: 1200px; height: auto; border-radius: 8px;"></video>
+                    <div class="video-caption">
+                        Rendered little experimental version for reference on how these effects could be combined. Spaceship by Jan Pscheidt, rest done by me in KarmaXPU & Nuke, slapping on some spaceship material and using both volumetric rendering for the close clouds and also cards I rendered out from Houdini in compositing for the BG, so I could control the lightning control in post.
+                    </div>
+                </div>
+            </div>
+        </div>
+        </section>
+
+                <!-- Behind the Scenes Video -->
+        <section class="video-section fade-in">
+        <div class="center-container">
+            <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+                <div class="video-wrapper">
+                    <video playsinline muted autoplay loop src="./vid/InvertedLightDome_Test_v04.mp4" style="width: 100%; max-width: 1200px; height: auto; border-radius: 8px;"></video>
+                    <div class="video-caption">
+                        Not "Lightning" but "lighting", just gonna slap that in this section too, as I was also working on a way to create these headlights efficiently. Learned a lot about rendering those in Karma, e.g. that theres a difference between uniform sampling and variance sampling.
+                    </div>
+                </div>
+            </div>
+        </div>
+        </section>
+
+                        <!-- Behind the Scenes Video -->
+        <section class="video-section fade-in">
+        <div class="center-container">
+            <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+                <div class="video-wrapper">
+                    <video playsinline muted autoplay loop src="./vid/InvertedDomelight_v01.mp4" style="width: 100%; max-width: 1200px; height: auto; border-radius: 8px;"></video>
+                    <div class="video-caption">
+                        Little breakdown of what I was mentioning before. Rendering all of these elements separately actually saves render time, especially when minor details of the spaceship change.
+                    </div>
+                </div>
+            </div>
+        </div>
+        </section>
+
+
+    </section>
+
+    <!-- HDRI Creation -->
+    <section class="content-section">
+        <div class="project-description fade-in">
+            <h2 class="project_subtitle">§ HDRIs & Clouds</h2>
+            <p class="project_text">
+             When you got these amounts of shots, it's always useful to have a background for any angle imaginable. Thats why I created a set of Clouds & HDRIs that could be placed anywhere. For the more organic looking clouds in the foreground we used some of the clouds in the VRAY Library accessible online. 
+            </p>
+        </div>
+
+
+    <!-- Behind the Scenes Gallery -->
+    <div class="ig-gallery ig-gallery-2col fade-in">
+        <div class="ig-gallery-item">
+            <img src="./img/bts/BTS_5.webp" alt="Still 3" data-caption="" loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/bts/BTS_6.webp" alt="Still 4" data-caption="" loading="lazy">
+        </div>
+        <div class="ig-gallery-item">
+            <img src="./img/bts/BTS_7.webp" alt="Still 5" data-caption='' loading="lazy">
+        </div>
+            <div class="ig-gallery-item">
+            <img src="./img/bts/BTS_8.webp" alt="Still 5" data-caption='' loading="lazy">
+        </div>
+    </div>
+
+
+
+
+        <!-- Behind the Scenes Video -->
+        <section class="video-section fade-in">
+        <div class="center-container">
+            <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+                <div class="video-wrapper">
+                    <video playsinline muted autoplay loop src="./vid/Inverted_Environment_HDRI_Showoff.mp4" style="width: 100%; max-width: 1200px; height: auto; border-radius: 8px;"></video>
+                    <div class="video-caption">
+                        Realtime Preview of the HDRI in Houdini Vulkan.
+                    </div>
+                </div>
+            </div>
+        </div>
+        </section>
+
+    </section>
+
+    <!-- Complete Breakdown -->
+    <section class="content-section">
+        <div class="project-description fade-in">
+            <h2 class="project_subtitle">§ Complete Breakdown</h2>
+            <p class="project_text">
+            If you had'nt enough breakdowns already, you can check out the complete breakdown below, which includes a the ton of work that was put into rendering, compositing, lighting, modeling and so on. 
+            </p>
+        </div>
+
+    <!-- Video Section -->
+    <section class="video-section fade-in">
+        <div class="center-container">
+            <div class="video-container">
+                <iframe src="https://player.vimeo.com/video/1075776466?autoplay=0&color=ffffff&title=0&byline=0&portrait=0" 
+                        title="The USB Paradox Advertisement" 
+                        allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+    </section>
+    </section>
+
+    <!-- Learnings Section -->
+    <section class="content-section">
+        <div class="project-description fade-in">
+            <h2 class="project_subtitle">§ Learnings</h2>
+            
+            <p class="project_text"><b>Nuke</b></p>
+            <p class="project_text">
+                ○ Nuke 3D System e.g. 3D Cards & HDRIs<br>
+                ○ Various Distortion Methods
+            </p>
+
+            <p class="project_text"><b>Houdini</b></p>
+            <p class="project_text">
+                ○ 360° Rendering in KarmaXPU<br>
+                ○ Volumetric rendering<br>
+                ○ Various ways to render water effects on geometry
+            </p>
+        </div>
+    </section>
+
+    <!-- Lightbox Modal for Image Gallery -->
+    <div class="ig-lightbox" id="ig-lightbox">
+        <div class="ig-lightbox-content">
+            <button class="ig-lightbox-nav ig-lightbox-prev" id="ig-lightbox-prev">‹</button>
+            <img id="ig-lightbox-img" src="" alt="">
+            <button class="ig-lightbox-nav ig-lightbox-next" id="ig-lightbox-next">›</button>
+            <div class="ig-lightbox-caption" id="ig-lightbox-caption">Caption text goes here</div>
+            <div class="ig-lightbox-counter" id="ig-lightbox-counter">1 / 6</div>
+        </div>
+    </div>
+
+    <!-- Copyright -->
+    <div class="copyright">
+        © Jona Melvin Grobe
+    </div>
+
+    <!-- External JavaScript Files -->
+    <script src="../../js/project.js"></script>
+    <script src="../../js/project_image_gallery.js"></script>
+</body>
+</html>
