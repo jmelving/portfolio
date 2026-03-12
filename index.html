@@ -1,159 +1,1189 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <!--Metadata-->
+<!--Metadata-->
+    <!-- Basic Metadata -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Dive into the world of Jona Melvin Grobe: Where art meets code, efficiency meets creativity, and 3D gets weird!">
 
-    <meta name="keywords" content="Jona Melvin Grobe, 3D generalist portfolio, 3D artist showcase, procedural 3D art, 
-    high-quality 3D visualizations, Houdini generalist work, realistic 3D rendering, VFX and simulations,
-    digital sculpting portfolio, game asset creation, python, automation, JMG, jmelving">
+    <title>Jona Melvin Grobe — Tech Art</title>
+
+    <meta name="description" content="Dive into the world of Jona Melvin Grobe: Where art meets code, efficiency meets creativity, and 3D gets weird!">
+    <meta name="keywords" content="Jona Melvin Grobe, 3D generalist portfolio, Houdini artist, procedural art, VFX simulations, realtime FX, technical artist">
     <meta name="author" content="Jona Melvin Grobe">
-    <meta name="robots" content="index, follow"> <!--allows link following for algos-->
-    
-    <!-- Open Graph Metadata -->
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph (Social Sharing) -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Jona Melvin Grobe | Portfolio">
-    <meta property="og:description" content="Dive into Melvin's world: Where art meets code, efficiency meets creativity, and 3D gets weird!">
+    <meta property="og:title" content="Jona Melvin Grobe | Technical Artist">
+    <meta property="og:description" content="Where art meets code, efficiency meets creativity, and 3D gets weird.">
     <meta property="og:image" content="https://mir-s3-cdn-cf.behance.net/projects/404/881ee8164415761.Y3JvcCw5OTksNzgyLDAsOTQ.png">
     <meta property="og:url" content="https://jmelving.de">
 
-    <title>Jona Melvin Grobe</title>
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" href="/img/favicon.png">
+    <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+    <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../css/main.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Syne:wght@400;600;700;800&family=Syne+Mono&display=swap" rel="stylesheet">
+
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/homegallery.css">
     <link rel="stylesheet" href="../css/effects.css">
     <link rel="stylesheet" href="./css/mainpage.css">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --bg:     #080808;
+  --fg:     #EDEAE4;
+  --dim:    rgba(237,234,228,0.36);
+  --dimmer: rgba(237,234,228,0.12);
+  --border: rgba(237,234,228,0.07);
+}
+
+html, body {
+  width:100%; height:100%;
+  background:var(--bg);
+  color:var(--fg);
+  font-family:'Syne', sans-serif;
+  overflow:hidden;
+  cursor:none;
+}
+
+/* ── VIDEO + CRT ── */
+#video-bg {
+  position:fixed; z-index:-1;   /* hidden behind CRT canvas, still used as texture source */
+  top:0; left:-380px;
+  width:calc(100vw + 380px); height:100vh;
+  object-fit:cover; object-position:center center;
+  opacity:0; pointer-events:none;
+}
+#crt-canvas {
+  position:fixed; z-index:0;
+  top:0; left:0;
+  width:100vw; height:100vh;
+  pointer-events:none;
+}
+#video-overlay {
+  position:fixed; inset:0; z-index:0;
+  background: radial-gradient(ellipse 60% 80% at calc((100vw - 380px) / 2) 50%,
+    rgba(8,8,8,0.0)  0%,
+    rgba(8,8,8,0.52) 58%,
+    rgba(8,8,8,0.92) 100%);
+  pointer-events:none;
+}
+
+/* ── CURSOR ── */
+#cur-dot {
+  position:fixed; width:24px; height:24px;
+  background:var(--fg); border-radius:50%;
+  pointer-events:none; z-index:9999;
+  transform:translate(-50%,-50%) scale(0.167);
+  will-change:left,top,transform;
+}
+#cur-ring {
+  position:fixed; width:26px; height:26px;
+  border:1px solid rgba(237,234,228,0.3);
+  border-radius:50%; pointer-events:none; z-index:9998;
+  transform:translate(-50%,-50%);
+  will-change:left,top,transform;
+}
+body.hovering #cur-dot  { transform:translate(-50%,-50%) scale(0); }
+body.hovering #cur-ring { border-color:rgba(237,234,228,0.62); }
+
+/* ── LAYOUT ── */
+#layout {
+  position:relative; z-index:1;
+  display:flex; width:100vw; height:100vh;
+  background:transparent;
+}
+
+/* ── LEFT ── */
+#left {
+  flex:1; position:relative; overflow:hidden; min-width:0;
+}
+#canvas {
+  position:absolute; inset:0; z-index:1; pointer-events:none;
+}
+#left::before {
+  content:''; position:absolute; left:50%; top:0; bottom:0;
+  width:1px; background:rgba(237,234,228,0.05); z-index:2; pointer-events:none;
+}
+#left::after {
+  content:''; position:absolute; top:50%; left:0; right:0;
+  height:1px; background:rgba(237,234,228,0.05); z-index:2; pointer-events:none;
+}
+
+/* ── CENTER STAGE ── */
+#stage {
+  position:absolute; inset:0; z-index:10;
+  display:flex; align-items:center; justify-content:center;
+  pointer-events:none;
+}
+
+#nav-svg { overflow:visible; pointer-events:none; }
+
+.nav-line {
+  stroke:rgba(237,234,228,0.18);
+  stroke-width:0.75;
+  stroke-dasharray:500;
+  stroke-dashoffset:500;
+  animation:drawLine 1.2s 0.5s cubic-bezier(0.76,0,0.24,1) forwards;
+}
+.nav-line.l2 { animation-delay:0.65s; }
+@keyframes drawLine { to { stroke-dashoffset:0; } }
+
+.dot-group { pointer-events:all; cursor:pointer; }
+
+.dot-glow {
+  fill:none; stroke:rgba(237,234,228,0.1); stroke-width:1; r:22;
+  transition:r 0.45s cubic-bezier(0.16,1,0.3,1), stroke 0.3s, opacity 0.3s;
+  opacity:0; animation:fadeEl 0.5s 1.5s ease forwards;
+}
+.dot-group:hover .dot-glow { r:52; stroke:rgba(237,234,228,0.14); opacity:1; }
+
+.dot-main {
+  fill:rgba(237,234,228,0.82); r:7;
+  transition:r 0.45s cubic-bezier(0.16,1,0.3,1), fill 0.3s;
+  opacity:0; animation:fadeEl 0.5s 1.5s ease forwards;
+}
+.dot-group.l2 .dot-main { animation-delay:1.65s; }
+.dot-group.l2 .dot-glow { animation-delay:1.65s; }
+.dot-group:hover .dot-main { r:22; fill:rgba(237,234,228,0.95); }
+
+@keyframes fadeEl { to { opacity:1; } }
+
+.nav-lbl {
+  font-family:'Cormorant Garamond', serif;
+  font-size:26px; font-weight:300; font-style:italic;
+  letter-spacing:1px;
+  fill:rgba(237,234,228,0.45);
+  opacity:0; animation:fadeEl 0.5s 1.7s ease forwards;
+  pointer-events:none; transition:fill 0.3s, font-size 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.nav-lbl.l2 { animation-delay:1.8s; }
+.nav-lbl.hovered { fill:rgba(237,234,228,0.92); font-size:36px; cursor:pointer; }
+
+/* ── PLAY BUTTON ── */
+#play-group { pointer-events:all; cursor:pointer; }
+
+#play-outer {
+  fill:none; stroke:rgba(237,234,228,0.08); stroke-width:1;
+  animation:spin 28s linear infinite; transform-origin:0 0;
+}
+#play-inner {
+  fill:none; stroke:rgba(237,234,228,0.05); stroke-width:1;
+  animation:spin 18s linear infinite reverse; transform-origin:0 0;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+
+#play-circle {
+  fill:rgba(237,234,228,0.03); stroke:rgba(237,234,228,0.22); stroke-width:1;
+  transition:fill 0.35s, stroke 0.35s;
+}
+#play-group:hover #play-circle { fill:rgba(237,234,228,0.07); stroke:rgba(237,234,228,0.58); }
+#play-tri { fill:rgba(237,234,228,0.7); transition:fill 0.3s; }
+#play-group:hover #play-tri { fill:rgba(237,234,228,0.95); }
+#pause-bars { display:none; }
+#pause-bar1, #pause-bar2 { fill:rgba(237,234,228,0.78); }
+#play-sub {
+  font-family:'Syne Mono',monospace;
+  font-size:11px; letter-spacing:3px; text-transform:uppercase;
+  fill:rgba(237,234,228,0.22); text-anchor:middle; pointer-events:none;
+}
+
+/* ── RIGHT PANEL ── */
+#right {
+  width:380px; flex-shrink:0;
+  border-left:1px solid var(--border);
+  padding:44px 40px;
+  display:flex; flex-direction:column;
+  background:rgba(8,8,8,0.72);
+  backdrop-filter:blur(20px);
+  position:relative; z-index:10;
+  overflow-y:auto; scrollbar-width:none;
+}
+#right::-webkit-scrollbar { display:none; }
+
+#avatar {
+  width:110px; height:110px;
+  min-width:110px; min-height:110px;
+  aspect-ratio:1/1;
+  border-radius:50%;
+  border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+  margin-bottom:26px; background:rgba(237,234,228,0.025);
+  overflow:hidden;
+}
+#avatar span { font-size:1.1rem; font-weight:700; letter-spacing:0.12em; color:rgba(237,234,228,0.38); }
+/* When an image is present the initials hide automatically */
+#avatar img {
+  width:100%; height:100%;
+  object-fit:cover; object-position:center top;
+  display:block;
+  border-radius:50%;
+}
+
+#status-row {
+  display:flex; align-items:center; flex-wrap:wrap;
+  gap:0 12px; margin-bottom:28px;
+  font-family:'Syne Mono',monospace;
+  font-size:0.68rem; letter-spacing:0.2em;
+  color:var(--dim); text-transform:uppercase;
+}
+.s-dot {
+  width:5px; height:5px; border-radius:50%;
+  background:var(--fg); opacity:0.55;
+  animation:blink 3.2s ease-in-out infinite; flex-shrink:0;
+}
+@keyframes blink { 0%,100%{opacity:0.55} 50%{opacity:0.1} }
+.s-sep { color:var(--dimmer); }
+
+#name {
+  font-family:'Cormorant Garamond', serif;
+  font-size:clamp(2rem, 2.8vw, 3rem);
+  font-weight:300; letter-spacing:0.04em;
+  line-height:1.08; margin-bottom:6px; color:var(--fg);
+}
+#role-line {
+  font-family:'Cormorant Garamond', serif;
+  font-size:1.25rem; font-weight:300; font-style:italic;
+  color:var(--dim); letter-spacing:0.04em;
+}
+
+.rule { height:1px; background:var(--border); margin:24px 0; flex-shrink:0; }
+
+#bio { font-size:0.9rem; line-height:1.86; color:rgba(237,234,228,0.48); }
+
+#tags { display:flex; flex-wrap:wrap; gap:6px 13px; margin-top:20px; }
+.tag {
+  font-family:'Syne Mono',monospace;
+  font-size:0.65rem; letter-spacing:0.17em;
+  text-transform:uppercase; color:rgba(237,234,228,0.22);
+}
+
+#socials { display:flex; gap:9px; margin-top:28px; }
+.soc-wrap { display:flex; flex-direction:column; align-items:center; gap:5px; }
+.soc-mob-label {
+  display:none;
+  font-family:'Syne Mono', monospace;
+  font-size:0.6rem; letter-spacing:0.08em; text-transform:uppercase;
+  color:rgba(237,234,228,0.45); text-align:center; white-space:nowrap;
+}
+@media (max-width:700px) {
+  #socials { gap:0; justify-content:space-between; }
+  .soc-mob-label { display:block; }
+  #soc-tip { display:none; }
+}
+.soc {
+  width:34px; height:34px; border-radius:50%;
+  border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--dim); text-decoration:none;
+  transition:border-color 0.22s, color 0.22s, background 0.22s;
+}
+.soc:hover { border-color:rgba(237,234,228,0.3); color:var(--fg); background:rgba(237,234,228,0.04); }
+.soc svg { width:14px; height:14px; fill:currentColor; }
+
+#cta {
+  display:inline-flex; align-items:center; gap:8px;
+  padding:13px 24px; border-radius:100px;
+  border:1px solid rgba(237,234,228,0.16);
+  font-size:0.7rem; font-weight:700;
+  letter-spacing:0.2em; text-transform:uppercase;
+  background:none; color:var(--fg);
+  font-family:'Syne',sans-serif; cursor:pointer;
+  text-decoration:none;
+  transition:background 0.28s, border-color 0.28s; width:fit-content;
+}
+#cta:hover { background:rgba(237,234,228,0.05); border-color:rgba(237,234,228,0.35); }
+
+/* ── SOCIAL TOOLTIP ── */
+#soc-tip {
+  font-family:'Syne Mono', monospace;
+  font-size:0.72rem; letter-spacing:0.06em; line-height:1.6;
+  color:rgba(237,234,228,0.65);
+  margin-top:10px;
+  min-height:1.6em;
+  transition:opacity 0.2s;
+  opacity:0;
+}
+#soc-tip.visible { opacity:1; }
+
+/* Hide mobile nav on desktop */
+#mobile-nav { display:none; }
+
+/* ── MOBILE ── */
+@media (max-width: 700px) {
+  #right {
+    width:100vw;
+    border-left:none;
+    padding: 36px 24px 60px;
+    overflow-y:auto;
+    height:100vh;
+  }
+  #left { display:none; }
+  #name { font-size: clamp(1.7rem, 7vw, 2.4rem); }
+
+  #mobile-nav {
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-bottom:28px;
+  }
+  .mob-btn {
+    display:flex; align-items:center; gap:16px;
+    padding:20px 22px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:rgba(237,234,228,0.03);
+    color:var(--fg);
+    font-family:'Syne', sans-serif;
+    text-decoration:none; cursor:pointer;
+    transition:background 0.22s, border-color 0.22s;
+    width:100%; text-align:left;
+  }
+  .mob-btn:active { background:rgba(237,234,228,0.07); border-color:rgba(237,234,228,0.25); }
+  .mob-btn-icon {
+    width:46px; height:46px; border-radius:50%;
+    border:1px solid rgba(237,234,228,0.14);
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+    color:var(--dim);
+  }
+  .mob-btn-icon svg { width:20px; height:20px; }
+  .mob-btn-text { display:flex; flex-direction:column; gap:4px; }
+  .mob-btn-title { font-size:1.05rem; font-weight:700; letter-spacing:0.02em; color:var(--fg); }
+  .mob-btn-sub {
+    font-family:'Syne Mono', monospace;
+    font-size:0.55rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--dim);
+  }
+}
+#bubbles { position:fixed; top:0; left:0; pointer-events:none; z-index:50; }
+.bubble {
+  position:absolute;
+  width:140px; height:140px;
+  border-radius:50%;
+  border:1px solid rgba(237,234,228,0.22);
+  opacity:0;
+  background:transparent;
+  pointer-events:none;
+  cursor:pointer;
+  /* NO transform transition — position is JS-driven every frame */
+  transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1), border-color 0.3s;
+  will-change:transform,opacity;
+}
+.bubble.visible  { opacity:1; pointer-events:all; }
+.bubble:hover    { border-color:rgba(237,234,228,0.65); }
+.bubble-inner {
+  position:absolute; inset:0;
+  border-radius:50%; overflow:hidden;
+  background:#111;
+}
+
+.bubble img {
+  width:100%; height:100%; object-fit:cover;
+  filter:brightness(0.7) saturate(0.85);
+  transition:filter 0.35s, transform 0.5s cubic-bezier(0.16,1,0.3,1);
+  display:block;
+}
+.bubble:hover img { filter:brightness(0.92) saturate(1.05); }
+.bubble-lbl {
+  position:absolute; bottom:0; left:0; right:0;
+  padding:10px 10px 12px;
+  font-family:'Cormorant Garamond',serif;
+  font-size:15px; font-weight:300; font-style:italic;
+  letter-spacing:0.4px;
+  color:rgba(237,234,228,0.9);
+  background:linear-gradient(transparent, rgba(8,8,8,0.78));
+  text-align:center; line-height:1.3;
+}
+
+/* ── VIMEO MODAL ── */
+#vimeo-modal {
+  display:none; position:fixed; inset:0; z-index:1000;
+  background:rgba(8,8,8,0.92); backdrop-filter:blur(18px);
+  align-items:center; justify-content:center; flex-direction:column; gap:20px;
+}
+#vimeo-modal.open { display:flex; }
+#vimeo-wrap {
+  position:relative; width:min(82vw, 1100px); aspect-ratio:16/9; background:#000;
+}
+#vimeo-wrap iframe { position:absolute; inset:0; width:100%; height:100%; border:none; }
+#vimeo-close {
+  width:34px; height:34px; border-radius:50%;
+  border:1px solid rgba(237,234,228,0.18);
+  background:none; color:var(--dim); font-size:0.75rem; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  font-family:inherit; align-self:flex-end;
+  margin-right: calc((100vw - min(82vw, 1100px)) / 2);
+  transition:border-color 0.2s, color 0.2s;
+}
+#vimeo-close:hover { border-color:rgba(237,234,228,0.4); color:var(--fg); }
+
+#grain {
+  position:fixed; inset:0; z-index:200; pointer-events:none; opacity:0.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:200px;
+}
+</style>
 </head>
+<body>
 
-<body class="background">
-    <!--NAV BAR-->
-    <header class="header-main">
-        <nav class="nav-items">
-            <div class="header-pb"><a href="/about_me/"><img src="../img/pb.gif" alt="profile picture"></a></div>
-            <div class="header-jona-melvin-grobe"><a href="/about_me/">jona_melvin_grobe</a></div>
-            <div class="header-contact"> <a href="/about_me/">_about_me</a></div>
-        </nav>
-    </header>
+<video id="video-bg" src="../vid/SHOWREEL2025_Low.mp4" autoplay muted loop playsinline preload="auto" crossorigin="anonymous"></video>
+<canvas id="crt-canvas"></canvas>
+<div id="video-overlay"></div>
 
-    <!--SHOWREEL-->
-    <div class="showreel-container" id="showreelContainer">
-        <!-- High-Res Image Slideshow -->
-        <div class="image-slideshow" id="imageSlideshow">
-            <img class="slide-image active" src="../projects/Numb/img/Thumbnail.webp" alt="Showreel Frame 1">
-            <img class="slide-image" src="../projects/PaintingGreys/img/PaintingGreys_4.webp" alt="Showreel Frame 2">
-            <img class="slide-image" src="../projects/Porsche/img/thumbnail.webp" alt="Showreel Frame 3">
+<div id="grain"></div>
+<div id="cur-dot"></div>
+<div id="cur-ring"></div>
+
+<div id="layout">
+  <div id="left">
+    <canvas id="canvas"></canvas>
+    <div id="stage">
+      <svg id="nav-svg" viewBox="-280 -230 560 460" width="560" height="460">
+        <circle id="play-outer" cx="0" cy="0" r="82"/>
+        <circle id="play-inner" cx="0" cy="0" r="64"/>
+        <line class="nav-line l1" x1="-48" y1="-48" x2="-200" y2="-168"/>
+        <line class="nav-line l2" x1="48"  y1="48"  x2="200"  y2="168"/>
+
+        <g class="dot-group l1" id="dot-projects">
+          <circle class="dot-glow" cx="-200" cy="-168"/>
+          <circle class="dot-main" cx="-200" cy="-168"/>
+        </g>
+        <text class="nav-lbl l1" id="lbl-projects"
+              x="-200" y="-168" dx="-28" dy="-24" text-anchor="end">Projects</text>
+
+        <g class="dot-group l2" id="dot-curiosities">
+          <circle class="dot-glow" cx="200" cy="168"/>
+          <circle class="dot-main" cx="200" cy="168"/>
+        </g>
+        <text class="nav-lbl l2" id="lbl-curiosities"
+              x="200" y="168" dx="28" dy="-20" text-anchor="start">Curiosities</text>
+
+        <g id="play-group">
+          <circle id="play-circle" cx="0" cy="0" r="46"/>
+          <polygon id="play-tri" points="-11,-17 24,0 -11,17"/>
+          <g id="pause-bars">
+            <rect id="pause-bar1" x="-15" y="-16" width="11" height="32" rx="2"/>
+            <rect id="pause-bar2" x="4"   y="-16" width="11" height="32" rx="2"/>
+          </g>
+          <text id="play-sub" x="0" y="66">Showreel</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <div id="right">
+    <div id="avatar">
+      <!-- ↓ To use a photo or GIF: uncomment the line below and set the src path.
+           The initials will hide automatically once the image loads.
+           Supports .jpg .png .gif .webp — e.g. src="img/me.gif" -->
+      <img id="avatar-img" src="../img/ProfilePic.png" alt="Jona Melvin Grobe">
+      <span id="avatar-initials">JMG</span>
+    </div>
+    <div id="status-row">
+      <span class="s-dot"></span>
+      <span>creating </span>
+      <span class="s-sep">·</span>
+      <span>GERMANY/BAVARIA</span><br><br>
+      <span class="s-sep">·</span>
+      <span id="clock">—</span>
+    </div>
+    <div id="name">Jona Melvin Grobe.</div>
+    <div id="role-line">Technical Artist.</div>
+    <a id="cta" style="margin-top:18px;" href="mailto:jonamelvingrobe@gmail.com?subject=Project%20Inquiry&body=Hi%20Melvin,%0A%0AI'd%20like%20to%20reach%20out%20regarding%20a%20project%20or%20a%20possible%20collaboration.%0A%0APlease%20find%20some%20details%20below:%0A%0AProject%20type:%0ATimeline:%0ABudget:%0A%0ABest,%0A">Get in Touch &nbsp;→</a>
+    <div class="rule"></div>
+
+    <div id="mobile-nav">
+      <button class="mob-btn" id="mob-showreel">
+        <div class="mob-btn-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="9"/><polygon points="10,8 17,12 10,16" fill="currentColor" stroke="none"/></svg>
         </div>
-
-        <!-- Background Video (loads after images) -->
-        <video class="bg-video" 
-               id="backgroundVideo"
-               playsinline 
-               muted 
-               autoplay 
-               loop 
-               style="opacity: 0;">
-            <source src="../vid/SHOWREEL2025_Low.mp4" type="video/mp4">
-            <source src="vid/showreel.webm" type="video/webm">
-        </video>
-
-        <!-- Vignette Effect -->
-        <div class="vignette-overlay"></div>
-
-        <!-- Content Overlay -->
-        <div class="content-overlay">
-            <h1 class="brand-title">JONA MELVIN GROBE</h1>
-            <p class="brand-subtitle">generalist & technical artist</p>
+        <div class="mob-btn-text">
+          <span class="mob-btn-title">Watch Showreel</span>
+          <span class="mob-btn-sub">2025 · Houdini &amp; FX</span>
         </div>
-
-        <!-- Mobile Tap Hint -->
-        <div class="mobile-tap-hint" id="mobileTapHint">
-            <span class="tap-icon">👆</span>
-            <span class="tap-text">TAP TO PLAY SHOWREEL</span>
+      </button>
+      <a class="mob-btn" href="../projects/index.html">
+        <div class="mob-btn-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
         </div>
-
-        <!-- Custom Cursor -->
-        <div class="custom-cursor" id="customCursor">
-            PLAY<br>SHOWREEL
+        <div class="mob-btn-text">
+          <span class="mob-btn-title">Projects</span>
+          <span class="mob-btn-sub">Work &amp; Case Studies</span>
         </div>
+      </a>
+      <a class="mob-btn" href="../projects/index.html#lab-section">
+        <div class="mob-btn-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="mob-btn-text">
+          <span class="mob-btn-title">Curiosities</span>
+          <span class="mob-btn-sub">Experiments &amp; Side Work</span>
+        </div>
+      </a>
     </div>
 
-    <!-- Vimeo Modal -->
-    <div class="modal-overlay" id="modalOverlay">
-        <div class="modal-content">
-            <button class="close-button" id="closeButton">×</button>
-            <iframe class="vimeo-iframe" 
-                    id="vimeoIframe"
-                    src=""
-                    allow="autoplay; fullscreen; picture-in-picture">
-            </iframe>
-        </div>
+    <div id="bio">
+      Self-driven technical artist & generalist crafting tools and automating tasks to supercharge project creation. <br> <br>
+        🎸 Music fuels my creativity. <br>
+        🧠 Curious mind, always experimenting. <br>
+        ✨ Done is better than perfect. <br>
     </div>
-
-    <!--Image Gallery-->
-    <div class="gallery">
-        <!-- ECHOES -->     
-        <a href="../projects/Echoes/" class="gallery-item" data-category="motion collaberation">
-          <div class="project-container grainy hover-cycle">
-            <div class="image-stack">
-              <img src="./projects/Echoes/img/ECHOES_3.webp" alt="Echoes" class="active">
-              <img src="./projects/Echoes/img/ECHOES_4.webp" alt="Echoes 2">
-              <img src="./projects/Echoes/img/ECHOES_5.webp" alt="Echoes 3">
-            </div>
-            <div class="project-info">
-              <div class="project-title">ECHOES</div>
-              <div class="work-description">Short | Master Project 1</div>
-            </div>
-          </div>
+    <div id="tags">
+      <span class="tag">Houdini</span>
+      <span class="tag">Tools</span>
+      <span class="tag">Workflow</span>
+      <span class="tag">Procedural</span>
+      <span class="tag">FX</span>
+      <span class="tag">Pipeline</span>
+      <span class="tag">Lookdev</span>
+      <span class="tag">USD</span>
+    </div>
+    <div id="socials">
+      <!-- <a class="soc" href="#" data-tip="X / Twitter">
+        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a> -->
+      <div class="soc-wrap">
+        <a class="soc" href="https://www.instagram.com/j.melvin.g/" target="_blank"data-tip="Instagram — work-in-progress shots, behind the scenes &amp; daily FX experiments.">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
         </a>
-
-        <!-- DEVIANT -->     
-        <a href="../projects/Deviant/" class="gallery-item" data-category="motion">
-          <div class="project-container grainy hover-cycle">
-            <div class="image-stack">
-              <img src="./projects/Deviant/img/Thumbnail.webp" alt="Deviant" class="active">
-              <img src="./projects/Deviant/img/Deviant_4.webp" alt="Deviant 2">
-              <img src="./projects/Deviant/img/Deviant_1.webp" alt="Deviant 3">
-            </div>
-            <div class="project-info">
-              <div class="project-title">DEVIANT</div>
-              <div class="work-description">Music Video Snippet</div>
-            </div>
-          </div>
+        <span class="soc-mob-label">BTS &amp; experiments</span>
+      </div>
+      <div class="soc-wrap">
+        <a class="soc" href="https://www.youtube.com/@jmeIving" target="_blank" data-tip="YouTube — tutorials, process breakdowns &amp; deep-dives into Houdini &amp; FX pipelines.">
+          <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
         </a>
-
-        <!-- PAINTING GREYS --> 
-        <a href="../projects/PaintingGreys/" class="gallery-item" data-category="motion collaberation">
-          <div class="project-container grainy hover-cycle">
-            <div class="image-stack">
-              <img src="../projects/PaintingGreys/img/Thumbnail.webp" alt="Painting Greys Thumbnail by Jona Melvin Grobe" class="active">
-              <img src="/projects/PaintingGreys/img/PaintingGreys_11.webp" alt="PG 2">
-              <img src="/projects/PaintingGreys/img/PaintingGreys_4.webp" alt="PG 3">
-              <img src="/projects/PaintingGreys/img/PaintingGreys_8.webp" alt="PG 4">
-            </div>
-            <div class="project-info">
-              <div class="project-title">PAINTING GREYS</div>
-              <div class="work-description">Multimedia Music Video | Bachelor Project 3</div>
-            </div>
-          </div>
+        <span class="soc-mob-label">Tutorials &amp; process</span>
+      </div>
+      <div class="soc-wrap">
+        <a class="soc" href="https://github.com/jmelving" target="_blank" data-tip="GitHub — tools, pipeline scripts &amp; open-source Houdini utilities.">
+          <svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
         </a>
+        <span class="soc-mob-label">Tools &amp; scripts</span>
+      </div>
     </div>
+    <div id="soc-tip"></div>
 
-    <div class="centered-button-container">
-        <a href="/projects/"><button class="btn btn-marquee">
-          <span data-text="SHOW MORE PROJECTS">SHOW MORE PROJECTS</span>
-        </button></a>
+  </div>
+</div>
+
+<!-- PROJECT BUBBLES — swap src to your real images, update href to your project URLs -->
+<div id="bubbles">
+
+  <div class="bubble" id="bubble-0"
+    style="--dur:4.2s;--delay:0s;--fx:7px;--fy:-9px;--fx2:-5px;--fy2:7px;--fx3:9px;--fy3:2px"
+    onclick="window.open('../projects/ECHOES#fluid','_self')">
+    <div class="bubble-inner">
+        <img src="../projects/Echoes/img/ECHOES_1.webp">
+        <!--
+      <svg width="140" height="140" viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+        <defs><radialGradient id="g0" cx="40%" cy="35%"><stop offset="0%" stop-color="#1a3a4a"/><stop offset="100%" stop-color="#060c10"/></radialGradient></defs>
+        <rect width="140" height="140" fill="url(#g0)"/>
+        <path d="M20,90 Q50,40 80,75 Q110,110 130,60" stroke="rgba(100,180,220,0.35)" stroke-width="1.2" fill="none"/>
+        <path d="M10,70 Q45,20 85,60 Q115,95 138,50" stroke="rgba(100,180,220,0.2)" stroke-width="0.8" fill="none"/>
+        <circle cx="70" cy="70" r="28" stroke="rgba(100,180,220,0.15)" stroke-width="1" fill="none"/>
+        <circle cx="70" cy="70" r="14" stroke="rgba(100,180,220,0.1)" stroke-width="1" fill="rgba(100,180,220,0.05)"/>
+        <text x="70" y="30" text-anchor="middle" font-family="monospace" font-size="8" fill="rgba(100,180,220,0.3)" letter-spacing="1">FLIP</text>
+      </svg>-->
+      <div class="bubble-lbl">ECHOES</div>
     </div>
+  </div>
 
-    <script src="./js/mainpage.js"></script>
+  <div class="bubble" id="bubble-1"
+    style="--dur:3.8s;--delay:-1.4s;--fx:-6px;--fy:-7px;--fx2:8px;--fy2:5px;--fx3:-4px;--fy3:-9px"
+    onclick="window.open('../projects/Deviant#terrain','_self')">
+    <div class="bubble-inner">
+        <img src="../projects/Deviant/img/Deviant_5.webp">
+         <!--
+      <svg width="140" height="140" viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+        <defs><radialGradient id="g1" cx="55%" cy="60%"><stop offset="0%" stop-color="#1a2a18"/><stop offset="100%" stop-color="#080c06"/></radialGradient></defs>
+        <rect width="140" height="140" fill="url(#g1)"/>
+        <path d="M0,105 Q35,70 70,80 Q105,90 140,60" stroke="rgba(120,180,100,0.3)" stroke-width="1" fill="none"/>
+        <path d="M0,90  Q30,55 70,65 Q110,75 140,45" stroke="rgba(120,180,100,0.22)" stroke-width="1" fill="none"/>
+        <path d="M0,75  Q28,42 70,50 Q112,58 140,30" stroke="rgba(120,180,100,0.15)" stroke-width="1" fill="none"/>
+        <path d="M0,60  Q30,30 70,38 Q110,46 140,18" stroke="rgba(120,180,100,0.1)" stroke-width="1" fill="none"/>
+        <path d="M20,120 Q60,95 85,105 Q115,115 140,95" stroke="rgba(120,180,100,0.18)" stroke-width="1" fill="none"/>
+        <text x="70" y="125" text-anchor="middle" font-family="monospace" font-size="8" fill="rgba(120,180,100,0.3)" letter-spacing="1">TERRAIN</text>
+      </svg>-->
+      <div class="bubble-lbl">DEVIANT</div>
+    </div>
+  </div>
+
+  <div class="bubble" id="bubble-2"
+    style="--dur:4.6s;--delay:-2.8s;--fx:5px;--fy:8px;--fx2:-8px;--fy2:-6px;--fx3:6px;--fy3:-8px"
+    onclick="window.open('../projects/PaintingGreys#ocean','_self')">
+    <div class="bubble-inner">
+      <img src="../projects/PaintingGreys/img/Thumbnail.webp">
+        <!--
+      <svg width="140" height="140" viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+        <defs><radialGradient id="g2" cx="45%" cy="40%"><stop offset="0%" stop-color="#0d1f35"/><stop offset="100%" stop-color="#040810"/></radialGradient></defs>
+        <rect width="140" height="140" fill="url(#g2)"/>
+        <path d="M0,85 Q18,75 35,85 Q52,95 70,85 Q88,75 105,85 Q122,95 140,85" stroke="rgba(80,140,200,0.4)" stroke-width="1.2" fill="none"/>
+        <path d="M0,72 Q18,62 35,72 Q52,82 70,72 Q88,62 105,72 Q122,82 140,72" stroke="rgba(80,140,200,0.28)" stroke-width="1" fill="none"/>
+        <path d="M0,59 Q20,49 38,59 Q56,69 70,59 Q84,49 105,59 Q124,69 140,59" stroke="rgba(80,140,200,0.18)" stroke-width="1" fill="none"/>
+        <path d="M0,98 Q22,90 40,98 Q58,106 70,98 Q86,90 110,98 Q126,106 140,98" stroke="rgba(80,140,200,0.22)" stroke-width="0.8" fill="none"/>
+        <circle cx="35" cy="85" r="1.5" fill="rgba(200,220,255,0.4)"/>
+        <circle cx="70" cy="72" r="1.2" fill="rgba(200,220,255,0.35)"/>
+        <circle cx="105" cy="85" r="1.8" fill="rgba(200,220,255,0.3)"/>
+        <text x="70" y="38" text-anchor="middle" font-family="monospace" font-size="8" fill="rgba(80,140,200,0.3)" letter-spacing="1">FLIP OCEAN</text>
+      </svg> -->
+      <div class="bubble-lbl">PAINTING <br> GREYS</div>
+    </div>
+  </div>
+
+</div>
+
+<div id="vimeo-modal">
+  <button id="vimeo-close" onclick="closeVimeo()">✕</button>
+  <div id="vimeo-wrap">
+    <iframe id="vimeo-iframe" src="" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// SOCIAL TOOLTIPS
+const socTip = document.getElementById('soc-tip');
+document.querySelectorAll('.soc[data-tip]').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    socTip.textContent = el.dataset.tip;
+    socTip.classList.add('visible');
+  });
+  el.addEventListener('mouseleave', () => socTip.classList.remove('visible'));
+});
+
+// CURSOR
+const curDot  = document.getElementById('cur-dot');
+const curRing = document.getElementById('cur-ring');
+let mX = window.innerWidth/2, mY = window.innerHeight/2, rX = mX, rY = mY;
+let lastMX = mX, lastMY = mY, mouseVel = 0, dotScale = 0.167, ringScale = 1;
+document.addEventListener('mousemove', e => { mX = e.clientX; mY = e.clientY; });
+document.addEventListener('mouseover', e => {
+  document.body.classList.toggle('hovering', !!e.target.closest('#play-group, .dot-group, .soc, #cta'));
+});
+(function animRing(t){
+  // Mouse velocity
+  const dx = mX - lastMX, dy = mY - lastMY;
+  const speed = Math.sqrt(dx*dx + dy*dy);
+  lastMX = mX; lastMY = mY;
+  mouseVel += (speed - mouseVel) * 0.18;
+
+  // Dot scale — velocity driven
+  const targetDotScale = 0.167 + Math.min(mouseVel * 0.055, 0.833);
+  dotScale += (targetDotScale - dotScale) * 0.10;
+
+  // Ring scale — velocity driven (grows with movement) + idle sine pulse when still
+  const idlePulse = 1 + Math.sin(t * 0.0018) * 0.18;   // slow gentle breathe
+  const velScale  = 1 + Math.min(mouseVel * 0.06, 0.7); // grows up to 1.7× when fast
+  const targetRingScale = mouseVel > 0.5 ? velScale : idlePulse;
+  ringScale += (targetRingScale - ringScale) * 0.07;     // lazy lerp — smooth in all cases
+
+  rX += (mX-rX)*0.11; rY += (mY-rY)*0.11;
+  curDot.style.left  = mX+'px'; curDot.style.top  = mY+'px';
+  curDot.style.transform  = `translate(-50%,-50%) scale(${dotScale.toFixed(3)})`;
+  curRing.style.left = rX+'px'; curRing.style.top = rY+'px';
+  curRing.style.transform = `translate(-50%,-50%) scale(${ringScale.toFixed(3)})`;
+  requestAnimationFrame(animRing);
+})(performance.now());
+
+// AVATAR — hide initials if a photo/gif is present
+const avatarImg = document.getElementById('avatar-img');
+if (avatarImg) {
+  document.getElementById('avatar-initials').style.display = 'none';
+  avatarImg.addEventListener('error', () => {
+    avatarImg.style.display = 'none';
+    document.getElementById('avatar-initials').style.display = '';
+  });
+}
+
+// CLOCK
+function tick(){
+  const d=new Date(), p=n=>String(n).padStart(2,'0');
+  document.getElementById('clock').textContent=`⊙ ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())} CET`;
+}
+tick(); setInterval(tick,1000);
+
+// LABEL + BUBBLES — quadrant-based trigger, physics simulation
+const lblProjects = document.getElementById('lbl-projects');
+const lblCurios   = document.getElementById('lbl-curiosities');
+const dotCurios   = document.getElementById('dot-curiosities');
+dotCurios.addEventListener('mouseenter', () => lblCurios.classList.add('hovered'));
+dotCurios.addEventListener('mouseleave', () => lblCurios.classList.remove('hovered'));
+
+// ── Play button screen position ──────────────────────────────
+function getPlayCenter() {
+  const rect = document.getElementById('stage').getBoundingClientRect();
+  return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+}
+// Play button visual radius in screen px (SVG r=46 inside viewBox 560x460)
+function getPlayRadius() {
+  const svg = document.getElementById('nav-svg');
+  return 46 * ((svg.clientWidth || 560) / 560);
+}
+
+// ── Bubble physics state ─────────────────────────────────────
+const BUBBLE_R   = 70;   // half of 140px
+const BUBBLE_CNT = 3;
+const bubbleEls  = [0,1,2].map(i => document.getElementById('bubble-'+i));
+
+// Each bubble: { x, y, vx, vy, targetAngle, alive }
+const bubs = Array.from({length: BUBBLE_CNT}, (_, i) => ({
+  x: 0, y: 0, vx: 0, vy: 0,
+  orbitAngle: (Math.PI * 2 / BUBBLE_CNT) * i,
+  alive: false,
+  scale: 0,
+  suckScale: 1,
+  hovered: false,
+}));
+
+// ── Projects dot screen position ────────────────────────────
+function getProjectsDotPos() {
+  const stage = document.getElementById('stage');
+  const svg   = document.getElementById('nav-svg');
+  const rect  = stage.getBoundingClientRect();
+  const scaleX = (svg.clientWidth  || 560) / 560;
+  const scaleY = (svg.clientHeight || 460) / 460;
+  return {
+    x: rect.left + rect.width  / 2 + (-200) * scaleX,
+    y: rect.top  + rect.height / 2 + (-168) * scaleY,
+  };
+}
+
+let bubblesActive  = false;
+let isSuckingIn    = false;   // true during the suck-in phase
+
+function spawnBubbles() {
+  if (bubblesActive) return;
+  bubblesActive = true;
+  isSuckingIn   = false;
+  const c = getPlayCenter();
+  const pr = getPlayRadius();
+  const orbitR = pr + BUBBLE_R + 30;
+  bubs.forEach((b, i) => {
+    b.orbitAngle = (Math.PI * 2 / BUBBLE_CNT) * i - Math.PI / 2;
+    b.x  = c.x + Math.cos(b.orbitAngle) * orbitR;
+    b.y  = c.y + Math.sin(b.orbitAngle) * orbitR;
+    b.vx = (Math.random() - 0.5) * 1.5;
+    b.vy = (Math.random() - 0.5) * 1.5;
+    b.alive = true;
+    b.scale = 0;
+    b.suckScale = 1;
+    const el = bubbleEls[i];
+    el.style.transition = 'opacity 0.5s ease, border-color 0.3s';
+    setTimeout(() => el.classList.add('visible'), i * 120);
+  });
+  lblProjects.classList.add('hovered');
+  lblProjects.textContent = 'Show all Projects →';
+}
+
+function despawnBubbles() {
+  if (!bubblesActive) return;
+  isSuckingIn = true;
+  bubbleEls.forEach((el, i) => {
+    el.style.transition = `transform 0.45s ${i * 0.07}s cubic-bezier(0.4,0,0.6,1), opacity 0.4s ${i * 0.07}s ease, border-color 0.3s`;
+    el.style.transform = el.style.transform.replace(/scale\([^)]*\)/, '') + ' scale(0)';
+  });
+  setTimeout(() => {
+    bubblesActive = false;
+    isSuckingIn   = false;
+    bubs.forEach(b => b.alive = false);
+    bubbleEls.forEach(el => el.classList.remove('visible'));
+    lblProjects.classList.remove('hovered');
+    lblProjects.textContent = 'Projects';
+  }, 550);
+}
+
+// ── Physics loop ─────────────────────────────────────────────
+const DAMPING  = 0.88;
+const NOISE_F  = 0.0008;
+let   noiseT   = 0;
+
+// Simple pseudo-noise per bubble
+function noise(seed, t) {
+  return Math.sin(t * 0.7 + seed * 2.3) * Math.cos(t * 0.4 + seed * 1.1);
+}
+
+function updateBubbles(dt) {
+  if (!bubblesActive && !isSuckingIn) return;
+  noiseT += dt;
+
+  const c  = getPlayCenter();
+  const pr = getPlayRadius();
+  const PUSH_DIST = pr + BUBBLE_R + 6;
+
+  bubs.forEach((b, i) => {
+    if (!b.alive) return;
+
+    if (isSuckingIn) return; // CSS handles scale-down, physics paused
+
+    // Gentle noise force — makes them drift organically
+    b.vx += noise(i,       noiseT * NOISE_F) * 0.12;
+    b.vy += noise(i + 10,  noiseT * NOISE_F) * 0.12;
+
+    // Soft attraction toward a loose orbit around the play button
+    const orbitR  = pr + BUBBLE_R + 40;
+    b.orbitAngle += 0.00015 * dt; // slow drift
+    const tx = c.x + Math.cos(b.orbitAngle) * orbitR;
+    const ty = c.y + Math.sin(b.orbitAngle) * orbitR;
+    b.vx += (tx - b.x) * 0.003;
+    b.vy += (ty - b.y) * 0.003;
+
+    // ── Collision: play button ───────────────────────────────
+    const dcx = b.x - c.x;
+    const dcy = b.y - c.y;
+    const dc  = Math.sqrt(dcx * dcx + dcy * dcy);
+    if (dc < PUSH_DIST && dc > 0.1) {
+      const nx = dcx / dc;
+      const ny = dcy / dc;
+      const overlap = PUSH_DIST - dc;
+      // Push position out
+      b.x += nx * overlap * 0.5;
+      b.y += ny * overlap * 0.5;
+      // Reflect velocity component toward center
+      const dot = b.vx * nx + b.vy * ny;
+      if (dot < 0) {
+        b.vx -= dot * nx * 1.4;
+        b.vy -= dot * ny * 1.4;
+      }
+    }
+
+    // ── Collision: other bubbles ─────────────────────────────
+    for (let j = i + 1; j < BUBBLE_CNT; j++) {
+      const o = bubs[j];
+      if (!o.alive) continue;
+      const ddx = b.x - o.x;
+      const ddy = b.y - o.y;
+      const dd  = Math.sqrt(ddx * ddx + ddy * ddy);
+      const MIN = BUBBLE_R * 2 + 4;
+      if (dd < MIN && dd > 0.1) {
+        const nx = ddx / dd;
+        const ny = ddy / dd;
+        const push = (MIN - dd) * 0.35;
+        b.x += nx * push; b.y += ny * push;
+        o.x -= nx * push; o.y -= ny * push;
+        const dv = (b.vx - o.vx) * nx + (b.vy - o.vy) * ny;
+        if (dv < 0) {
+          b.vx -= dv * nx * 0.6; b.vy -= dv * ny * 0.6;
+          o.vx += dv * nx * 0.6; o.vy += dv * ny * 0.6;
+        }
+      }
+    }
+
+    // Damping
+    b.vx *= DAMPING;
+    b.vy *= DAMPING;
+
+    b.x += b.vx;
+    b.y += b.vy;
+
+    // Apply to DOM (center the 140px element)
+    // Smooth hover scale
+    const targetScale = b.hovered ? 1.14 : 1.0;
+    b.drawScale = b.drawScale !== undefined
+      ? b.drawScale + (targetScale - b.drawScale) * 0.12
+      : 1.0;
+    bubbleEls[i].style.transform = `translate(${b.x - BUBBLE_R}px, ${b.y - BUBBLE_R}px) scale(${b.drawScale})`;
+  });
+}
+
+// ── Spawn on Projects dot hover, not quadrant ────────────────
+let despawnTimer = null;
+
+const dotProjects = document.getElementById('dot-projects');
+dotProjects.addEventListener('mouseenter', () => {
+  if (despawnTimer) { clearTimeout(despawnTimer); despawnTimer = null; }
+  spawnBubbles();
+});
+dotProjects.addEventListener('mouseleave', () => {
+  if (!bubblesActive && !isSuckingIn) return;
+  if (despawnTimer) clearTimeout(despawnTimer);
+  despawnTimer = setTimeout(despawnBubbles, 2000);
+});
+
+// Hovering a bubble resets the despawn timer
+bubbleEls.forEach((el, i) => {
+  el.addEventListener('mouseenter', () => {
+    bubs[i].hovered = true;
+    if (despawnTimer) { clearTimeout(despawnTimer); despawnTimer = null; }
+  });
+  el.addEventListener('mouseleave', () => {
+    bubs[i].hovered = false;
+    if (!bubblesActive && !isSuckingIn) return;
+    if (despawnTimer) clearTimeout(despawnTimer);
+    despawnTimer = setTimeout(despawnBubbles, 2000);
+  });
+});
+
+lblProjects.addEventListener('mouseenter', () => {
+  if (despawnTimer) { clearTimeout(despawnTimer); despawnTimer = null; }
+});
+lblProjects.addEventListener('mouseleave', () => {
+  if (!bubblesActive && !isSuckingIn) return;
+  if (despawnTimer) clearTimeout(despawnTimer);
+  despawnTimer = setTimeout(despawnBubbles, 2000);
+});
+
+lblProjects.style.pointerEvents = 'all';
+lblProjects.addEventListener('click', () => window.open('../projects','_self'));
+document.getElementById('dot-projects').addEventListener('click', () => window.open('../projects','_self'));
+document.getElementById('dot-curiosities').addEventListener('click', () => window.open('../projects/index.html#lab-section','_self'));
+
+// VIDEO + CRT SHADER
+const video = document.getElementById('video-bg');
+video.play().catch(()=>{});
+
+(function initCRT() {
+  const cv  = document.getElementById('crt-canvas');
+  const gl  = cv.getContext('webgl', { alpha: false });
+  if (!gl) { // WebGL not available — fall back to plain video
+    video.style.opacity   = '0.45';
+    video.style.filter    = 'brightness(0.6) saturate(0.85)';
+    video.style.zIndex    = '0';
+    video.style.left      = '-380px';
+    video.style.width     = 'calc(100vw + 380px)';
+    return;
+  }
+
+  // ── Shaders ──────────────────────────────────────────────
+  const VS = `
+    attribute vec2 a_pos;
+    varying vec2 v_uv;
+    void main(){
+      v_uv = vec2(a_pos.x * 0.5 + 0.5, 0.5 - a_pos.y * 0.5);
+      gl_Position = vec4(a_pos, 0.0, 1.0);
+    }`;
+
+  const FS = `
+    precision mediump float;
+    uniform sampler2D u_tex;
+    uniform float     u_t;
+    uniform float     u_vidScale;
+    uniform float     u_vidOff;
+    uniform vec2      u_res;      // canvas resolution in pixels
+    uniform vec2      u_mouse;    // mouse in 0..1 canvas UV
+    varying vec2      v_uv;
+
+    // Barrel / bowl distortion — original, no pre-scaling
+    vec2 barrel(vec2 uv){
+      vec2 c = uv - 0.5;
+      float r = dot(c, c);
+      return uv + c * r * 0.22;
+    }
+
+    void main(){
+      vec2 uv = barrel(v_uv);
+
+      // Clamp to edge instead of clipping — stretches edge pixels for a VHS look
+      uv = clamp(uv, 0.0, 1.0);
+
+      vec2 vUV = vec2(uv.x * u_vidScale + u_vidOff, uv.y);
+
+      // RGB chromatic aberration
+      float ca  = 0.006;
+      vec2  dir = (uv - 0.5) * ca;
+      float r   = texture2D(u_tex, vUV + dir).r;
+      float g   = texture2D(u_tex, vUV      ).g;
+      float b   = texture2D(u_tex, vUV - dir).b;
+      vec3  col = vec3(r, g, b);
+
+      // Scanlines + pixel grid — driven by distorted UV so they warp with the image
+      vec2  screenUV = uv * u_res;
+      float lineSize = 2.0;
+      float scan = mod(floor(screenUV.y / lineSize), 2.0);
+      col *= 0.78 + 0.22 * scan;
+
+      float px = mod(floor(screenUV.x / lineSize), 2.0);
+      col *= 0.92 + 0.08 * px;
+
+      // Brightness + slight desaturation
+      float lum = dot(col, vec3(0.299, 0.587, 0.114));
+      col = mix(vec3(lum), col, 0.88);
+      col *= 0.62;
+
+      // Vignette centred on play button
+      float playX = 1.0 - (190.0 / (u_vidScale > 0.0 ? (1.0 / u_vidScale) * 380.0 + 380.0 : 760.0));
+      // simpler: hardcode relative centre ~37% of canvas
+      vec2  vc  = vec2(u_vidOff + u_vidScale * 0.5, 0.5);  // centre of video in canvas UV
+      float vd  = length((uv - vc) * vec2(0.9, 1.0));
+      float vig = smoothstep(0.0, 0.75, vd);
+      col *= 1.0 - vig * 0.72;
+
+      // Cursor glow — subtle brightness lift in a soft radius around mouse
+      float aspect  = u_res.x / u_res.y;
+      vec2  mDelta  = (v_uv - u_mouse) * vec2(aspect, 1.0);
+      float cursor  = smoothstep(0.35, 0.0, length(mDelta));
+      col += col * cursor * 0.5;
+
+      gl_FragColor = vec4(col, 1.0);
+    }`;
+
+  function compile(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src); gl.compileShader(s);
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, compile(gl.VERTEX_SHADER,   VS));
+  gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, FS));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+
+  // Full-screen quad
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER,
+    new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const aPos = gl.getAttribLocation(prog, 'a_pos');
+  gl.enableVertexAttribArray(aPos);
+  gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+  // Texture
+  const tex = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, tex);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.uniform1i(gl.getUniformLocation(prog, 'u_tex'), 0);
+  const uT        = gl.getUniformLocation(prog, 'u_t');
+  const uVidScale = gl.getUniformLocation(prog, 'u_vidScale');
+  const uVidOff   = gl.getUniformLocation(prog, 'u_vidOff');
+  const uMouse    = gl.getUniformLocation(prog, 'u_mouse');
+  const uRes      = gl.getUniformLocation(prog, 'u_res');
+
+  function setVideoUniforms() {
+    const vw    = window.innerWidth;
+    const total = vw + 380;         // video element width in px
+    // canvas UV x → video texture UV x:
+    // screenX = canvasUV * vw
+    // videoUV = (screenX + 380) / total  [video starts at -380px in screen space]
+    // videoUV = canvasUV * (vw/total) + 380/total
+    gl.uniform1f(uVidScale, vw   / total);
+    gl.uniform1f(uVidOff,   380  / total);
+  }
+
+  function resize() {
+    cv.width  = window.innerWidth;
+    cv.height = window.innerHeight;
+    gl.viewport(0, 0, cv.width, cv.height);
+    gl.uniform2f(uRes, cv.width, cv.height);
+    setVideoUniforms();
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function crtLoop(t) {
+    if (video.readyState >= 2) {
+      gl.bindTexture(gl.TEXTURE_2D, tex);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, video);
+      gl.uniform1f(uT, t * 0.001);
+      gl.uniform2f(uMouse, mX / window.innerWidth, mY / window.innerHeight);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    }
+    requestAnimationFrame(crtLoop);
+  }
+  requestAnimationFrame(crtLoop);
+})();
+
+// VIMEO MODAL
+const VIMEO_ID = 'XXXXXXXXX'; // ← replace with your Vimeo video ID
+const vimeoModal  = document.getElementById('vimeo-modal');
+const vimeoIframe = document.getElementById('vimeo-iframe');
+function openVimeo(){
+  vimeoIframe.src = `https://player.vimeo.com/video/${VIMEO_ID}?autoplay=1&color=ffffff&title=0&byline=0&portrait=0`;
+  vimeoModal.classList.add('open');
+}
+function closeVimeo(){
+  vimeoModal.classList.remove('open');
+  vimeoIframe.src = '';
+}
+document.getElementById('play-group').addEventListener('click', openVimeo);
+const mobShowreel = document.getElementById('mob-showreel');
+if (mobShowreel) mobShowreel.addEventListener('click', openVimeo);
+vimeoModal.addEventListener('click', e => { if(e.target === vimeoModal) closeVimeo(); });
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeVimeo(); });
+
+// PARTICLES
+const canvas = document.getElementById('canvas');
+const ctx    = canvas.getContext('2d');
+let W, H, pcx, pcy;
+function resizeCanvas(){
+  const el = document.getElementById('left');
+  W = canvas.width  = el.offsetWidth;
+  H = canvas.height = el.offsetHeight;
+  pcx = W/2; pcy = H/2;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+const TAU = Math.PI*2;
+class Particle {
+  constructor(i, total){
+    const t = i/total;
+    this.R     = 36 + t*280 + (Math.random()-.5)*54;
+    this.angle = Math.random()*TAU;
+    const dir  = Math.random()<.5 ? 1 : -1;
+    this.speed = dir*(0.000032 + Math.random()*0.000058);
+    this.ox=0; this.oy=0;
+    this.size  = .5  + Math.random()*1.05;
+    this.alpha = .05 + Math.random()*.42;
+    this.bright = Math.random()<.065;
+    if(this.bright){ this.size=.9+Math.random()*.7; this.alpha=.5+Math.random()*.38; }
+  }
+  update(dt){
+    this.angle += this.speed*dt;
+    const bx = pcx+Math.cos(this.angle)*this.R;
+    const by = pcy+Math.sin(this.angle)*this.R;
+    const wx=bx+this.ox, wy=by+this.oy;
+    const dx=wx-mX, dy=wy-mY, d2=dx*dx+dy*dy, PR=140;
+    if(d2<PR*PR && d2>.01){
+      const d=Math.sqrt(d2), f=(1-d/PR)*4.5;
+      this.ox+=(dx/d)*f; this.oy+=(dy/d)*f;
+    }
+    this.ox*=.968; this.oy*=.968;
+    this.x=bx+this.ox; this.y=by+this.oy;
+  }
+  draw(){
+    if(this.bright){
+      const g=ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.size*5);
+      g.addColorStop(0,`rgba(237,234,228,${this.alpha*.5})`);
+      g.addColorStop(1,'rgba(237,234,228,0)');
+      ctx.beginPath(); ctx.arc(this.x,this.y,this.size*5,0,TAU);
+      ctx.fillStyle=g; ctx.fill();
+    }
+    ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,TAU);
+    ctx.fillStyle=`rgba(237,234,228,${this.alpha})`; ctx.fill();
+  }
+}
+const COUNT=200;
+const particles=Array.from({length:COUNT},(_,i)=>new Particle(i,COUNT));
+
+// Init bubble positions off-screen so first transform lands correctly
+bubbleEls.forEach(el => {
+  el.style.left = '0px';
+  el.style.top  = '0px';
+});
+
+let lastT=performance.now();
+(function loop(now){
+  const dt=Math.min(now-lastT,50); lastT=now;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='rgba(8,8,8,0.18)';
+  ctx.fillRect(0,0,W,H);
+  for(const p of particles){p.update(dt);p.draw();}
+  updateBubbles(dt);
+  requestAnimationFrame(loop);
+})(performance.now());
+</script>
+
 </body>
-
-<p style="text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center;font-size: small;font-family: monospace; margin: 0; color: rgb(255, 255, 255);">
-    © Jona Melvin Grobe — 2025
-</p>
-<br>
-
 </html>
