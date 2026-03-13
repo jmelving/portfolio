@@ -841,47 +841,8 @@ footer p {
   <!-- ═══════════════ LAB ═══════════════ -->
   <section id="lab-section">
     <div id="lab-grid-wrap">
-      <!--
-        HOW TO ADD ITEMS — copy a block below and swap src/title/sub:
-
-        Image:  <div class="lab-item">
-                  <div class="lab-card">
-                    <img src="path/to/img.webp" alt="..."
-                         style="aspect-ratio:4/3;object-fit:cover;width:100%;display:block;">
-                    <div class="lab-overlay"></div>
-                    <div class="lab-info">
-                      <div class="lab-title">Title</div>
-                      <div class="lab-sub">Tool · Type</div>
-                    </div>
-                  </div>
-                </div>
-
-        Video:  <div class="lab-item">
-                  <div class="lab-card">
-                    <video src="path/to/clip.mp4" autoplay muted loop playsinline
-                           style="aspect-ratio:4/3;object-fit:cover;width:100%;display:block;"></video>
-                    <span class="lab-vid-badge">Video</span>
-                    <div class="lab-overlay"></div>
-                    <div class="lab-info">
-                      <div class="lab-title">Title</div>
-                      <div class="lab-sub">Houdini · Simulation</div>
-                    </div>
-                  </div>
-                </div>
-
-        Suggested aspect ratios:
-          landscape  →  4/3  or  3/2
-          square     →  1/1
-          portrait   →  3/4  or  2/3
-          tall video →  9/16
-      -->
       <div class="lab-masonry">
 
-
-        
-
-
-        <!--VIDEO — swap src to your real .mp4 -->
         <div class="lab-item">
           <div class="lab-card">
             <video src="../projects/WellThatHappened/vid/StylizedTexture_workflow.mp4" autoplay muted loop playsinline
@@ -907,7 +868,6 @@ footer p {
           </div>
         </div>
 
-        <!--VIDEO — swap src to your real .mp4 -->
         <div class="lab-item">
           <div class="lab-card">
             <video src="../projects/WellThatHappened/vid/Penguin_BTS.mp4" autoplay muted loop playsinline
@@ -944,66 +904,6 @@ footer p {
             </div>
           </div>
         </div>
-<!--
-        <div class="lab-item">
-          <div class="lab-card">
-            <img src="../projects/Vestige/img/Thumbnail.webp" alt="Experiment 004"
-                 style="aspect-ratio:3/2;object-fit:cover;width:100%;display:block;">
-            <div class="lab-overlay"></div>
-            <div class="lab-info">
-              <div class="lab-title">Experiment 004</div>
-              <div class="lab-sub">UE5 · Lookdev</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="lab-item">
-          <div class="lab-card">
-            <img src="../projects/PaintingGreys/img/Thumbnail.webp" alt="Experiment 005"
-                 style="aspect-ratio:3/4;object-fit:cover;width:100%;display:block;">
-            <div class="lab-overlay"></div>
-            <div class="lab-info">
-              <div class="lab-title">Experiment 005</div>
-              <div class="lab-sub">Compositing · Nuke</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="lab-item">
-          <div class="lab-card">
-            <img src="../projects/WheelofSuffering/img/WOS_1.webp" alt="Experiment 006"
-                 style="aspect-ratio:1/1;object-fit:cover;width:100%;display:block;">
-            <div class="lab-overlay"></div>
-            <div class="lab-info">
-              <div class="lab-title">Experiment 006</div>
-              <div class="lab-sub">Houdini · Terrain</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="lab-item">
-          <div class="lab-card">
-            <img src="../projects/Echoes/img/ECHOES_3.webp" alt="Experiment 007"
-                 style="aspect-ratio:4/3;object-fit:cover;width:100%;display:block;">
-            <div class="lab-overlay"></div>
-            <div class="lab-info">
-              <div class="lab-title">Experiment 007</div>
-              <div class="lab-sub">FX · Simulation</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="lab-item">
-          <div class="lab-card">
-            <img src="../projects/InGritWeTrust/img/Thumbnail.png" alt="Experiment 008"
-                 style="aspect-ratio:3/2;object-fit:cover;width:100%;display:block;">
-            <div class="lab-overlay"></div>
-            <div class="lab-info">
-              <div class="lab-title">Experiment 008</div>
-              <div class="lab-sub">Render · Lookdev</div>
-            </div>
-          </div>
-        </div>-->
 
       </div><!-- /lab-masonry -->
     </div>
@@ -1159,6 +1059,7 @@ document.querySelectorAll('.hover-cycle').forEach(container => {
     idx = 0; imgs[0].classList.add('active');
   });
 });
+
 // ── LIGHTBOX ──────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function () {
   const lb      = document.getElementById('lightbox');
@@ -1171,9 +1072,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const btnNext = document.getElementById('lb-next');
   const btnClose= document.getElementById('lb-close');
 
-  if (!lb) return; // safety
+  if (!lb) return;
 
-  // Build flat list from all lab cards
   const cards = Array.from(document.querySelectorAll('.lab-item .lab-card'));
   const items = [];
   cards.forEach(card => {
@@ -1190,9 +1090,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   let cur = 0;
-  let scrollY = 0;
 
-  // Build dots
   items.forEach(function(_, i) {
     const d = document.createElement('button');
     d.className = 'lb-dot';
@@ -1206,7 +1104,6 @@ document.addEventListener('DOMContentLoaded', function () {
     cur = ((i % items.length) + items.length) % items.length;
     const item = items[cur];
 
-    // Swap media
     lbWrap.innerHTML = '';
     var el;
     if (item.type === 'video') {
@@ -1223,7 +1120,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (item.type === 'video') el.addEventListener('canplay', reveal, {once:true});
     else { el.addEventListener('load', reveal, {once:true}); if (el.complete) reveal(); }
 
-    // Caption + counter + dots
     if (lbTitle) lbTitle.textContent = item.title;
     if (lbSub)   lbSub.textContent   = item.sub;
     if (lbCount) lbCount.textContent = (cur + 1) + ' / ' + items.length;
@@ -1231,26 +1127,16 @@ document.addEventListener('DOMContentLoaded', function () {
       d.classList.toggle('active', i === cur);
     });
 
-    // Lock scroll without jump
-    scrollY = window.scrollY;
-    document.body.style.top = '-' + scrollY + 'px';
-    document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
-
+    document.body.style.overflow = 'hidden';
     lb.classList.add('open');
   }
 
   function close() {
     lb.classList.remove('open');
-    // Restore scroll position exactly
-    document.body.style.position = '';
-    document.body.style.top = '';
-    document.body.style.width = '';
-    window.scrollTo(0, scrollY);
+    document.body.style.overflow = '';
     setTimeout(function() { lbWrap.innerHTML = ''; }, 350);
   }
 
-  // Wire each card directly — no delegation, no href issues
   cards.forEach(function(card, i) {
     card.style.cursor = 'pointer';
     card.addEventListener('click', function(e) {
