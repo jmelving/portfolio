@@ -17,6 +17,7 @@
   --dim:    rgba(237,234,228,0.36);
   --dimmer: rgba(237,234,228,0.12);
   --border: rgba(237,234,228,0.07);
+  --gap:    3px;
 }
 
 html { scroll-behavior: smooth; }
@@ -325,14 +326,22 @@ header {
 
 /* ── LAB SECTION ── */
 #lab-section { position:relative; z-index:1; scroll-margin-top:70px; }
-#lab-grid-wrap { padding:0 48px 80px; }
+#lab-grid-wrap { padding:48px 48px 80px; }
 
-/* Masonry via CSS columns */
-.lab-masonry { columns:4; column-gap:3px; }
+/* ── LAB MASONRY — absolute position engine (same as project pages) ── */
+.lab-masonry {
+  position:relative;
+  visibility:hidden;
+}
+.lab-masonry.laid-out {
+  visibility:visible;
+}
+.lm-wrap {
+  position:absolute;
+  box-sizing:border-box;
+}
 
-.lab-item { break-inside:avoid; margin-bottom:3px; display:block; }
-
-/* Card — NO fixed aspect-ratio; media defines the height */
+/* ── LAB CARD ── */
 .lab-card {
   position:relative;
   overflow:hidden;
@@ -350,7 +359,6 @@ header {
 }
 .lab-card:hover::after { border-color:rgba(237,234,228,0.18); }
 
-/* Media — width 100%, height natural from intrinsic ratio */
 .lab-card img,
 .lab-card video {
   display:block; width:100%; height:auto; max-height:70vh;
@@ -400,9 +408,7 @@ header {
   background:rgba(8,8,8,0.65); backdrop-filter:blur(6px);
 }
 
-/* ══════════════════════════════════════════
-   LIGHTBOX
-══════════════════════════════════════════ */
+/* ── LIGHTBOX ── */
 #lightbox {
   position:fixed; inset:0; z-index:500;
   display:flex; align-items:center; justify-content:center;
@@ -413,10 +419,8 @@ header {
 }
 #lightbox.open { opacity:1; pointer-events:all; }
 
-/* ── Media stage — fixed size box, media fits inside ── */
 #lb-stage {
   position:relative;
-  /* Fixed dimensions so arrows never shift */
   width: min(88vw, 1200px);
   height: min(82vh, 900px);
   display:flex; align-items:center; justify-content:center;
@@ -442,7 +446,6 @@ header {
 #lb-media-wrap img.ready,
 #lb-media-wrap video.ready { opacity:1; }
 
-/* ── Arrows — anchored to stage edges, vertically centered ── */
 .lb-arrow {
   position:absolute; top:50%; z-index:10;
   transform:translateY(-50%);
@@ -467,7 +470,6 @@ header {
 #lb-prev { left:-66px; }
 #lb-next { right:-66px; }
 
-/* ── Close ── */
 #lb-close {
   position:fixed; top:28px; right:36px; z-index:520;
   width:38px; height:38px; border-radius:50%;
@@ -481,7 +483,6 @@ header {
 #lb-close:hover { border-color:rgba(237,234,228,0.45); color:var(--fg); }
 #lb-close svg { width:13px; height:13px; stroke:currentColor; fill:none; stroke-width:1.8; stroke-linecap:round; }
 
-/* ── Caption ── */
 #lb-caption {
   position:fixed; bottom:44px; left:50%; transform:translateX(-50%);
   z-index:520;
@@ -506,7 +507,6 @@ header {
   color:var(--dim);
 }
 
-/* ── Dots ── */
 #lb-dots {
   display:flex; align-items:center; gap:7px;
   pointer-events:all;
@@ -524,7 +524,6 @@ header {
   transform:scale(1.3);
 }
 
-/* ── Counter top-right of stage ── */
 #lb-counter {
   position:fixed; top:30px; left:50%; transform:translateX(-50%);
   font-family:'Syne Mono', monospace;
@@ -533,7 +532,6 @@ header {
   z-index:520; pointer-events:none;
 }
 
-/* ── Swipe hint fade ── */
 #lb-hint {
   position:fixed; bottom:12px; left:50%; transform:translateX(-50%);
   font-family:'Syne Mono', monospace;
@@ -559,8 +557,7 @@ footer p {
 
 /* ── RESPONSIVE ── */
 @media (max-width:1100px) {
-  .gallery     { grid-template-columns:repeat(2,1fr); }
-  .lab-masonry { columns:3; }
+  .gallery { grid-template-columns:repeat(2,1fr); }
 }
 @media (max-width:700px) {
   #side-rail   { width:44px; }
@@ -568,9 +565,11 @@ footer p {
   header       { left:44px; padding:18px 20px; }
   .page-content { margin-left:44px; }
   .gallery     { grid-template-columns:1fr; gap:0; }
-  .lab-masonry { columns:2; }
   .gallery-item { opacity:1; animation:none; }
-  .project-info, .lab-info { transform:translateY(0) !important; opacity:1 !important; }
+  .project-info { transform:translateY(0) !important; opacity:1 !important; }
+  .lab-card .lab-info { transform:translateY(0) !important; opacity:1 !important; }
+  .lab-card .lab-overlay { opacity:1 !important; }
+  .lab-card img, .lab-card video { filter:grayscale(0%) brightness(0.85) saturate(1) !important; transform:none !important; }
   #hero, #filters, #gallery-wrap, #lab-grid-wrap, #lab-divider-inner, footer {
     padding-left:20px; padding-right:20px;
   }
@@ -616,14 +615,14 @@ footer p {
     <div id="hero">
       <div id="hero-number">12</div>
       <h1>Selected<br><em>Works.</em></h1>
-      <p id="hero-sub">VFX · Music Video · Curiosities · Misc</p>
+      <p id="hero-sub">VFX · Short Films · Music Videos</p>
     </div>
 
     <div id="filters">
       <button class="filter-btn active" data-filter="all">All</button>
       <button class="filter-btn" data-filter="short">Short</button>
       <button class="filter-btn" data-filter="musicvideo">Music Video</button>
-      <button class="filter-btn" data-filter="curiosities">Curiosities</button>
+      <button class="filter-btn" data-filter="ad">Ad</button>
       <button class="filter-btn" data-filter="misc">Misc</button>
     </div>
 
@@ -679,7 +678,7 @@ footer p {
           </div>
         </a>
 
-        <a href="../projects/TheUSBParadox/" class="gallery-item" data-category="short">
+        <a href="../projects/TheUSBParadox/" class="gallery-item" data-category="short ad">
           <div class="project-container hover-cycle">
             <div class="image-stack">
               <img src="../projects/TheUSBParadox/img/thumbnail.webp" alt="USB Paradox" class="active">
@@ -728,7 +727,7 @@ footer p {
           </div>
         </a>
 
-        <a href="../projects/Deviant/" class="gallery-item" data-category="musicvideo curiosities">
+        <a href="../projects/Deviant/" class="gallery-item" data-category="musicvideo">
           <div class="project-container hover-cycle">
             <div class="image-stack">
               <img src="../projects/Deviant/img/Thumbnail.webp" alt="Deviant" class="active">
@@ -743,56 +742,8 @@ footer p {
             </div>
           </div>
         </a>
-<!--
-        <a href="../projects/Numb/" class="gallery-item" data-category="musicvideo curiosities">
-          <div class="project-container hover-cycle">
-            <div class="image-stack">
-              <img src="../projects/Numb/img/Thumbnail.webp" alt="Numb" class="active">
-              <img src="../projects/Numb/img/Still_4.webp" alt="Numb 2">
-              <img src="../projects/Numb/img/Still_2.webp" alt="Numb 3">
-            </div>
-            <div class="img-overlay"></div>
-            <span class="cat-pill">Music Video</span>
-            <div class="project-info">
-              <div class="project-title">Numb</div>
-              <div class="work-description">Music Video Snippet</div>
-            </div>
-          </div>
-        </a>
 
-        <a href="../projects/HayAlgoQue/" class="gallery-item" data-category="musicvideo">
-          <div class="project-container hover-cycle">
-            <div class="image-stack">
-              <img src="../projects/HayAlgoQue/img/Still_0.webp" alt="Hay Algo Que" class="active">
-              <img src="../projects/HayAlgoQue/img/Still_1.webp" alt="HAQ 2">
-              <img src="../projects/HayAlgoQue/img/Still_3.webp" alt="HAQ 3">
-            </div>
-            <div class="img-overlay"></div>
-            <span class="cat-pill">Music Video</span>
-            <div class="project-info">
-              <div class="project-title">Hay Algo Que</div>
-              <div class="work-description">Music Video</div>
-            </div>
-          </div>
-        </a>
-
-        <a href="../projects/Vestige/" class="gallery-item" data-category="misc">
-          <div class="project-container hover-cycle">
-            <div class="image-stack">
-              <img src="../projects/Vestige/img/Thumbnail.webp" alt="Vestige" class="active">
-              <img src="../projects/Vestige/img/Vestiege_02.webp" alt="Vestige 2">
-              <img src="../projects/Vestige/img/Vestiege_01.webp" alt="Vestige 3">
-            </div>
-            <div class="img-overlay"></div>
-            <span class="cat-pill">Misc</span>
-            <div class="project-info">
-              <div class="project-title">Vestige</div>
-              <div class="work-description">Unreal Engine 5 · Environment</div>
-            </div>
-          </div>
-        </a>-->
-
-        <a href="../projects/WheelofSuffering/" class="gallery-item" data-category="curiosities">
+        <a href="../projects/WheelofSuffering/" class="gallery-item" data-category="misc">
           <div class="project-container hover-cycle">
             <div class="image-stack">
               <img src="../projects/WheelofSuffering/img/Thumbnail.webp" alt="Wheel of Suffering" class="active">
@@ -800,30 +751,16 @@ footer p {
               <img src="../projects/WheelofSuffering/img/WOS_1.webp" alt="WOS 3">
             </div>
             <div class="img-overlay"></div>
-            <span class="cat-pill">Curiosities</span>
+            <span class="cat-pill">Challenge</span>
             <div class="project-info">
               <div class="project-title">Wheel of Suffering</div>
               <div class="work-description">Pwnisher Challenge · Top 100</div>
             </div>
           </div>
         </a>
- <!--
-        <a href="../projects/InGritWeTrust/" class="gallery-item" data-category="misc">
-          <div class="project-container hover-cycle">
-            <div class="image-stack">
-              <img src="../projects/InGritWeTrust/img/Thumbnail.png" alt="In Grit We Trust" class="active">
-            </div>
-            <div class="img-overlay"></div>
-            <span class="cat-pill">Misc</span>
-            <div class="project-info">
-              <div class="project-title">In Grit We Trust</div>
-              <div class="work-description">Commercial Visual</div>
-            </div>
-          </div>
-        </a>
 
       </div>
-    </div>-->
+    </div>
   </section>
 
   <!-- ═══════════════ LAB DIVIDER ═══════════════ -->
@@ -832,7 +769,7 @@ footer p {
       <div id="lab-divider-accent"></div>
       <div id="lab-text">
         <h2>The<br><em>Lab.</em></h2>
-        <p>Experiments · Sketches · Curiosities · Side Work</p>
+        <p>Experiments · Sketches · Side Work</p>
       </div>
     </div>
     <div id="lab-ghost-num">∞</div>
@@ -841,12 +778,17 @@ footer p {
   <!-- ═══════════════ LAB ═══════════════ -->
   <section id="lab-section">
     <div id="lab-grid-wrap">
-      <div class="lab-masonry">
 
-        <div class="lab-item">
-          <div class="lab-card">
-            <video src="../projects/WellThatHappened/vid/StylizedTexture_workflow.mp4" autoplay muted loop playsinline
-                   style="aspect-ratio:1/1;object-fit:cover;width:100%;display:block;"></video>
+      <!-- Each .lm-wrap holds one .lab-card. Width + position set by JS. -->
+      <div class="lab-masonry cols-4" id="lab-masonry">
+
+        <div class="lm-wrap">
+          <div class="lab-card"
+               data-title="Stylized Texture Workflow"
+               data-sub="Houdini · COPs"
+               data-type="video">
+            <video src="../projects/WellThatHappened/vid/StylizedTexture_workflow.mp4"
+                   autoplay muted loop playsinline></video>
             <span class="lab-vid-badge">Video</span>
             <div class="lab-overlay"></div>
             <div class="lab-info">
@@ -856,22 +798,27 @@ footer p {
           </div>
         </div>
 
-        <div class="lab-item">
-          <div class="lab-card">
-            <img src="../vid/MuscleStiff.webp" alt="Muscle Stiffness Test"
-                 style="aspect-ratio:3/4;object-fit:cover;width:100%;display:block;">
+        <div class="lm-wrap">
+          <div class="lab-card"
+               data-title="Muscle Stiffness Test"
+               data-sub="Houdini · Muscle Simulation"
+               data-type="image">
+            <img src="../vid/MuscleStiff.webp" alt="Muscle Stiffness Test">
             <div class="lab-overlay"></div>
             <div class="lab-info">
               <div class="lab-title">Muscle Stiffness Test</div>
-              <div class="lab-sub">Houdini· Muscle Simulation</div>
+              <div class="lab-sub">Houdini · Muscle Simulation</div>
             </div>
           </div>
         </div>
 
-        <div class="lab-item">
-          <div class="lab-card">
-            <video src="../projects/WellThatHappened/vid/Penguin_BTS.mp4" autoplay muted loop playsinline
-                   style="aspect-ratio:1/1;object-fit:cover;width:100%;display:block;"></video>
+        <div class="lm-wrap">
+          <div class="lab-card"
+               data-title="Stylized Penguin"
+               data-sub="Houdini · Character FX"
+               data-type="video">
+            <video src="../projects/WellThatHappened/vid/Penguin_BTS.mp4"
+                   autoplay muted loop playsinline></video>
             <span class="lab-vid-badge">Video</span>
             <div class="lab-overlay"></div>
             <div class="lab-info">
@@ -881,10 +828,12 @@ footer p {
           </div>
         </div>
 
-        <div class="lab-item">
-          <div class="lab-card">
-            <img src="../img/curiosities/ConceptArtCreature.png" alt="Concept Art Creature"
-                 style="aspect-ratio:4/3;object-fit:cover;width:100%;display:block;">
+        <div class="lm-wrap">
+          <div class="lab-card"
+               data-title="Concept Art Creature"
+               data-sub="Photoshop · Concept Art"
+               data-type="image">
+            <img src="../img/curiosities/ConceptArtCreature.png" alt="Concept Art Creature">
             <div class="lab-overlay"></div>
             <div class="lab-info">
               <div class="lab-title">Concept Art Creature</div>
@@ -893,10 +842,12 @@ footer p {
           </div>
         </div>
 
-        <div class="lab-item">
-          <div class="lab-card">
-            <img src="../img/curiosities/SketchMe (5).png" alt="Experiment 002"
-                 style="aspect-ratio:3/4;object-fit:cover;width:100%;display:block;">
+        <div class="lm-wrap">
+          <div class="lab-card"
+               data-title="Cute Sketch 01"
+               data-sub="Photoshop · 2D Sketch"
+               data-type="image">
+            <img src="../img/curiosities/SketchMe (5).png" alt="Cute Sketch 01">
             <div class="lab-overlay"></div>
             <div class="lab-info">
               <div class="lab-title">Cute Sketch 01</div>
@@ -912,35 +863,26 @@ footer p {
   <!-- ── FOOTER ── -->
   <footer>
     <p>© Jona Melvin Grobe — 2025</p>
-    <p>Technical Artist · Austria</p>
+    <p>Technical Artist · Germany - Bavaria</p>
   </footer>
 
 </div><!-- /page-content -->
 
-<!-- ══════════════════════════════════════════
-     LIGHTBOX
-══════════════════════════════════════════ -->
+<!-- ── LIGHTBOX ── -->
 <div id="lightbox">
   <button id="lb-close" aria-label="Close">
     <svg viewBox="0 0 14 14"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
   </button>
-
   <div id="lb-stage">
     <button class="lb-arrow" id="lb-prev" aria-label="Previous">
       <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
     </button>
-
-    <div id="lb-media-wrap">
-      <!-- filled by JS -->
-    </div>
-
+    <div id="lb-media-wrap"></div>
     <button class="lb-arrow" id="lb-next" aria-label="Next">
       <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
     </button>
   </div>
-
   <div id="lb-counter"></div>
-
   <div id="lb-caption">
     <div id="lb-dots"></div>
     <div id="lb-title-wrap">
@@ -948,12 +890,11 @@ footer p {
       <div id="lb-sub"></div>
     </div>
   </div>
-
   <div id="lb-hint">← swipe or use arrow keys →</div>
 </div>
 
 <script>
-// ── CURSOR ──────────────────────────────────────────────────
+/* ── CURSOR ── */
 const curDot  = document.getElementById('cur-dot');
 const curRing = document.getElementById('cur-ring');
 let mX = window.innerWidth/2, mY = window.innerHeight/2;
@@ -978,14 +919,14 @@ document.addEventListener('mouseover', e => {
   requestAnimationFrame(animRing);
 })(performance.now());
 
-// ── AMBIENT CANVAS ───────────────────────────────────────────
+/* ── AMBIENT CANVAS ── */
 (function () {
   const cv = document.getElementById('bg-canvas');
   const ctx = cv.getContext('2d');
   let W, H;
   const resize = () => { W = cv.width = window.innerWidth; H = cv.height = window.innerHeight; };
   resize(); window.addEventListener('resize', resize);
-  const orbs = [210,190,240,200,220].map((hue, i) => ({
+  const orbs = [210,190,240,200,220].map(hue => ({
     x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight,
     r: 200 + Math.random() * 350,
     vx: (Math.random() - 0.5) * 0.15, vy: (Math.random() - 0.5) * 0.12,
@@ -1007,7 +948,7 @@ document.addEventListener('mouseover', e => {
   })();
 })();
 
-// ── SIDE RAIL active tracking ────────────────────────────────
+/* ── SIDE RAIL ── */
 const railWorks  = document.getElementById('rail-works');
 const railLab    = document.getElementById('rail-lab');
 const labSection = document.getElementById('lab-section');
@@ -1019,7 +960,7 @@ function updateRail() {
 window.addEventListener('scroll', updateRail, { passive:true });
 updateRail();
 
-// ── FILTERS ─────────────────────────────────────────────────
+/* ── FILTERS ── */
 const filterBtns   = document.querySelectorAll('.filter-btn');
 const galleryItems = document.querySelectorAll('.gallery-item');
 const countLabel   = document.getElementById('count-label');
@@ -1041,7 +982,7 @@ filterBtns.forEach(btn => {
   });
 });
 
-// ── IMAGE FLIPBOOK ───────────────────────────────────────────
+/* ── IMAGE FLIPBOOK ── */
 document.querySelectorAll('.hover-cycle').forEach(container => {
   const imgs = container.querySelectorAll('.image-stack img');
   if (imgs.length < 2) return;
@@ -1060,8 +1001,75 @@ document.querySelectorAll('.hover-cycle').forEach(container => {
   });
 });
 
-// ── LIGHTBOX ──────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', function () {
+/* ── LAB MASONRY — absolute-position engine (identical to project pages) ──
+   Items placed strictly left→right: item 0→col 0, item 1→col 1, …
+   Each column tracks its running Y. Container height = tallest column.
+────────────────────────────────────────────────────────────────────────── */
+(function () {
+  const GAP = 3;
+
+  function colsForGrid(grid) {
+    const w = window.innerWidth;
+    if (w <= 700)  return 1;
+    if (w <= 1100) return 2;
+    // read cols-N class
+    for (let n = 6; n >= 1; n--) {
+      if (grid.classList.contains('cols-' + n)) return n;
+    }
+    return 4;
+  }
+
+  function layoutGrid(grid) {
+    const wraps = Array.from(grid.querySelectorAll(':scope > .lm-wrap'));
+    if (!wraps.length) return;
+
+    const cols  = colsForGrid(grid);
+    const total = grid.offsetWidth;
+    const colW  = (total - GAP * (cols - 1)) / cols;
+    const colY  = new Array(cols).fill(0);
+
+    // First pass: lock width so height measurement is accurate
+    wraps.forEach(w => { w.style.width = colW + 'px'; });
+
+    // Second pass: place
+    wraps.forEach((wrap, idx) => {
+      const col = idx % cols;
+      wrap.style.left = (col * (colW + GAP)) + 'px';
+      wrap.style.top  = colY[col] + 'px';
+      colY[col] += wrap.offsetHeight + GAP;
+    });
+
+    grid.style.height = Math.max(...colY) - GAP + 'px';
+    grid.classList.add('laid-out');
+  }
+
+  function layoutAll() {
+    document.querySelectorAll('.lab-masonry').forEach(layoutGrid);
+  }
+
+  layoutAll();
+  requestAnimationFrame(layoutAll);
+  setTimeout(layoutAll, 300);
+  setTimeout(layoutAll, 900);
+
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(layoutAll, 80);
+  });
+
+  // Re-run when any media inside the grid finishes loading
+  document.querySelectorAll('.lab-masonry img').forEach(img => {
+    if (!img.complete) img.addEventListener('load', layoutAll);
+  });
+  document.querySelectorAll('.lab-masonry video').forEach(v => {
+    v.addEventListener('loadedmetadata', layoutAll);
+    v.addEventListener('canplay', layoutAll);
+  });
+})();
+
+/* ── LIGHTBOX ── */
+(function () {
   const lb      = document.getElementById('lightbox');
   const lbWrap  = document.getElementById('lb-media-wrap');
   const lbDots  = document.getElementById('lb-dots');
@@ -1071,31 +1079,26 @@ document.addEventListener('DOMContentLoaded', function () {
   const btnPrev = document.getElementById('lb-prev');
   const btnNext = document.getElementById('lb-next');
   const btnClose= document.getElementById('lb-close');
+  const hint    = document.getElementById('lb-hint');
 
   if (!lb) return;
 
-  const cards = Array.from(document.querySelectorAll('.lab-item .lab-card'));
-  const items = [];
-  cards.forEach(card => {
-    const img   = card.querySelector('img');
-    const vid   = card.querySelector('video');
-    const media = img || vid;
-    if (!media) return;
-    items.push({
-      type:  vid ? 'video' : 'image',
-      src:   media.src || media.getAttribute('src') || '',
-      title: card.querySelector('.lab-title') ? card.querySelector('.lab-title').textContent : '',
-      sub:   card.querySelector('.lab-sub')   ? card.querySelector('.lab-sub').textContent   : '',
-    });
-  });
+  // Collect all lab cards
+  const cards = Array.from(document.querySelectorAll('.lab-masonry .lab-card'));
+  const items = cards.map(card => ({
+    type:  card.dataset.type || (card.querySelector('video') ? 'video' : 'image'),
+    src:   (card.querySelector('video') || card.querySelector('img') || {}).src || '',
+    title: card.dataset.title || '',
+    sub:   card.dataset.sub   || '',
+  })).filter(i => i.src);
 
   let cur = 0;
 
-  items.forEach(function(_, i) {
+  // Build dots
+  items.forEach((_, i) => {
     const d = document.createElement('button');
-    d.className = 'lb-dot';
-    d.type = 'button';
-    d.addEventListener('click', function(e) { e.stopPropagation(); show(i); });
+    d.className = 'lb-dot'; d.type = 'button';
+    d.addEventListener('click', e => { e.stopPropagation(); show(i); });
     lbDots.appendChild(d);
   });
 
@@ -1105,66 +1108,61 @@ document.addEventListener('DOMContentLoaded', function () {
     const item = items[cur];
 
     lbWrap.innerHTML = '';
-    var el;
+    let el;
     if (item.type === 'video') {
       el = document.createElement('video');
       el.src = item.src; el.autoplay = true; el.muted = true; el.loop = true;
-      el.setAttribute('playsinline','');
+      el.setAttribute('playsinline', '');
+      el.addEventListener('canplay', () => el.classList.add('ready'), { once: true });
     } else {
       el = document.createElement('img');
       el.src = item.src; el.alt = item.title;
+      el.addEventListener('load', () => el.classList.add('ready'), { once: true });
+      if (el.complete) el.classList.add('ready');
     }
-    el.style.cssText = 'opacity:0;transition:opacity 0.3s;max-width:min(88vw,1200px);max-height:min(76vh,840px);width:auto;height:auto;display:block;border:1px solid rgba(237,234,228,0.07);';
     lbWrap.appendChild(el);
-    var reveal = function() { el.style.opacity = '1'; };
-    if (item.type === 'video') el.addEventListener('canplay', reveal, {once:true});
-    else { el.addEventListener('load', reveal, {once:true}); if (el.complete) reveal(); }
 
-    if (lbTitle) lbTitle.textContent = item.title;
-    if (lbSub)   lbSub.textContent   = item.sub;
-    if (lbCount) lbCount.textContent = (cur + 1) + ' / ' + items.length;
-    lbDots.querySelectorAll('.lb-dot').forEach(function(d, i) {
-      d.classList.toggle('active', i === cur);
-    });
+    lbTitle.textContent = item.title;
+    lbSub.textContent   = item.sub;
+    lbCount.textContent = (cur + 1) + ' / ' + items.length;
+    lbDots.querySelectorAll('.lb-dot').forEach((d, j) => d.classList.toggle('active', j === cur));
 
     document.body.style.overflow = 'hidden';
     lb.classList.add('open');
+
+    // Fade hint after first interaction
+    setTimeout(() => hint && hint.classList.add('gone'), 2400);
   }
 
   function close() {
     lb.classList.remove('open');
     document.body.style.overflow = '';
-    setTimeout(function() { lbWrap.innerHTML = ''; }, 350);
+    setTimeout(() => { lbWrap.innerHTML = ''; }, 350);
   }
 
-  cards.forEach(function(card, i) {
-    card.style.cursor = 'pointer';
-    card.addEventListener('click', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      show(i);
-    });
+  cards.forEach((card, i) => {
+    card.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); show(i); });
   });
 
-  btnPrev.type  = 'button'; btnPrev.addEventListener('click',  function(e) { e.stopPropagation(); show(cur - 1); });
-  btnNext.type  = 'button'; btnNext.addEventListener('click',  function(e) { e.stopPropagation(); show(cur + 1); });
-  btnClose.type = 'button'; btnClose.addEventListener('click', function(e) { e.stopPropagation(); close(); });
-  lb.addEventListener('click', function(e) { if (e.target === lb) close(); });
+  btnPrev.type  = 'button'; btnPrev.addEventListener('click',  e => { e.stopPropagation(); show(cur - 1); });
+  btnNext.type  = 'button'; btnNext.addEventListener('click',  e => { e.stopPropagation(); show(cur + 1); });
+  btnClose.type = 'button'; btnClose.addEventListener('click', e => { e.stopPropagation(); close(); });
+  lb.addEventListener('click', e => { if (e.target === lb) close(); });
 
-  document.addEventListener('keydown', function(e) {
+  document.addEventListener('keydown', e => {
     if (!lb.classList.contains('open')) return;
     if (e.key === 'ArrowLeft')  show(cur - 1);
     if (e.key === 'ArrowRight') show(cur + 1);
     if (e.key === 'Escape')     close();
   });
 
-  var tx = 0;
-  lb.addEventListener('touchstart', function(e) { tx = e.touches[0].clientX; }, {passive:true});
-  lb.addEventListener('touchend',   function(e) {
-    var dx = e.changedTouches[0].clientX - tx;
+  let tx = 0;
+  lb.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+  lb.addEventListener('touchend',   e => {
+    const dx = e.changedTouches[0].clientX - tx;
     if (Math.abs(dx) > 40) show(dx < 0 ? cur + 1 : cur - 1);
   });
-});
+})();
 </script>
 </body>
 </html>
