@@ -1,0 +1,300 @@
+/* =============================================================================
+   shared.css
+   Reusable component styles: grain · cursor · ambient canvas ·
+   side rail · header · vimeo modal.
+
+   Usage:
+     <link rel="stylesheet" href="../../shared/shared.css">
+
+   Design tokens — define these on :root in your page stylesheet.
+   Fallbacks are provided so every component works out of the box.
+     --bg      page background     default #080808
+     --fg      primary text        default #EDEAE4
+     --dim     muted text          default rgba(237,234,228,0.36)
+     --dimmer  very muted text     default rgba(237,234,228,0.12)
+     --border  hairline borders    default rgba(237,234,228,0.07)
+   ============================================================================= */
+
+/* ── Internal fallback aliases ─────────────────────────────────────────────── */
+:root {
+  --sh-bg:     var(--bg,     #080808);
+  --sh-fg:     var(--fg,     #EDEAE4);
+  --sh-dim:    var(--dim,    rgba(237,234,228,0.36));
+  --sh-dimmer: var(--dimmer, rgba(237,234,228,0.12));
+  --sh-border: var(--border, rgba(237,234,228,0.07));
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   GRAIN OVERLAY
+   Injected as <div id="sh-grain"> by shared.js.
+   Control opacity via --grain-opacity (default 0.025).
+   ══════════════════════════════════════════════════════════════════════════════ */
+:root { --grain-opacity: 0.025; }
+
+#sh-grain {
+  position:         fixed;
+  inset:            0;
+  z-index:          200;
+  pointer-events:   none;
+  opacity:          var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:  200px;
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   CUSTOM CURSOR
+   Injected as #sh-cur-dot + #sh-cur-ring by shared.js.
+   Hidden automatically on touch / narrow screens.
+   ══════════════════════════════════════════════════════════════════════════════ */
+#sh-cur-dot {
+  position:       fixed;
+  width:          24px;
+  height:         24px;
+  background:     var(--sh-fg);
+  border-radius:  50%;
+  pointer-events: none;
+  z-index:        9999;
+  transform:      translate(-50%,-50%) scale(0.167);
+}
+#sh-cur-ring {
+  position:       fixed;
+  width:          26px;
+  height:         26px;
+  border:         1px solid rgba(237,234,228,0.3);
+  border-radius:  50%;
+  pointer-events: none;
+  z-index:        9998;
+  transform:      translate(-50%,-50%);
+}
+/* Dot disappears; ring brightens over interactive elements */
+body.sh-hovering #sh-cur-dot  { transform: translate(-50%,-50%) scale(0); }
+body.sh-hovering #sh-cur-ring { border-color: rgba(237,234,228,0.62); }
+
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   AMBIENT CANVAS
+   Injected as <canvas id="sh-bg-canvas"> by shared.js.
+   Control opacity via --ambient-opacity (default 0.45).
+   ══════════════════════════════════════════════════════════════════════════════ */
+:root { --ambient-opacity: 0.45; }
+
+#sh-bg-canvas {
+  position:       fixed;
+  inset:          0;
+  z-index:        0;
+  pointer-events: none;
+  opacity:        var(--ambient-opacity);
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   SIDE RAIL
+   Markup stays in your HTML; shared.js handles scroll-spy behaviour.
+
+   Customise width with --rail-width (default 88px).
+   ══════════════════════════════════════════════════════════════════════════════ */
+:root { --rail-width: 88px; }
+
+#side-rail {
+  position:        fixed;
+  left:            0;
+  top:             0;
+  bottom:          0;
+  z-index:         90;
+  width:           var(--rail-width);
+  display:         flex;
+  flex-direction:  column;
+  align-items:     center;
+  justify-content: center;
+  border-right:    1px solid var(--sh-border);
+  background:      rgba(8,8,8,0.5);
+  backdrop-filter: blur(12px);
+  gap:             4px;
+}
+
+/* Individual nav item — add data-section="id" to wire scroll-spy */
+.rail-item {
+  display:        flex;
+  flex-direction: column;
+  align-items:    center;
+  gap:            10px;
+  padding:        14px 0;
+  cursor:         pointer;
+  text-decoration: none;
+  transition:     opacity 0.4s;
+  opacity:        0.28;
+}
+.rail-item.active { opacity: 1; }
+.rail-item:hover  { opacity: 0.72; }
+
+.rail-dot {
+  width:         6px;
+  height:        6px;
+  border-radius: 50%;
+  border:        1px solid rgba(237,234,228,0.5);
+  background:    transparent;
+  transition:    background 0.35s, transform 0.35s;
+  flex-shrink:   0;
+}
+.rail-item.active .rail-dot {
+  background: var(--sh-fg);
+  transform:  scale(1.5);
+}
+
+.rail-label {
+  font-family:     'Syne Mono', monospace;
+  font-size:       0.8rem;
+  letter-spacing:  0.14em;
+  text-transform:  uppercase;
+  color:           var(--sh-fg);
+  writing-mode:    vertical-rl;
+  text-orientation: mixed;
+  transform:       rotate(180deg);
+  white-space:     nowrap;
+  pointer-events:  none;
+}
+
+.rail-line {
+  width:      1px;
+  height:     20px;
+  background: var(--sh-border);
+  flex-shrink: 0;
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   HEADER
+   Markup stays in your HTML.
+   Offset left matches --rail-width automatically.
+   ══════════════════════════════════════════════════════════════════════════════ */
+header {
+  position:        fixed;
+  top:             0;
+  left:            var(--rail-width);
+  right:           0;
+  z-index:         100;
+  padding:         22px 52px;
+  display:         flex;
+  align-items:     center;
+  justify-content: space-between;
+  border-bottom:   1px solid var(--sh-border);
+  background:      rgba(8,8,8,0.72);
+  backdrop-filter: blur(20px);
+}
+
+.header-left  { display: flex; align-items: center; gap: 22px; }
+
+.header-back {
+  font-family:    'Syne Mono', monospace;
+  font-size:      0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color:          var(--sh-dim);
+  text-decoration: none;
+  display:        flex;
+  align-items:    center;
+  gap:            8px;
+  transition:     color 0.2s;
+}
+.header-back:hover  { color: var(--sh-fg); }
+.header-back::before { content: '←'; font-size: 0.85rem; }
+
+.header-sep {
+  color:       var(--sh-dimmer);
+  font-family: 'Syne Mono', monospace;
+  font-size:   0.75rem;
+}
+.header-title {
+  font-family:    'Syne Mono', monospace;
+  font-size:      0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color:          rgba(237,234,228,0.55);
+}
+.header-meta {
+  font-family:    'Syne Mono', monospace;
+  font-size:      0.67rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color:          rgba(237,234,228,0.38);
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   PAGE CONTENT OFFSET
+   Pushes the scrollable area past the fixed side rail.
+   ══════════════════════════════════════════════════════════════════════════════ */
+.page-content { margin-left: var(--rail-width); }
+
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   VIMEO MODAL
+   Injected as <div id="sh-vimeo-modal"> by shared.js.
+   Opened via openVimeo() / closed via closeVimeo() — both attached to window
+   by shared.js so you can call them inline or from any script.
+   ══════════════════════════════════════════════════════════════════════════════ */
+#sh-vimeo-modal {
+  display:         none;
+  position:        fixed;
+  inset:           0;
+  z-index:         1000;
+  background:      rgba(8,8,8,0.93);
+  backdrop-filter: blur(20px);
+  align-items:     center;
+  justify-content: center;
+  flex-direction:  column;
+  gap:             20px;
+}
+#sh-vimeo-modal.open { display: flex; }
+
+#sh-vimeo-wrap {
+  position:     relative;
+  width:        min(88vw, 1200px);
+  aspect-ratio: 16/9;
+}
+#sh-vimeo-wrap iframe {
+  position: absolute;
+  inset:    0;
+  width:    100%;
+  height:   100%;
+  border:   none;
+}
+
+#sh-vimeo-close {
+  width:         36px;
+  height:        36px;
+  border-radius: 50%;
+  border:        1px solid rgba(237,234,228,0.18);
+  background:    none;
+  color:         var(--sh-dim);
+  font-size:     0.8rem;
+  cursor:        pointer;
+  display:       flex;
+  align-items:   center;
+  justify-content: center;
+  align-self:    flex-end;
+  margin-right:  calc((100vw - min(88vw, 1200px)) / 2);
+  transition:    border-color 0.2s, color 0.2s;
+}
+#sh-vimeo-close:hover {
+  border-color: rgba(237,234,228,0.42);
+  color:        var(--sh-fg);
+}
+
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 1200px) {
+  :root { --rail-width: 46px; }
+
+  .rail-label  { font-size: 0.56rem; }
+  header       { padding: 18px 22px; }
+  .header-meta { display: none; }
+
+  /* Hide custom cursor — use OS default on touch/small screens */
+  #sh-cur-dot,
+  #sh-cur-ring { display: none; }
+}
