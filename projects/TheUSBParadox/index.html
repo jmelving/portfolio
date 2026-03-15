@@ -4,120 +4,56 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <meta name="description" content="R&D breakdown of The USB Paradox — lightning, water droplets, and volumetric lighting built in Houdini and Nuke.">
+  <meta name="keywords" content="Jona Melvin Grobe, USB Paradox, Houdini, Nuke, VFX, lightning, water droplets, volumetrics, KarmaXPU, 3D generalist, R&D, ADCE, Awards, Creative Club Austria">
+  <meta name="author" content="Jona Melvin Grobe">
+  <meta name="robots" content="index, follow">
 
-    <meta name="description" content="R&D breakdown of The USB Paradox — lightning, water droplets, and volumetric lighting built in Houdini and Nuke.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="The USB Paradox | Jona Melvin Grobe | Portfolio">
+  <meta property="og:description" content="Lightning strikes, water droplets, and volumetric lighting — a behind-the-scenes R&D breakdown.">
+  <meta property="og:image" content="https://jmelving.de/projects/USBParadox/img/thumbnail.webp">
+  <meta property="og:url" content="https://jmelving.de/projects/USBParadox/">
 
-    <meta name="keywords" content="Jona Melvin Grobe, USB Paradox, Houdini, Nuke, VFX, lightning, water droplets, volumetrics, KarmaXPU, 3D generalist, R&D, ADCE, Awards, Creative Club Austria">
-    <meta name="author" content="Jona Melvin Grobe">
-    <meta name="robots" content="index, follow">
-
-    <!-- Open Graph Metadata -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="The USB Paradox | Jona Melvin Grobe | Portfolio">
-    <meta property="og:description" content="Lightning strikes, water droplets, and volumetric lighting — a behind-the-scenes R&D breakdown.">
-    <meta property="og:image" content="https://jmelving.de/projects/USBParadox/img/thumbnail.webp">
-    <meta property="og:url" content="https://jmelving.de/projects/USBParadox/">
-
-    <!-- Twitter / X Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="The USB Paradox | Jona Melvin Grobe">
-    <meta name="twitter:description" content="Lightning strikes, water droplets, and volumetric lighting — a behind-the-scenes R&D breakdown.">
-    <meta name="twitter:image" content="https://jmelving.de/projects/USBParadox/img/thumbnail.webp">
-
-
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The USB Paradox | Jona Melvin Grobe">
+  <meta name="twitter:description" content="Lightning strikes, water droplets, and volumetric lighting — a behind-the-scenes R&D breakdown.">
+  <meta name="twitter:image" content="https://jmelving.de/projects/USBParadox/img/thumbnail.webp">
 
   <title>The USB Paradox — Jona Melvin Grobe</title>
   <link rel="icon" href="../../img/favicon.ico" type="image/x-icon">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Syne:wght@400;600;700;800&family=Syne+Mono&display=swap" rel="stylesheet">
+
+  <!-- Shared components -->
+  <link rel="stylesheet" href="../../css/project_shared.css">
+  <link rel="stylesheet" href="../../css/masonry.css">
+
   <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    /* =========================================================================
+       DESIGN TOKENS — change these to retheme the entire page
+       ========================================================================= */
     :root {
       --bg:     #080808;
       --fg:     #EDEAE4;
       --dim:    rgba(237,234,228,0.36);
       --dimmer: rgba(237,234,228,0.12);
       --border: rgba(237,234,228,0.07);
-      --gap:    3px;
+
+      /* shared.css overrides — uncomment to adjust */
+      /* --rail-width:      88px;  */
+      /* --grain-opacity:   0.025; */
+      /* --ambient-opacity: 0.45;  */
     }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
       width: 100%; background: var(--bg); color: var(--fg);
       font-family: 'Syne', sans-serif; cursor: none;
       min-height: 100vh; overflow-x: hidden;
     }
-
-    /* ── GRAIN ── */
-    #grain {
-      position: fixed; inset: 0; z-index: 200; pointer-events: none; opacity: 0.025;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      background-size: 200px;
-    }
-
-    /* ── CURSOR ── */
-    #cur-dot {
-      position: fixed; width: 24px; height: 24px; background: var(--fg); border-radius: 50%;
-      pointer-events: none; z-index: 9999; transform: translate(-50%,-50%) scale(0.167);
-    }
-    #cur-ring {
-      position: fixed; width: 26px; height: 26px; border: 1px solid rgba(237,234,228,0.3);
-      border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%);
-    }
-    body.hovering #cur-dot  { transform: translate(-50%,-50%) scale(0); }
-    body.hovering #cur-ring { border-color: rgba(237,234,228,0.62); }
-
-    /* ── AMBIENT ── */
-    #bg-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.45; }
-
-    /* ── SIDE RAIL ── */
-    #side-rail {
-      position: fixed; left: 0; top: 0; bottom: 0; z-index: 90; width: 88px;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      border-right: 1px solid var(--border);
-      background: rgba(8,8,8,0.5); backdrop-filter: blur(12px); gap: 4px;
-    }
-    .rail-item {
-      display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 14px 0;
-      cursor: pointer; text-decoration: none; transition: opacity 0.4s; opacity: 0.28;
-    }
-    .rail-item.active { opacity: 1; }
-    .rail-item:hover  { opacity: 0.72; }
-    .rail-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      border: 1px solid rgba(237,234,228,0.5); background: transparent;
-      transition: background 0.35s, transform 0.35s; flex-shrink: 0;
-    }
-    .rail-item.active .rail-dot { background: var(--fg); transform: scale(1.5); }
-    .rail-label {
-      font-family: 'Syne Mono', monospace;
-      font-size: 0.8rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg);
-      writing-mode: vertical-rl; text-orientation: mixed; transform: rotate(180deg);
-      white-space: nowrap; pointer-events: none;
-    }
-    .rail-line { width: 1px; height: 20px; background: var(--border); flex-shrink: 0; }
-
-    /* ── HEADER ── */
-    header {
-      position: fixed; top: 0; left: 88px; right: 0; z-index: 100; padding: 22px 52px;
-      display: flex; align-items: center; justify-content: space-between;
-      border-bottom: 1px solid var(--border);
-      background: rgba(8,8,8,0.72); backdrop-filter: blur(20px);
-    }
-    .header-left { display: flex; align-items: center; gap: 22px; }
-    .header-back {
-      font-family: 'Syne Mono', monospace; font-size: 0.72rem; letter-spacing: 0.2em;
-      text-transform: uppercase; color: var(--dim); text-decoration: none;
-      display: flex; align-items: center; gap: 8px; transition: color 0.2s;
-    }
-    .header-back:hover { color: var(--fg); }
-    .header-back::before { content: '←'; font-size: 0.85rem; }
-    .header-sep   { color: var(--dimmer); font-family: 'Syne Mono', monospace; font-size: 0.75rem; }
-    .header-title { font-family: 'Syne Mono', monospace; font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(237,234,228,0.55); }
-    .header-meta  { font-family: 'Syne Mono', monospace; font-size: 0.67rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(237,234,228,0.38); }
-
-    /* ── PAGE LAYOUT ── */
-    .page-content { margin-left: 88px; }
 
     /* ── HERO ── */
     #hero { position: relative; height: 100vh; overflow: hidden; cursor: pointer; }
@@ -177,7 +113,7 @@
     #hero:hover .hero-play-circle svg { fill: var(--fg); }
     .hero-play-label { font-family: 'Syne Mono', monospace; font-size: 0.65rem; letter-spacing: 0.34em; text-transform: uppercase; color: rgba(237,234,228,0.32); }
     #hero::before { content:''; position:absolute; left:50%; top:0; bottom:0; width:1px; background:rgba(237,234,228,0.04); z-index:3; pointer-events:none; }
-    #hero::after  { content:''; position:absolute; top:50%; left:0; right:0;  height:1px; background:rgba(237,234,228,0.04); z-index:3; pointer-events:none; }
+    #hero::after  { content:''; position:absolute; top:50%; left:0; right:0; height:1px; background:rgba(237,234,228,0.04); z-index:3; pointer-events:none; }
     @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
 
     /* ── DETAILS BAR ── */
@@ -209,107 +145,15 @@
     .video-embed:hover { border-color: rgba(237,234,228,0.16); transform: translateY(-5px); box-shadow: 0 28px 64px rgba(0,0,0,0.58); }
     .video-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
 
-    /* ── MEDIA MASONRY ────────────────────────────────────────────────────────
-       The container is relatively positioned with an explicit height set by JS.
-       Each .mc-wrap is absolutely positioned by JS — left-to-right order,
-       column by column, with heights measured after media loads.
-       visibility:hidden until JS has completed the first layout pass.
-    ── */
-    .media-masonry {
-      position: relative;
-      margin: 46px 0;
-      visibility: hidden;
-    }
-    .media-masonry.laid-out {
-      visibility: visible;
-    }
-    /* Items live in absolute flow; width is set by JS */
-    .mc-wrap {
-      position: absolute;
-      box-sizing: border-box;
-    }
-
-    .media-card {
-      position: relative; overflow: hidden;
-      background: #0d0d0d; display: block; cursor: pointer;
-    }
-    .mc-label {
-      padding: 10px 2px 0;
-      font-family: 'Syne', sans-serif; font-size: 0.84rem; line-height: 1.65;
-      color: rgba(237,234,228,0.55);
-    }
-    .mc-label-title { color: rgba(237,234,228,0.72); font-weight: 600; font-size: 0.82rem; }
-    .mc-label-sub {
-      font-family: 'Syne Mono', monospace; font-size: 0.58rem; letter-spacing: 0.16em;
-      color: rgba(237,234,228,0.3); margin-top: 2px;
-    }
-    .mc-label-desc {
-      font-family: 'Syne', sans-serif; font-size: 0.78rem; line-height: 1.6;
-      color: rgba(237,234,228,0.42); margin-top: 7px;
-    }
-    .mc-label-desc:empty { display: none; }
-    .media-card img, .media-card video {
-      display: block; width: 100%; height: auto; max-height: 70vh; object-fit: cover;
-      filter: grayscale(80%) brightness(0.72) saturate(0.8);
-      transition: filter 0.45s ease, transform 0.55s cubic-bezier(0.16,1,0.3,1);
-    }
-    .media-card:hover img, .media-card:hover video {
-      filter: grayscale(10%) brightness(0.92) saturate(1.1); transform: scale(1.04);
-    }
-    .media-card::after {
-      content: ''; position: absolute; inset: 0;
-      border: 1px solid rgba(237,234,228,0.04);
-      pointer-events: none; z-index: 4; transition: border-color 0.3s;
-    }
-    .media-card:hover::after { border-color: rgba(237,234,228,0.18); }
-    .mc-overlay {
-      position: absolute; inset: 0; z-index: 2;
-      background: linear-gradient(180deg, transparent 45%, rgba(8,8,8,0.88) 100%);
-      opacity: 0; transition: opacity 0.35s; pointer-events: none;
-    }
-    .media-card:hover .mc-overlay { opacity: 1; }
-    .mc-info {
-      position: absolute; bottom: 0; left: 0; right: 0; z-index: 3;
-      padding: 12px 15px 16px; transform: translateY(6px); opacity: 0;
-      transition: transform 0.32s cubic-bezier(0.16,1,0.3,1), opacity 0.28s;
-    }
-    .media-card:hover .mc-info { transform: translateY(0); opacity: 1; }
-    .mc-title {
-      font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 300;
-      letter-spacing: 0.05em; color: var(--fg); line-height: 1.2; margin-bottom: 4px;
-    }
-    .mc-sub {
-      font-family: 'Syne Mono', monospace; font-size: 0.6rem; letter-spacing: 0.18em;
-      color: rgba(237,234,228,0.58);
-    }
-    .mc-badge {
-      position: absolute; top: 10px; left: 10px; z-index: 5;
-      font-family: 'Syne Mono', monospace; font-size: 0.5rem; letter-spacing: 0.2em;
-      text-transform: uppercase; padding: 3px 9px; border-radius: 100px;
-      border: 1px solid rgba(237,234,228,0.2); color: rgba(237,234,228,0.65);
-      background: rgba(8,8,8,0.65); backdrop-filter: blur(6px);
-    }
-
     /* ── LEARNINGS ── */
     .learnings-wrap { margin-top: 46px; display: flex; flex-direction: column; gap: 2px; }
-    .learning-block {
-      display: grid; grid-template-columns: 260px 1fr;
-      border: 1px solid var(--border); transition: border-color 0.3s;
-    }
+    .learning-block { display: grid; grid-template-columns: 260px 1fr; border: 1px solid var(--border); transition: border-color 0.3s; }
     .learning-block:hover { border-color: rgba(237,234,228,0.14); }
     .learning-block + .learning-block { border-top: none; }
-    .learning-block-header {
-      display: flex; flex-direction: column; justify-content: center; gap: 12px;
-      padding: 26px 36px; border-right: 1px solid var(--border);
-      background: rgba(237,234,228,0.018);
-    }
+    .learning-block-header { display: flex; flex-direction: column; justify-content: center; gap: 12px; padding: 26px 36px; border-right: 1px solid var(--border); background: rgba(237,234,228,0.018); }
     .learning-block-label { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 300; letter-spacing: 0.05em; color: var(--fg); }
     .learning-block-tag { font-family: 'Syne Mono', monospace; font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase; padding: 5px 13px; border-radius: 100px; border: 1px solid var(--border); color: var(--dimmer); align-self: flex-start; }
-    .learning-block-body {
-      padding: 26px 48px 28px;
-      display: grid; grid-template-columns: repeat(2, 1fr);
-      gap: 0px 28px; align-content: start;
-    }
+    .learning-block-body { padding: 26px 48px 28px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 0px 28px; align-content: start; }
     .learning-item { font-size: 0.92rem; line-height: 1.65; color: rgba(237,234,228,0.52); font-family: 'Syne', sans-serif; }
     .learning-item::before { content: '○  '; color: rgba(237,234,228,0.2); }
 
@@ -317,82 +161,47 @@
     footer { position: relative; z-index: 1; padding: 26px 52px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
     footer p { font-family: 'Syne Mono', monospace; font-size: 0.65rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--dimmer); }
 
-    /* ── VIMEO MODAL ── */
-    #vimeo-modal { display: none; position: fixed; inset: 0; z-index: 1000; background: rgba(8,8,8,0.93); backdrop-filter: blur(20px); align-items: center; justify-content: center; flex-direction: column; gap: 20px; }
-    #vimeo-modal.open { display: flex; }
-    #vimeo-wrap { position: relative; width: min(88vw, 1200px); aspect-ratio: 16/9; }
-    #vimeo-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
-    #vimeo-close { width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(237,234,228,0.18); background: none; color: var(--dim); font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; justify-content: center; align-self: flex-end; margin-right: calc((100vw - min(88vw, 1200px)) / 2); transition: border-color 0.2s, color 0.2s; }
-    #vimeo-close:hover { border-color: rgba(237,234,228,0.42); color: var(--fg); }
-
-    /* ── LIGHTBOX ── */
-    #lightbox { position: fixed; inset: 0; z-index: 500; display: flex; align-items: center; justify-content: center; background: rgba(8,8,8,0.96); backdrop-filter: blur(28px); opacity: 0; pointer-events: none; transition: opacity 0.38s cubic-bezier(0.16,1,0.3,1); }
-    #lightbox.open { opacity: 1; pointer-events: all; }
-    #lb-stage { position: relative; width: min(90vw, 1300px); height: min(86vh, 960px); display: flex; align-items: center; justify-content: center; }
-    #lb-media-wrap { max-width: 100%; max-height: 100%; display: flex; align-items: center; justify-content: center; }
-    #lb-media-wrap img { display: block; max-width: min(90vw, 1300px); max-height: min(80vh, 920px); width: auto; height: auto; object-fit: contain; opacity: 0; transition: opacity 0.3s ease; border: 1px solid rgba(237,234,228,0.07); }
-    #lb-media-wrap img.ready { opacity: 1; }
-    #lb-media-wrap video { display: block; max-width: min(90vw, 1300px); max-height: min(80vh, 920px); width: auto; height: auto; opacity: 0; transition: opacity 0.3s ease; border: 1px solid rgba(237,234,228,0.07); }
-    #lb-media-wrap video.ready { opacity: 1; }
-    .lb-arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 10; width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(237,234,228,0.18); background: rgba(8,8,8,0.65); backdrop-filter: blur(10px); color: rgba(237,234,228,0.6); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.22s, color 0.22s; }
-    .lb-arrow:hover { border-color: rgba(237,234,228,0.5); color: var(--fg); }
-    .lb-arrow svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-    #lb-prev { left: -70px; } #lb-next { right: -70px; }
-    #lb-close { position: fixed; top: 28px; right: 38px; z-index: 520; width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(237,234,228,0.16); background: rgba(8,8,8,0.65); backdrop-filter: blur(10px); color: rgba(237,234,228,0.5); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.22s, color 0.22s; }
-    #lb-close:hover { border-color: rgba(237,234,228,0.45); color: var(--fg); }
-    #lb-close svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; }
-    #lb-caption { position: fixed; bottom: 48px; left: 50%; transform: translateX(-50%); z-index: 520; display: flex; flex-direction: column; align-items: center; gap: 16px; pointer-events: none; max-width: min(72vw, 860px); width: max-content; }
-    #lb-title-wrap { display: flex; flex-direction: column; align-items: center; gap: 6px; opacity: 0; transform: translateY(6px); transition: opacity 0.3s 0.12s, transform 0.3s 0.12s; }
-    #lightbox.open #lb-title-wrap { opacity: 1; transform: translateY(0); }
-    #lb-title { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 300; letter-spacing: 0.06em; color: var(--fg); white-space: nowrap; }
-    #lb-sub   { font-family: 'Syne Mono', monospace; font-size: 0.64rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dim); }
-    #lb-desc  { font-family: 'Syne', sans-serif; font-size: 0.82rem; line-height: 1.72; color: rgba(237,234,228,0.42); text-align: center; max-width: min(72vw, 860px); margin-top: 2px; }
-    #lb-desc:empty { display: none; }
-    #lb-dots  { display: flex; align-items: center; gap: 8px; pointer-events: all; }
-    .lb-dot { width: 6px; height: 6px; border-radius: 50%; border: 1px solid rgba(237,234,228,0.3); background: transparent; cursor: pointer; transition: background 0.25s, border-color 0.25s, transform 0.25s; }
-    .lb-dot.active { background: var(--fg); border-color: var(--fg); transform: scale(1.3); }
-    #lb-counter { position: fixed; top: 32px; left: 50%; transform: translateX(-50%); font-family: 'Syne Mono', monospace; font-size: 0.64rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--dimmer); z-index: 520; pointer-events: none; }
-
     /* ── RESPONSIVE ── */
     @media (max-width: 1200px) {
-      #side-rail { width: 46px; }
-      .rail-label { font-size: 0.56rem; }
-      header { left: 46px; padding: 18px 22px; }
-      .page-content { margin-left: 46px; }
+      body { cursor: auto; }
       .project-section { padding: 52px 22px; }
       #details { display: block; }
       .detail-item { border-right: none; border-bottom: 1px solid var(--border); padding: 30px 22px; }
       .detail-item:last-child { border-bottom: none; }
       .learning-block { grid-template-columns: 1fr; }
-      .learning-block-header { border-right: none; border-bottom: 1px solid var(--border); }
+      .learning-block-header { border-right: none; border-bottom: 1px solid var(--border); padding-left: 22px; padding-right: 22px; }
       .learning-block-body { grid-template-columns: 1fr; padding-left: 22px; padding-right: 22px; }
-      .learning-block-header { padding-left: 22px; padding-right: 22px; }
-      #lb-prev { left: -4px; } #lb-next { right: -4px; }
       footer { padding: 22px; }
-      body { cursor: auto; }
-      #cur-dot, #cur-ring { display: none; }
-      .header-meta { display: none; }
-      .media-card img, .media-card video {
-        filter: grayscale(0%) brightness(0.85) saturate(1) !important;
-        transform: none !important;
-      }
-      .media-card .mc-overlay { opacity: 1 !important; }
-      .media-card .mc-info { transform: translateY(0) !important; opacity: 1 !important; }
-      .media-card::after { border-color: rgba(237,234,228,0.10) !important; }
     }
   </style>
 </head>
-<body>
 
-<div id="grain"></div>
-<canvas id="bg-canvas"></canvas>
-<div id="cur-dot"></div>
-<div id="cur-ring"></div>
+<!--
+  =============================================================================
+  SHARED COMPONENT CONFIG  (data-attributes on <body>)
+  -----------------------------------------------------------------------------
+  data-ambient-hues             Comma-separated HSL hue angles for ambient orbs.
+                                Default: "210,195,228,205,218"
+  data-cursor-hover-selectors   CSS selectors that enlarge the cursor on hover.
+                                Default: "a,button,#hero,.media-card,.video-embed"
+  =============================================================================
+-->
+<body
+  data-ambient-hues="210,195,228,205,218"
+  data-cursor-hover-selectors="a,button,#hero,.media-card,.video-embed"
+>
+
+<!-- grain, cursor, ambient canvas injected automatically by shared.js -->
 
 <nav id="side-rail">
-  <a class="rail-item active" href="#overview"  data-section="overview"><div class="rail-dot"></div><div class="rail-label">Overview</div></a>
+  <!--
+    SIDE RAIL NAV
+    Add/remove .rail-item blocks freely.
+    data-section must match the id of the target <section> on this page.
+  -->
+  <a class="rail-item active" href="#overview"  data-section="overview"> <div class="rail-dot"></div><div class="rail-label">Overview</div></a>
   <div class="rail-line"></div>
-  <a class="rail-item"        href="#process"   data-section="process"><div class="rail-dot"></div><div class="rail-label">Process</div></a>
+  <a class="rail-item"        href="#process"   data-section="process">  <div class="rail-dot"></div><div class="rail-label">Process</div></a>
   <div class="rail-line"></div>
   <a class="rail-item"        href="#breakdown" data-section="breakdown"><div class="rail-dot"></div><div class="rail-label">Breakdown</div></a>
   <div class="rail-line"></div>
@@ -410,13 +219,27 @@
 
 <div class="page-content">
 
-  <section id="hero" data-video-src="" onclick="openVimeo()">
+  <!--
+    HERO CONFIG  (data-attributes on this element)
+    ─────────────────────────────────────────────────────────────────────────
+    data-vimeo-id              Vimeo ID opened when hero is clicked.
+    data-video-src             Path to a looping bg video.
+                               Leave "" to use the slideshow below instead.
+    data-slideshow-interval    Ms between slides. Default: 3800.
+    onclick="openVimeo()"      Calls the shared Vimeo modal (auto-injected).
+  -->
+  <section id="hero"
+    data-vimeo-id="1066698349"
+    data-video-src=""
+    data-slideshow-interval="3800"
+    onclick="openVimeo()"
+  >
     <video id="hero-video" autoplay muted loop playsinline></video>
     <div class="hero-slideshow" id="hero-slideshow">
       <div class="hero-slide active" style="background-image:url('./img/USB_3.webp')"></div>
-      <div class="hero-slide" style="background-image:url('./img/USB_4.webp')"></div>
-      <div class="hero-slide" style="background-image:url('./img/USB_1.webp')"></div>
-      <div class="hero-slide" style="background-image:url('./img/thumbnail.webp')"></div>
+      <div class="hero-slide"        style="background-image:url('./img/USB_4.webp')"></div>
+      <div class="hero-slide"        style="background-image:url('./img/USB_1.webp')"></div>
+      <div class="hero-slide"        style="background-image:url('./img/thumbnail.webp')"></div>
     </div>
     <div class="hero-overlay"></div>
     <div class="hero-content">
@@ -477,54 +300,12 @@
     </div>
 
     <div class="media-masonry cols-3">
-      <div class="mc-wrap">
-        <div class="media-card" data-title="Film Still 1" data-sub="USB Paradox · 2024" data-type="image" data-desc="">
-          <img src="./img/USB_0.webp" alt="Film Still 1">
-          <div class="mc-overlay"></div>
-          <div class="mc-info"><div class="mc-title">Film Still 1</div><div class="mc-sub">USB Paradox · 2024</div></div>
-        </div>
-        <div class="mc-label"><div class="mc-label-title"></div><div class="mc-label-sub"></div><div class="mc-label-desc"></div></div>
-      </div>
-      <div class="mc-wrap">
-        <div class="media-card" data-title="Film Still 2" data-sub="USB Paradox · 2024" data-type="image">
-          <img src="./img/USB_1.webp" alt="Film Still 2">
-          <div class="mc-overlay"></div>
-          <div class="mc-info"><div class="mc-title">Film Still 2</div><div class="mc-sub">USB Paradox · 2024</div></div>
-        </div>
-        <div class="mc-label"><div class="mc-label-title"></div><div class="mc-label-sub"></div><div class="mc-label-desc"></div></div>
-      </div>
-      <div class="mc-wrap">
-        <div class="media-card" data-title="Film Still 3" data-sub="USB Paradox · 2024" data-type="image">
-          <img src="./img/USB_2.webp" alt="Film Still 3">
-          <div class="mc-overlay"></div>
-          <div class="mc-info"><div class="mc-title">Film Still 3</div><div class="mc-sub">USB Paradox · 2024</div></div>
-        </div>
-        <div class="mc-label"><div class="mc-label-title"></div><div class="mc-label-sub"></div><div class="mc-label-desc"></div></div>
-      </div>
-      <div class="mc-wrap">
-        <div class="media-card" data-title="Film Still 4" data-sub="USB Paradox · 2024" data-type="image">
-          <img src="./img/USB_3.webp" alt="Still 4">
-          <div class="mc-overlay"></div>
-          <div class="mc-info"><div class="mc-title">Film Still 4</div><div class="mc-sub">USB Paradox · 2024</div></div>
-        </div>
-        <div class="mc-label"><div class="mc-label-title"></div><div class="mc-label-sub"></div><div class="mc-label-desc"></div></div>
-      </div>
-      <div class="mc-wrap">
-        <div class="media-card" data-title="Film Still 5" data-sub="USB Paradox · 2024" data-type="image">
-          <img src="./img/USB_4.webp" alt="Film Still 5">
-          <div class="mc-overlay"></div>
-          <div class="mc-info"><div class="mc-title">Film Still 5</div><div class="mc-sub">USB Paradox · 2024</div></div>
-        </div>
-        <div class="mc-label"><div class="mc-label-title"></div><div class="mc-label-sub"></div><div class="mc-label-desc"></div></div>
-      </div>
-      <div class="mc-wrap">
-        <div class="media-card" data-title="Film Still 6" data-sub="R&D · Compositing" data-type="image">
-          <img src="./img/USB_5.webp" alt="Film Still 6">
-          <div class="mc-overlay"></div>
-          <div class="mc-info"><div class="mc-title">Film Still 6</div><div class="mc-sub">USB Paradox · 2024</div></div>
-        </div>
-        <div class="mc-label"><div class="mc-label-title"></div><div class="mc-label-sub"></div><div class="mc-label-desc"></div></div>
-      </div>
+      <div class="mc-wrap"><div class="media-card" data-title="Film Still 1" data-sub="USB Paradox · 2024" data-type="image" data-desc=""><img src="./img/USB_0.webp" alt="Film Still 1"><div class="mc-overlay"></div><div class="mc-info"><div class="mc-title">Film Still 1</div><div class="mc-sub">USB Paradox · 2024</div></div></div><div class="mc-label"><div class="mc-label-title"></div><div class="mc-label-sub"></div><div class="mc-label-desc"></div></div></div>
+      <div class="mc-wrap"><div class="media-card" data-title="Film Still 2" data-sub="USB Paradox · 2024" data-type="image"><img src="./img/USB_1.webp" alt="Film Still 2"><div class="mc-overlay"></div><div class="mc-info"><div class="mc-title">Film Still 2</div><div class="mc-sub">USB Paradox · 2024</div></div></div><div class="mc-label"><div class="mc-label-title"></div><div class="mc-label-sub"></div><div class="mc-label-desc"></div></div></div>
+      <div class="mc-wrap"><div class="media-card" data-title="Film Still 3" data-sub="USB Paradox · 2024" data-type="image"><img src="./img/USB_2.webp" alt="Film Still 3"><div class="mc-overlay"></div><div class="mc-info"><div class="mc-title">Film Still 3</div><div class="mc-sub">USB Paradox · 2024</div></div></div><div class="mc-label"><div class="mc-label-title"></div><div class="mc-label-sub"></div><div class="mc-label-desc"></div></div></div>
+      <div class="mc-wrap"><div class="media-card" data-title="Film Still 4" data-sub="USB Paradox · 2024" data-type="image"><img src="./img/USB_3.webp" alt="Still 4"><div class="mc-overlay"></div><div class="mc-info"><div class="mc-title">Film Still 4</div><div class="mc-sub">USB Paradox · 2024</div></div></div><div class="mc-label"><div class="mc-label-title"></div><div class="mc-label-sub"></div><div class="mc-label-desc"></div></div></div>
+      <div class="mc-wrap"><div class="media-card" data-title="Film Still 5" data-sub="USB Paradox · 2024" data-type="image"><img src="./img/USB_4.webp" alt="Film Still 5"><div class="mc-overlay"></div><div class="mc-info"><div class="mc-title">Film Still 5</div><div class="mc-sub">USB Paradox · 2024</div></div></div><div class="mc-label"><div class="mc-label-title"></div><div class="mc-label-sub"></div><div class="mc-label-desc"></div></div></div>
+      <div class="mc-wrap"><div class="media-card" data-title="Film Still 6" data-sub="R&D · Compositing" data-type="image"><img src="./img/USB_5.webp" alt="Film Still 6"><div class="mc-overlay"></div><div class="mc-info"><div class="mc-title">Film Still 6</div><div class="mc-sub">USB Paradox · 2024</div></div></div><div class="mc-label"><div class="mc-label-title"></div><div class="mc-label-sub"></div><div class="mc-label-desc"></div></div></div>
     </div>
   </section>
 
@@ -532,237 +313,62 @@
   <section class="project-section" id="process">
     <div class="section-eyebrow">02 — Behind the Scenes</div>
     <h2 class="section-title">Process</h2>
-    <p class="section-body">
-      My role was not to create the final image but to build efficient workflows and reusable assets
-      that could accelerate production — spanning water droplet rendering, lightning generation,
-      volumetric dome lighting, HDRIs and cloud assets.
-    </p>
+    <p class="section-body">My role was not to create the final image but to build efficient workflows and reusable assets that could accelerate production — spanning water droplet rendering, lightning generation, volumetric dome lighting, HDRIs and cloud assets.</p>
 
     <div class="sub-rule"></div>
     <div class="sub-heading">§ Waterdroplets</div>
     <div class="sub-title">Sliding Water on Surfaces</div>
-    <p class="section-body" style="margin-bottom:0;">
-      Starting with a fully rendered approach in KarmaXPU, I discovered that simulating it in Nuke
-      via displacement offered significantly more control — and near-realtime feedback.
-    </p>
+    <p class="section-body" style="margin-bottom:0;">Starting with a fully rendered approach in KarmaXPU, I discovered that simulating it in Nuke via displacement offered significantly more control — and near-realtime feedback.</p>
 
     <div class="media-masonry cols-2">
-      <div class="mc-wrap">
-        <div class="media-card" data-title="First Render Test on a Glass Dome" data-sub="KarmaXPU · Render" data-type="video" data-desc="Initial render-based approach to simulate water sliding down a glass dome using texture based displacement.">
-          <video src="./vid/HydroGlide_Glass_Test.mp4" autoplay muted loop playsinline></video>
-          <span class="mc-badge">Video</span>
-          <div class="mc-overlay"></div>
-          <div class="mc-info"><div class="mc-title">First Render Test on a Glass Dome</div><div class="mc-sub">KarmaXPU · Render</div></div>
-        </div>
-        <div class="mc-label"><div class="mc-label-title">1</div><div class="mc-label-sub"></div><div class="mc-label-desc">Initial render-based approach to simulate water sliding down a glass dome using texture based displacement.</div></div>
-      </div>
-      <div class="mc-wrap">
-        <div class="media-card" data-title="Waterdrop Test v3" data-sub="KarmaXPU · Simulation" data-type="video" data-desc="Refined simulation pass using a flip fluid approach in Houdini, with improved interaction and more visually interesting droplet shapes. All fully rendered. But kinda slow for iterative work.">
-          <video src="./vid/Inverted_Waterdrops_v3.mp4" autoplay muted loop playsinline></video>
-          <span class="mc-badge">Video</span>
-          <div class="mc-overlay"></div>
-          <div class="mc-info"><div class="mc-title">Refined simulation pass</div><div class="mc-sub">KarmaXPU · Simulation</div></div>
-        </div>
-        <div class="mc-label"><div class="mc-label-title">2</div><div class="mc-label-sub"></div><div class="mc-label-desc">Refined simulation pass using a flip fluid approach in Houdini, with improved interaction and more visually interesting droplet shapes. All fully rendered. But kinda slow for iterative work.</div></div>
-      </div>
-      <div class="mc-wrap">
-        <div class="media-card" data-title="Hydroglide with added Set Pieces" data-sub="Houdini · Compositing" data-type="video" data-desc="Simulating water sliding down the actual set pieces in Houdini, using a flip fluid approach with added forces to create a more dynamic and visually interesting flow.">
-          <video src="./vid/InvertedHydroglide_v02.mp4" autoplay muted loop playsinline></video>
-          <span class="mc-badge">Video</span>
-          <div class="mc-overlay"></div>
-          <div class="mc-info"><div class="mc-title">Hydroglide with added Set Pieces</div><div class="mc-sub">Houdini · Compositing</div></div>
-        </div>
-        <div class="mc-label"><div class="mc-label-title">3</div><div class="mc-label-sub"></div><div class="mc-label-desc">Simulating water sliding down the actual set pieces in Houdini, using a flip fluid approach with added forces to create a more dynamic and visually interesting flow.</div></div>
-      </div>
-      <div class="mc-wrap">
-        <div class="media-card" data-title="Nuke ST-Map Displacement v5" data-sub="Nuke · Near-Realtime" data-type="video" data-desc="Final Nuke-based approach using ST-Map displacement, allowing for near-realtime feedback and greater control over the water droplet animation.">
-          <video src="./vid/Hydroglide_v5 1.mp4" autoplay muted loop playsinline></video>
-          <span class="mc-badge">Video</span>
-          <div class="mc-overlay"></div>
-          <div class="mc-info"><div class="mc-title">Nuke ST-Map Displacement</div><div class="mc-sub">Nuke · Near-Realtime</div></div>
-        </div>
-        <div class="mc-label"><div class="mc-label-title">4</div><div class="mc-label-sub"></div><div class="mc-label-desc">Final Nuke-based approach using ST-Map displacement, allowing for near-realtime feedback and greater control over the water droplet animation</div></div>
-      </div>
+      <div class="mc-wrap"><div class="media-card" data-title="First Render Test on a Glass Dome" data-sub="KarmaXPU · Render" data-type="video" data-desc="Initial render-based approach to simulate water sliding down a glass dome using texture based displacement."><video src="./vid/HydroGlide_Glass_Test.mp4" autoplay muted loop playsinline></video><span class="mc-badge">Video</span><div class="mc-overlay"></div><div class="mc-info"><div class="mc-title">First Render Test on a Glass Dome</div><div class="mc-sub">KarmaXPU · Render</div></div></div><div class="mc-label"><div class="mc-label-title">1</div><div class="mc-label-sub"></div><div class="mc-label-desc">Initial render-based approach to simulate water sliding down a glass dome using texture based displacement.</div></div></div>
+      <div class="mc-wrap"><div class="media-card" data-title="Waterdrop Test v3" data-sub="KarmaXPU · Simulation" data-type="video" data-desc="Refined simulation pass using a flip fluid approach in Houdini, with improved interaction and more visually interesting droplet shapes. All fully rendered. But kinda slow for iterative work."><video src="./vid/Inverted_Waterdrops_v3.mp4" autoplay muted loop playsinline></video><span class="mc-badge">Video</span><div class="mc-overlay"></div><div class="mc-info"><div class="mc-title">Refined simulation pass</div><div class="mc-sub">KarmaXPU · Simulation</div></div></div><div class="mc-label"><div class="mc-label-title">2</div><div class="mc-label-sub"></div><div class="mc-label-desc">Refined simulation pass using a flip fluid approach in Houdini, with improved interaction and more visually interesting droplet shapes. All fully rendered. But kinda slow for iterative work.</div></div></div>
+      <div class="mc-wrap"><div class="media-card" data-title="Hydroglide with added Set Pieces" data-sub="Houdini · Compositing" data-type="video" data-desc="Simulating water sliding down the actual set pieces in Houdini, using a flip fluid approach with added forces to create a more dynamic and visually interesting flow."><video src="./vid/InvertedHydroglide_v02.mp4" autoplay muted loop playsinline></video><span class="mc-badge">Video</span><div class="mc-overlay"></div><div class="mc-info"><div class="mc-title">Hydroglide with added Set Pieces</div><div class="mc-sub">Houdini · Compositing</div></div></div><div class="mc-label"><div class="mc-label-title">3</div><div class="mc-label-sub"></div><div class="mc-label-desc">Simulating water sliding down the actual set pieces in Houdini, using a flip fluid approach with added forces to create a more dynamic and visually interesting flow.</div></div></div>
+      <div class="mc-wrap"><div class="media-card" data-title="Nuke ST-Map Displacement v5" data-sub="Nuke · Near-Realtime" data-type="video" data-desc="Final Nuke-based approach using ST-Map displacement, allowing for near-realtime feedback and greater control over the water droplet animation."><video src="./vid/Hydroglide_v5 1.mp4" autoplay muted loop playsinline></video><span class="mc-badge">Video</span><div class="mc-overlay"></div><div class="mc-info"><div class="mc-title">Nuke ST-Map Displacement</div><div class="mc-sub">Nuke · Near-Realtime</div></div></div><div class="mc-label"><div class="mc-label-title">4</div><div class="mc-label-sub"></div><div class="mc-label-desc">Final Nuke-based approach using ST-Map displacement, allowing for near-realtime feedback and greater control over the water droplet animation</div></div></div>
     </div>
 
     <div class="sub-rule"></div>
     <div class="sub-heading">§ Lightning</div>
     <div class="sub-title">Strikes, Branches &amp; Flicker</div>
-    <p class="section-body" style="margin-bottom:0;">
-      Starting from a point cloud architecture, I progressively added branching, twitching, and
-      multi-path switching — delivering over 40 variations to the team.
-    </p>
+    <p class="section-body" style="margin-bottom:0;">Starting from a point cloud architecture, I progressively added branching, twitching, and multi-path switching — delivering over 40 variations to the team.</p>
 
     <div class="media-masonry cols-3">
-      <div class="mc-wrap">
-        <div class="media-card" data-title="Point Cloud & Shortest Path" data-sub="Houdini · R&D" data-type="image" data-desc="Lightning forms when electrical discharge follows the path of least resistance through the air. Using a shortest-path algorithm allows multiple lightning branches to rapidly propagate between regions of high voltage, creating the characteristic streaking patterns.">
-          <img src="./img/bts/BTS_2.webp" alt="BTS 2">
-          <div class="mc-overlay"></div>
-          <div class="mc-info"><div class="mc-title">Point Cloud & Shortest Path</div><div class="mc-sub">Houdini · R&D</div></div>
-        </div>
-
-        <div class="mc-label"><div class="mc-label-title">1</div><div class="mc-label-sub"></div><div class="mc-label-desc">Lightning forms when electrical discharge follows the path of least resistance through the air. Using a shortest-path algorithm allows multiple lightning branches to rapidly propagate between regions of high voltage, creating the characteristic streaking patterns. </div></div>
-      </div>
-
-      <div class="mc-wrap">
-        <div class="media-card" data-title="Geometry Light Test" data-sub="KarmaXPU · R&D" data-type="image" data-desc="Early test to see if we could render the lightning geometry as a geometry light. This resolved very slow though and in subsequent tests I switched to rendering the lightning with instanced pointlights.">
-          <img src="./img/bts/BTS_4.webp" alt="BTS 4">
-          <div class="mc-overlay"></div>
-          <div class="mc-info"><div class="mc-title">Geometry Light Test</div><div class="mc-sub">KarmaXPU · R&D</div></div>
-        </div>
-        <div class="mc-label"><div class="mc-label-title">2</div><div class="mc-label-sub"></div><div class="mc-label-desc">Early test to see if we could render the lightning geometry as a geometry light. This resolved very slow though and in subsequent tests I switched to rendering the lightning with instanced pointlights.</div></div>
-      </div>
-
-
-
-      <div class="mc-wrap">
-        <div class="media-card" data-title="Instanced Point Light Render" data-sub="Karma · R&D" data-type="image" data-desc="Early test to see if we could render the lightning geometry as a geometry light. This resolved very slow though and in subsequent tests I switched to rendering the lightning with instanced pointlights.">
-          <img src="./img/bts/BTS_3.webp" alt="BTS 3">
-          <div class="mc-overlay"></div>
-          <div class="mc-info"><div class="mc-title">Instanced Point Light Render</div><div class="mc-sub">KarmaXPU · R&D</div></div>
-        </div>
-        <div class="mc-label"><div class="mc-label-title">3</div><div class="mc-label-sub"></div><div class="mc-label-desc">Early test to see if we could render the lightning geometry as a geometry light. This resolved very slow though and in subsequent tests I switched to rendering the lightning with instanced pointlights.</div></div>
-      </div>
-
-
-      <div class="mc-wrap">
-        <div class="media-card" data-title="Lightning Strikes V1" data-sub="KarmaXPU · Animation" data-type="video" data-desc="First animated output of the lightning strikes achieved by carving the shortest path links and changing the end point seed slightly. Rendered with instanced point lights in KarmaXPU. This version was more of a proof of concept to show that we could achieve the desired look and performance, but the rendering took more time than we wanted.">
-          <video src="./vid/LightningStrikes_Inverted_V1.mp4" autoplay muted loop playsinline></video>
-          <span class="mc-badge">Video</span>
-          <div class="mc-overlay"></div>
-          <div class="mc-info"><div class="mc-title">Animated Lightning Strikes</div><div class="mc-sub">KarmaXPU · Rendering</div></div>
-        </div>
-        <div class="mc-label"><div class="mc-label-title">4</div><div class="mc-label-sub"></div><div class="mc-label-desc">First animated output of the lightning strikes achieved by carving the shortest path links and changing the end point seed slightly. Rendered with instanced point lights in KarmaXPU. This version was more of a proof of concept to show that we could achieve the desired look and performance, but the rendering took more time than we wanted.</div></div>
-      </div>
-
-
-      <div class="mc-wrap">
-        <div class="media-card" data-title="Branching &amp; Flicker" data-sub="Houdini · FX" data-type="video" data-desc="I added more visual interest to the lightning by introducing more branching and flickering. Branching was achieved by randomly splitting the shortest path links at certain intervals, creating a more natural and chaotic lightning pattern. Flickering was implemented by randomly varying the intensity of the instanced point lights over time. This version had a much more dynamic and visually appealing look in render.">
-          <video src="./vid/Lightning_Inverted_v03.mp4" autoplay muted loop playsinline></video>
-          <span class="mc-badge">Video</span>
-          <div class="mc-overlay"></div>
-          <div class="mc-info"><div class="mc-title">Branching &amp; Flicker v03</div><div class="mc-sub">Houdini · FX</div></div>
-        </div>
-        <div class="mc-label"><div class="mc-label-title">5</div><div class="mc-label-sub"></div><div class="mc-label-desc">I added more visual interest to the lightning by introducing more branching and flickering. Branching was achieved by randomly splitting the shortest path links at certain intervals, creating a more natural and chaotic lightning pattern. Flickering was implemented by randomly varying the intensity of the instanced point lights over time. This version had a much more dynamic and visually appealing look in render.</div></div>
-      </div>
-
-
-      <div class="mc-wrap">
-        <div class="media-card" data-title="Volume + Light AOV Separation" data-sub="KarmaXPU · Compositing" data-type="video" data-desc="To give the compositing team more control over the lightning, I separated the volume and light AOVs in render. This way, they could adjust the intensity and color of the lightning in post without affecting the volumetric lighting. This would become especially useful for shots where the lightning needs to interact with the clouds and environment, allowing for more flexibility in achieving the desired look in comp.">
-          <video src="./vid/Lighting Comp Makeoff.mp4" autoplay muted loop playsinline></video>
-          <span class="mc-badge">Video</span>
-          <div class="mc-overlay"></div>
-          <div class="mc-info"><div class="mc-title">Volume + Light AOV Separation</div><div class="mc-sub">KarmaXPU & Nuke · Rendering & Compositing</div></div>
-        </div>
-        <div class="mc-label"><div class="mc-label-title">6</div><div class="mc-label-sub"></div><div class="mc-label-desc">To give the compositing team more control over the lightning, I separated the volume and light AOVs in render. This way, they could adjust the intensity and color of the lightning in post without affecting the volumetric lighting. This would become especially useful for shots where the lightning needs to interact with the clouds and environment, allowing for more flexibility in achieving the desired look in comp.</div></div>
-      </div>
+      <div class="mc-wrap"><div class="media-card" data-title="Point Cloud & Shortest Path" data-sub="Houdini · R&D" data-type="image" data-desc="Lightning forms when electrical discharge follows the path of least resistance through the air. Using a shortest-path algorithm allows multiple lightning branches to rapidly propagate between regions of high voltage, creating the characteristic streaking patterns."><img src="./img/bts/BTS_2.webp" alt="BTS 2"><div class="mc-overlay"></div><div class="mc-info"><div class="mc-title">Point Cloud & Shortest Path</div><div class="mc-sub">Houdini · R&D</div></div></div><div class="mc-label"><div class="mc-label-title">1</div><div class="mc-label-sub"></div><div class="mc-label-desc">Lightning forms when electrical discharge follows the path of least resistance through the air. Using a shortest-path algorithm allows multiple lightning branches to rapidly propagate between regions of high voltage, creating the characteristic streaking patterns.</div></div></div>
+      <div class="mc-wrap"><div class="media-card" data-title="Geometry Light Test" data-sub="KarmaXPU · R&D" data-type="image" data-desc="Early test to see if we could render the lightning geometry as a geometry light. This resolved very slow though and in subsequent tests I switched to rendering the lightning with instanced pointlights."><img src="./img/bts/BTS_4.webp" alt="BTS 4"><div class="mc-overlay"></div><div class="mc-info"><div class="mc-title">Geometry Light Test</div><div class="mc-sub">KarmaXPU · R&D</div></div></div><div class="mc-label"><div class="mc-label-title">2</div><div class="mc-label-sub"></div><div class="mc-label-desc">Early test to see if we could render the lightning geometry as a geometry light. This resolved very slow though and in subsequent tests I switched to rendering the lightning with instanced pointlights.</div></div></div>
+      <div class="mc-wrap"><div class="media-card" data-title="Instanced Point Light Render" data-sub="Karma · R&D" data-type="image" data-desc="Early test to see if we could render the lightning geometry as a geometry light. This resolved very slow though and in subsequent tests I switched to rendering the lightning with instanced pointlights."><img src="./img/bts/BTS_3.webp" alt="BTS 3"><div class="mc-overlay"></div><div class="mc-info"><div class="mc-title">Instanced Point Light Render</div><div class="mc-sub">KarmaXPU · R&D</div></div></div><div class="mc-label"><div class="mc-label-title">3</div><div class="mc-label-sub"></div><div class="mc-label-desc">Early test to see if we could render the lightning geometry as a geometry light. This resolved very slow though and in subsequent tests I switched to rendering the lightning with instanced pointlights.</div></div></div>
+      <div class="mc-wrap"><div class="media-card" data-title="Lightning Strikes V1" data-sub="KarmaXPU · Animation" data-type="video" data-desc="First animated output of the lightning strikes achieved by carving the shortest path links and changing the end point seed slightly. Rendered with instanced point lights in KarmaXPU."><video src="./vid/LightningStrikes_Inverted_V1.mp4" autoplay muted loop playsinline></video><span class="mc-badge">Video</span><div class="mc-overlay"></div><div class="mc-info"><div class="mc-title">Animated Lightning Strikes</div><div class="mc-sub">KarmaXPU · Rendering</div></div></div><div class="mc-label"><div class="mc-label-title">4</div><div class="mc-label-sub"></div><div class="mc-label-desc">First animated output of the lightning strikes achieved by carving the shortest path links and changing the end point seed slightly. Rendered with instanced point lights in KarmaXPU. This version was more of a proof of concept to show that we could achieve the desired look and performance, but the rendering took more time than we wanted.</div></div></div>
+      <div class="mc-wrap"><div class="media-card" data-title="Branching &amp; Flicker" data-sub="Houdini · FX" data-type="video" data-desc="I added more visual interest to the lightning by introducing more branching and flickering. Branching was achieved by randomly splitting the shortest path links at certain intervals. Flickering was implemented by randomly varying the intensity of the instanced point lights over time."><video src="./vid/Lightning_Inverted_v03.mp4" autoplay muted loop playsinline></video><span class="mc-badge">Video</span><div class="mc-overlay"></div><div class="mc-info"><div class="mc-title">Branching &amp; Flicker v03</div><div class="mc-sub">Houdini · FX</div></div></div><div class="mc-label"><div class="mc-label-title">5</div><div class="mc-label-sub"></div><div class="mc-label-desc">I added more visual interest to the lightning by introducing more branching and flickering. Branching was achieved by randomly splitting the shortest path links at certain intervals, creating a more natural and chaotic lightning pattern. Flickering was implemented by randomly varying the intensity of the instanced point lights over time.</div></div></div>
+      <div class="mc-wrap"><div class="media-card" data-title="Volume + Light AOV Separation" data-sub="KarmaXPU · Compositing" data-type="video" data-desc="To give the compositing team more control over the lightning, I separated the volume and light AOVs in render. This way, they could adjust the intensity and color of the lightning in post without affecting the volumetric lighting."><video src="./vid/Lighting Comp Makeoff.mp4" autoplay muted loop playsinline></video><span class="mc-badge">Video</span><div class="mc-overlay"></div><div class="mc-info"><div class="mc-title">Volume + Light AOV Separation</div><div class="mc-sub">KarmaXPU & Nuke · Rendering & Compositing</div></div></div><div class="mc-label"><div class="mc-label-title">6</div><div class="mc-label-sub"></div><div class="mc-label-desc">To give the compositing team more control over the lightning, I separated the volume and light AOVs in render. This would become especially useful for shots where the lightning needs to interact with the clouds and environment, allowing for more flexibility in comp.</div></div></div>
     </div>
 
-
     <div class="media-masonry cols-1">
-      
-      <div class="mc-wrap">
-        <div class="media-card" data-title="Full Composite Reference S02" data-sub="KarmaXPU + Nuke" data-type="video" data-desc="I put together a quick experiment to show how these effects could be combined. I did the rest of the work on the spaceship in Karma, XPU, and Nuke. I added some spaceship materials and used both volumetric rendering for the close clouds and cards I rendered out from Houdini in compositing for the background. This way, I could control the lighting in post. Spaceship by Jan Pscheidt.">
-          <video src="./vid/INV_S02_Lightning_V012.mp4" autoplay muted loop playsinline></video>
-          <span class="mc-badge">Video</span>
-          <div class="mc-overlay"></div>
-          <div class="mc-info"><div class="mc-title">Full Composite Reference S02</div><div class="mc-sub">KarmaXPU + Nuke</div></div>
-        </div>
-        <div class="mc-label"><div class="mc-label-title">7</div><div class="mc-label-sub"></div><div class="mc-label-desc">I put together a quick experiment to show how these effects could be combined. I did the rest of the work on the spaceship in Karma, XPU, and Nuke. I added some spaceship materials and used both volumetric rendering for the close clouds and cards I rendered out from Houdini in compositing for the background. This way, I could control the lighting in post. Spaceship by Jan Pscheidt.</div></div>
-      </div>
-    </div>    
+      <div class="mc-wrap"><div class="media-card" data-title="Full Composite Reference S02" data-sub="KarmaXPU + Nuke" data-type="video" data-desc="I put together a quick experiment to show how these effects could be combined. I added some spaceship materials and used both volumetric rendering for the close clouds and cards I rendered out from Houdini in compositing for the background. Spaceship by Jan Pscheidt."><video src="./vid/INV_S02_Lightning_V012.mp4" autoplay muted loop playsinline></video><span class="mc-badge">Video</span><div class="mc-overlay"></div><div class="mc-info"><div class="mc-title">Full Composite Reference S02</div><div class="mc-sub">KarmaXPU + Nuke</div></div></div><div class="mc-label"><div class="mc-label-title">7</div><div class="mc-label-sub"></div><div class="mc-label-desc">I put together a quick experiment to show how these effects could be combined. I added some spaceship materials and used both volumetric rendering for the close clouds and cards I rendered out from Houdini in compositing for the background. This way, I could control the lighting in post. Spaceship by Jan Pscheidt.</div></div></div>
+    </div>
 
     <div class="sub-rule"></div>
     <div class="sub-heading">§ Lighting</div>
     <div class="sub-title">Spot Lights, Uniform Sampling &amp; Variance</div>
-    <p class="section-body" style="margin-bottom:0;">
-      A rather small but important part was to figure out how to get the spotlights in front of the spaceship to light the clouds and environment without causing too much noise in render. I experimented with different sampling techniques and found that using uniform sampling for the direct lighting of the volumetric environment, gave me the best results in terms of quality and performance. Of course rendering this out as an additional AOV pass would yield the biggest benefit for the compositing
-    </p>
+    <p class="section-body" style="margin-bottom:0;">A rather small but important part was to figure out how to get the spotlights in front of the spaceship to light the clouds and environment without causing too much noise in render. I experimented with different sampling techniques and found that using uniform sampling for the direct lighting of the volumetric environment, gave me the best results in terms of quality and performance. Of course rendering this out as an additional AOV pass would yield the biggest benefit for the compositing</p>
 
     <div class="media-masonry cols-3">
-      <div class="mc-wrap">
-        <div class="media-card" data-title="Spot Light AOV Breakdown" data-sub="KarmaXPU · Passes" data-type="video" data-desc="All render passes getting combined into the final result.">
-          <video src="./vid/InvertedDomelight_v01.mp4" autoplay muted loop playsinline></video>
-          <span class="mc-badge">Video</span>
-          <div class="mc-overlay"></div>
-          <div class="mc-info"><div class="mc-title">Dome Light Element Breakdown</div><div class="mc-sub">KarmaXPU · Passes</div></div>
-        </div>
-        <div class="mc-label"><div class="mc-label-title">1</div><div class="mc-label-sub"></div><div class="mc-label-desc">All render passes getting combined into the final result.</div></div>
-      </div>
-
-
-      <div class="mc-wrap">
-        <div class="media-card" data-title="Dome Light Test v04" data-sub="KarmaXPU · Volumetrics" data-type="video" data-desc="Rendering of a test scene with the spotlight setup and uniform sampling to reduce noise for the spotlight pass. This gives really cool dynamic results, when the lights face the camera and ignite the volume sourrounding it.">
-          <video src="./vid/InvertedLightDome_Test_v04.mp4" autoplay muted loop playsinline></video>
-          <span class="mc-badge">Video</span>
-          <div class="mc-overlay"></div>
-          <div class="mc-info"><div class="mc-title">Dome Light Test v04</div><div class="mc-sub">KarmaXPU · Volumetrics</div></div>
-        </div>
-        <div class="mc-label"><div class="mc-label-title">2</div><div class="mc-label-sub"></div><div class="mc-label-desc">Final Rendering & Compositing of a test scene with the spotlight setup and uniform sampling to reduce noise for the spotlight pass. This gives really cool dynamic results, when the lights face the camera and ignite the volume sourrounding it.</div></div>
-      </div>
-
+      <div class="mc-wrap"><div class="media-card" data-title="Spot Light AOV Breakdown" data-sub="KarmaXPU · Passes" data-type="video" data-desc="All render passes getting combined into the final result."><video src="./vid/InvertedDomelight_v01.mp4" autoplay muted loop playsinline></video><span class="mc-badge">Video</span><div class="mc-overlay"></div><div class="mc-info"><div class="mc-title">Dome Light Element Breakdown</div><div class="mc-sub">KarmaXPU · Passes</div></div></div><div class="mc-label"><div class="mc-label-title">1</div><div class="mc-label-sub"></div><div class="mc-label-desc">All render passes getting combined into the final result.</div></div></div>
+      <div class="mc-wrap"><div class="media-card" data-title="Dome Light Test v04" data-sub="KarmaXPU · Volumetrics" data-type="video" data-desc="Rendering of a test scene with the spotlight setup and uniform sampling to reduce noise for the spotlight pass. This gives really cool dynamic results, when the lights face the camera and ignite the volume surrounding it."><video src="./vid/InvertedLightDome_Test_v04.mp4" autoplay muted loop playsinline></video><span class="mc-badge">Video</span><div class="mc-overlay"></div><div class="mc-info"><div class="mc-title">Dome Light Test v04</div><div class="mc-sub">KarmaXPU · Volumetrics</div></div></div><div class="mc-label"><div class="mc-label-title">2</div><div class="mc-label-sub"></div><div class="mc-label-desc">Final Rendering & Compositing of a test scene with the spotlight setup and uniform sampling to reduce noise for the spotlight pass. This gives really cool dynamic results, when the lights face the camera and ignite the volume surrounding it.</div></div></div>
     </div>
 
     <div class="sub-rule"></div>
     <div class="sub-heading">§ HDRIs &amp; Clouds</div>
     <div class="sub-title">360° Environment Library</div>
-    <p class="section-body" style="margin-bottom:0;">
-      I built a set of clouds and HDRIs & HDR Images deployable at any angle to serve all the different shots.
-      More organic foreground clouds were sourced from the VRAY library.
-    </p>
+    <p class="section-body" style="margin-bottom:0;">I built a set of clouds and HDRIs &amp; HDR Images deployable at any angle to serve all the different shots. More organic foreground clouds were sourced from the VRAY library.</p>
 
     <div class="media-masonry cols-2">
-      <div class="mc-wrap">
-        <div class="media-card" data-title="HDRI Setup" data-sub="Houdini · Environment" data-type="image">
-          <img src="./img/bts/BTS_5.webp" alt="BTS 5">
-          <div class="mc-overlay"></div>
-          <div class="mc-info"><div class="mc-title">HDR Still 1</div><div class="mc-sub">KarmaXPU · Rendering</div></div>
-        </div>
-        <div class="mc-label"><div class="mc-label-title"></div><div class="mc-label-sub"></div><div class="mc-label-desc"></div></div>
-      </div>
-
-      <div class="mc-wrap">
-        <div class="media-card" data-title="HDR Still 2" data-sub="Houdini · VDB" data-type="image">
-          <img src="./img/bts/BTS_6.webp" alt="BTS 6">
-          <div class="mc-overlay"></div>
-          <div class="mc-info"><div class="mc-title">HDR Still 2</div><div class="mc-sub">KarmaXPU · Rendering</div></div>
-        </div>
-        <div class="mc-label"><div class="mc-label-title"></div><div class="mc-label-sub"></div><div class="mc-label-desc"></div></div>
-      </div>
-
-
-      <div class="mc-wrap">
-        <div class="media-card" data-title="HDRI Bright Top Light" data-sub="Houdini · Render" data-type="image">
-          <img src="./img/bts/BTS_7.webp" alt="BTS 7">
-          <div class="mc-overlay"></div>
-          <div class="mc-info"><div class="mc-title">HDRI Bright Top Light</div><div class="mc-sub">KarmaXPU · Rendering</div></div>
-        </div>
-        <div class="mc-label"><div class="mc-label-title"></div><div class="mc-label-sub"></div><div class="mc-label-desc"></div></div>
-      </div>
-
-
-      <div class="mc-wrap">
-        <div class="media-card" data-title="HDRI Dark Stormy Environment" data-sub="KarmaXPU · Lookdev" data-type="image">
-          <img src="./img/bts/BTS_8.webp" alt="BTS 8">
-          <div class="mc-overlay"></div>
-          <div class="mc-info"><div class="mc-title">HDRI Dark Stormy Environment</div><div class="mc-sub">KarmaXPU · Lookdev</div></div>
-        </div>
-        <div class="mc-label"><div class="mc-label-title"></div><div class="mc-label-sub"></div><div class="mc-label-desc"></div></div>
-      </div>
-
+      <div class="mc-wrap"><div class="media-card" data-title="HDRI Setup" data-sub="Houdini · Environment" data-type="image"><img src="./img/bts/BTS_5.webp" alt="BTS 5"><div class="mc-overlay"></div><div class="mc-info"><div class="mc-title">HDR Still 1</div><div class="mc-sub">KarmaXPU · Rendering</div></div></div><div class="mc-label"><div class="mc-label-title"></div><div class="mc-label-sub"></div><div class="mc-label-desc"></div></div></div>
+      <div class="mc-wrap"><div class="media-card" data-title="HDR Still 2" data-sub="Houdini · VDB" data-type="image"><img src="./img/bts/BTS_6.webp" alt="BTS 6"><div class="mc-overlay"></div><div class="mc-info"><div class="mc-title">HDR Still 2</div><div class="mc-sub">KarmaXPU · Rendering</div></div></div><div class="mc-label"><div class="mc-label-title"></div><div class="mc-label-sub"></div><div class="mc-label-desc"></div></div></div>
+      <div class="mc-wrap"><div class="media-card" data-title="HDRI Bright Top Light" data-sub="Houdini · Render" data-type="image"><img src="./img/bts/BTS_7.webp" alt="BTS 7"><div class="mc-overlay"></div><div class="mc-info"><div class="mc-title">HDRI Bright Top Light</div><div class="mc-sub">KarmaXPU · Rendering</div></div></div><div class="mc-label"><div class="mc-label-title"></div><div class="mc-label-sub"></div><div class="mc-label-desc"></div></div></div>
+      <div class="mc-wrap"><div class="media-card" data-title="HDRI Dark Stormy Environment" data-sub="KarmaXPU · Lookdev" data-type="image"><img src="./img/bts/BTS_8.webp" alt="BTS 8"><div class="mc-overlay"></div><div class="mc-info"><div class="mc-title">HDRI Dark Stormy Environment</div><div class="mc-sub">KarmaXPU · Lookdev</div></div></div><div class="mc-label"><div class="mc-label-title"></div><div class="mc-label-sub"></div><div class="mc-label-desc"></div></div></div>
     </div>
 
     <div class="media-masonry cols-1">
-      
-      <div class="mc-wrap">
-        <div class="media-card" data-title="HDRI Realtime Preview" data-sub="Houdini Vulkan" data-type="video">
-          <video src="./vid/Inverted_Environment_HDRI_Showoff.mp4" autoplay muted loop playsinline></video>
-          <span class="mc-badge">Video</span>
-          <div class="mc-overlay"></div>
-          <div class="mc-info"><div class="mc-title">HDRI Realtime Preview</div><div class="mc-sub">Houdini · Vulkan</div></div>
-        </div>
-        <div class="mc-label"><div class="mc-label-title"></div><div class="mc-label-sub"></div><div class="mc-label-desc"></div></div>
-      </div>
+      <div class="mc-wrap"><div class="media-card" data-title="HDRI Realtime Preview" data-sub="Houdini Vulkan" data-type="video"><video src="./vid/Inverted_Environment_HDRI_Showoff.mp4" autoplay muted loop playsinline></video><span class="mc-badge">Video</span><div class="mc-overlay"></div><div class="mc-info"><div class="mc-title">HDRI Realtime Preview</div><div class="mc-sub">Houdini · Vulkan</div></div></div><div class="mc-label"><div class="mc-label-title"></div><div class="mc-label-sub"></div><div class="mc-label-desc"></div></div></div>
     </div>
 
   </section>
@@ -771,10 +377,7 @@
   <section class="project-section" id="breakdown">
     <div class="section-eyebrow">03 — Full Production Breakdown</div>
     <h2 class="section-title">Complete<br><em>Breakdown.</em></h2>
-    <p class="section-body" style="margin-bottom:52px;">
-      The complete breakdown covers the full scope of production — rendering, compositing, lighting,
-      modeling and the combined effort of the entire team.
-    </p>
+    <p class="section-body" style="margin-bottom:52px;">The complete breakdown covers the full scope of production — rendering, compositing, lighting, modeling and the combined effort of the entire team.</p>
     <div class="video-embed">
       <iframe src="https://player.vimeo.com/video/1075776466?autoplay=0&color=ffffff&title=0&byline=0&portrait=0" title="The USB Paradox — Complete Breakdown" allowfullscreen></iframe>
     </div>
@@ -784,15 +387,10 @@
   <section class="project-section" id="learnings">
     <div class="section-eyebrow">04 — Takeaways</div>
     <h2 class="section-title">Learnings</h2>
-    <p class="section-body" style="margin-bottom:0;">
-      Key technical skills developed and deepened over the course of the R&amp;D process.
-    </p>
+    <p class="section-body" style="margin-bottom:0;">Key technical skills developed and deepened over the course of the R&amp;D process.</p>
     <div class="learnings-wrap">
       <div class="learning-block">
-        <div class="learning-block-header">
-          <div class="learning-block-label">Nuke</div>
-          <div class="learning-block-tag">Compositing</div>
-        </div>
+        <div class="learning-block-header"><div class="learning-block-label">Nuke</div><div class="learning-block-tag">Compositing</div></div>
         <div class="learning-block-body">
           <div class="learning-item">Nuke 3D System</div>
           <div class="learning-item">3D Cards &amp; HDRIs</div>
@@ -803,10 +401,7 @@
         </div>
       </div>
       <div class="learning-block">
-        <div class="learning-block-header">
-          <div class="learning-block-label">Houdini</div>
-          <div class="learning-block-tag">FX · Rendering</div>
-        </div>
+        <div class="learning-block-header"><div class="learning-block-label">Houdini</div><div class="learning-block-tag">FX · Rendering</div></div>
         <div class="learning-block-body">
           <div class="learning-item">360° rendering in KarmaXPU</div>
           <div class="learning-item">Volumetric &amp; cloud rendering</div>
@@ -819,10 +414,7 @@
         </div>
       </div>
       <div class="learning-block">
-        <div class="learning-block-header">
-          <div class="learning-block-label">Pipeline</div>
-          <div class="learning-block-tag">Workflow · R&amp;D</div>
-        </div>
+        <div class="learning-block-header"><div class="learning-block-label">Pipeline</div><div class="learning-block-tag">Workflow · R&amp;D</div></div>
         <div class="learning-block-body">
           <div class="learning-item">R&amp;D asset handoff workflow</div>
           <div class="learning-item">Rendering elements separately for compositing control</div>
@@ -834,208 +426,14 @@
   </section>
 
   <footer>
-    <p>© Jona Melvin Grobe — 2025</p>
-    <p>Technical Artist · Austria</p>
+    <p>© Jona Melvin Grobe — 2026</p>
+    <p>Technical Artist · Germany - Bavaria</p>
   </footer>
 </div>
 
-<!-- VIMEO MODAL -->
-<div id="vimeo-modal">
-  <button id="vimeo-close" onclick="closeVimeo()">✕</button>
-  <div id="vimeo-wrap">
-    <iframe id="vimeo-iframe" src="" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
-  </div>
-</div>
+<!-- Shared components: grain, cursor, ambient canvas, rail, vimeo modal all auto-injected -->
+<script src="../../js/project_shared.js" defer></script>
+<script src="../../js/masonry.js" defer></script>
 
-<!-- LIGHTBOX -->
-<div id="lightbox">
-  <button id="lb-close"><svg viewBox="0 0 14 14"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg></button>
-  <div id="lb-stage">
-    <button class="lb-arrow" id="lb-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
-    <div id="lb-media-wrap"></div>
-    <button class="lb-arrow" id="lb-next"><svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg></button>
-  </div>
-  <div id="lb-counter"></div>
-  <div id="lb-caption">
-    <div id="lb-dots"></div>
-    <div id="lb-title-wrap">
-      <div id="lb-title"></div>
-      <div id="lb-sub"></div>
-      <div id="lb-desc"></div>
-    </div>
-  </div>
-</div>
-
-<script>
-/* ── CURSOR ── */
-const curDot=document.getElementById('cur-dot'),curRing=document.getElementById('cur-ring');
-let mX=innerWidth/2,mY=innerHeight/2,rX=mX,rY=mY,lastMX=mX,lastMY=mY,mouseVel=0,dotScale=0.167,ringScale=1;
-document.addEventListener('mousemove',e=>{mX=e.clientX;mY=e.clientY;});
-document.addEventListener('mouseover',e=>{document.body.classList.toggle('hovering',!!e.target.closest('a,button,#hero,.media-card,.video-embed'));});
-(function anim(t){
-  const s=Math.sqrt((mX-lastMX)**2+(mY-lastMY)**2);lastMX=mX;lastMY=mY;
-  mouseVel+=(s-mouseVel)*0.18;dotScale+=(0.167+Math.min(mouseVel*0.055,0.833)-dotScale)*0.10;
-  const ip=1+Math.sin(t*0.0018)*0.18,vs=1+Math.min(mouseVel*0.06,0.7);
-  ringScale+=((mouseVel>0.5?vs:ip)-ringScale)*0.07;
-  rX+=(mX-rX)*0.11;rY+=(mY-rY)*0.11;
-  curDot.style.cssText=`left:${mX}px;top:${mY}px;transform:translate(-50%,-50%) scale(${dotScale.toFixed(3)})`;
-  curRing.style.cssText=`left:${rX}px;top:${rY}px;transform:translate(-50%,-50%) scale(${ringScale.toFixed(3)})`;
-  requestAnimationFrame(anim);
-})(performance.now());
-
-/* ── AMBIENT ── */
-(function(){
-  const cv=document.getElementById('bg-canvas'),ctx=cv.getContext('2d');let W,H;
-  const r=()=>{W=cv.width=innerWidth;H=cv.height=innerHeight;};r();window.addEventListener('resize',r);
-  const orbs=[210,195,228,205,218].map(h=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:260+Math.random()*400,vx:(Math.random()-.5)*0.12,vy:(Math.random()-.5)*0.10,h,a:0.02+Math.random()*0.03}));
-  (function loop(){ctx.clearRect(0,0,W,H);orbs.forEach(o=>{o.x+=o.vx;o.y+=o.vy;if(o.x<-o.r)o.x=W+o.r;if(o.x>W+o.r)o.x=-o.r;if(o.y<-o.r)o.y=H+o.r;if(o.y>H+o.r)o.y=-o.r;const g=ctx.createRadialGradient(o.x,o.y,0,o.x,o.y,o.r);g.addColorStop(0,`hsla(${o.h},28%,50%,${o.a})`);g.addColorStop(1,'hsla(0,0%,0%,0)');ctx.beginPath();ctx.arc(o.x,o.y,o.r,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();});requestAnimationFrame(loop);})();
-})();
-
-/* ── HERO ── */
-(function(){
-  const hero=document.getElementById('hero'),vid=document.getElementById('hero-video'),ss=document.getElementById('hero-slideshow');
-  const src=(hero.dataset.videoSrc||'').trim();
-  if(src){vid.src=src;vid.classList.add('active');ss.style.display='none';}
-  else{vid.style.display='none';const slides=ss.querySelectorAll('.hero-slide');let i=0;setInterval(()=>{slides[i].classList.remove('active');i=(i+1)%slides.length;slides[i].classList.add('active');},3800);}
-})();
-
-/* ── SIDE RAIL ── */
-const railItems=document.querySelectorAll('.rail-item[data-section]');
-const sects=Array.from(railItems).map(i=>document.getElementById(i.dataset.section)).filter(Boolean);
-function updateRail(){let a=sects[0];sects.forEach(s=>{if(s.getBoundingClientRect().top<innerHeight*0.5)a=s;});railItems.forEach(i=>i.classList.toggle('active',i.dataset.section===a.id));}
-window.addEventListener('scroll',updateRail,{passive:true});updateRail();
-
-/* ── VIMEO ── */
-const VIMEO_ID='1066698349';
-const vm=document.getElementById('vimeo-modal'),vi=document.getElementById('vimeo-iframe');
-function openVimeo(e){if(e&&e.stopPropagation)e.stopPropagation();vi.src=`https://player.vimeo.com/video/${VIMEO_ID}?autoplay=1&color=ffffff&title=0&byline=0&portrait=0`;vm.classList.add('open');}
-function closeVimeo(){vm.classList.remove('open');vi.src='';}
-vm.addEventListener('click',e=>{if(e.target===vm)closeVimeo();});
-
-/* ── MASONRY ─────────────────────────────────────────────────────────────────
-   Pure absolute-position approach. Items are placed strictly left→right:
-   item 0 → col 0, item 1 → col 1, item 2 → col 2, item 3 → col 0, etc.
-   Each column tracks its current Y offset; items stack downward within their column.
-   Container height = tallest column when done.
-   Runs once on load, after every image/video loads, and on resize.
-──────────────────────────────────────────────────────────────────────────────*/
-(function(){
-  const GAP = 3;
-
-  function colsForGrid(grid) {
-    const w = window.innerWidth;
-    // On narrow screens everything collapses to 1 column
-    if (w <= 1200) return 1;
-    // At medium widths, cap 3- and 4-col grids at 2
-    if (w <= 1100) {
-      for (let n = 4; n >= 1; n--) if (grid.classList.contains('cols-'+n)) return Math.min(n, 2);
-    }
-    for (let n = 4; n >= 1; n--) if (grid.classList.contains('cols-'+n)) return n;
-    return 3;
-  }
-
-  function layoutGrid(grid) {
-    const wraps = Array.from(grid.querySelectorAll(':scope > .mc-wrap'));
-    if (!wraps.length) return;
-
-    const cols    = colsForGrid(grid);
-    const total   = grid.offsetWidth;
-    const colW    = (total - GAP * (cols - 1)) / cols;
-    const colY    = new Array(cols).fill(0); // running Y per column
-
-    // First pass: set width so height measurement is accurate
-    wraps.forEach(w => { w.style.width = colW + 'px'; });
-
-    // Second pass: place each item
-    wraps.forEach((wrap, idx) => {
-      const col = idx % cols;
-      wrap.style.left = (col * (colW + GAP)) + 'px';
-      wrap.style.top  = colY[col] + 'px';
-      colY[col] += wrap.offsetHeight + GAP;
-    });
-
-    grid.style.height = Math.max(...colY) - GAP + 'px';
-    grid.classList.add('laid-out');
-  }
-
-  function layoutAll() {
-    document.querySelectorAll('.media-masonry').forEach(layoutGrid);
-  }
-
-  // Run immediately, then again on next frame (fonts/images may shift things)
-  layoutAll();
-  requestAnimationFrame(layoutAll);
-  // And once more after a short delay to catch any slow resources
-  setTimeout(layoutAll, 300);
-  setTimeout(layoutAll, 900);
-
-  // Debounced resize
-  let t;
-  window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(layoutAll, 80); });
-
-  // Re-run whenever a media element inside a grid finishes loading
-  document.querySelectorAll('.media-masonry img').forEach(img => {
-    if (!img.complete) img.addEventListener('load', layoutAll);
-  });
-  document.querySelectorAll('.media-masonry video').forEach(v => {
-    v.addEventListener('loadedmetadata', layoutAll);
-    v.addEventListener('canplay', layoutAll);
-  });
-})();
-
-/* ── LIGHTBOX ── */
-(function(){
-  const lb=document.getElementById('lightbox'),lbW=document.getElementById('lb-media-wrap'),
-        lbDots=document.getElementById('lb-dots'),lbTitle=document.getElementById('lb-title'),
-        lbSub=document.getElementById('lb-sub'),lbDesc=document.getElementById('lb-desc'),
-        lbCount=document.getElementById('lb-counter'),
-        btnP=document.getElementById('lb-prev'),btnN=document.getElementById('lb-next'),
-        btnC=document.getElementById('lb-close');
-
-  const cards=Array.from(document.querySelectorAll('.media-card'));
-  const items=cards.map(c=>{
-    const img=c.querySelector('img'), vid=c.querySelector('video');
-    return { type:c.dataset.type||(vid?'video':'image'), src:vid?(vid.src||vid.getAttribute('src')):(img?img.src:''), title:c.dataset.title||'', sub:c.dataset.sub||'', desc:c.dataset.desc||'' };
-  }).filter(i=>i.src);
-
-  let cur=0;
-  items.forEach((_,i)=>{const d=document.createElement('button');d.className='lb-dot';d.type='button';d.addEventListener('click',e=>{e.stopPropagation();show(i);});lbDots.appendChild(d);});
-
-  function show(i){
-    cur=((i%items.length)+items.length)%items.length;
-    const item=items[cur]; lbW.innerHTML='';
-    let el;
-    if(item.type==='video'){
-      el=document.createElement('video');
-      el.src=item.src;el.autoplay=true;el.muted=true;el.loop=true;el.setAttribute('playsinline','');
-      el.addEventListener('canplay',()=>el.classList.add('ready'),{once:true});
-    } else {
-      el=document.createElement('img');el.src=item.src;el.alt=item.title;
-      el.addEventListener('load',()=>el.classList.add('ready'),{once:true});
-      if(el.complete)el.classList.add('ready');
-    }
-    lbW.appendChild(el);
-    lbTitle.textContent=item.title; lbSub.textContent=item.sub; lbDesc.textContent=item.desc;
-    lbCount.textContent=(cur+1)+' / '+items.length;
-    lbDots.querySelectorAll('.lb-dot').forEach((d,j)=>d.classList.toggle('active',j===cur));
-    document.body.style.overflow='hidden';
-    lb.classList.add('open');
-  }
-  function close(){
-    lb.classList.remove('open');document.body.style.overflow='';
-    setTimeout(()=>{lbW.innerHTML='';},350);
-  }
-
-  cards.forEach((c,i)=>c.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();show(i);}));
-  btnP.addEventListener('click',e=>{e.stopPropagation();show(cur-1);});
-  btnN.addEventListener('click',e=>{e.stopPropagation();show(cur+1);});
-  btnC.addEventListener('click',e=>{e.stopPropagation();close();});
-  lb.addEventListener('click',e=>{if(e.target===lb)close();});
-  document.addEventListener('keydown',e=>{if(e.key==='Escape'){close();closeVimeo();return;}if(!lb.classList.contains('open'))return;if(e.key==='ArrowLeft')show(cur-1);if(e.key==='ArrowRight')show(cur+1);});
-  let tx=0;
-  lb.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true});
-  lb.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>40)show(dx<0?cur+1:cur-1);});
-})();
-</script>
 </body>
 </html>
