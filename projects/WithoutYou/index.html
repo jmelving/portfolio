@@ -1,252 +1,710 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!--Metadata-->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="ECHOES by Jona Melvin Grobe, Hannah Rampitsch, Chris Raschke and Sina Anders">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="keywords" content="Jona Melvin Grobe, 3D generalist portfolio, 3D artist showcase, procedural 3D art, 
-    high-quality 3D visualizations, Houdini generalist work, realistic 3D rendering, VFX and simulations,
-    digital sculpting portfolio, game asset creation, Without You, Art Lead, Bachelor Project, FH Salzburg">
-    <meta name="author" content="Jona Melvin Grobe">
-    <meta name="robots" content="index, follow">
-    
-    <!-- Open Graph Metadata -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Echoes | Jona Melvin Grobe | Portfolio">
-    <meta property="og:description" content="Dive into the world of Jona Melvin Grobe: Where art meets code, efficiency meets creativity, and 3D gets weird!">
-    <meta property="og:image" content="https://jmelving.de/projects/Echoes/img/Still_1.webp">
-    <meta property="og:url" content="https://jmelving.de">
+  <meta name="description" content="Without You — Bachelor Project 2 by Jona Melvin Grobe, Bernadette Erkinger and Fabian Holzer. An animated short about human greed, ants, and the end of the world.">
+  <meta name="keywords" content="Jona Melvin Grobe, Without You, Echoes, Houdini, Blender, Nuke, Bachelor Project, FH Salzburg, 3D generalist, Compositing, Animated Short">
+  <meta name="author" content="Jona Melvin Grobe">
+  <meta name="robots" content="index, follow">
 
-    <title>Without You</title>
+  <!-- Open Graph Metadata -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Without You | Jona Melvin Grobe | Portfolio">
+  <meta property="og:description" content="An animated short about human greed — ants, mushrooms, and the end of the world. Bachelor Project 2 at FH Salzburg.">
+  <meta property="og:image" content="https://jmelving.de/projects/Echoes/img/Still_1.webp">
+  <meta property="og:url" content="https://jmelving.de/projects/Echoes/">
 
-    <link rel="icon" href="../../img/favicon.ico" type="image/x-icon">
+  <!-- Twitter / X Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Without You | Jona Melvin Grobe">
+  <meta name="twitter:description" content="An animated short about human greed — ants, mushrooms, and the end of the world.">
+  <meta name="twitter:image" content="https://jmelving.de/projects/Echoes/img/Still_1.webp">
 
-    <!-- External CSS Files -->
-    <link rel="stylesheet" href="../../css/project.css">
-    <link rel="stylesheet" href="../../css/project_image_gallery.css">
-    
-    <style>
-        /* Helper classes for different column layouts */
-        .ig-gallery-1col { --gallery-columns: 1; }
-        .ig-gallery-2col { --gallery-columns: 2; }
-        .ig-gallery-3col { --gallery-columns: 3; }
-        .ig-gallery-4col { --gallery-columns: 4; }
-        .ig-gallery-5col { --gallery-columns: 5; }
-    </style>
+  <title>Without You — Jona Melvin Grobe</title>
+  <link rel="icon" href="../../img/favicon.ico" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Syne:wght@400;600;700;800&family=Syne+Mono&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg:     #080808;
+      --fg:     #EDEAE4;
+      --dim:    rgba(237,234,228,0.36);
+      --dimmer: rgba(237,234,228,0.12);
+      --border: rgba(237,234,228,0.07);
+      --gap:    3px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      width: 100%; background: var(--bg); color: var(--fg);
+      font-family: 'Syne', sans-serif; cursor: none;
+      min-height: 100vh; overflow-x: hidden;
+    }
+
+    /* ── GRAIN ── */
+    #grain {
+      position: fixed; inset: 0; z-index: 200; pointer-events: none; opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px;
+    }
+
+    /* ── CURSOR ── */
+    #cur-dot {
+      position: fixed; width: 24px; height: 24px; background: var(--fg); border-radius: 50%;
+      pointer-events: none; z-index: 9999; transform: translate(-50%,-50%) scale(0.167);
+    }
+    #cur-ring {
+      position: fixed; width: 26px; height: 26px; border: 1px solid rgba(237,234,228,0.3);
+      border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%);
+    }
+    body.hovering #cur-dot  { transform: translate(-50%,-50%) scale(0); }
+    body.hovering #cur-ring { border-color: rgba(237,234,228,0.62); }
+
+    /* ── AMBIENT ── */
+    #bg-canvas { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.45; }
+
+    /* ── SIDE RAIL ── */
+    #side-rail {
+      position: fixed; left: 0; top: 0; bottom: 0; z-index: 90; width: 88px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      border-right: 1px solid var(--border);
+      background: rgba(8,8,8,0.5); backdrop-filter: blur(12px); gap: 4px;
+    }
+    .rail-item {
+      display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 14px 0;
+      cursor: pointer; text-decoration: none; transition: opacity 0.4s; opacity: 0.28;
+    }
+    .rail-item.active { opacity: 1; }
+    .rail-item:hover  { opacity: 0.72; }
+    .rail-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      border: 1px solid rgba(237,234,228,0.5); background: transparent;
+      transition: background 0.35s, transform 0.35s; flex-shrink: 0;
+    }
+    .rail-item.active .rail-dot { background: var(--fg); transform: scale(1.5); }
+    .rail-label {
+      font-family: 'Syne Mono', monospace;
+      font-size: 0.8rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg);
+      writing-mode: vertical-rl; text-orientation: mixed; transform: rotate(180deg);
+      white-space: nowrap; pointer-events: none;
+    }
+    .rail-line { width: 1px; height: 20px; background: var(--border); flex-shrink: 0; }
+
+    /* ── HEADER ── */
+    header {
+      position: fixed; top: 0; left: 88px; right: 0; z-index: 100; padding: 22px 52px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      background: rgba(8,8,8,0.72); backdrop-filter: blur(20px);
+    }
+    .header-left { display: flex; align-items: center; gap: 22px; }
+    .header-back {
+      font-family: 'Syne Mono', monospace; font-size: 0.72rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--dim); text-decoration: none;
+      display: flex; align-items: center; gap: 8px; transition: color 0.2s;
+    }
+    .header-back:hover { color: var(--fg); }
+    .header-back::before { content: '←'; font-size: 0.85rem; }
+    .header-sep   { color: var(--dimmer); font-family: 'Syne Mono', monospace; font-size: 0.75rem; }
+    .header-title { font-family: 'Syne Mono', monospace; font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(237,234,228,0.55); }
+    .header-meta  { font-family: 'Syne Mono', monospace; font-size: 0.67rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(237,234,228,0.38); }
+
+    /* ── PAGE LAYOUT ── */
+    .page-content { margin-left: 88px; }
+
+    /* ── HERO ── */
+    #hero { position: relative; height: 100vh; overflow: hidden; cursor: pointer; }
+    .hero-slideshow { position: absolute; inset: 0; z-index: 1; }
+    .hero-slide {
+      position: absolute; inset: 0; background-size: cover; background-position: center;
+      filter: grayscale(85%) brightness(0.52); opacity: 0; transition: opacity 1.3s ease;
+    }
+    .hero-slide.active { opacity: 1; }
+    #hero-video {
+      position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%;
+      object-fit: cover; filter: grayscale(70%) brightness(0.52); display: none;
+    }
+    #hero-video.active { display: block; }
+    .hero-overlay {
+      position: absolute; inset: 0; z-index: 2; pointer-events: none;
+      background: linear-gradient(180deg, rgba(8,8,8,0.08) 0%, rgba(8,8,8,0.2) 40%, rgba(8,8,8,0.80) 100%);
+    }
+    .hero-content {
+      position: absolute; inset: 0; z-index: 4;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 18px; padding-top: 68px;
+    }
+    .hero-eyebrow {
+      font-family: 'Syne Mono', monospace; font-size: 0.78rem; letter-spacing: 0.34em;
+      text-transform: uppercase; color: var(--dim);
+      opacity: 0; animation: fadeUp 0.9s 0.25s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif; font-size: clamp(4rem, 10.5vw, 9.5rem);
+      font-weight: 300; letter-spacing: 0.02em; line-height: 0.92; color: var(--fg); text-align: center;
+      opacity: 0; animation: fadeUp 0.9s 0.4s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .hero-sub {
+      font-family: 'Cormorant Garamond', serif; font-size: clamp(1.1rem, 2.8vw, 1.85rem);
+      font-weight: 300; font-style: italic; color: var(--dim); letter-spacing: 0.08em;
+      opacity: 0; animation: fadeUp 0.9s 0.55s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    .hero-play-hint {
+      position: absolute; bottom: 52px; left: 50%; z-index: 4;
+      display: flex; flex-direction: column; align-items: center; gap: 16px;
+      opacity: 0; animation: fadeUpHint 0.9s 0.72s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    @keyframes fadeUpHint {
+      from { opacity:0; transform: translateX(-50%) translateY(20px); }
+      to   { opacity:1; transform: translateX(-50%) translateY(0); }
+    }
+    .hero-play-circle {
+      width: 96px; height: 96px; border-radius: 50%;
+      border: 1px solid rgba(237,234,228,0.24);
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(8,8,8,0.38); backdrop-filter: blur(10px);
+      transition: border-color 0.35s, background 0.35s, transform 0.45s cubic-bezier(0.16,1,0.3,1);
+    }
+    #hero:hover .hero-play-circle { border-color: rgba(237,234,228,0.6); background: rgba(8,8,8,0.58); transform: scale(1.1); }
+    .hero-play-circle svg { width: 28px; height: 28px; fill: rgba(237,234,228,0.72); transition: fill 0.3s; margin-left: 5px; }
+    #hero:hover .hero-play-circle svg { fill: var(--fg); }
+    .hero-play-label { font-family: 'Syne Mono', monospace; font-size: 0.65rem; letter-spacing: 0.34em; text-transform: uppercase; color: rgba(237,234,228,0.32); }
+    #hero::before { content:''; position:absolute; left:50%; top:0; bottom:0; width:1px; background:rgba(237,234,228,0.04); z-index:3; pointer-events:none; }
+    #hero::after  { content:''; position:absolute; top:50%; left:0; right:0;  height:1px; background:rgba(237,234,228,0.04); z-index:3; pointer-events:none; }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+    /* ── DETAILS BAR ── */
+    #details { position: relative; z-index: 1; display: flex; flex-wrap: wrap; border-bottom: 1px solid var(--border); }
+    .detail-item { flex: 1; min-width: 180px; padding: 44px 48px; border-right: 1px solid var(--border); }
+    .detail-item:last-child { border-right: none; }
+    .detail-label { font-family: 'Syne Mono', monospace; font-size: 0.66rem; letter-spacing: 0.26em; text-transform: uppercase; color: var(--dimmer); margin-bottom: 14px; }
+    .detail-value { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-weight: 300; letter-spacing: 0.04em; color: var(--fg); line-height: 1.85; }
+    .detail-value a { color: var(--dim); text-decoration: none; transition: color 0.2s; }
+    .detail-value a:hover { color: var(--fg); }
+    .detail-secondary { font-family: 'Syne Mono', monospace; font-size: 0.65rem; letter-spacing: 0.14em; color: var(--dimmer); margin-top: 6px; }
+
+    /* ── SECTIONS ── */
+    .project-section { position: relative; z-index: 1; padding: 88px 52px; border-bottom: 1px solid var(--border); scroll-margin-top: 74px; }
+    .section-eyebrow { font-family: 'Syne Mono', monospace; font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(237,234,228,0.28); margin-bottom: 14px; }
+    .section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.6rem, 4.8vw, 4.2rem); font-weight: 300; letter-spacing: 0.03em; line-height: 1.08; color: var(--fg); margin-bottom: 36px; }
+    .section-title em { font-style: italic; color: var(--dim); }
+    .section-body { font-size: 1.02rem; line-height: 2.05; color: rgba(237,234,228,0.52); font-family: 'Syne', sans-serif; max-width: 780px; }
+    .sub-rule { height: 1px; background: var(--border); margin: 66px 0 54px; }
+    .sub-heading { font-family: 'Syne Mono', monospace; font-size: 0.7rem; letter-spacing: 0.26em; text-transform: uppercase; color: rgba(237,234,234,0.32); margin-bottom: 10px; }
+    .sub-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.8rem, 3.2vw, 2.7rem); font-weight: 300; font-style: italic; color: var(--dim); margin-bottom: 24px; }
+
+    /* ── VIDEO EMBED ── */
+    .video-embed {
+      position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;
+      border: 1px solid var(--border); margin: 46px 0;
+      transition: border-color 0.3s, transform 0.4s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s;
+    }
+    .video-embed:hover { border-color: rgba(237,234,228,0.16); transform: translateY(-5px); box-shadow: 0 28px 64px rgba(0,0,0,0.58); }
+    .video-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+
+    /* ── MEDIA MASONRY ── */
+    .media-masonry {
+      position: relative; margin: 46px 0; visibility: hidden;
+    }
+    .media-masonry.laid-out { visibility: visible; }
+    .mc-wrap { position: absolute; box-sizing: border-box; }
+
+    .media-card {
+      position: relative; overflow: hidden;
+      background: #0d0d0d; display: block; cursor: pointer;
+    }
+    .mc-label {
+      padding: 10px 2px 0;
+      font-family: 'Syne', sans-serif; font-size: 0.84rem; line-height: 1.65;
+      color: rgba(237,234,228,0.55);
+    }
+    .mc-label-title { color: rgba(237,234,228,0.72); font-weight: 600; font-size: 0.82rem; }
+    .mc-label-sub { font-family: 'Syne Mono', monospace; font-size: 0.58rem; letter-spacing: 0.16em; color: rgba(237,234,228,0.3); margin-top: 2px; }
+    .mc-label-desc { font-family: 'Syne', sans-serif; font-size: 0.78rem; line-height: 1.6; color: rgba(237,234,228,0.42); margin-top: 7px; }
+    .mc-label-desc:empty { display: none; }
+    .media-card img, .media-card video {
+      display: block; width: 100%; height: auto; max-height: 70vh; object-fit: cover;
+      filter: grayscale(80%) brightness(0.72) saturate(0.8);
+      transition: filter 0.45s ease, transform 0.55s cubic-bezier(0.16,1,0.3,1);
+    }
+    .media-card:hover img, .media-card:hover video {
+      filter: grayscale(10%) brightness(0.92) saturate(1.1); transform: scale(1.04);
+    }
+    .media-card::after {
+      content: ''; position: absolute; inset: 0;
+      border: 1px solid rgba(237,234,228,0.04);
+      pointer-events: none; z-index: 4; transition: border-color 0.3s;
+    }
+    .media-card:hover::after { border-color: rgba(237,234,228,0.18); }
+    .mc-overlay {
+      position: absolute; inset: 0; z-index: 2;
+      background: linear-gradient(180deg, transparent 45%, rgba(8,8,8,0.88) 100%);
+      opacity: 0; transition: opacity 0.35s; pointer-events: none;
+    }
+    .media-card:hover .mc-overlay { opacity: 1; }
+    .mc-info {
+      position: absolute; bottom: 0; left: 0; right: 0; z-index: 3;
+      padding: 12px 15px 16px; transform: translateY(6px); opacity: 0;
+      transition: transform 0.32s cubic-bezier(0.16,1,0.3,1), opacity 0.28s;
+    }
+    .media-card:hover .mc-info { transform: translateY(0); opacity: 1; }
+    .mc-title { font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; font-weight: 300; letter-spacing: 0.05em; color: var(--fg); line-height: 1.2; margin-bottom: 4px; }
+    .mc-sub { font-family: 'Syne Mono', monospace; font-size: 0.6rem; letter-spacing: 0.18em; color: rgba(237,234,228,0.58); }
+
+    /* ── LEARNINGS ── */
+    .learnings-wrap { margin-top: 46px; display: flex; flex-direction: column; gap: 2px; }
+    .learning-block {
+      display: grid; grid-template-columns: 260px 1fr;
+      border: 1px solid var(--border); transition: border-color 0.3s;
+    }
+    .learning-block:hover { border-color: rgba(237,234,228,0.14); }
+    .learning-block + .learning-block { border-top: none; }
+    .learning-block-header {
+      display: flex; flex-direction: column; justify-content: center; gap: 12px;
+      padding: 26px 36px; border-right: 1px solid var(--border);
+      background: rgba(237,234,228,0.018);
+    }
+    .learning-block-label { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 300; letter-spacing: 0.05em; color: var(--fg); }
+    .learning-block-tag { font-family: 'Syne Mono', monospace; font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase; padding: 5px 13px; border-radius: 100px; border: 1px solid var(--border); color: var(--dimmer); align-self: flex-start; }
+    .learning-block-body {
+      padding: 26px 48px 28px;
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 0px 28px; align-content: start;
+    }
+    .learning-item { font-size: 0.92rem; line-height: 1.65; color: rgba(237,234,228,0.52); font-family: 'Syne', sans-serif; }
+    .learning-item::before { content: '○  '; color: rgba(237,234,228,0.2); }
+
+    /* ── FOOTER ── */
+    footer { position: relative; z-index: 1; padding: 26px 52px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+    footer p { font-family: 'Syne Mono', monospace; font-size: 0.65rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--dimmer); }
+
+    /* ── VIDEO MODAL ── */
+    #vimeo-modal { display: none; position: fixed; inset: 0; z-index: 1000; background: rgba(8,8,8,0.93); backdrop-filter: blur(20px); align-items: center; justify-content: center; flex-direction: column; gap: 20px; }
+    #vimeo-modal.open { display: flex; }
+    #vimeo-wrap { position: relative; width: min(88vw, 1200px); aspect-ratio: 16/9; }
+    #vimeo-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+    #vimeo-close { width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(237,234,228,0.18); background: none; color: var(--dim); font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; justify-content: center; align-self: flex-end; margin-right: calc((100vw - min(88vw, 1200px)) / 2); transition: border-color 0.2s, color 0.2s; }
+    #vimeo-close:hover { border-color: rgba(237,234,228,0.42); color: var(--fg); }
+
+    /* ── LIGHTBOX ── */
+    #lightbox { position: fixed; inset: 0; z-index: 500; display: flex; align-items: center; justify-content: center; background: rgba(8,8,8,0.96); backdrop-filter: blur(28px); opacity: 0; pointer-events: none; transition: opacity 0.38s cubic-bezier(0.16,1,0.3,1); }
+    #lightbox.open { opacity: 1; pointer-events: all; }
+    #lb-stage { position: relative; width: min(90vw, 1300px); height: min(86vh, 960px); display: flex; align-items: center; justify-content: center; }
+    #lb-media-wrap { max-width: 100%; max-height: 100%; display: flex; align-items: center; justify-content: center; }
+    #lb-media-wrap img { display: block; max-width: min(90vw, 1300px); max-height: min(80vh, 920px); width: auto; height: auto; object-fit: contain; opacity: 0; transition: opacity 0.3s ease; border: 1px solid rgba(237,234,228,0.07); }
+    #lb-media-wrap img.ready { opacity: 1; }
+    .lb-arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 10; width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(237,234,228,0.18); background: rgba(8,8,8,0.65); backdrop-filter: blur(10px); color: rgba(237,234,228,0.6); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.22s, color 0.22s; }
+    .lb-arrow:hover { border-color: rgba(237,234,228,0.5); color: var(--fg); }
+    .lb-arrow svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    #lb-prev { left: -70px; } #lb-next { right: -70px; }
+    #lb-close { position: fixed; top: 28px; right: 38px; z-index: 520; width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(237,234,228,0.16); background: rgba(8,8,8,0.65); backdrop-filter: blur(10px); color: rgba(237,234,228,0.5); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.22s, color 0.22s; }
+    #lb-close:hover { border-color: rgba(237,234,228,0.45); color: var(--fg); }
+    #lb-close svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; }
+    #lb-caption { position: fixed; bottom: 48px; left: 50%; transform: translateX(-50%); z-index: 520; display: flex; flex-direction: column; align-items: center; gap: 16px; pointer-events: none; max-width: min(72vw, 860px); width: max-content; }
+    #lb-title-wrap { display: flex; flex-direction: column; align-items: center; gap: 6px; opacity: 0; transform: translateY(6px); transition: opacity 0.3s 0.12s, transform 0.3s 0.12s; }
+    #lightbox.open #lb-title-wrap { opacity: 1; transform: translateY(0); }
+    #lb-title { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 300; letter-spacing: 0.06em; color: var(--fg); white-space: nowrap; }
+    #lb-sub   { font-family: 'Syne Mono', monospace; font-size: 0.64rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dim); }
+    #lb-desc  { font-family: 'Syne', sans-serif; font-size: 0.82rem; line-height: 1.72; color: rgba(237,234,228,0.42); text-align: center; max-width: min(72vw, 860px); margin-top: 2px; }
+    #lb-desc:empty { display: none; }
+    #lb-dots  { display: flex; align-items: center; gap: 8px; pointer-events: all; }
+    .lb-dot { width: 6px; height: 6px; border-radius: 50%; border: 1px solid rgba(237,234,228,0.3); background: transparent; cursor: pointer; transition: background 0.25s, border-color 0.25s, transform 0.25s; }
+    .lb-dot.active { background: var(--fg); border-color: var(--fg); transform: scale(1.3); }
+    #lb-counter { position: fixed; top: 32px; left: 50%; transform: translateX(-50%); font-family: 'Syne Mono', monospace; font-size: 0.64rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--dimmer); z-index: 520; pointer-events: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1200px) {
+      #side-rail { width: 46px; }
+      .rail-label { font-size: 0.56rem; }
+      header { left: 46px; padding: 18px 22px; }
+      .page-content { margin-left: 46px; }
+      .project-section { padding: 52px 22px; }
+      #details { display: block; }
+      .detail-item { border-right: none; border-bottom: 1px solid var(--border); padding: 30px 22px; }
+      .detail-item:last-child { border-bottom: none; }
+      .learning-block { grid-template-columns: 1fr; }
+      .learning-block-header { border-right: none; border-bottom: 1px solid var(--border); padding-left: 22px; padding-right: 22px; }
+      .learning-block-body { grid-template-columns: 1fr; padding-left: 22px; padding-right: 22px; }
+      #lb-prev { left: -4px; } #lb-next { right: -4px; }
+      footer { padding: 22px; }
+      body { cursor: auto; }
+      #cur-dot, #cur-ring { display: none; }
+      .header-meta { display: none; }
+      .media-card img, .media-card video { filter: grayscale(0%) brightness(0.85) saturate(1) !important; transform: none !important; }
+      .media-card .mc-overlay { opacity: 1 !important; }
+      .media-card .mc-info { transform: translateY(0) !important; opacity: 1 !important; }
+      .media-card::after { border-color: rgba(237,234,228,0.10) !important; }
+    }
+  </style>
 </head>
-
 <body>
-    <!-- Navigation Bar -->
-    <header class="header-main">
-        <nav class="nav-items">
-            <div class="header-pb"><a href="../../"><img src="../../img/pb.gif" alt="profile picture"></a></div>
-            <div class="header-jona-melvin-grobe"><a href="../../">jona_melvin_grobe</a></div>
-            <div class="header-contact"><a href="../../projects">x</a></div>
-        </nav>
-    </header>
-    <!-- Hero Section -->
-    <section class="hero-section" id="heroSection" data-video-url="https://player.vimeo.com/video/839891107?autoplay=1&color=ffffff&title=0&byline=0&portrait=0">
-            <!-- For VIMEO  https://player.vimeo.com/video/VIDEO_ID?autoplay=1&color=ffffff&title=0&byline=0&portrait=0-->
 
+<div id="grain"></div>
+<canvas id="bg-canvas"></canvas>
+<div id="cur-dot"></div>
+<div id="cur-ring"></div>
 
-        <!-- Image Slideshow -->
-        <div class="image-slideshow" id="imageSlideshow">
-            <img class="slide-image active" src="./img/Still_3.webp" alt="Frame 1">
-            <img class="slide-image" src="./img/Still_0.webp" alt="Frame 2">
-            <img class="slide-image" src="./img/Still_1.webp" alt="Frame 3">
-        </div>
-        
-        <!-- Background Image/Video (optional) -->
-        <div class="background-image" id="backgroundImage" style="background-image: url('./img/Still_4.webp');"></div>
-        
-        <div class="hero-overlay"></div>
-        
-        <div class="project-heading">
-            <h1>WITHOUT YOU</h1>
-            <h2 class="sub-heading">Bachelor Project 2</h2>
-        </div>
+<nav id="side-rail">
+  <a class="rail-item active" href="#overview"  data-section="overview"><div class="rail-dot"></div><div class="rail-label">Overview</div></a>
+  <div class="rail-line"></div>
+  <a class="rail-item"        href="#process"   data-section="process"><div class="rail-dot"></div><div class="rail-label">Process</div></a>
+  <div class="rail-line"></div>
+  <a class="rail-item"        href="#role"      data-section="role"><div class="rail-dot"></div><div class="rail-label">My Role</div></a>
+  <div class="rail-line"></div>
+  <a class="rail-item"        href="#learnings" data-section="learnings"><div class="rail-dot"></div><div class="rail-label">Learnings</div></a>
+</nav>
 
-        <!-- Mobile Tap Hint -->
-        <div class="mobile-tap-hint">
-            <span class="tap-icon">👆</span>
-            <span class="tap-text">TAP TO PLAY VIDEO</span>
-        </div>
+<header>
+  <div class="header-left">
+    <a class="header-back" href="../../projects/">Projects</a>
+    <span class="header-sep">·</span>
+    <span class="header-title">Without You</span>
+  </div>
+  <span class="header-meta">Bachelor Project 2 · 2022–2023</span>
+</header>
 
-        <!-- Custom Cursor -->
-        <div class="custom-cursor" id="customCursor">
-            PLAY<br>VIDEO
-        </div>
-    </section>
+<div class="page-content">
 
-    <!-- Video Modal -->
-    <div class="modal-overlay" id="modalOverlay">
-        <div class="modal-content">
-            <button class="close-button" id="closeButton">×</button>
-            <iframe class="video-iframe" 
-                    id="videoIframe"
-                    src=""
-                    allow="autoplay; fullscreen; picture-in-picture"
-                    allowfullscreen>
-            </iframe>
-        </div>
+  <!-- HERO -->
+  <section id="hero" data-video-src="" onclick="openVideoModal()">
+    <video id="hero-video" autoplay muted loop playsinline></video>
+    <div class="hero-slideshow" id="hero-slideshow">
+      <div class="hero-slide active" style="background-image:url('./img/Still_3.webp')"></div>
+      <div class="hero-slide"        style="background-image:url('./img/Still_0.webp')"></div>
+      <div class="hero-slide"        style="background-image:url('./img/Still_1.webp')"></div>
+      <div class="hero-slide"        style="background-image:url('./img/Still_4.webp')"></div>
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Animated Short · Bachelor Project 2 · 2022–2023</div>
+      <h1 class="hero-title">Without<br>You.</h1>
+      <p class="hero-sub">3D Animation · VFX · Compositing</p>
+    </div>
+    <div class="hero-play-hint">
+      <div class="hero-play-circle">
+        <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+      </div>
+      <span class="hero-play-label">Watch</span>
+    </div>
+  </section>
+
+  <!-- DETAILS BAR -->
+  <div id="details">
+    <div class="detail-item">
+      <div class="detail-label">Role</div>
+      <div class="detail-value">3D Generalist<br>Project Manager</div>
+    </div>
+    <div class="detail-item">
+      <div class="detail-label">Collaborators</div>
+      <div class="detail-value">
+        <a href="https://bernadette_erkinger.artstation.com/" target="_blank">Bernadette Erkinger</a><br>
+        <a href="https://christopherraschke.com/" target="_blank">Fabian Holzer</a>
+      </div>
+    </div>
+    <div class="detail-item">
+      <div class="detail-label">Duration</div>
+      <div class="detail-value">6 Months</div>
+      <div class="detail-secondary">2022 – 2023</div>
+    </div>
+    <div class="detail-item">
+      <div class="detail-label">Tools</div>
+      <div class="detail-value">Blender<br>Houdini<br>Nuke<br>DaVinci Resolve</div>
+    </div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <section class="project-section" id="overview">
+    <div class="section-eyebrow">01 — Project Description</div>
+    <h2 class="section-title">Overview</h2>
+    <p class="section-body">
+      <em>Without You</em> is an animated short about human greed. Ants peacefully inhabit their world — until humans invade, determined to harvest their powerful mushrooms as an energy source. When humanity's exploitation destroys the earth, the ants discover a way to fight back.
+      <br><br>
+      We wanted to create a stylised film that humorously tackles human greed and climate change, told entirely from the perspective of ants. The visual direction was heavily inspired by the game <em>Grounded</em> — lush, oversized, and slightly absurd.
+    </p>
+
+    <div class="video-embed">
+      <iframe src="https://www.youtube.com/embed/b841bMnN5P4?autoplay=0" title="Without You — Animated Short" allowfullscreen></iframe>
     </div>
 
-    <!-- Details Section -->
-    <section class="details-container fade-in">
-        <div class="details-table">
-            <div class="detail">
-                <h4>Role</h4>
-                <p class="details-description">3D Generalist</p>
-                <p class="details-description">Project Manager</p>
-            </div>
-            
-            <div class="detail">
-                <h4>Collaborators</h4>
-                <p class="details-description"><a href="https://bernadette_erkinger.artstation.com/" target="_blank">Bernadette Erkinger</a></p>
-                <p class="details-description"><a href="https://christopherraschke.com/" target="_blank">Fabian Holzer</a></p>
-            </div>
-            
-            <div class="detail">
-                <h4>Duration</h4>
-                <p class="details-description">6 months</p>
-                <p class="details-description-secondary">2022-2023</p>
-            </div>
-            
-            <div class="detail">
-                <h4>Tools</h4>
-                <p class="details-description">Blender</p>
-                <p class="details-description">Houdini</p>
-                <p class="details-description">Nuke</p>
-                <p class="details-description">Davinci Resolve</p>
-            </div>
+    <div class="media-masonry cols-3">
+      <div class="mc-wrap">
+        <div class="media-card" data-title="Still 00" data-sub="Blender · Houdini" data-type="image" data-desc="">
+          <img src="./img/Still_0.webp" alt="Still 00">
+          <div class="mc-overlay"></div>
+          <div class="mc-info"><div class="mc-title">Still 00</div><div class="mc-sub">Blender · Houdini</div></div>
         </div>
-    </section>
-
-    <!-- Video Section -->
-    <section class="video-section fade-in">
-        <div class="center-container">
-            <div class="video-container">
-                <iframe src="https://www.youtube.com/embed/b841bMnN5P4" 
-                        title="Echoes Short Film" 
-                        allowfullscreen>
-                </iframe>
-            </div>
+        <div class="mc-label"><div class="mc-label-title"></div><div class="mc-label-sub"></div><div class="mc-label-desc"></div></div>
+      </div>
+      <div class="mc-wrap">
+        <div class="media-card" data-title="Still 01" data-sub="Blender · Houdini" data-type="image" data-desc="">
+          <img src="./img/Still_1.webp" alt="Still 01">
+          <div class="mc-overlay"></div>
+          <div class="mc-info"><div class="mc-title">Still 01</div><div class="mc-sub">Blender · Houdini</div></div>
         </div>
-    </section>
-
-    <!-- Project Description -->
-    <section class="content-section">
-        <div class="project-description fade-in">
-            <h2 class="project_subtitle">§ Project Description</h2>
-            <p class="project_text">
-                “Without You" is an animated short about human greed. Ants peacefully inhabit their world, until humans invade, determined to harvest their powerful mushrooms as an energy source. When humanity destroys the earth, the ants discover a way to get rid of the humans. The Project We wanted to create a stylized film that humerously takes up the topic of human greed, in combination with climate change and take the persepective of ants. The Look was highly inspired by the Game "Grounded". 
-            </p>
+        <div class="mc-label"><div class="mc-label-title"></div><div class="mc-label-sub"></div><div class="mc-label-desc"></div></div>
+      </div>
+      <div class="mc-wrap">
+        <div class="media-card" data-title="Still 02" data-sub="Blender · Houdini" data-type="image" data-desc="">
+          <img src="./img/Still_2.webp" alt="Still 02">
+          <div class="mc-overlay"></div>
+          <div class="mc-info"><div class="mc-title">Still 02</div><div class="mc-sub">Blender · Houdini</div></div>
         </div>
-    </section>
-
-
-
-    <!-- Behind the Scenes Gallery -->
-    <div class="ig-gallery ig-gallery-2col fade-in">
-        <div class="ig-gallery-item">
-            <img src="./img/Still_0.webp" alt="Behind the Scenes 1" data-caption="" loading="lazy">
+        <div class="mc-label"><div class="mc-label-title"></div><div class="mc-label-sub"></div><div class="mc-label-desc"></div></div>
+      </div>
+      <div class="mc-wrap">
+        <div class="media-card" data-title="Still 03" data-sub="Blender · Houdini" data-type="image" data-desc="">
+          <img src="./img/Still_3.webp" alt="Still 03">
+          <div class="mc-overlay"></div>
+          <div class="mc-info"><div class="mc-title">Still 03</div><div class="mc-sub">Blender · Houdini</div></div>
         </div>
-        <div class="ig-gallery-item">
-            <img src="./img/Still_1.webp" alt="Behind the Scenes 2" data-caption="" loading="lazy">
+        <div class="mc-label"><div class="mc-label-title"></div><div class="mc-label-sub"></div><div class="mc-label-desc"></div></div>
+      </div>
+      <div class="mc-wrap">
+        <div class="media-card" data-title="Still 04" data-sub="Blender · Houdini" data-type="image" data-desc="">
+          <img src="./img/Still_4.webp" alt="Still 04">
+          <div class="mc-overlay"></div>
+          <div class="mc-info"><div class="mc-title">Still 04</div><div class="mc-sub">Blender · Houdini</div></div>
         </div>
-        <div class="ig-gallery-item">
-            <img src="./img/Still_2.webp" alt="Behind the Scenes 3" data-caption="" loading="lazy">
+        <div class="mc-label"><div class="mc-label-title"></div><div class="mc-label-sub"></div><div class="mc-label-desc"></div></div>
+      </div>
+      <div class="mc-wrap">
+        <div class="media-card" data-title="Still 05" data-sub="Blender · Houdini" data-type="image" data-desc="">
+          <img src="./img/Still_5.webp" alt="Still 05">
+          <div class="mc-overlay"></div>
+          <div class="mc-info"><div class="mc-title">Still 05</div><div class="mc-sub">Blender · Houdini</div></div>
         </div>
-        <div class="ig-gallery-item">
-            <img src="./img/Still_3.webp" alt="Behind the Scenes 4" data-caption="" loading="lazy">
-        </div>
-        <div class="ig-gallery-item">
-            <img src="./img/Still_4.webp" alt="Behind the Scenes 5" data-caption='' loading="lazy">
-        </div>
-        <div class="ig-gallery-item">
-            <img src="./img/Still_5.webp" alt="Behind the Scenes 6" data-caption="" loading="lazy">
-        </div>
+        <div class="mc-label"><div class="mc-label-title"></div><div class="mc-label-sub"></div><div class="mc-label-desc"></div></div>
+      </div>
     </div>
-    
+  </section>
 
-    <!-- Process Section -->
-    <section class="content-section">
-        <div class="project-description fade-in">
-            <h2 class="project_subtitle">§ Process</h2>
-            <p class="project_text">
-                After facing a major setback at the start of production and requiring to start nearly from scratch, we worked hard to achieve our goal of delivering a finished product. The story is now much better conveyed, thanks to Josef Schinwald`s assistance in constructing an epic adventure for our protagonist.
-            </p>
+  <!-- PROCESS -->
+  <section class="project-section" id="process">
+    <div class="section-eyebrow">02 — Behind the Scenes</div>
+    <h2 class="section-title">Process</h2>
+    <p class="section-body">
+      After a major setback early in production — requiring us to restart almost from scratch — the team pushed hard to deliver a finished product. The restructure was painful, but it ultimately led to a much cleaner story, with Josef Schinwald's guidance helping us shape a more coherent narrative arc for the protagonist.
+    </p>
+  </section>
+
+  <!-- MY ROLE -->
+  <section class="project-section" id="role">
+    <div class="section-eyebrow">03 — Responsibilities</div>
+    <h2 class="section-title">My Role</h2>
+    <p class="section-body">
+      For Bachelor Project 2, unlike the first, we worked as a team. Students who had performed particularly well in BP1 were offered a Lead position — I was given that responsibility, which meant guiding teammates, organising workflow, and making sure nobody felt overwhelmed.
+      <br><br>
+      Midway through, the project was completely restructured, making the semester challenging for everyone. I focused on keeping momentum going and ensuring the team could finish successfully. In the end, my main responsibilities were:
+    </p>
+    <div class="learnings-wrap" style="margin-top: 36px;">
+      <div class="learning-block">
+        <div class="learning-block-header">
+          <div class="learning-block-label">Lead</div>
+          <div class="learning-block-tag">Management · Direction</div>
         </div>
-    </section>
-
-    <!-- My Role -->
-    <section class="content-section">
-        <div class="project-description fade-in">
-            <h2 class="project_subtitle">§ My Role</h2>
-            <p class="project_text">
-                For the second Bachelor Project, unlike the first one, we were working as a team. Some students who had done particularly well in the first project were given the opportunity to take on a Lead position. In this project, I was given that responsibility, which meant guiding my teammates and helping to organize the workflow.  
-
-                I wanted to make sure that nobody felt overwhelmed, so I assigned specific roles to my peers and took on the remaining tasks myself. Midway through, the project was completely restructured, which made the semester very challenging for all of us.  
-                <br><br>
-                In the end, my main responsibilities included:  <br>
-                ○ Project Management<br>
-                ○ Feedback & Tutoring<br>
-                ○ Compositing<br>
-                ○ Animation / Layout / Rendering / Lighting / Simulations<br>
-                ○ A bit of Modeling & Texturing (with most of it handled by Bernadette Erkinger)<br>
-                ○ Communication with Audio / Voice actor <br>
-                ○ Singing with my beautiful voice for the credits :) <br>
-                <br>
-
-
-                It was certainly a lot of work, but I learned how important it is to balance leadership with collaboration. Even though the scope of the project was ambitious, everyone contributed in their own way, and I focused on keeping things moving forward so the team could finish successfully.
-
-
-            </p>
+        <div class="learning-block-body">
+          <div class="learning-item">Project management &amp; workflow organisation</div>
+          <div class="learning-item">Feedback &amp; tutoring for team members</div>
+          <div class="learning-item">Communication with audio &amp; voice actor</div>
+          <div class="learning-item">Singing for the credits (beautiful voice confirmed)</div>
         </div>
-    </section>
-
-    <!-- Learnings Section -->
-    <section class="content-section">
-        <div class="project-description fade-in">
-            <h2 class="project_subtitle">§ Learnings</h2>
-            
-            <p class="project_text"><b>Project Management</b></p>
-            <p class="project_text">
-                ○ First time managing a Project<br>
-                ○ Giving constructive Feedback
-                ○ Filestructures are Important
-
-            </p>
-
-            <p class="project_text"><b>3D</b></p>
-            <p class="project_text">
-                ○ First Houdini Destruction Simulation<br>
-                ○ Working in a Team to bring all assets together into a final scene<br>
-            </p>
+      </div>
+      <div class="learning-block">
+        <div class="learning-block-header">
+          <div class="learning-block-label">3D</div>
+          <div class="learning-block-tag">Production · Finishing</div>
         </div>
-    </section>
-
-    <!-- Lightbox Modal for Image Gallery -->
-    <div class="ig-lightbox" id="ig-lightbox">
-        <div class="ig-lightbox-content">
-            <button class="ig-lightbox-nav ig-lightbox-prev" id="ig-lightbox-prev">‹</button>
-            <img id="ig-lightbox-img" src="" alt="">
-            <button class="ig-lightbox-nav ig-lightbox-next" id="ig-lightbox-next">›</button>
-            <div class="ig-lightbox-caption" id="ig-lightbox-caption">Caption text goes here</div>
-            <div class="ig-lightbox-counter" id="ig-lightbox-counter">1 / 6</div>
+        <div class="learning-block-body">
+          <div class="learning-item">Animation, layout &amp; rendering</div>
+          <div class="learning-item">Lighting &amp; simulations</div>
+          <div class="learning-item">Compositing (Nuke)</div>
+          <div class="learning-item">Modeling &amp; texturing support (lead by Bernadette Erkinger)</div>
         </div>
+      </div>
     </div>
+  </section>
 
-    <!-- Copyright -->
-    <div class="copyright">
-        © Jona Melvin Grobe
+  <!-- LEARNINGS -->
+  <section class="project-section" id="learnings">
+    <div class="section-eyebrow">04 — Takeaways</div>
+    <h2 class="section-title">Learnings</h2>
+    <p class="section-body" style="margin-bottom:0;">
+      Key skills built across leadership and technical production.
+    </p>
+    <div class="learnings-wrap">
+      <div class="learning-block">
+        <div class="learning-block-header">
+          <div class="learning-block-label">Management</div>
+          <div class="learning-block-tag">First Lead Role</div>
+        </div>
+        <div class="learning-block-body">
+          <div class="learning-item">First time managing a project</div>
+          <div class="learning-item">Giving constructive feedback</div>
+          <div class="learning-item">File structures are important</div>
+        </div>
+      </div>
+      <div class="learning-block">
+        <div class="learning-block-header">
+          <div class="learning-block-label">3D</div>
+          <div class="learning-block-tag">FX · Pipeline</div>
+        </div>
+        <div class="learning-block-body">
+          <div class="learning-item">First Houdini destruction simulation</div>
+          <div class="learning-item">Assembling team assets into a unified final scene</div>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <!-- External JavaScript Files -->
-    <script src="../../js/project.js"></script>
-    <script src="../../js/project_image_gallery.js"></script>
+  <footer>
+    <p>© Jona Melvin Grobe — 2025</p>
+    <p>Technical Artist · Austria</p>
+  </footer>
+</div>
+
+<!-- VIDEO MODAL (Vimeo) -->
+<div id="vimeo-modal">
+  <button id="vimeo-close" onclick="closeVideoModal()">✕</button>
+  <div id="vimeo-wrap">
+    <iframe id="vimeo-iframe" src="" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox">
+  <button id="lb-close"><svg viewBox="0 0 14 14"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg></button>
+  <div id="lb-stage">
+    <button class="lb-arrow" id="lb-prev"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+    <div id="lb-media-wrap"></div>
+    <button class="lb-arrow" id="lb-next"><svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg></button>
+  </div>
+  <div id="lb-counter"></div>
+  <div id="lb-caption">
+    <div id="lb-dots"></div>
+    <div id="lb-title-wrap">
+      <div id="lb-title"></div>
+      <div id="lb-sub"></div>
+      <div id="lb-desc"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── CURSOR ── */
+const curDot=document.getElementById('cur-dot'),curRing=document.getElementById('cur-ring');
+let mX=innerWidth/2,mY=innerHeight/2,rX=mX,rY=mY,lastMX=mX,lastMY=mY,mouseVel=0,dotScale=0.167,ringScale=1;
+document.addEventListener('mousemove',e=>{mX=e.clientX;mY=e.clientY;});
+document.addEventListener('mouseover',e=>{document.body.classList.toggle('hovering',!!e.target.closest('a,button,#hero,.media-card,.video-embed'));});
+(function anim(t){
+  const s=Math.sqrt((mX-lastMX)**2+(mY-lastMY)**2);lastMX=mX;lastMY=mY;
+  mouseVel+=(s-mouseVel)*0.18;dotScale+=(0.167+Math.min(mouseVel*0.055,0.833)-dotScale)*0.10;
+  const ip=1+Math.sin(t*0.0018)*0.18,vs=1+Math.min(mouseVel*0.06,0.7);
+  ringScale+=((mouseVel>0.5?vs:ip)-ringScale)*0.07;
+  rX+=(mX-rX)*0.11;rY+=(mY-rY)*0.11;
+  curDot.style.cssText=`left:${mX}px;top:${mY}px;transform:translate(-50%,-50%) scale(${dotScale.toFixed(3)})`;
+  curRing.style.cssText=`left:${rX}px;top:${rY}px;transform:translate(-50%,-50%) scale(${ringScale.toFixed(3)})`;
+  requestAnimationFrame(anim);
+})(performance.now());
+
+/* ── AMBIENT ── */
+(function(){
+  const cv=document.getElementById('bg-canvas'),ctx=cv.getContext('2d');let W,H;
+  const r=()=>{W=cv.width=innerWidth;H=cv.height=innerHeight;};r();window.addEventListener('resize',r);
+  const orbs=[210,195,228,205,218].map(h=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:260+Math.random()*400,vx:(Math.random()-.5)*0.12,vy:(Math.random()-.5)*0.10,h,a:0.02+Math.random()*0.03}));
+  (function loop(){ctx.clearRect(0,0,W,H);orbs.forEach(o=>{o.x+=o.vx;o.y+=o.vy;if(o.x<-o.r)o.x=W+o.r;if(o.x>W+o.r)o.x=-o.r;if(o.y<-o.r)o.y=H+o.r;if(o.y>H+o.r)o.y=-o.r;const g=ctx.createRadialGradient(o.x,o.y,0,o.x,o.y,o.r);g.addColorStop(0,`hsla(${o.h},28%,50%,${o.a})`);g.addColorStop(1,'hsla(0,0%,0%,0)');ctx.beginPath();ctx.arc(o.x,o.y,o.r,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();});requestAnimationFrame(loop);})();
+})();
+
+/* ── HERO SLIDESHOW ── */
+(function(){
+  const hero=document.getElementById('hero'),vid=document.getElementById('hero-video'),ss=document.getElementById('hero-slideshow');
+  const src=(hero.dataset.videoSrc||'').trim();
+  if(src){vid.src=src;vid.classList.add('active');ss.style.display='none';}
+  else{vid.style.display='none';const slides=ss.querySelectorAll('.hero-slide');let i=0;setInterval(()=>{slides[i].classList.remove('active');i=(i+1)%slides.length;slides[i].classList.add('active');},3800);}
+})();
+
+/* ── SIDE RAIL ── */
+const railItems=document.querySelectorAll('.rail-item[data-section]');
+const sects=Array.from(railItems).map(i=>document.getElementById(i.dataset.section)).filter(Boolean);
+function updateRail(){let a=sects[0];sects.forEach(s=>{if(s.getBoundingClientRect().top<innerHeight*0.5)a=s;});railItems.forEach(i=>i.classList.toggle('active',i.dataset.section===a.id));}
+window.addEventListener('scroll',updateRail,{passive:true});updateRail();
+
+/* ── VIDEO MODAL (Vimeo) ── */
+const VIMEO_SRC='https://player.vimeo.com/video/839891107?autoplay=1&color=ffffff&title=0&byline=0&portrait=0';
+const vm=document.getElementById('vimeo-modal'),vi=document.getElementById('vimeo-iframe');
+function openVideoModal(e){if(e&&e.stopPropagation)e.stopPropagation();vi.src=VIMEO_SRC;vm.classList.add('open');}
+function closeVideoModal(){vm.classList.remove('open');vi.src='';}
+vm.addEventListener('click',e=>{if(e.target===vm)closeVideoModal();});
+
+/* ── MASONRY ── */
+(function(){
+  const GAP=3;
+  function colsForGrid(grid){
+    const w=window.innerWidth;
+    if(w<=1200)return 1;
+    for(let n=4;n>=1;n--)if(grid.classList.contains('cols-'+n))return n;
+    return 3;
+  }
+  function layoutGrid(grid){
+    const wraps=Array.from(grid.querySelectorAll(':scope > .mc-wrap'));
+    if(!wraps.length)return;
+    const cols=colsForGrid(grid),total=grid.offsetWidth,colW=(total-GAP*(cols-1))/cols,colY=new Array(cols).fill(0);
+    wraps.forEach(w=>{w.style.width=colW+'px';});
+    wraps.forEach((wrap,idx)=>{
+      const col=idx%cols;
+      wrap.style.left=(col*(colW+GAP))+'px';
+      wrap.style.top=colY[col]+'px';
+      colY[col]+=wrap.offsetHeight+GAP;
+    });
+    grid.style.height=Math.max(...colY)-GAP+'px';
+    grid.classList.add('laid-out');
+  }
+  function layoutAll(){document.querySelectorAll('.media-masonry').forEach(layoutGrid);}
+  layoutAll();requestAnimationFrame(layoutAll);setTimeout(layoutAll,300);setTimeout(layoutAll,900);
+  let t;window.addEventListener('resize',()=>{clearTimeout(t);t=setTimeout(layoutAll,80);});
+  document.querySelectorAll('.media-masonry img').forEach(img=>{if(!img.complete)img.addEventListener('load',layoutAll);});
+})();
+
+/* ── LIGHTBOX ── */
+(function(){
+  const lb=document.getElementById('lightbox'),lbW=document.getElementById('lb-media-wrap'),
+        lbDots=document.getElementById('lb-dots'),lbTitle=document.getElementById('lb-title'),
+        lbSub=document.getElementById('lb-sub'),lbDesc=document.getElementById('lb-desc'),
+        lbCount=document.getElementById('lb-counter'),
+        btnP=document.getElementById('lb-prev'),btnN=document.getElementById('lb-next'),
+        btnC=document.getElementById('lb-close');
+  const cards=Array.from(document.querySelectorAll('.media-card'));
+  const items=cards.map(c=>{
+    const img=c.querySelector('img');
+    return{type:'image',src:img?img.src:'',title:c.dataset.title||'',sub:c.dataset.sub||'',desc:c.dataset.desc||''};
+  }).filter(i=>i.src);
+  let cur=0;
+  items.forEach((_,i)=>{const d=document.createElement('button');d.className='lb-dot';d.type='button';d.addEventListener('click',e=>{e.stopPropagation();show(i);});lbDots.appendChild(d);});
+  function show(i){
+    cur=((i%items.length)+items.length)%items.length;
+    const item=items[cur];lbW.innerHTML='';
+    const el=document.createElement('img');el.src=item.src;el.alt=item.title;
+    el.addEventListener('load',()=>el.classList.add('ready'),{once:true});
+    if(el.complete)el.classList.add('ready');
+    lbW.appendChild(el);
+    lbTitle.textContent=item.title;lbSub.textContent=item.sub;lbDesc.textContent=item.desc;
+    lbCount.textContent=(cur+1)+' / '+items.length;
+    lbDots.querySelectorAll('.lb-dot').forEach((d,j)=>d.classList.toggle('active',j===cur));
+    document.body.style.overflow='hidden';lb.classList.add('open');
+  }
+  function close(){lb.classList.remove('open');document.body.style.overflow='';setTimeout(()=>{lbW.innerHTML='';},350);}
+  cards.forEach((c,i)=>c.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();show(i);}));
+  btnP.addEventListener('click',e=>{e.stopPropagation();show(cur-1);});
+  btnN.addEventListener('click',e=>{e.stopPropagation();show(cur+1);});
+  btnC.addEventListener('click',e=>{e.stopPropagation();close();});
+  lb.addEventListener('click',e=>{if(e.target===lb)close();});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){close();closeVideoModal();return;}if(!lb.classList.contains('open'))return;if(e.key==='ArrowLeft')show(cur-1);if(e.key==='ArrowRight')show(cur+1);});
+  let tx=0;
+  lb.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true});
+  lb.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>40)show(dx<0?cur+1:cur-1);});
+})();
+</script>
 </body>
 </html>
