@@ -59,7 +59,7 @@ html, body {
 
 /* ── VIDEO + CRT ── */
 #video-bg {
-  position:fixed; z-index:-1;   /* hidden behind CRT canvas, still used as texture source */
+  position:fixed; z-index:-1;
   top:0; left:-380px;
   width:calc(100vw + 380px); height:100vh;
   object-fit:cover; object-position:center center;
@@ -203,7 +203,7 @@ body.hovering #cur-ring { border-color:rgba(237,234,228,0.62); }
 #right {
   width:380px; flex-shrink:0;
   border-left:1px solid var(--border);
-  padding:44px 40px;
+  padding:44px 40px 28px;
   display:flex; flex-direction:column;
   background:rgba(8,8,8,0.72);
   backdrop-filter:blur(20px);
@@ -224,7 +224,6 @@ body.hovering #cur-ring { border-color:rgba(237,234,228,0.62); }
   overflow:hidden;
 }
 #avatar span { font-size:1.1rem; font-weight:700; letter-spacing:0.12em; color:rgba(237,234,228,0.38); }
-/* When an image is present the initials hide automatically */
 #avatar img {
   width:100%; height:100%;
   object-fit:cover; object-position:center top;
@@ -318,6 +317,33 @@ body.hovering #cur-ring { border-color:rgba(237,234,228,0.62); }
 }
 #soc-tip.visible { opacity:1; }
 
+/* ── RIGHT PANEL FOOTER ── */
+#right-footer {
+  margin-top:auto;
+  padding-top:20px;
+  border-top:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-shrink:0;
+}
+#impressum-link {
+  font-family:'Syne Mono', monospace;
+  font-size:0.6rem;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:rgba(237,234,228,0.2);
+  text-decoration:none;
+  transition:color 0.22s;
+}
+#impressum-link:hover { color:rgba(237,234,228,0.55); }
+#right-footer-copy {
+  font-family:'Syne Mono', monospace;
+  font-size:0.6rem;
+  letter-spacing:0.14em;
+  color:rgba(237,234,228,0.12);
+}
+
 /* Hide mobile nav on desktop */
 #mobile-nav { display:none; }
 
@@ -326,7 +352,7 @@ body.hovering #cur-ring { border-color:rgba(237,234,228,0.62); }
   #right {
     width:100vw;
     border-left:none;
-    padding: 36px 24px 60px;
+    padding: 36px 24px 36px;
     overflow-y:auto;
     height:100vh;
   }
@@ -366,7 +392,10 @@ body.hovering #cur-ring { border-color:rgba(237,234,228,0.62); }
     font-family:'Syne Mono', monospace;
     font-size:0.55rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--dim);
   }
+
+  #right-footer { margin-top:28px; padding-top:16px; }
 }
+
 #bubbles { position:fixed; top:0; left:0; pointer-events:none; z-index:50; }
 .bubble {
   position:absolute;
@@ -377,7 +406,6 @@ body.hovering #cur-ring { border-color:rgba(237,234,228,0.62); }
   background:transparent;
   pointer-events:none;
   cursor:pointer;
-  /* NO transform transition — position is JS-driven every frame */
   transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1), border-color 0.3s;
   will-change:transform,opacity;
 }
@@ -436,8 +464,6 @@ body.hovering #cur-ring { border-color:rgba(237,234,228,0.62); }
 }
 </style>
 
-
-
 <!-- Structured Data for Google -->
 <script type="application/ld+json">
 {
@@ -460,9 +486,6 @@ body.hovering #cur-ring { border-color:rgba(237,234,228,0.62); }
   ]
 }
 </script>
-
-
-
 
 </head>
 <body>
@@ -514,9 +537,6 @@ body.hovering #cur-ring { border-color:rgba(237,234,228,0.62); }
 
   <div id="right">
     <div id="avatar">
-      <!-- ↓ To use a photo or GIF: uncomment the line below and set the src path.
-           The initials will hide automatically once the image loads.
-           Supports .jpg .png .gif .webp — e.g. src="img/me.gif" -->
       <img id="avatar-img" src="../img/ProfilePic.png" alt="Jona Melvin Grobe">
       <span id="avatar-initials">JMG</span>
     </div>
@@ -579,11 +599,8 @@ body.hovering #cur-ring { border-color:rgba(237,234,228,0.62); }
       <span class="tag">USD</span>
     </div>
     <div id="socials">
-      <!-- <a class="soc" href="#" data-tip="X / Twitter">
-        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-      </a> -->
       <div class="soc-wrap">
-        <a class="soc" href="https://www.instagram.com/j.melvin.g/" target="_blank"data-tip="Instagram — work-in-progress shots, behind the scenes &amp; daily FX experiments.">
+        <a class="soc" href="https://www.instagram.com/j.melvin.g/" target="_blank" data-tip="Instagram — work-in-progress shots, behind the scenes &amp; daily FX experiments.">
           <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
         </a>
         <span class="soc-mob-label">BTS</span>
@@ -602,11 +619,17 @@ body.hovering #cur-ring { border-color:rgba(237,234,228,0.62); }
       </div>
     </div>
     <div id="soc-tip"></div>
-    <br><br>
+
+    <!-- ── RIGHT PANEL FOOTER ── -->
+    <div id="right-footer">
+      <a id="impressum-link" href="./impressum/index.html">Impressum</a>
+      <span id="right-footer-copy">© 2025 JMG</span>
+    </div>
+
   </div>
 </div>
 
-<!-- PROJECT BUBBLES — swap src to your real images, update href to your project URLs -->
+<!-- PROJECT BUBBLES -->
 <div id="bubbles">
 
   <div class="bubble" id="bubble-0"
@@ -614,16 +637,6 @@ body.hovering #cur-ring { border-color:rgba(237,234,228,0.62); }
     onclick="window.open('../projects/Echoes','_self')">
     <div class="bubble-inner">
         <img src="../projects/Echoes/img/ECHOES_1.webp">
-        <!--
-      <svg width="140" height="140" viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
-        <defs><radialGradient id="g0" cx="40%" cy="35%"><stop offset="0%" stop-color="#1a3a4a"/><stop offset="100%" stop-color="#060c10"/></radialGradient></defs>
-        <rect width="140" height="140" fill="url(#g0)"/>
-        <path d="M20,90 Q50,40 80,75 Q110,110 130,60" stroke="rgba(100,180,220,0.35)" stroke-width="1.2" fill="none"/>
-        <path d="M10,70 Q45,20 85,60 Q115,95 138,50" stroke="rgba(100,180,220,0.2)" stroke-width="0.8" fill="none"/>
-        <circle cx="70" cy="70" r="28" stroke="rgba(100,180,220,0.15)" stroke-width="1" fill="none"/>
-        <circle cx="70" cy="70" r="14" stroke="rgba(100,180,220,0.1)" stroke-width="1" fill="rgba(100,180,220,0.05)"/>
-        <text x="70" y="30" text-anchor="middle" font-family="monospace" font-size="8" fill="rgba(100,180,220,0.3)" letter-spacing="1">FLIP</text>
-      </svg>-->
       <div class="bubble-lbl">ECHOES</div>
     </div>
   </div>
@@ -633,17 +646,6 @@ body.hovering #cur-ring { border-color:rgba(237,234,228,0.62); }
     onclick="window.open('../projects/Deviant#terrain','_self')">
     <div class="bubble-inner">
         <img src="../projects/Deviant/img/Deviant_5.webp">
-         <!--
-      <svg width="140" height="140" viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
-        <defs><radialGradient id="g1" cx="55%" cy="60%"><stop offset="0%" stop-color="#1a2a18"/><stop offset="100%" stop-color="#080c06"/></radialGradient></defs>
-        <rect width="140" height="140" fill="url(#g1)"/>
-        <path d="M0,105 Q35,70 70,80 Q105,90 140,60" stroke="rgba(120,180,100,0.3)" stroke-width="1" fill="none"/>
-        <path d="M0,90  Q30,55 70,65 Q110,75 140,45" stroke="rgba(120,180,100,0.22)" stroke-width="1" fill="none"/>
-        <path d="M0,75  Q28,42 70,50 Q112,58 140,30" stroke="rgba(120,180,100,0.15)" stroke-width="1" fill="none"/>
-        <path d="M0,60  Q30,30 70,38 Q110,46 140,18" stroke="rgba(120,180,100,0.1)" stroke-width="1" fill="none"/>
-        <path d="M20,120 Q60,95 85,105 Q115,115 140,95" stroke="rgba(120,180,100,0.18)" stroke-width="1" fill="none"/>
-        <text x="70" y="125" text-anchor="middle" font-family="monospace" font-size="8" fill="rgba(120,180,100,0.3)" letter-spacing="1">TERRAIN</text>
-      </svg>-->
       <div class="bubble-lbl">DEVIANT</div>
     </div>
   </div>
@@ -653,19 +655,6 @@ body.hovering #cur-ring { border-color:rgba(237,234,228,0.62); }
     onclick="window.open('../projects/PaintingGreys#ocean','_self')">
     <div class="bubble-inner">
       <img src="../projects/PaintingGreys/img/Thumbnail.webp">
-        <!--
-      <svg width="140" height="140" viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
-        <defs><radialGradient id="g2" cx="45%" cy="40%"><stop offset="0%" stop-color="#0d1f35"/><stop offset="100%" stop-color="#040810"/></radialGradient></defs>
-        <rect width="140" height="140" fill="url(#g2)"/>
-        <path d="M0,85 Q18,75 35,85 Q52,95 70,85 Q88,75 105,85 Q122,95 140,85" stroke="rgba(80,140,200,0.4)" stroke-width="1.2" fill="none"/>
-        <path d="M0,72 Q18,62 35,72 Q52,82 70,72 Q88,62 105,72 Q122,82 140,72" stroke="rgba(80,140,200,0.28)" stroke-width="1" fill="none"/>
-        <path d="M0,59 Q20,49 38,59 Q56,69 70,59 Q84,49 105,59 Q124,69 140,59" stroke="rgba(80,140,200,0.18)" stroke-width="1" fill="none"/>
-        <path d="M0,98 Q22,90 40,98 Q58,106 70,98 Q86,90 110,98 Q126,106 140,98" stroke="rgba(80,140,200,0.22)" stroke-width="0.8" fill="none"/>
-        <circle cx="35" cy="85" r="1.5" fill="rgba(200,220,255,0.4)"/>
-        <circle cx="70" cy="72" r="1.2" fill="rgba(200,220,255,0.35)"/>
-        <circle cx="105" cy="85" r="1.8" fill="rgba(200,220,255,0.3)"/>
-        <text x="70" y="38" text-anchor="middle" font-family="monospace" font-size="8" fill="rgba(80,140,200,0.3)" letter-spacing="1">FLIP OCEAN</text>
-      </svg> -->
       <div class="bubble-lbl">PAINTING <br> GREYS</div>
     </div>
   </div>
@@ -697,24 +686,21 @@ let mX = window.innerWidth/2, mY = window.innerHeight/2, rX = mX, rY = mY;
 let lastMX = mX, lastMY = mY, mouseVel = 0, dotScale = 0.167, ringScale = 1;
 document.addEventListener('mousemove', e => { mX = e.clientX; mY = e.clientY; });
 document.addEventListener('mouseover', e => {
-  document.body.classList.toggle('hovering', !!e.target.closest('#play-group, .dot-group, .soc, #cta'));
+  document.body.classList.toggle('hovering', !!e.target.closest('#play-group, .dot-group, .soc, #cta, #impressum-link'));
 });
 (function animRing(t){
-  // Mouse velocity
   const dx = mX - lastMX, dy = mY - lastMY;
   const speed = Math.sqrt(dx*dx + dy*dy);
   lastMX = mX; lastMY = mY;
   mouseVel += (speed - mouseVel) * 0.18;
 
-  // Dot scale — velocity driven
   const targetDotScale = 0.167 + Math.min(mouseVel * 0.055, 0.833);
   dotScale += (targetDotScale - dotScale) * 0.10;
 
-  // Ring scale — velocity driven (grows with movement) + idle sine pulse when still
-  const idlePulse = 1 + Math.sin(t * 0.0018) * 0.18;   // slow gentle breathe
-  const velScale  = 1 + Math.min(mouseVel * 0.06, 0.7); // grows up to 1.7× when fast
+  const idlePulse = 1 + Math.sin(t * 0.0018) * 0.18;
+  const velScale  = 1 + Math.min(mouseVel * 0.06, 0.7);
   const targetRingScale = mouseVel > 0.5 ? velScale : idlePulse;
-  ringScale += (targetRingScale - ringScale) * 0.07;     // lazy lerp — smooth in all cases
+  ringScale += (targetRingScale - ringScale) * 0.07;
 
   rX += (mX-rX)*0.11; rY += (mY-rY)*0.11;
   curDot.style.left  = mX+'px'; curDot.style.top  = mY+'px';
@@ -741,30 +727,26 @@ function tick(){
 }
 tick(); setInterval(tick,1000);
 
-// LABEL + BUBBLES — quadrant-based trigger, physics simulation
+// LABEL + BUBBLES
 const lblProjects = document.getElementById('lbl-projects');
 const lblCurios   = document.getElementById('lbl-curiosities');
 const dotCurios   = document.getElementById('dot-curiosities');
 dotCurios.addEventListener('mouseenter', () => lblCurios.classList.add('hovered'));
 dotCurios.addEventListener('mouseleave', () => lblCurios.classList.remove('hovered'));
 
-// ── Play button screen position ──────────────────────────────
 function getPlayCenter() {
   const rect = document.getElementById('stage').getBoundingClientRect();
   return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
 }
-// Play button visual radius in screen px (SVG r=46 inside viewBox 560x460)
 function getPlayRadius() {
   const svg = document.getElementById('nav-svg');
   return 46 * ((svg.clientWidth || 560) / 560);
 }
 
-// ── Bubble physics state ─────────────────────────────────────
-const BUBBLE_R   = 70;   // half of 140px
+const BUBBLE_R   = 70;
 const BUBBLE_CNT = 3;
 const bubbleEls  = [0,1,2].map(i => document.getElementById('bubble-'+i));
 
-// Each bubble: { x, y, vx, vy, targetAngle, alive }
 const bubs = Array.from({length: BUBBLE_CNT}, (_, i) => ({
   x: 0, y: 0, vx: 0, vy: 0,
   orbitAngle: (Math.PI * 2 / BUBBLE_CNT) * i,
@@ -774,21 +756,8 @@ const bubs = Array.from({length: BUBBLE_CNT}, (_, i) => ({
   hovered: false,
 }));
 
-// ── Projects dot screen position ────────────────────────────
-function getProjectsDotPos() {
-  const stage = document.getElementById('stage');
-  const svg   = document.getElementById('nav-svg');
-  const rect  = stage.getBoundingClientRect();
-  const scaleX = (svg.clientWidth  || 560) / 560;
-  const scaleY = (svg.clientHeight || 460) / 460;
-  return {
-    x: rect.left + rect.width  / 2 + (-200) * scaleX,
-    y: rect.top  + rect.height / 2 + (-168) * scaleY,
-  };
-}
-
 let bubblesActive  = false;
-let isSuckingIn    = false;   // true during the suck-in phase
+let isSuckingIn    = false;
 
 function spawnBubbles() {
   if (bubblesActive) return;
@@ -831,12 +800,10 @@ function despawnBubbles() {
   }, 550);
 }
 
-// ── Physics loop ─────────────────────────────────────────────
 const DAMPING  = 0.88;
 const NOISE_F  = 0.0008;
 let   noiseT   = 0;
 
-// Simple pseudo-noise per bubble
 function noise(seed, t) {
   return Math.sin(t * 0.7 + seed * 2.3) * Math.cos(t * 0.4 + seed * 1.1);
 }
@@ -851,22 +818,18 @@ function updateBubbles(dt) {
 
   bubs.forEach((b, i) => {
     if (!b.alive) return;
+    if (isSuckingIn) return;
 
-    if (isSuckingIn) return; // CSS handles scale-down, physics paused
-
-    // Gentle noise force — makes them drift organically
     b.vx += noise(i,       noiseT * NOISE_F) * 0.12;
     b.vy += noise(i + 10,  noiseT * NOISE_F) * 0.12;
 
-    // Soft attraction toward a loose orbit around the play button
     const orbitR  = pr + BUBBLE_R + 40;
-    b.orbitAngle += 0.00015 * dt; // slow drift
+    b.orbitAngle += 0.00015 * dt;
     const tx = c.x + Math.cos(b.orbitAngle) * orbitR;
     const ty = c.y + Math.sin(b.orbitAngle) * orbitR;
     b.vx += (tx - b.x) * 0.003;
     b.vy += (ty - b.y) * 0.003;
 
-    // ── Collision: play button ───────────────────────────────
     const dcx = b.x - c.x;
     const dcy = b.y - c.y;
     const dc  = Math.sqrt(dcx * dcx + dcy * dcy);
@@ -874,10 +837,8 @@ function updateBubbles(dt) {
       const nx = dcx / dc;
       const ny = dcy / dc;
       const overlap = PUSH_DIST - dc;
-      // Push position out
       b.x += nx * overlap * 0.5;
       b.y += ny * overlap * 0.5;
-      // Reflect velocity component toward center
       const dot = b.vx * nx + b.vy * ny;
       if (dot < 0) {
         b.vx -= dot * nx * 1.4;
@@ -885,7 +846,6 @@ function updateBubbles(dt) {
       }
     }
 
-    // ── Collision: other bubbles ─────────────────────────────
     for (let j = i + 1; j < BUBBLE_CNT; j++) {
       const o = bubs[j];
       if (!o.alive) continue;
@@ -907,15 +867,11 @@ function updateBubbles(dt) {
       }
     }
 
-    // Damping
     b.vx *= DAMPING;
     b.vy *= DAMPING;
-
     b.x += b.vx;
     b.y += b.vy;
 
-    // Apply to DOM (center the 140px element)
-    // Smooth hover scale
     const targetScale = b.hovered ? 1.14 : 1.0;
     b.drawScale = b.drawScale !== undefined
       ? b.drawScale + (targetScale - b.drawScale) * 0.12
@@ -924,7 +880,6 @@ function updateBubbles(dt) {
   });
 }
 
-// ── Spawn on Projects dot hover, not quadrant ────────────────
 let despawnTimer = null;
 
 const dotProjects = document.getElementById('dot-projects');
@@ -938,7 +893,6 @@ dotProjects.addEventListener('mouseleave', () => {
   despawnTimer = setTimeout(despawnBubbles, 2000);
 });
 
-// Hovering a bubble resets the despawn timer
 bubbleEls.forEach((el, i) => {
   el.addEventListener('mouseenter', () => {
     bubs[i].hovered = true;
@@ -973,7 +927,7 @@ video.play().catch(()=>{});
 (function initCRT() {
   const cv  = document.getElementById('crt-canvas');
   const gl  = cv.getContext('webgl', { alpha: false });
-  if (!gl) { // WebGL not available — fall back to plain video
+  if (!gl) {
     video.style.opacity   = '0.45';
     video.style.filter    = 'brightness(0.6) saturate(0.85)';
     video.style.zIndex    = '0';
@@ -982,7 +936,6 @@ video.play().catch(()=>{});
     return;
   }
 
-  // ── Shaders ──────────────────────────────────────────────
   const VS = `
     attribute vec2 a_pos;
     varying vec2 v_uv;
@@ -997,11 +950,10 @@ video.play().catch(()=>{});
     uniform float     u_t;
     uniform float     u_vidScale;
     uniform float     u_vidOff;
-    uniform vec2      u_res;      // canvas resolution in pixels
-    uniform vec2      u_mouse;    // mouse in 0..1 canvas UV
+    uniform vec2      u_res;
+    uniform vec2      u_mouse;
     varying vec2      v_uv;
 
-    // Barrel / bowl distortion — original, no pre-scaling
     vec2 barrel(vec2 uv){
       vec2 c = uv - 0.5;
       float r = dot(c, c);
@@ -1010,13 +962,9 @@ video.play().catch(()=>{});
 
     void main(){
       vec2 uv = barrel(v_uv);
-
-      // Clamp to edge instead of clipping — stretches edge pixels for a VHS look
       uv = clamp(uv, 0.0, 1.0);
-
       vec2 vUV = vec2(uv.x * u_vidScale + u_vidOff, uv.y);
 
-      // RGB chromatic aberration
       float ca  = 0.006;
       vec2  dir = (uv - 0.5) * ca;
       float r   = texture2D(u_tex, vUV + dir).r;
@@ -1024,7 +972,6 @@ video.play().catch(()=>{});
       float b   = texture2D(u_tex, vUV - dir).b;
       vec3  col = vec3(r, g, b);
 
-      // Scanlines + pixel grid — driven by distorted UV so they warp with the image
       vec2  screenUV = uv * u_res;
       float lineSize = 2.0;
       float scan = mod(floor(screenUV.y / lineSize), 2.0);
@@ -1033,20 +980,15 @@ video.play().catch(()=>{});
       float px = mod(floor(screenUV.x / lineSize), 2.0);
       col *= 0.92 + 0.08 * px;
 
-      // Brightness + slight desaturation
       float lum = dot(col, vec3(0.299, 0.587, 0.114));
       col = mix(vec3(lum), col, 0.88);
       col *= 0.62;
 
-      // Vignette centred on play button
-      float playX = 1.0 - (190.0 / (u_vidScale > 0.0 ? (1.0 / u_vidScale) * 380.0 + 380.0 : 760.0));
-      // simpler: hardcode relative centre ~37% of canvas
-      vec2  vc  = vec2(u_vidOff + u_vidScale * 0.5, 0.5);  // centre of video in canvas UV
+      vec2  vc  = vec2(u_vidOff + u_vidScale * 0.5, 0.5);
       float vd  = length((uv - vc) * vec2(0.9, 1.0));
       float vig = smoothstep(0.0, 0.75, vd);
       col *= 1.0 - vig * 0.72;
 
-      // Cursor glow — subtle brightness lift in a soft radius around mouse
       float aspect  = u_res.x / u_res.y;
       vec2  mDelta  = (v_uv - u_mouse) * vec2(aspect, 1.0);
       float cursor  = smoothstep(0.35, 0.0, length(mDelta));
@@ -1066,7 +1008,6 @@ video.play().catch(()=>{});
   gl.linkProgram(prog);
   gl.useProgram(prog);
 
-  // Full-screen quad
   const buf = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, buf);
   gl.bufferData(gl.ARRAY_BUFFER,
@@ -1075,7 +1016,6 @@ video.play().catch(()=>{});
   gl.enableVertexAttribArray(aPos);
   gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
 
-  // Texture
   const tex = gl.createTexture();
   gl.bindTexture(gl.TEXTURE_2D, tex);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
@@ -1091,11 +1031,7 @@ video.play().catch(()=>{});
 
   function setVideoUniforms() {
     const vw    = window.innerWidth;
-    const total = vw + 380;         // video element width in px
-    // canvas UV x → video texture UV x:
-    // screenX = canvasUV * vw
-    // videoUV = (screenX + 380) / total  [video starts at -380px in screen space]
-    // videoUV = canvasUV * (vw/total) + 380/total
+    const total = vw + 380;
     gl.uniform1f(uVidScale, vw   / total);
     gl.uniform1f(uVidOff,   380  / total);
   }
@@ -1124,7 +1060,7 @@ video.play().catch(()=>{});
 })();
 
 // VIMEO MODAL
-const VIMEO_ID = '802238375'; // ← replace with your Vimeo video ID
+const VIMEO_ID = '802238375';
 const vimeoModal  = document.getElementById('vimeo-modal');
 const vimeoIframe = document.getElementById('vimeo-iframe');
 function openVimeo(){
@@ -1195,7 +1131,6 @@ class Particle {
 const COUNT=200;
 const particles=Array.from({length:COUNT},(_,i)=>new Particle(i,COUNT));
 
-// Init bubble positions off-screen so first transform lands correctly
 bubbleEls.forEach(el => {
   el.style.left = '0px';
   el.style.top  = '0px';
