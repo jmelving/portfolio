@@ -231,20 +231,6 @@ body.hovering #cur-ring { border-color:rgba(237,234,228,0.62); }
   border-radius:50%;
 }
 
-#status-row {
-  display:flex; align-items:center; flex-wrap:wrap;
-  gap:0 12px; margin-bottom:28px;
-  font-family:'Syne Mono',monospace;
-  font-size:0.68rem; letter-spacing:0.2em;
-  color:var(--dim); text-transform:uppercase;
-}
-.s-dot {
-  width:5px; height:5px; border-radius:50%;
-  background:var(--fg); opacity:0.55;
-  animation:blink 3.2s ease-in-out infinite; flex-shrink:0;
-}
-@keyframes blink { 0%,100%{opacity:0.55} 50%{opacity:0.1} }
-.s-sep { color:var(--dimmer); }
 
 #name {
   font-family:'Cormorant Garamond', serif;
@@ -540,14 +526,7 @@ body.hovering #cur-ring { border-color:rgba(237,234,228,0.62); }
       <img id="avatar-img" src="../img/ProfilePic.png" alt="Jona Melvin Grobe">
       <span id="avatar-initials">JMG</span>
     </div>
-    <div id="status-row">
-      <!--<span class="s-dot"></span>
-      <span>GERMANY/BAVARIA</span>
-      <span class="s-sep">·</span>
-      <span>GERMANY/BAVARIA</span><br><br>
-      <span class="s-sep">·</span>
-      <span id="clock">—</span>-->
-    </div>
+
     <div id="name">Jona Melvin Grobe.</div>
     <div id="role-line">Technical Artist.</div>
     <a id="cta" style="margin-top:18px;" href="mailto:jonamelvingrobe@gmail.com?subject=Project%20Inquiry&body=Hi%20Melvin,%0A%0AI'd%20like%20to%20reach%20out%20regarding%20a%20project%20or%20a%20possible%20collaboration.%0A%0APlease%20find%20some%20details%20below:%0A%0AProject%20type:%0ATimeline:%0ABudget:%0A%0ABest,%0A">Get in Touch &nbsp;→</a>
@@ -720,12 +699,6 @@ if (avatarImg) {
   });
 }
 
-// CLOCK
-function tick(){
-  const d=new Date(), p=n=>String(n).padStart(2,'0');
-  document.getElementById('clock').textContent=`⊙ ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())} CET`;
-}
-tick(); setInterval(tick,1000);
 
 // LABEL + BUBBLES
 const lblProjects = document.getElementById('lbl-projects');
