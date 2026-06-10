@@ -45,6 +45,18 @@ const PROJECTS_DATA = {
      pill:     label shown on hover (top-right badge)
   ── */
   projects: [
+        {
+      href:     "../projects/DontPushMyButtons/",
+      category: "short",
+      pill:     "Short",
+      title:    "Don't Push My Buttons",
+      desc:     "Short · CrossDot Studio",
+      images: [
+        { src: "../projects/DontPushMyButtons/img/Still_5.webp", alt: "DPMB 1" },
+        { src: "../projects/DontPushMyButtons/img/Still_2.webp", alt: "DPMB 2" },
+        { src: "../projects/DontPushMyButtons/img/Still_3.webp", alt: "DPMB 3" },
+      ],
+    },
     {
       href:     "../projects/Echoes/",
       category: "short",
