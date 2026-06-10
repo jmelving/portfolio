@@ -1,6 +1,6 @@
 /**
  * ╔══════════════════════════════════════════════╗
- * ║         CURIOSITIES — CONTENT DATA           ║
+ * ║         CURIOSITIES - CONTENT DATA           ║
  * ║  Edit this file to update all page content.  ║
  * ╚══════════════════════════════════════════════╝
  *
@@ -59,123 +59,96 @@ I forget to leave the camera at home.`,
     /* ══ 01 · MUSIC ═══════════════════════════ */
     {
       id:       "music",
-      enabled:  false,
+      enabled:  true,
       navLabel: "Music",
       num:      "01",
-      titlePlain:  "Music.",
-      titleItalic: "",
-      subtitle: "Production · Composition · Sound Design",
+      titlePlain:  "Music &",
+      titleItalic: "Visuals.",
+      subtitle: "Music Videos · Editing · Rhythm · Sound Design & Music Production",
       ghostChar: "♩",
 
-      intro: `Music is where I think without an output file format. Most of it lives on a hard drive
-somewhere — beats started at midnight, half-finished ambient pieces, the occasional
-thing that actually gets exported. It feeds directly into how I approach sound design
-and scoring for motion work.`,
+      intro: `Combining visuals, music, and rhythm is the work I'm most passionate about.
+The edit lives in the beat, the cut lands on the note. Whether it's editing or
+creating music videos, I'm drawn to the craft of building visuals that feel like
+they were made for the sound and vice versa.`,
 
-      /* ↓ Paste your Spotify embed src here */
-      spotifyEmbedSrc: "https://open.spotify.com/embed/track/YOUR_TRACK_ID?utm_source=generator&theme=0",
+      /* spotifyEmbedSrc: "",  ← nothing to show yet */
 
-      textParagraphs: [
-        `I produce mostly in the electronic space — somewhere between ambient, hyperpop and
-whatever mood the night calls for. Gear is minimal: a laptop, a MIDI controller, and
-too many plugins.`,
-        `Some of it ends up online. If you want to hear it, ask nicely.`,
-      ],
-
-      stats: [
-        { num: "4+", label: "Years producing" },
-        { num: "∞",  label: "Unfinished tracks" },
-        { num: "1",  label: "MIDI controller" },
-        { num: "0",  label: "Albums (yet)" },
-      ],
-
-      gallery: {
-        cols: 3,
-        subHeading: "Studio & Process",
-        subTitle:   "Where the tracks live",
-        items: [
-          { src: "./img/music/daw_session.webp",  title: "DAW Session", sub: "Production · 2024", desc: "" },
-          { src: "./img/music/midi_setup.webp",   title: "Midi Setup",  sub: "Hardware · Studio", desc: "" },
-          { src: "./img/music/waveforms.webp",    title: "Waveforms",   sub: "Sound Design",      desc: "" },
-        ],
-      },
-    },
-
-    /* ══ 02 · 3D PRINTING ═════════════════════ */
-    {
-      id:       "printing",
-      enabled:  false,
-      navLabel: "3D Printing",
-      num:      "02",
-      titlePlain:  "3D Printing &",
-      titleItalic: "Installations.",
-      subtitle: "FDM · Resin · Physical Fabrication",
-      ghostChar: "◈",
-
-      intro: `Taking something from a 3D viewport into physical space is a feeling that never gets old.
-I use printing mostly for installation work and props — pieces that need to exist in a
-room rather than on a screen.`,
+      /* stats: [],  ← nothing to claim yet */
 
       featureCard: {
-        imgSrc:       "./img/printing/installation_hero.webp",
-        imgAlt:       "3D Printed Installation",
-        eyebrow:      "Featured Work",
-        titlePlain:   "Printed",
-        titleItalic:  "Objects.",
-        desc: `Most prints start as experiments — testing material properties, tolerances, or just
-whether an idea that looked good in Houdini can survive being held in someone's hands.
-Some become installation pieces. Some end up on a shelf. All of them teach something
-the viewport can't.`,
-      },
-
-      stats: [
-        { num: "FDM",    label: "Primary method" },
-        { num: "PLA+",   label: "Material of choice" },
-        { num: "Houdini",label: "Modelling pipeline" },
-      ],
-
-      gallery: {
-        cols: 3,
-        subHeading: "Selected Prints",
-        subTitle:   "Objects & Installations",
-        items: [
-          { src: "./img/printing/print_01.webp",           title: "Print 01",         sub: "FDM · PLA+",        desc: "" },
-          { src: "./img/printing/print_02.webp",           title: "Print 02",         sub: "FDM · Installation", desc: "" },
-          { src: "./img/printing/in_progress.webp",        title: "In Progress",      sub: "Bed · 2am",         desc: "" },
-          { src: "./img/printing/installation_view.webp",  title: "Installation View",sub: "Physical · Space",  desc: "" },
-          { src: "./img/printing/detail_shot.webp",        title: "Detail Shot",      sub: "Macro · FDM",       desc: "" },
-        ],
+        videoSrc:    "./vid/Music&MusicVideosCuriosity.mp4",
+        reversed:    true,
+        eyebrow:     "Music & Visuals",
+        titlePlain:  "Sound meets",
+        titleItalic: "Image.",
+        desc: `Most of it is still in progress, but the direction is clear. Edits built
+around the music, visuals that earn the sound they're paired with. The kind
+of thing where you notice immediately when it's off.`,
       },
     },
 
-    /* ══ 03 · GAMES ═══════════════════════════ */
+    /* ══ 02 · CRAFTING ════════════════════════ */
     {
-      id:       "games",
-      enabled:  false,
-      navLabel: "Games",
-      num:      "03",
-      titlePlain:  "Game",
-      titleItalic: "Development.",
-      subtitle: "Unreal · Unity · VR · Mechanics",
-      ghostChar: "▶",
+      id:       "printing",
+      enabled:  true,
+      navLabel: "Crafting",
+      num:      "02",
+      titlePlain:  "Crafting &",
+      titleItalic: "Making.",
+      subtitle: "3D Printing · Clay · Wood · Paper · Whatever Works",
+      ghostChar: "◈",
 
-      intro: `Games are where real-time constraints meet storytelling. I approach them as an interactive
-extension of the same visual language — lighting, shading, spatial composition — except
-now the audience can walk around in it. Two projects so far, very different in tone.`,
+      intro: `I also love seeing digital ideas become physical objects with a real purpose.
+Unfortunately, that's all I need: to buy more PLA than I'll use in a lifetime.`,
 
-      pullQuote: {
-        text: `"Real-time rendering is the one place where the audience gets to decide the camera."`,
-        cite: "— on why game development is a different kind of interesting",
+      featureCard: {
+        videoSrc:     "./vid/Crafting_Curiosities.mp4",
+        imgSrc:       "./img/printing/installation_hero.webp",
+        imgAlt:       "3D Printed Object",
+        eyebrow:      "Physical Work",
+        titlePlain:   "Digital to",
+        titleItalic:  "Physical.",
+        desc: `Most prints start as experiments, testing whether an idea that looked good in
+Houdini can survive being held in someone's hands. Some become installation pieces.
+Some end up on a shelf. All of them teach something the viewport can't.`,
       },
 
-      gameCards: [
+      stats: [
+        { num: "PLA+",   label: "Material of choice" },
+        { num: "Houdini",label: "Print prep pipeline" },
+      ],
+
+    },
+
+    /* ══ 03 · INTERACTIVE LOGIC SYSTEMS ══════ */
+    {
+      id:       "games",
+      enabled:  true,
+      navLabel: "Games",
+      num:      "03",
+      titlePlain:  "Interactive Logic",
+      titleItalic: "Systems.",
+      subtitle: "VR · Game Dev · Simulations · Educational Experiences",
+      ghostChar: "▶",
+
+      intro: `I'm also fascinated by building interactive logic systems that simulate
+real-world and abstract scenarios, whether through VR, games, or playful
+educational experiences.`,
+
+      /* pullQuote: {
+        text: `"Real-time rendering is the one place where the audience gets to decide the camera."`,
+        cite: "— on why game development is a different kind of interesting",
+      }, */
+
+      /* gameCards: [
         {
           imgSrc: "./img/games/vr_game.webp",
           imgAlt: "VR Game",
           tag:    "VR · Unreal Engine",
           title:  "VR Game",
           desc:   `A virtual reality experience built in Unreal Engine. Focused on spatial storytelling
-and presence — the feeling that the world pushes back when you touch it.`,
+and presence -the feeling that the world pushes back when you touch it.`,
         },
         {
           imgSrc: "./img/games/walle_game.webp",
@@ -185,25 +158,23 @@ and presence — the feeling that the world pushes back when you touch it.`,
           desc:   `A fan-made Wall-E game exploring how cinematic animation and game mechanics can
 coexist. An excuse to model Wall-E and make him roll around a wasteland.`,
         },
-      ],
+      ], */
 
-      gallery: {
-        cols: 3,
-        subHeading: "Behind the Scenes",
-        subTitle:   "Screenshots & Development",
-        items: [
-          { src: "./img/games/vr_env.webp",      title: "VR — Environment", sub: "Unreal Engine · Lookdev", desc: "Environment pass from the VR project. Lumen lighting throughout." },
-          { src: "./img/games/vr_interact.webp", title: "VR — Interaction", sub: "Unreal Engine · Blueprint",desc: "Interaction system wiring in Blueprint." },
-          { src: "./img/games/walle_model.webp", title: "Wall-E — Model",   sub: "3D · Character",          desc: "Wall-E model pass. Tried to keep the proportions faithful." },
-          { src: "./img/games/walle_world.webp", title: "Wall-E — World",   sub: "Environment · Game",      desc: "The wasteland environment — trash piles and rust." },
-        ],
+      featureCard: {
+        videoSrc:    "./vid/InteractiveLogicSystems&GamesCuriosity.mp4",
+        eyebrow:     "Interactive Logic Systems & Games",
+        titlePlain:  "Systems that",
+        titleItalic: "Play.",
+        desc: `There's something deeply satisfying about defining a set of rules and then
+watching someone interact with them in ways you didn't predict. That's the
+part that keeps pulling me back.`,
       },
     },
 
     /* ══ 04 · COMFYUI & AI ════════════════════ */
     {
       id:       "ai",
-      enabled:  false,           // ← LIVE
+      enabled:  true,
       navLabel: "AI",
       num:      "04",
       titlePlain:  "ComfyUI &",
@@ -211,43 +182,33 @@ coexist. An excuse to model Wall-E and make him roll around a wasteland.`,
       subtitle: "ComfyUI · Stable Diffusion · Node Pipelines · Generative Tooling",
       ghostChar: "⬡",
 
-      intro: `ComfyUI is interesting to me not just as an AI tool, but as a general
-automation platform. With everything going on around AI it's hard not to
-be curious — and combining both is where it gets genuinely exciting.`,
+      intro: `ComfyUI is interesting to me because it's free, handles a lot of image tasks
+well, and is a good place to experiment, figuring out where AI actually fits
+and where it doesn't.`,
 
       textParagraphs: [
-        `I've had workflows running for a while, but lately I find myself going
-deeper. Reference early in a project, a cleaner finish at the end, the
-occasional thing that would've taken an hour now taking ten minutes.`,
-        `The AI side and the automation side start feeding each other in ways
-that are hard to map in advance. That's the part I'm most curious
-about right now.`,
-      ],
-
-      stats: [
-        { num: "Houdini",  label: "Where it starts" },
-        { num: "ComfyUI",  label: "Where it continues" },
-        { num: "20%",      label: "The part it helps most" },
-        { num: "Open",     label: "Fully open source" },
+        `The part that genuinely excites me isn't AI doing things that were already
+possible. It's when it does something that wasn't possible before, like generating a usable depth map
+from a single image, or offering a suggestion that involves just enough random
+chance to land somewhere you wouldn't have gone yourself. That's where it stops
+feeling like a shortcut and starts feeling like a tool with its own character.`,
       ],
 
       pullQuote: {
-        text: `"The more I use it the more I notice the gaps it fits into — and the more interesting those gaps get."`,
-        cite: "— on where the curiosity is pointing",
+        text: `"All of these fascinations feed back into my work, helping me stay connected to being an artist, while building the tools to empower me at the same time."`,
+        cite: "",
       },
 
-      gallery: {
-        cols: 3,
-        subHeading: "Workflows & Outputs",
-        subTitle:   "What comes out of the pipeline",
-        items: [
-          /* ↓ Replace src paths with your actual exports / screenshots */
-          { src: "./img/ai/workflow_01.webp", title: "Houdini → ComfyUI",  sub: "Pipeline",        desc: "" },
-          { src: "./img/ai/output_01.webp",   title: "Concept Reference",  sub: "Early Stage",     desc: "" },
-          { src: "./img/ai/workflow_02.webp", title: "Render Enhancement", sub: "Post",            desc: "" },
-          { src: "./img/ai/output_02.webp",   title: "Upscale Pass",       sub: "Detail Recovery", desc: "" },
-          { src: "./img/ai/node_graph.webp",  title: "Node Graph",         sub: "ComfyUI",         desc: "" },
-        ],
+      featureCard: {
+        videoSrc:    "./vid/ComfyUI_AI_Curiosity.mp4",
+        reversed:    true,
+        eyebrow:     "ComfyUI & AI",
+        titlePlain:  "Where it fits,",
+        titleItalic: "Where it doesn't.",
+        desc: `This workflow from 2024 transfers facial performance from live video onto a
+3D character, generating the animation on top rather than keyframing it. It had
+3D music videos in mind. Nowadays it can be done far more easily, but back then it
+took some figuring out. That's the approach: find out where it fits, and for which purposes.`,
       },
     },
 
@@ -263,7 +224,7 @@ about right now.`,
       ghostChar: "○",
 
       intro: `Photography taught me more about lighting than any rendering textbook. The constraint of
-working with what's already there — no HDRI to swap, no light rig to reposition —
+working with what's already there. No HDRI to swap, no light rig to reposition,
 makes you read a scene differently. I shoot when something is worth keeping.`,
 
       gallery: {

@@ -57,6 +57,18 @@ const PROJECTS_DATA = {
         { src: "../projects/DontPushMyButtons/img/Still_3.webp", alt: "DPMB 3" },
       ],
     },
+            {
+      href:     "../projects/DontPushMyButtons/",
+      category: "short",
+      pill:     "Short",
+      title:    "Decades Ahead",
+      desc:     "Short · CrossDot Studio",
+      images: [
+        { src: "../projects/DecadesAhead/img/Still_1.webp", alt: "DPMB 1" },
+        { src: "../projects/DecadesAhead/img/Still_0.webp", alt: "DPMB 2" },
+        { src: "../projects/DecadesAhead/img/Still_2.webp", alt: "DPMB 3" },
+      ],
+    },
     {
       href:     "../projects/Echoes/",
       category: "short",

@@ -131,9 +131,11 @@
     if (s.featureCard) {
       const fc = s.featureCard;
       html.push(`
-    <div class="print-feature">
+    <div class="print-feature${fc.fullWidth ? ' print-feature--full' : fc.reversed ? ' print-feature--reversed' : ''}">
       <div class="print-feature-img">
-        <img src="${fc.imgSrc}" alt="${esc(fc.imgAlt)}">
+        ${fc.videoSrc
+          ? `<video src="${fc.videoSrc}" autoplay muted loop playsinline></video>`
+          : `<img src="${fc.imgSrc}" alt="${esc(fc.imgAlt)}">`}
       </div>
       <div class="print-feature-text">
         <div class="eyebrow">${esc(fc.eyebrow)}</div>
@@ -195,7 +197,9 @@
           data-title="${esc(item.title)}"
           data-sub="${esc(item.sub)}"
           data-desc="${esc(item.desc || '')}">
-          <img src="${item.src}" alt="${esc(item.title)}">
+          ${item.type === 'video'
+            ? `<video src="${item.src}" autoplay muted loop playsinline></video>`
+            : `<img src="${item.src}" alt="${esc(item.title)}">`}
           <div class="mc-overlay"></div>
           <div class="mc-info">
             <div class="mc-title">${esc(item.title)}</div>
