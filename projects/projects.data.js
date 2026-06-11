@@ -359,14 +359,14 @@ const PROJECTS_DATA = {
       src:   "../img/random_for_lab/Neglect_JonaMelvinGrobe_FinalCreativeProject_API_DATAvisualiszation_Houdini_Small.mp4",
       title: "Neglect",
       sub:   "Houdini · Data Visualisation · Short Film",
-      desc:  "",
+      desc:  "Tempered with the World Health Organization's API to create a data visualisation short film about drinking and driving related deaths.",
     },
     {
       type:  "video",
       src:   "../img/random_for_lab/Just some ragdolltest_Houdiniv01.mp4",
       title: "Ragdoll",
       sub:   "Houdini · Physics",
-      desc:  "",
+      desc:  "Testing ragdoll simulation on a mixamo character, setting limits and constraints to get a more realistic look.",
     },
     {
       type:  "video",
@@ -380,7 +380,7 @@ const PROJECTS_DATA = {
       src:   "../img/random_for_lab/Houdini_SmallClouds_turntable_v01.mp4",
       title: "Small Clouds",
       sub:   "Houdini · VFX · Clouds",
-      desc:  "",
+      desc:  "Turntable of some small clouds I created using Houdini's cloud tools.",
     },
     {
       type:  "video",
