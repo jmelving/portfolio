@@ -9,6 +9,8 @@
 
 (function () {
 
+  let layoutAll = () => {};
+
   /* ══════════════════════════════════════════════════════
      1. RENDER PAGE
      ══════════════════════════════════════════════════════ */
@@ -156,12 +158,12 @@
   function renderLabSection(d) {
     const items = (d.lab || []).map(item => {
       const media = item.type === 'video'
-        ? `<video src="${item.src}" autoplay muted loop playsinline></video>
+        ? `<video data-src="${item.src}" autoplay muted loop playsinline></video>
            <span class="lab-vid-badge">Video</span>`
         : `<img src="${item.src}" alt="${item.title || ''}">`;
       return `
         <div class="lm-wrap">
-          <div class="lab-card" data-title="${item.title || ''}" data-sub="${item.sub || ''}" data-desc="${item.desc || ''}" data-type="${item.type || 'image'}">
+          <div class="lab-card" data-title="${item.title || ''}" data-sub="${item.sub || ''}" data-desc="${item.desc || ''}" data-type="${item.type || 'image'}" data-src="${item.src || ''}">
             ${media}
             <div class="lab-overlay"></div>
             <div class="lab-info">
@@ -334,7 +336,7 @@
       grid.style.height = Math.max(...colY) - GAP + 'px';
       grid.classList.add('laid-out');
     }
-    function layoutAll() { document.querySelectorAll('.lab-masonry').forEach(layoutGrid); }
+    layoutAll = function() { document.querySelectorAll('.lab-masonry').forEach(layoutGrid); };
     layoutAll(); requestAnimationFrame(layoutAll);
     setTimeout(layoutAll, 300); setTimeout(layoutAll, 900);
     let t; window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(layoutAll, 80); });
@@ -362,7 +364,7 @@
     const cards = Array.from(document.querySelectorAll('.lab-masonry .lab-card'));
     const items = cards.map(c => ({
       type:  c.dataset.type || (c.querySelector('video') ? 'video' : 'image'),
-      src:   (c.querySelector('video') || c.querySelector('img') || {}).src || '',
+      src:   c.dataset.src || (c.querySelector('video') || c.querySelector('img') || {}).src || '',
       title: c.dataset.title || '',
       sub:   c.dataset.sub || '',
       desc:  c.dataset.desc || '',
@@ -383,7 +385,7 @@
       let el;
       if (item.type === 'video') {
         el = document.createElement('video');
-        el.src = item.src; el.autoplay = true; el.muted = true; el.loop = true;
+        el.src = item.src; el.autoplay = true; el.muted = false; el.loop = true; el.controls = true;
         el.setAttribute('playsinline', '');
         el.addEventListener('canplay', () => el.classList.add('ready'), { once: true });
       } else {
@@ -424,6 +426,28 @@
   }
 
   /* ══════════════════════════════════════════════════════
+     8b. LAZY VIDEO LOADER
+     ══════════════════════════════════════════════════════ */
+  function initLazyVideos() {
+    const videos = document.querySelectorAll('.lab-masonry video[data-src]');
+    if (!('IntersectionObserver' in window)) {
+      videos.forEach(v => { v.src = v.dataset.src; v.load(); });
+      return;
+    }
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const v = entry.target;
+        v.src = v.dataset.src;
+        v.load();
+        obs.unobserve(v);
+        v.addEventListener('loadedmetadata', layoutAll, { once: true });
+      });
+    }, { rootMargin: '400px' });
+    videos.forEach(v => obs.observe(v));
+  }
+
+  /* ══════════════════════════════════════════════════════
      9. BOOT
      ══════════════════════════════════════════════════════ */
   function boot() {
@@ -438,6 +462,7 @@
     initFilters();
     initFlipbook();
     initMasonry();
+    initLazyVideos();
     initLightbox();
   }
 
