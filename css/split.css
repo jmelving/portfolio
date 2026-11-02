@@ -26,12 +26,13 @@ body {
 a { color:inherit; }
 img, video { display:block; max-width:100%; }
 
-#field {
+.field {
   position:fixed; inset:0;
   width:100vw; height:100vh;
   z-index:1;
   pointer-events:none;
 }
+.field.over { z-index:4; }          /* lava above images/cards, below text */
 body.nogl { background:linear-gradient(90deg, var(--paper) var(--seam), var(--ink) var(--seam)) fixed; }
 
 .grain {
@@ -43,7 +44,7 @@ body.nogl { background:linear-gradient(90deg, var(--paper) var(--seam), var(--in
 
 /* everything that reads as text sits above the field and inverts against it */
 .ink-text {
-  position:relative; z-index:3;
+  position:relative; z-index:5;
   color:var(--paper);
   mix-blend-mode:difference;
 }

@@ -13,6 +13,12 @@
      field.setInkAlpha(0)     // make the black see-through (to show media behind)
      field.side(x, y)         // 'ink' | 'paper' for a viewport point
 
+   Option lavaOver: true adds a second canvas above the page content that draws
+   only the paper (seam + white lava). Content on the ink side can run under the
+   wavy edge and gets cut by it; white lava flows over images, and black lava
+   opens the paper up to reveal what lies beneath.
+   Text (.ink-text) sits above both and inverts against whatever passes.
+
      const show = SplitField.slideshow(document.getElementById('project-bg'));
      show.images([...]); show.video(src); show.stop();
    ───────────────────────────────────────────────────────── */
@@ -34,6 +40,7 @@
     uniform vec4  uBlobs[${MAX_BLOBS}];   // x, y, radius, signed weight
     uniform vec3  uPaper, uInk;
     uniform float uInkAlpha;
+    uniform float uMode;      // 0 = seam only, 1 = seam + lava, 2 = lava only (overlay)
 
     float wave(float s){
       return 0.62 * sin(s * 5.2  + uTime * 0.32)
@@ -46,14 +53,17 @@
       vec2 p = vec2(gl_FragCoord.x, uView.y * uDpr - gl_FragCoord.y) / uDpr;
       float g = exp(-pow((p.y - uPullAt) / uReach, 2.0));
       float edge = uCenter + uAmp * wave(p.y / uView.y) + uPull * g;
-      float I = 0.5 + 0.5 * tanh_((p.x - edge) / uSoft);
+      float I0 = 0.5 + 0.5 * tanh_((p.x - edge) / uSoft);
+      float I = I0;
 
-      for (int i = 0; i < ${MAX_BLOBS}; i++) {
-        vec4 b = uBlobs[i];
-        if (b.z <= 0.0) continue;
-        vec2 q = (p - b.xy) / b.z;
-        float x = dot(q, q);
-        if (x < 1.0) { float k = 1.0 - x; I += b.w * k * k; }
+      if (uMode > 0.5) {
+        for (int i = 0; i < ${MAX_BLOBS}; i++) {
+          vec4 b = uBlobs[i];
+          if (b.z <= 0.0) continue;
+          vec2 q = (p - b.xy) / b.z;
+          float x = dot(q, q);
+          if (x < 1.0) { float k = 1.0 - x; I += b.w * k * k; }
+        }
       }
 
       #ifdef GL_OES_standard_derivatives
@@ -62,6 +72,15 @@
         float w = 0.03;
       #endif
       float a = smoothstep(0.5 - w, 0.5 + w, I);
+
+      if (uMode > 1.5) {
+        // overlay, drawn above the page content: only the paper.
+        // Black is the background here, so black lava doesn't paint over anything —
+        // it opens holes in the paper and shows whatever lies underneath.
+        float paper = 1.0 - a;
+        gl_FragColor = vec4(uPaper * paper, paper);
+        return;
+      }
       float ink = a * uInkAlpha;
       gl_FragColor = vec4(uPaper * (1.0 - a) + uInk * ink, (1.0 - a) + ink);
     }`;
@@ -72,17 +91,18 @@
       enterFrom: 0.5,                 // seam starts here and eases to `split` (feels like a page transition)
       inkAlpha: 1,
       lava: true, ambient: true,
+      lavaOver: false,                // draw the lava above the page content
     }, opts);
     const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    const cv = document.createElement('canvas');
-    cv.id = 'field';
-    cv.setAttribute('aria-hidden', 'true');
-    document.body.prepend(cv);
-
-    const gl = cv.getContext('webgl', { premultipliedAlpha: true, antialias: false });
-    let U = null;
-    if (gl) {
+    // one WebGL layer per canvas; with lavaOver there are two (seam below, lava above the content)
+    function layer(cls, mode) {
+      const cv = document.createElement('canvas');
+      cv.className = cls;
+      cv.setAttribute('aria-hidden', 'true');
+      document.body.prepend(cv);
+      const gl = cv.getContext('webgl', { premultipliedAlpha: true, antialias: false });
+      if (!gl) return null;
       gl.getExtension('OES_standard_derivatives');
       const sh = (type, src) => {
         const s = gl.createShader(type);
@@ -100,14 +120,21 @@
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 3,-1, -1,3]), gl.STATIC_DRAW);
         gl.enableVertexAttribArray(0);
         gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
-        U = {};
-        ['uView','uDpr','uTime','uCenter','uAmp','uSoft','uPull','uPullAt','uReach','uBlobs','uPaper','uInk','uInkAlpha']
+        const U = {};
+        ['uView','uDpr','uTime','uCenter','uAmp','uSoft','uPull','uPullAt','uReach','uBlobs','uPaper','uInk','uInkAlpha','uMode']
           .forEach(n => U[n] = gl.getUniformLocation(prog, n));
         const hex = h => [1,3,5].map(i => parseInt(h.substr(i, 2), 16) / 255);
         gl.uniform3fv(U.uPaper, hex(PAPER));
         gl.uniform3fv(U.uInk, hex(INK));
-      } catch (err) { console.warn(err); U = null; }
+        gl.uniform1f(U.uMode, mode);
+        return { cv, gl, U };
+      } catch (err) { console.warn(err); return null; }
     }
+    // the seam layer always includes the lava, so where a blob crosses the seam there is no
+    // original edge left underneath to shimmer through; the overlay only adds it over content
+    const layers = [layer('field', 1)];
+    if (o.lavaOver && o.lava) layers.push(layer('field over', 2));
+    const U = layers.every(Boolean) ? layers[0].U : null;
     if (!U) document.body.classList.add('nogl');
 
     let W, H, dpr = 1, mobile = false;
@@ -116,8 +143,10 @@
       W = innerWidth; H = innerHeight;
       mobile = W <= 760;
       dpr = Math.min(devicePixelRatio || 1, 1.25);
-      cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
-      if (U) gl.viewport(0, 0, cv.width, cv.height);
+      if (U) layers.forEach(L => {
+        L.cv.width = Math.round(W * dpr); L.cv.height = Math.round(H * dpr);
+        L.gl.viewport(0, 0, L.cv.width, L.cv.height);
+      });
       document.documentElement.style.setProperty('--seam', (restFrac() * 100).toFixed(2) + 'vw');
     }
     resize();
@@ -220,18 +249,20 @@
           blobData[k + 2] = b.r * (0.45 + 0.55 * b.life) * (0.3 + 0.7 * ease(b.grow));
           blobData[k + 3] = b.s * 1.5 * fade;
         });
-        gl.uniform2f(U.uView, W, H);
-        gl.uniform1f(U.uDpr, dpr);
-        gl.uniform1f(U.uTime, t);
-        gl.uniform1f(U.uCenter, center);
-        gl.uniform1f(U.uAmp, amp * (0.4 + 0.6 * intro));
-        gl.uniform1f(U.uSoft, 70);
-        gl.uniform1f(U.uPull, pull);
-        gl.uniform1f(U.uPullAt, ptr.y);
-        gl.uniform1f(U.uReach, reach);
-        gl.uniform4fv(U.uBlobs, blobData);
-        gl.uniform1f(U.uInkAlpha, inkA);
-        gl.drawArrays(gl.TRIANGLES, 0, 3);
+        layers.forEach(({ gl, U }) => {
+          gl.uniform2f(U.uView, W, H);
+          gl.uniform1f(U.uDpr, dpr);
+          gl.uniform1f(U.uTime, t);
+          gl.uniform1f(U.uCenter, center);
+          gl.uniform1f(U.uAmp, amp * (0.4 + 0.6 * intro));
+          gl.uniform1f(U.uSoft, 70);
+          gl.uniform1f(U.uPull, pull);
+          gl.uniform1f(U.uPullAt, ptr.y);
+          gl.uniform1f(U.uReach, reach);
+          gl.uniform4fv(U.uBlobs, blobData);
+          gl.uniform1f(U.uInkAlpha, inkA);
+          gl.drawArrays(gl.TRIANGLES, 0, 3);
+        });
       }
       requestAnimationFrame(frame);
     }
