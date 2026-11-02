@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects — Jona Melvin Grobe</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/split.css">
+
+  <!--
+    Draft — projects overview in the front-page style.
+    The black half was "Projects" on the front page, so here the black takes over:
+    the seam slides from the middle to a narrow paper strip on the left.
+    Content comes from projects.data.js (same file the current page uses).
+  -->
+
+  <style>
+    #page {
+      display:grid;
+      grid-template-columns:var(--seam) 1fr;
+      min-height:100svh;
+    }
+
+    /* ── paper strip: who / what / filters ── */
+    .strip {
+      position:sticky; top:0;
+      height:100svh;
+      display:flex; flex-direction:column;
+      padding:var(--pad);
+      padding-right:clamp(18px, 2vw, 36px);
+    }
+    .strip h1 {
+      margin-top:auto;
+      font-weight:700;
+      font-size:clamp(38px, min(4.6vw, 9vh), 92px);
+      line-height:.9;
+      letter-spacing:-0.04em;
+    }
+    .strip .count { margin-top:14px; font-size:14px; opacity:.55; }
+    .filters { list-style:none; margin-top:clamp(24px, 5vh, 56px); display:flex; flex-direction:column; gap:4px; }
+    .filters button {
+      font:inherit; font-size:clamp(15px, 1.1vw, 18px);
+      color:inherit; background:none; border:0; cursor:pointer;
+      text-align:left; padding:2px 0;
+      opacity:.45; transition:opacity .25s;
+    }
+    .filters button:hover { opacity:.8; }
+    .filters button.on { opacity:1; }
+    .filters button.on::before { content:'→ '; }
+    .to-lab { margin-top:auto; font-size:14px; text-decoration:none; opacity:.6; }
+    .to-lab:hover { opacity:1; }
+
+    /* ── ink side: the index ── */
+    .list { padding:calc(var(--pad) * 2.2) var(--pad) var(--pad) clamp(28px, 4vw, 72px); }
+    .row {
+      display:grid;
+      grid-template-columns:3.2em 1fr auto;
+      align-items:baseline; gap:0 1.2em;
+      padding:clamp(10px, 1.6vh, 18px) 0;
+      border-top:1px solid color-mix(in srgb, currentColor 18%, transparent);
+      text-decoration:none;
+      transition:opacity .35s;
+    }
+    .row:last-child { border-bottom:1px solid color-mix(in srgb, currentColor 18%, transparent); }
+    .row .no { font-size:13px; opacity:.45; }
+    .row .title {
+      font-weight:600;
+      font-size:clamp(28px, 3.6vw, 64px);
+      line-height:1.02;
+      letter-spacing:-0.035em;
+      transition:transform .5s cubic-bezier(.2,.8,.2,1);
+    }
+    .row .desc { font-size:14px; opacity:.55; text-align:right; }
+    .list:hover .row { opacity:.3; }
+    .list .row:hover { opacity:1; }
+    .row:hover .title { transform:translateX(.18em); }
+    .row.hidden { display:none; }
+
+    /* ── the lab ── */
+    .lab { padding:clamp(80px, 14vh, 160px) var(--pad) var(--pad) clamp(28px, 4vw, 72px); }
+    .lab h2 {
+      font-weight:700;
+      font-size:clamp(38px, 5vw, 96px);
+      line-height:.9; letter-spacing:-0.04em;
+    }
+    .lab > p { max-width:46ch; margin-top:14px; opacity:.6; }
+    .lab-grid {
+      margin-top:clamp(28px, 5vh, 56px);
+      display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
+      gap:clamp(20px, 2.4vw, 40px);
+    }
+    .tile video, .tile img {
+      width:100%; aspect-ratio:4/3; object-fit:cover;
+      filter:grayscale(1) contrast(1.05);
+      transition:filter .5s;
+    }
+    .tile:hover video, .tile:hover img { filter:none; }
+    .tile figcaption { margin-top:10px; }
+    .tile b { display:block; font-weight:600; font-size:16px; }
+    .tile span { display:block; font-size:13px; opacity:.55; margin-top:2px; }
+
+    footer { display:flex; justify-content:space-between; padding:var(--pad); font-size:12px; opacity:.45; }
+
+    /* mobile: strip on top, list below; the seam pulls almost out of view */
+    @media (max-width:760px) {
+      #page { grid-template-columns:1fr; }
+      .strip { position:relative; height:auto; padding-bottom:12px; }
+      .strip h1 { margin-top:56px; font-size:15vw; }
+      .filters { flex-direction:row; flex-wrap:wrap; gap:6px 16px; margin-top:20px; }
+      .to-lab { display:none; }
+      .list { padding:24px var(--pad) var(--pad); }
+      .row { grid-template-columns:2.4em 1fr; }
+      .row .desc { grid-column:2; text-align:left; }
+      .lab { padding-left:var(--pad); }
+      footer { flex-direction:column; gap:6px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="grain"></div>
+  <div class="backdrop" id="backdrop" aria-hidden="true"></div>
+
+  <div id="page">
+    <aside class="strip ink-text fade-in">
+      <a class="back" href="../index_new_c.html">← Jona Melvin Grobe</a>
+      <h1>Selected<br>work.</h1>
+      <p class="count" id="count"></p>
+      <ul class="filters" id="filters"></ul>
+      <a class="to-lab" href="#lab">The Lab ↓</a>
+    </aside>
+
+    <main>
+      <nav class="list ink-text fade-in" id="list" aria-label="Projects"></nav>
+
+      <section class="lab" id="lab">
+        <h2 class="ink-text">The Lab.</h2>
+        <p class="ink-text">Experiments, dailies and tests that didn't become a project — yet.</p>
+        <div class="lab-grid" id="lab-grid"></div>
+      </section>
+
+      <footer class="ink-text">
+        <a href="../impressum/index.html" style="text-decoration:none">Impressum</a>
+        <span>© 2026 JMG</span>
+      </footer>
+    </main>
+  </div>
+
+  <script src="./projects.data.js"></script>
+  <script src="../js/split-field.js"></script>
+  <script>
+  (() => {
+    const D = PROJECTS_DATA;
+    const field = SplitField.init({ split: 0.26, splitMobile: 0.04, enterFrom: 0.5 });
+    const show  = SplitField.slideshow(document.getElementById('backdrop'));
+    const backdrop = document.getElementById('backdrop');
+
+    // the redesigned Echoes page is the only draft so far; everything else links to the current pages
+    const draftHref = href => /Echoes\/?$/.test(href) ? './Echoes/index_new.html' : href;
+
+    /* ── index rows ── */
+    const list = document.getElementById('list');
+    D.projects.forEach((p, i) => {
+      const a = document.createElement('a');
+      a.className = 'row';
+      a.href = draftHref(p.href);
+      a.dataset.category = p.category;
+      a.innerHTML = `<span class="no">${String(i + 1).padStart(2, '0')}</span>
+                     <span class="title">${p.title}</span>
+                     <span class="desc">${p.desc}</span>`;
+      const imgs = (p.images || []).map(im => im.src);
+      a.addEventListener('pointerenter', e => {
+        if (e.pointerType !== 'mouse' || !imgs.length) return;
+        show.images(imgs);
+        backdrop.classList.add('on');
+        field.setInkAlpha(0);          // the black turns into a window onto the project
+        field.setBias(-1.4);
+      });
+      a.addEventListener('pointerleave', () => {
+        show.stop();
+        backdrop.classList.remove('on');
+        field.setInkAlpha(1);
+        field.setBias(0);
+      });
+      list.appendChild(a);
+    });
+
+    /* ── filters ── */
+    const rows = [...list.children];
+    const countEl = document.getElementById('count');
+    const setCount = () => {
+      const n = rows.filter(r => !r.classList.contains('hidden')).length;
+      countEl.textContent = `${n} project${n === 1 ? '' : 's'}`;
+    };
+    const filters = document.getElementById('filters');
+    [{ label: 'All', value: 'all' }, ...D.filters].forEach((f, i) => {
+      const li = document.createElement('li');
+      const b = document.createElement('button');
+      b.textContent = f.label;
+      if (i === 0) b.classList.add('on');
+      b.addEventListener('click', () => {
+        filters.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+        rows.forEach(r => r.classList.toggle('hidden', f.value !== 'all' && !r.dataset.category.split(' ').includes(f.value)));
+        setCount();
+      });
+      li.appendChild(b);
+      filters.appendChild(li);
+    });
+    setCount();
+
+    /* ── lab grid: grey until hovered, videos play on hover ── */
+    const grid = document.getElementById('lab-grid');
+    (D.lab || []).forEach(item => {
+      if (!item.src) return;
+      const fig = document.createElement('figure');
+      fig.className = 'tile';
+      const isVid = /\.(mp4|webm|mov)$/i.test(item.src);
+      const m = isVid
+        ? Object.assign(document.createElement('video'), { muted: true, loop: true, playsInline: true, preload: 'metadata', src: item.src })
+        : Object.assign(document.createElement('img'), { loading: 'lazy', src: item.src, alt: item.title || '' });
+      m.classList.add('media');
+      fig.appendChild(m);
+      const cap = document.createElement('figcaption');
+      cap.className = 'ink-text';
+      cap.innerHTML = `<b>${item.title || ''}</b><span>${item.sub || ''}</span>`;
+      fig.appendChild(cap);
+      if (isVid) {
+        fig.addEventListener('pointerenter', () => m.play().catch(() => {}));
+        fig.addEventListener('pointerleave', () => m.pause());
+      }
+      grid.appendChild(fig);
+    });
+  })();
+  </script>
+</body>
+</html>

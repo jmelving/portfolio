@@ -1,0 +1,107 @@
+/* ─────────────────────────────────────────────────────────
+   split.css — shared base for the redesigned sub-pages.
+   Pairs with js/split-field.js (the liquid seam).
+
+   Rule of thumb: text is difference-blended (.ink-text), so it
+   reads black on the paper side and paper on the ink side, and
+   stays readable wherever the seam or a lava blob passes.
+   ───────────────────────────────────────────────────────── */
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --paper: #eeebe5;
+  --ink:   #0c0c0c;
+  --pad:   clamp(20px, 3.2vw, 56px);
+  --seam:  50vw;                     /* set by split-field.js */
+}
+
+html { background:var(--paper); }
+body {
+  font-family:'DM Sans', system-ui, sans-serif;
+  font-size:16px; line-height:1.55;
+  color:var(--paper);
+  -webkit-font-smoothing:antialiased;
+}
+a { color:inherit; }
+img, video { display:block; max-width:100%; }
+
+#field {
+  position:fixed; inset:0;
+  width:100vw; height:100vh;
+  z-index:1;
+  pointer-events:none;
+}
+body.nogl { background:linear-gradient(90deg, var(--paper) var(--seam), var(--ink) var(--seam)) fixed; }
+
+.grain {
+  position:fixed; inset:0; z-index:6; pointer-events:none;
+  background:url('../img/effects/Noise.png');
+  opacity:0.07;
+  mix-blend-mode:overlay;
+}
+
+/* everything that reads as text sits above the field and inverts against it */
+.ink-text {
+  position:relative; z-index:3;
+  color:var(--paper);
+  mix-blend-mode:difference;
+}
+/* media sits above the field, unblended */
+.media { position:relative; z-index:3; }
+
+/* background layer that the ink turns see-through for (hover slideshows) */
+.backdrop {
+  position:fixed; inset:0; z-index:0;
+  overflow:hidden;
+  pointer-events:none;
+  background:var(--ink);
+  opacity:0; transition:opacity .5s ease;
+}
+.backdrop.on { opacity:1; }
+.backdrop img, .backdrop video {
+  position:absolute; inset:0;
+  width:100%; height:100%; max-width:none;
+  object-fit:cover;
+  opacity:0;
+  will-change:opacity, transform;
+  backface-visibility:hidden;
+}
+.backdrop video { z-index:3; transition:opacity .4s ease; }
+.backdrop.is-video video { opacity:1; }
+
+/* small shared bits */
+.eyebrow { font-size:13px; opacity:0.5; }
+.back {
+  display:inline-flex; align-items:center; gap:.4em;
+  font-size:14px; text-decoration:none;
+  opacity:.75; transition:opacity .25s;
+}
+.back:hover { opacity:1; }
+.u-line { text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:4px; }
+
+/* video modal */
+.split-modal {
+  position:fixed; inset:0; z-index:100;
+  background:var(--ink);
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none;
+  transition:opacity .4s;
+}
+.split-modal.open { opacity:1; pointer-events:all; }
+.split-modal > div { width:min(88vw, 156vh); aspect-ratio:16/9; }
+.split-modal iframe { width:100%; height:100%; border:0; display:block; }
+.split-modal button {
+  position:absolute; top:var(--pad); right:var(--pad);
+  font:inherit; font-size:15px; color:var(--paper);
+  background:none; border:0; cursor:pointer;
+  border-bottom:1px solid currentColor;
+}
+
+/* intro fade */
+.fade-in { opacity:0; transition:opacity 1s ease .4s; }
+body.ready .fade-in { opacity:1; }
+
+@media (prefers-reduced-motion:reduce) {
+  .fade-in { transition:none; }
+}

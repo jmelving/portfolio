@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Echoes — Jona Melvin Grobe</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="../../img/favicon.ico" type="image/x-icon">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/split.css">
+
+  <!--
+    Draft — a project page in the front-page style.
+    Even split: words on the paper (left), work in the ink (right).
+    In the hero the ink is a window onto the project's stills; the film sits on the seam.
+    Content is copied from the current Echoes page for now.
+  -->
+
+  <style>
+    /* every section: text column on the paper, media column in the ink */
+    .split {
+      display:grid;
+      grid-template-columns:var(--seam) 1fr;
+    }
+    .split > .words {
+      padding:var(--pad);
+      padding-right:clamp(28px, 4vw, 72px);
+    }
+    .split > .work {
+      padding:var(--pad);
+      padding-left:clamp(28px, 4vw, 72px);
+    }
+    /* words stay in view while the work scrolls past */
+    .sticky { position:sticky; top:var(--pad); }
+
+    /* ── hero ── */
+    .hero { min-height:100svh; }
+    .hero .words { display:flex; flex-direction:column; min-height:100svh; }
+    .hero .meta { margin-top:auto; font-size:14px; opacity:.55; }
+    .hero h1 {
+      margin-top:10px;
+      font-weight:700;
+      font-size:clamp(64px, min(9.5vw, 17vh), 190px);
+      line-height:.86; letter-spacing:-0.05em;
+    }
+    .hero .sub { margin-top:16px; font-size:clamp(16px, 1.3vw, 21px); }
+    .facts {
+      display:grid; grid-template-columns:auto 1fr; gap:6px 24px;
+      margin-top:clamp(28px, 5vh, 56px);
+      font-size:clamp(14px, 1vw, 16px);
+    }
+    .facts dt { opacity:.5; }
+    .facts a { text-decoration:none; }
+    .facts a:hover { text-decoration:underline; text-underline-offset:3px; }
+
+    /* film button riding the seam */
+    #watch {
+      position:fixed; top:0; left:0; z-index:4;
+      width:clamp(120px, 10vw, 170px); aspect-ratio:1;
+      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
+      border:0; cursor:pointer;
+      background:var(--ink); color:var(--paper);
+      font:inherit; font-weight:600; font-size:clamp(15px, 1.15vw, 19px);
+      border-radius:46% 54% 51% 49% / 55% 45% 55% 45%;
+      animation:blob 7s ease-in-out infinite alternate;
+      transition:opacity .5s, scale .4s cubic-bezier(.2,.9,.25,1.4);
+    }
+    #watch:hover { scale:1.08; }
+    #watch svg { width:20px; height:22px; fill:currentColor; margin-left:4px; }
+    #watch.gone { opacity:0; pointer-events:none; }
+    .hero-still { display:none; }             /* mobile only: the ink strip is too thin to show the stills */
+    @keyframes blob {
+      0%   { border-radius:46% 54% 51% 49% / 55% 45% 55% 45%; }
+      50%  { border-radius:55% 45% 43% 57% / 47% 56% 44% 53%; }
+      100% { border-radius:49% 51% 58% 42% / 42% 52% 48% 58%; }
+    }
+
+    /* ── sections ── */
+    section.split { padding-block:clamp(60px, 12vh, 140px); }
+    .eyebrow { margin-bottom:12px; }
+    h2 {
+      font-weight:700;
+      font-size:clamp(38px, 4.4vw, 84px);
+      line-height:.92; letter-spacing:-0.04em;
+    }
+    .words p { max-width:44ch; margin-top:18px; font-size:clamp(15px, 1.1vw, 18px); opacity:.8; }
+    .words h3 { margin-top:34px; font-size:clamp(17px, 1.3vw, 21px); font-weight:600; }
+    .words h3 small { display:block; font-weight:400; font-size:13px; opacity:.55; }
+
+    .gallery { display:grid; grid-template-columns:1fr 1fr; gap:clamp(14px, 1.6vw, 26px); }
+    .gallery figure:first-child { grid-column:1 / -1; }
+    figure img, figure video { width:100%; height:auto; aspect-ratio:16/9; object-fit:cover; }
+    figcaption { margin-top:8px; font-size:13px; }
+    figcaption b { font-weight:600; }
+    figcaption span { opacity:.55; margin-left:8px; }
+    .stack { display:flex; flex-direction:column; gap:clamp(22px, 3vw, 44px); }
+
+    .poster { position:relative; display:block; cursor:pointer; border:0; padding:0; background:none; width:100%; }
+    .poster img { width:100%; aspect-ratio:16/9; object-fit:cover; filter:grayscale(1) brightness(.75); transition:filter .5s; }
+    .poster:hover img { filter:none; }
+    .poster .play {
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:center; gap:10px;
+      color:#fff; font:inherit; font-weight:600; font-size:clamp(18px, 1.6vw, 26px);
+      text-shadow:0 1px 18px rgba(0,0,0,.45);
+    }
+    .poster .play svg { width:22px; height:24px; fill:currentColor; }
+
+    .learn { display:grid; grid-template-columns:1fr 1fr; gap:clamp(24px, 3vw, 48px); }
+    .learn h4 { font-size:13px; font-weight:400; opacity:.55; }
+    .learn h4 b { display:block; font-size:clamp(20px, 1.7vw, 28px); font-weight:600; opacity:1; color:var(--paper); margin-bottom:2px; }
+    .learn ul { list-style:none; margin-top:14px; }
+    .learn li { padding:8px 0; border-top:1px solid color-mix(in srgb, currentColor 18%, transparent); font-size:clamp(15px, 1.05vw, 17px); }
+
+    /* ── next ── */
+    .next { padding-block:clamp(60px, 14vh, 160px) var(--pad); }
+    .next a { text-decoration:none; display:inline-block; }
+    .next .eyebrow { display:block; }
+    .next b {
+      display:block; font-weight:700;
+      font-size:clamp(46px, 6.4vw, 130px);
+      line-height:.9; letter-spacing:-0.045em;
+      transition:transform .6s cubic-bezier(.2,.8,.2,1);
+    }
+    .next a:hover b { transform:translateX(.12em); }
+    footer { display:flex; justify-content:space-between; padding:var(--pad); font-size:12px; opacity:.45; }
+
+    @media (max-width:760px) {
+      .split { grid-template-columns:1fr; }
+      .split > .work { padding-left:var(--pad); }
+      .hero .words { min-height:auto; padding-top:calc(var(--pad) * 1.5); }
+      .hero .meta { margin-top:48px; }
+      .hero h1 { font-size:22vw; }
+      .hero-still { display:block; width:100%; aspect-ratio:4/3; object-fit:cover; }
+      .sticky { position:static; }
+      #watch { width:120px; }
+      .gallery, .learn { grid-template-columns:1fr; }
+      section.split { padding-block:56px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="grain"></div>
+  <div class="backdrop on" id="backdrop" aria-hidden="true"></div>
+
+  <!-- ── HERO ── -->
+  <header class="split hero">
+    <div class="words ink-text fade-in">
+      <a class="back" href="../index_new.html">← Projects</a>
+      <p class="meta">Short Film · Master Project 1 · 2024–2025</p>
+      <h1>Echoes.</h1>
+      <p class="sub">Displacement · Destruction · Storytelling</p>
+      <dl class="facts">
+        <dt>Role</dt>          <dd>3D Generalist</dd>
+        <dt>Collaborators</dt> <dd><a href="https://rampitschhannah.com/" target="_blank" rel="noopener">Hannah Rampitsch</a>,
+                                   <a href="https://christopherraschke.com/" target="_blank" rel="noopener">Christopher Raschke</a>,
+                                   <a href="https://sinaistanders.myportfolio.com/" target="_blank" rel="noopener">Sina Anders</a></dd>
+        <dt>Duration</dt>      <dd>4 months, 2024–2025</dd>
+        <dt>Tools</dt>         <dd>Houdini, Nuke, DaVinci Resolve</dd>
+      </dl>
+    </div>
+    <div class="work"><img class="media hero-still" src="./img/ECHOES_3.webp" alt=""></div>
+  </header>
+
+  <button id="watch" aria-label="Watch Echoes">
+    <svg viewBox="0 0 20 22" aria-hidden="true"><path d="M2 1.5 L18.5 11 L2 20.5 Z"/></svg>
+    Watch film
+  </button>
+
+  <!-- ── 01 OVERVIEW ── -->
+  <section class="split" id="overview">
+    <div class="words ink-text"><div class="sticky">
+      <p class="eyebrow">01 · Project description</p>
+      <h2>Overview</h2>
+      <p>Echoes explores realistic everyday scenarios gradually disrupted by an effect distorting the surrounding environment — a symbol of the destruction caused by war. Each scenario represents an essential aspect of human life that is lost in conflict: education, community, art, and safety.</p>
+      <p>In the film's final moments, the distortion is revealed as the foreshadowing of a missile heading for a civilian building, and the last shot captures the full extent of the devastation.</p>
+    </div></div>
+    <div class="work">
+      <div class="gallery">
+        <figure class="media"><img src="./img/ECHOES_4.webp" alt="Missile through window" loading="lazy"><figcaption class="ink-text"><b>Missile Through Window</b><span>Jona Melvin Grobe</span></figcaption></figure>
+        <figure class="media"><img src="./img/ECHOES_3.webp" alt="Library shot" loading="lazy"><figcaption class="ink-text"><b>Library</b><span>Jona Melvin Grobe</span></figcaption></figure>
+        <figure class="media"><img src="./img/ECHOES_1.webp" alt="Scale shot" loading="lazy"><figcaption class="ink-text"><b>Scale</b><span>Sina Anders</span></figcaption></figure>
+        <figure class="media"><img src="./img/ECHOES_2.webp" alt="Table shot" loading="lazy"><figcaption class="ink-text"><b>Table</b><span>Hannah Rampitsch</span></figcaption></figure>
+        <figure class="media"><img src="./img/ECHOES_Hero.webp" alt="Dice shot" loading="lazy"><figcaption class="ink-text"><b>Dice</b><span>Hannah Rampitsch</span></figcaption></figure>
+        <figure class="media"><img src="./img/ECHOES_5.webp" alt="Burning building" loading="lazy"><figcaption class="ink-text"><b>Burning Building</b><span>Hannah Rampitsch</span></figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 02 PROCESS ── -->
+  <section class="split" id="process">
+    <div class="words ink-text"><div class="sticky">
+      <p class="eyebrow">02 · Behind the scenes</p>
+      <h2>Process</h2>
+      <p>The project began with storyboarding to synchronise the narrative with the emotional rhythm of everyday life being disrupted. Effects were developed in Houdini, rendered in Houdini's rendering systems, graded in DaVinci Resolve, and composited in Nuke.</p>
+      <h3>Displacement effect<small>A shared tool across all shots</small></h3>
+      <p>Besides handling three shots, I built a Houdini Digital Asset that gave the whole film one consistent displacement effect, intensifying as the video progresses. It starts from a user-controlled 0–1 gradient along a curve, and lets artists set direction, rotation, speed and falloffs — with live guides, so changes preview without recomputing the full effect.</p>
+    </div></div>
+    <div class="work">
+      <div class="stack">
+        <figure class="media"><video src="./vid/Echoes_vid_bts_01.mp4" muted loop playsinline preload="metadata" data-autoplay></video>
+          <figcaption class="ink-text"><b>Displacement tool v1</b><span>Extrudes along a custom user curve</span></figcaption></figure>
+        <figure class="media"><video src="./vid/Echoes_vid_bts_02.mp4" muted loop playsinline preload="metadata" data-autoplay></video>
+          <figcaption class="ink-text"><b>Displacement HDA</b><span>The animated, evolving effect used across all shots</span></figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 03 MAKING OF ── -->
+  <section class="split" id="making-of">
+    <div class="words ink-text"><div class="sticky">
+      <p class="eyebrow">03 · Making of</p>
+      <h2>The whole<br>production</h2>
+      <p>A full walkthrough — environments, VFX, rendering, compositing, and the combined effort of the entire team.</p>
+    </div></div>
+    <div class="work">
+      <button class="poster media" data-youtube="LC3t8ViJ4eU" aria-label="Play the making-of">
+        <img src="./img/ECHOES_3.webp" alt="" loading="lazy">
+        <span class="play"><svg viewBox="0 0 20 22" aria-hidden="true"><path d="M2 1.5 L18.5 11 L2 20.5 Z"/></svg>Making of</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ── 04 LEARNINGS ── -->
+  <section class="split" id="learnings">
+    <div class="words ink-text"><div class="sticky">
+      <p class="eyebrow">04 · Takeaways</p>
+      <h2>Learnings</h2>
+      <p>Skills developed and deepened over the four months of production.</p>
+    </div></div>
+    <div class="work ink-text">
+      <div class="learn">
+        <div>
+          <h4><b>Project</b>Planning</h4>
+          <ul><li>Stick to your goals</li><li>Don't overscope</li></ul>
+        </div>
+        <div>
+          <h4><b>Houdini</b>FX · Pipeline</h4>
+          <ul>
+            <li>Wood destruction workflow</li>
+            <li>Expanded USD pipeline, collaborating with others</li>
+            <li>Creating tools tailored to others' way of thinking</li>
+            <li>Digital Assets for shared FX across a team</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── NEXT ── -->
+  <div class="split next">
+    <div class="words ink-text"><a class="back" href="../index_new.html">← All projects</a></div>
+    <div class="work ink-text">
+      <a href="../PaintingGreys/"><span class="eyebrow">Next project</span><b>Painting Greys →</b></a>
+    </div>
+  </div>
+  <footer class="ink-text">
+    <a href="../../impressum/index.html" style="text-decoration:none">Impressum</a>
+    <span>© 2026 JMG</span>
+  </footer>
+
+  <script src="../../js/split-field.js"></script>
+  <script>
+  (() => {
+    const field = SplitField.init({ split: 0.5, splitMobile: 0.94, enterFrom: 0.26, inkAlpha: 0 });
+    const modal = SplitField.modal();
+
+    /* hero: the ink is a window onto the stills — until you scroll past it */
+    const backdrop = document.getElementById('backdrop');
+    const show = SplitField.slideshow(backdrop);
+    const STILLS = ['./img/ECHOES_3.webp', './img/ECHOES_4.webp', './img/ECHOES_1.webp',
+                    './img/ECHOES_Hero.webp', './img/ECHOES_2.webp', './img/ECHOES_5.webp'];
+
+    const hero = document.querySelector('.hero');
+    const watch = document.getElementById('watch');
+    new IntersectionObserver(([e]) => {
+      const inHero = e.intersectionRatio > 0.35;
+      field.setInkAlpha(inHero ? 0 : 1);
+      backdrop.classList.toggle('on', inHero);
+      watch.classList.toggle('gone', !inHero);
+      inHero ? show.images(STILLS) : show.stop();
+    }, { threshold: [0, 0.35, 1] }).observe(hero);
+
+    /* the film button rides the seam, halfway down the hero */
+    (function ride() {
+      const r = watch.getBoundingClientRect();
+      const y = innerWidth <= 760 ? innerHeight * 0.72 : innerHeight * 0.5;
+      const x = innerWidth <= 760 ? innerWidth * 0.5 : field.edgeAt(y);
+      watch.style.translate = `${x - r.width / 2}px ${y - r.height / 2}px`;
+      requestAnimationFrame(ride);
+    })();
+    watch.addEventListener('click', () => modal.youtube('KgtF4-e7J_Q'));
+    document.querySelectorAll('[data-youtube]').forEach(b => b.addEventListener('click', () => modal.youtube(b.dataset.youtube)));
+
+    /* videos only play while on screen */
+    const io = new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? e.target.play().catch(() => {}) : e.target.pause()), { threshold: 0.2 });
+    document.querySelectorAll('video[data-autoplay]').forEach(v => io.observe(v));
+  })();
+  </script>
+</body>
+</html>
