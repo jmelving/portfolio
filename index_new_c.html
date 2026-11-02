@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jona Melvin Grobe — Tech Art</title>
+  <meta name="description" content="Jona Melvin Grobe — CG Generalist & Technical Artist. Tools, procedural systems, FX.">
+  <meta name="author" content="Jona Melvin Grobe">
+  <meta name="robots" content="noindex">
+
+  <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+
+  <!--
+    Draft C — white half = Curiosities (left), black half = Projects (right),
+    a showreel bubble sits on the seam as a window into the reel,
+    the name stands on the bottom edge, flush left / flush right.
+  -->
+
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    :root {
+      --paper: #eeebe5;
+      --ink:   #0c0c0c;
+      --pad:   clamp(20px, 3.2vw, 56px);
+      --gap:   clamp(28px, 4vw, 72px);   /* clearance from the divide */
+      --face:  clamp(84px, 7.6vw, 128px);
+    }
+
+    html { background:var(--paper); }
+    body {
+      font-family:'DM Sans', system-ui, sans-serif;
+      font-size:15px; line-height:1.5;
+      color:var(--paper);
+      -webkit-font-smoothing:antialiased;
+    }
+    body.zone { cursor:pointer; }
+    a { color:inherit; }
+
+    /* ── PAGE ── */
+    #page {
+      position:relative;
+      min-height:100svh;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      grid-template-rows:auto minmax(200px, 1fr) auto auto;
+      grid-template-areas:
+        "tl tr"
+        "md md"
+        "nl nr"
+        "fl fr";
+      overflow:hidden;
+    }
+    #mid { grid-area:md; }
+
+    /* the liquid black/white field (WebGL), fixed to the viewport */
+    #field {
+      position:fixed; inset:0;
+      width:100vw; height:100vh;
+      z-index:1;
+      pointer-events:none;
+    }
+    body.nogl #page { background:linear-gradient(90deg, var(--paper) 50%, var(--ink) 50%); }
+    @media (max-width:760px) {
+      body.nogl #page { background:linear-gradient(180deg, var(--paper) 50%, var(--ink) 50%); }
+    }
+
+    /* the reel lives inside the black liquid … */
+    .reel-layer {
+      position:fixed; inset:0;
+      width:100vw; height:100vh;
+      object-fit:cover;
+      pointer-events:none;
+    }
+    #reel-bg {
+      z-index:0;
+      filter:grayscale(1) contrast(1.2);
+      transition:filter .8s ease;
+    }
+    body.reel-hover #reel-bg { filter:none; }
+    /* … and the bubble is a window onto the same reel, in colour (clip set by JS) */
+    #reel-window {
+      z-index:2;
+      clip-path:circle(0 at 50% 50%);
+      opacity:0; transition:opacity 1s .6s;
+    }
+    body.ready #reel-window { opacity:1; }
+
+    /* curiosities: sketches the cursor leaves on the paper, printed on with multiply */
+    #stamps {
+      position:fixed; inset:0; z-index:1;
+      pointer-events:none;
+      mix-blend-mode:multiply;
+      overflow:hidden;
+    }
+    #stamps img {
+      position:absolute;
+      width:clamp(100px, 8.5vw, 150px); height:auto;
+      clip-path:inset(3%);             /* the scans have a black frame */
+      animation:stamp 3.2s cubic-bezier(.3,.6,.3,1) forwards;
+    }
+    @keyframes stamp {
+      0%   { opacity:0;   transform:translate(-50%,-50%) rotate(var(--rot)) scale(.96); }
+      22%  { opacity:.85; transform:translate(-50%, calc(-50% - 10px)) rotate(var(--rot)) scale(1); }
+      70%  { opacity:.85; }
+      100% { opacity:0; transform:translate(-50%, calc(-50% - 90px)) rotate(calc(var(--rot) * -1)) scale(.8); }
+    }
+
+    #grain {
+      position:fixed; inset:0; z-index:6; pointer-events:none;
+      background:url('./img/effects/Noise.png');
+      opacity:0.07;
+      mix-blend-mode:overlay;
+    }
+
+    /* all text inverts against whatever is underneath, including the slime */
+    .cell {
+      position:relative; z-index:3;
+      padding:var(--pad);
+      color:var(--paper);
+      mix-blend-mode:difference;
+    }
+    .paper-side { padding-right:var(--gap); }
+    .ink-side   { padding-left:var(--gap); text-align:right; }
+
+    .tl { grid-area:tl; padding-top:calc(var(--pad) + var(--face) + 18px); }
+    .tr { grid-area:tr; }
+    .nl { grid-area:nl; padding-top:0; padding-bottom:0; }
+    .nr { grid-area:nr; padding-top:0; padding-bottom:0; }
+    .fl { grid-area:fl; }
+    .fr { grid-area:fr; }
+
+    .label { font-size:clamp(13px, 0.9vw, 15px); opacity:0.5; margin-bottom:10px; }
+
+    /* ── SOCIALS: handle + icons beside the portrait ──
+       the icons never move; hovering one opens a shared label after the row
+       that cycles through what you'll find there */
+    .soc-profile {
+      position:absolute; z-index:5;
+      top:var(--pad); left:calc(var(--pad) + var(--face) + 22px);
+      height:var(--face);
+      padding:0;
+      display:flex; flex-direction:column; justify-content:center; gap:10px;
+    }
+    .soc-profile .handle { font-size:clamp(15px, 1.1vw, 18px); font-weight:500; }
+    .soc-profile .icons { display:flex; align-items:center; gap:16px; }
+    .soc-profile a {
+      display:inline-flex; align-items:center;
+      text-decoration:none; opacity:0.55;
+      transition:opacity .25s;
+    }
+    .soc-profile a:hover, .soc-profile a.on { opacity:1; }
+    .soc-profile a.yt { opacity:0.85; }
+    .soc-profile svg { width:clamp(18px, 1.3vw, 22px); height:clamp(18px, 1.3vw, 22px); fill:currentColor; flex:none; }
+    .soc-profile .lab {
+      display:inline-block; overflow:hidden;
+      width:0; margin-left:-6px;          /* sits tight after the last icon */
+      white-space:nowrap;
+      font-size:clamp(14px, 1vw, 16px);
+      transition:width .45s cubic-bezier(.2,.8,.2,1);
+    }
+    .soc-profile .lab span {
+      display:inline-block; padding-left:8px;
+      transition:opacity .3s, transform .3s;
+    }
+    .soc-profile .lab span.out { opacity:0; transform:translateY(4px); }
+
+
+    /* ── PORTRAIT (outside the blended cells so it isn't inverted) ── */
+    #face {
+      position:absolute; z-index:5;      /* above .tl, whose padding covers it */
+      top:var(--pad); left:var(--pad);
+      width:var(--face); height:var(--face);
+      opacity:0;
+      transition:opacity 1s .5s;
+      cursor:pointer;
+    }
+    body.ready #face { opacity:1; }
+    #face img {
+      display:block; width:100%; height:100%;
+      object-fit:cover; object-position:center 30%;
+      filter:grayscale(1) contrast(1.08);
+      border-radius:46% 54% 51% 49% / 55% 45% 55% 45%;
+      animation:blob 9s ease-in-out infinite alternate;
+      transform:translate(var(--fx, 0), var(--fy, 0)) rotate(var(--fr, 0deg)) scale(var(--fs, 1));
+      transition:filter .5s, transform .5s cubic-bezier(.2,.9,.25,1.4);
+    }
+    #face:hover img {
+      filter:none;
+      --fs:1.18;
+      animation-duration:1.6s;            /* gets wobbly when you touch it */
+    }
+    @keyframes blob {
+      0%   { border-radius:46% 54% 51% 49% / 55% 45% 55% 45%; }
+      50%  { border-radius:55% 45% 43% 57% / 47% 56% 44% 53%; }
+      100% { border-radius:49% 51% 58% 42% / 42% 52% 48% 58%; }
+    }
+
+    /* ── TOP LEFT: who ── */
+    .role { font-size:clamp(19px, 1.6vw, 27px); line-height:1.25; }
+    .bio { max-width:42ch; margin-top:12px; font-size:clamp(15px, 1.12vw, 19px); opacity:0.7; }
+    .quote {
+      margin-top:12px; min-height:1.5em;
+      font-size:clamp(15px, 1.12vw, 19px);
+      transition:opacity .5s;
+    }
+    .quote.out { opacity:0; }
+    .tl .mail {
+      display:inline-block; margin-top:16px;
+      font-size:clamp(17px, 1.35vw, 22px);
+      text-decoration:none;
+      border-bottom:1px solid currentColor;
+    }
+
+    /* ── TOP RIGHT: selected projects ── */
+    .work { list-style:none; }
+    .work a {
+      display:inline-block;
+      text-decoration:none;
+      font-size:clamp(16px, 1.25vw, 21px);
+      padding:2px 0;
+      opacity:0.75;
+      transition:opacity .25s;
+    }
+    .work a:hover { opacity:1; }
+
+
+    /* ── NAME: stands on the bottom edge, flush left / flush right ── */
+    .nl h1, .nr span {
+      display:block;
+      font-weight:700;
+      font-size:clamp(40px, min(8.4vw, 13vh), 170px);
+      line-height:0.82;
+      letter-spacing:-0.035em;
+      white-space:nowrap;
+      user-select:none;
+    }
+    .nl h1 { margin-left:-0.04em; }      /* optical: J's hook sits on the margin */
+
+    /* ── FOOTER: one line, both sides on the same height ── */
+    .fl, .fr { padding-top:24px; }
+    .foot { display:flex; flex-wrap:wrap; gap:6px 20px; font-size:12px; }
+    .fr .foot { justify-content:flex-end; }
+    .foot a { text-decoration:none; opacity:0.75; }
+    .foot a:hover { opacity:1; }
+    .foot .small { opacity:0.45; }
+
+    /* ── SHOWREEL BUBBLE ── */
+    #play {
+      position:absolute; top:0; left:0; z-index:4;
+      width:var(--d, 240px); height:var(--d, 240px);
+      margin:calc(var(--d, 240px) / -2) 0 0 calc(var(--d, 240px) / -2);
+      border:0; border-radius:50%;
+      background:none; cursor:pointer;
+      color:#fff;
+      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
+      font:inherit;
+      text-shadow:0 1px 18px rgba(0,0,0,.35);
+      opacity:0; transition:opacity .8s 1.2s;
+    }
+    body.ready #play { opacity:1; }
+    #play svg {
+      width:24px; height:27px; margin-left:5px;
+      fill:currentColor;
+      filter:drop-shadow(0 1px 12px rgba(0,0,0,.35));
+      transition:transform .5s cubic-bezier(.2,.7,.2,1);
+    }
+    #play:hover svg { transform:scale(1.2); }
+    #play em {
+      font-style:normal; font-weight:700;
+      font-size:clamp(17px, 1.4vw, 24px);
+      letter-spacing:-0.02em;
+    }
+
+    /* ── CURSOR HINT ── */
+    #hint {
+      position:fixed; top:0; left:0; z-index:7;
+      pointer-events:none;
+      color:var(--paper);
+      mix-blend-mode:difference;
+      font-size:13px;
+      font-weight:600;
+      letter-spacing:-0.02em;
+      line-height:1;
+      white-space:nowrap;
+      opacity:0; transition:opacity .25s;
+    }
+    body.zone #hint { opacity:1; }
+    @media (hover:none) { #hint { display:none; } }
+
+    /* ── HOVER PREVIEW ── */
+    /* hovering a project swaps the reel for that project's stills, in full colour */
+    #project-bg {
+      position:fixed; inset:0; z-index:0;
+      overflow:hidden;
+      pointer-events:none;
+      opacity:0; transition:opacity .5s ease;
+      background:var(--ink);
+    }
+    body.project-on #project-bg { opacity:1; }
+    #project-bg img {
+      position:absolute; inset:0;
+      width:100%; height:100%;
+      object-fit:cover;
+      opacity:0;
+      will-change:opacity, transform;   /* fades + slow zoom are driven from JS */
+      backface-visibility:hidden;
+    }
+    #project-bg video {
+      position:absolute; inset:0; z-index:3;
+      width:100%; height:100%;
+      object-fit:cover;
+      opacity:0; transition:opacity .4s ease;
+    }
+    body.video-on #project-bg video { opacity:1; }
+    /* the showreel steps back while a project is showing */
+    #reel-window, #play { transition:opacity .5s; }
+    body.project-on #reel-window, body.project-on #play { opacity:0 !important; pointer-events:none; }
+
+    /* ── SHOWREEL MODAL ── */
+    #reel {
+      position:fixed; inset:0; z-index:100;
+      background:var(--ink);
+      display:flex; align-items:center; justify-content:center;
+      opacity:0; pointer-events:none;
+      transition:opacity .4s;
+    }
+    #reel.open { opacity:1; pointer-events:all; }
+    #reel-wrap { width:min(88vw, 156vh); aspect-ratio:16/9; }
+    #reel iframe { width:100%; height:100%; border:0; display:block; }
+    #reel-close {
+      position:absolute; top:var(--pad); right:var(--pad);
+      font:inherit; font-size:15px; color:var(--paper);
+      background:none; border:0; cursor:pointer;
+      border-bottom:1px solid currentColor;
+    }
+
+    /* intro fade */
+    .cell { opacity:0; transition:opacity 1s ease; }
+    body.ready .cell { opacity:1; }
+    body.ready .paper-side { transition-delay:.5s; }
+    body.ready .ink-side   { transition-delay:.8s; }
+
+    /* short laptop screens */
+    @media (min-width:761px) and (max-height:900px) {
+      :root { --pad:28px; --face:88px; }
+    }
+
+    /* ── MOBILE: split becomes horizontal, between "Jona Melvin" and "Grobe" ── */
+    @media (max-width:760px) {
+      #page {
+        grid-template-columns:1fr;
+        grid-template-rows:auto auto auto minmax(90vw, auto) auto auto auto;
+        grid-template-areas: "tl" "nl" "nr" "md" "tr" "fl" "fr";
+      }
+      #mid { grid-area:md; }
+      .paper-side { padding-right:var(--pad); }
+      .ink-side   { padding-left:var(--pad); text-align:left; }
+      .tl { padding-top:calc(var(--pad) * 1.5 + var(--face) + 14px); padding-bottom:0; }
+      #face { top:calc(var(--pad) * 1.5); }
+      .soc-profile { top:calc(var(--pad) * 1.5); }
+      .tl { padding-bottom:var(--gap); }
+      .nl { padding-bottom:4px; }
+      .nr { padding-top:4px; }
+      .nl h1, .nr span { font-size:16vw; line-height:0.9; }
+      .tr { padding-bottom:0; }
+      .fl { padding-top:var(--pad); padding-bottom:0; }
+      .fr .foot { justify-content:flex-start; }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      .cell { transition:none; }
+      #face img { animation:none; }
+    }
+  </style>
+</head>
+
+<body>
+  <video id="reel-bg"     class="reel-layer" src="./vid/SHOWREEL2025_Low.mp4" muted loop playsinline autoplay></video>
+  <div id="project-bg" aria-hidden="true"><img alt=""><img alt=""><video muted loop playsinline preload="none"></video></div>
+  <canvas id="field" aria-hidden="true"></canvas>
+  <video id="reel-window" class="reel-layer" src="./vid/SHOWREEL2025_Low.mp4" muted loop playsinline autoplay></video>
+  <div id="stamps"></div>
+  <div id="grain"></div>
+
+  <div id="page">
+    <div id="face"><img src="./img/ProfilePic.png" alt="Portrait of Jona Melvin Grobe"></div>
+
+    <!-- socials: handle + small icons beside the portrait
+         (placeholders: swap data-video for your own clips; data-slides="a.webp|b.webp" works too) -->
+    <div class="cell soc-profile">
+      <span class="handle">@jmeIving</span>
+      <span class="icons">
+        <a class="yt" data-say="Tutorials|Behind the scenes|Breakdowns" data-video="./img/random_for_lab/Houdini_BreakdownTool_SortingSolver.mp4" href="https://www.youtube.com/@jmeIving" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+        <a data-say="Behind the scenes|Real-life pics|Work in progress" data-video="./img/random_for_lab/Dailies_ColorfulHair_small.mp4" href="https://www.instagram.com/j.melvin.g/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+        <a data-say="Tools|Scripts|Houdini utilities" data-video="./img/random_for_lab/Houdini_Automated_Turntable Tool_Broken_Statuette_ugtkfevhw.mp4" href="https://github.com/jmelving" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+        <span class="lab" aria-hidden="true"><span></span></span>
+      </span>
+    </div>
+
+    <!-- white side: about + curiosities -->
+    <section class="cell paper-side tl">
+      <p class="role">CG Generalist &amp; Technical Artist.</p>
+      <p class="bio">Self-driven technical artist &amp; generalist crafting tools and automating tasks to supercharge project creation.</p>
+      <p class="quote" aria-live="polite">“Done is better than perfect.”</p>
+      <a class="mail"
+         href="mailto:jonamelvingrobe@gmail.com?subject=Project%20Inquiry&body=Hi%20Melvin,%0A%0AI'd%20like%20to%20reach%20out%20regarding%20a%20project%20or%20a%20possible%20collaboration.%0A%0APlease%20find%20some%20details%20below:%0A%0AProject%20type:%0ATimeline:%0ABudget:%0A%0ABest,%0A">Get in touch</a>
+    </section>
+
+    <!-- black side: projects -->
+    <section class="cell ink-side tr">
+      <p class="label">Selected</p>
+      <ul class="work">
+        <li><a data-slides="./projects/Echoes/img/ECHOES_Hero.webp|./projects/Echoes/img/ECHOES_1.webp|./projects/Echoes/img/ECHOES_2.webp|./projects/Echoes/img/ECHOES_3.webp|./projects/Echoes/img/ECHOES_4.webp|./projects/Echoes/img/ECHOES_5.webp" href="./projects/Echoes">Echoes</a></li>
+        <li><a data-slides="./projects/DontPushMyButtons/img/Still_3.webp|./projects/DontPushMyButtons/img/Still_1.webp|./projects/DontPushMyButtons/img/Still_5.webp|./projects/DontPushMyButtons/img/Still_6.webp|./projects/DontPushMyButtons/img/Still_8.webp|./projects/DontPushMyButtons/img/Still_9.webp" href="./projects/DontPushMyButtons#terrain">Don't Push My Buttons</a></li>
+        <li><a data-slides="./projects/PaintingGreys/img/PaintingGreys_1.webp|./projects/PaintingGreys/img/PaintingGreys_2.webp|./projects/PaintingGreys/img/PaintingGreys_6.webp|./projects/PaintingGreys/img/PaintingGreys_8.webp|./projects/PaintingGreys/img/PaintingGreys_10.webp|./projects/PaintingGreys/img/PaintingGreys_14.webp" href="./projects/PaintingGreys#ocean">Painting Greys</a></li>
+      </ul>
+    </section>
+
+    <!-- the showreel bubble is positioned over this by JS -->
+    <div id="mid"></div>
+
+    <div class="cell paper-side nl"><h1 aria-label="Jona Melvin Grobe">Jona Melvin</h1></div>
+    <div class="cell ink-side nr"><span aria-hidden="true">Grobe</span></div>
+
+    <section class="cell paper-side fl">
+      <div class="foot"><a class="small" href="./impressum/index.html">Impressum</a></div>
+    </section>
+
+    <section class="cell ink-side fr">
+      <div class="foot"><span class="small">© 2026 JMG</span></div>
+    </section>
+
+    <button id="play" aria-label="Play showreel">
+      <svg viewBox="0 0 20 22" aria-hidden="true"><path d="M2 1.5 L18.5 11 L2 20.5 Z"/></svg>
+      <em>Showreel</em>
+    </button>
+  </div>
+
+  <div id="hint"></div>
+
+  <div id="reel" role="dialog" aria-label="Showreel">
+    <button id="reel-close">Close</button>
+    <div id="reel-wrap"><iframe allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>
+  </div>
+
+  <script>
+  (() => {
+    const LINKS = { paper: './projects/index.html#lab-section', ink: './projects/index.html' };
+    const HINTS = { paper: '← Curiosities', ink: 'Projects →' };
+    const QUOTES = ['Done is better than perfect.', 'Music fuels my creativity.', 'Curious mind, always experimenting.'];
+    const SKETCHES = [1,2,3,4,5,6,7,8,9].map(i => `./img/curiosities/SketchMe (${i}).png`);
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const page     = document.getElementById('page');
+    const mid      = document.getElementById('mid');
+    const nameR    = document.querySelector('.nr');
+    const reelBg   = document.getElementById('reel-bg');
+    const reelWin  = document.getElementById('reel-window');
+    const playEl   = document.getElementById('play');
+    const hint     = document.getElementById('hint');
+    const stamps   = document.getElementById('stamps');
+    const face     = document.getElementById('face');
+    const faceImg  = face.querySelector('img');
+    const quoteEl  = document.querySelector('.quote');
+
+    /* ── LAYOUT ──
+       Desktop: vertical divide around 50% width, black to the right.
+       Mobile:  horizontal divide between "Jona Melvin" and "Grobe", black below.
+       "cross" is the axis across the divide; larger cross = black side. */
+
+    let W, H, vertical, base, len, amp, bub = { x: 0, y: 0, r: 120 };
+    function measure() {
+      W = page.clientWidth;
+      H = page.scrollHeight;
+      vertical = W > 760;
+      base = vertical ? W * 0.5 : nameR.offsetTop;
+      len  = vertical ? H : W;
+      amp  = Math.min(W, innerHeight) * 0.028;
+
+      if (vertical) {
+        // dead centre of the screen
+        bub = { x: W * 0.5, y: Math.min(innerHeight, H) * 0.5, r: Math.max(70, Math.min(W * 0.085, innerHeight * 0.17, 150)) };
+      } else {
+        bub = { x: W * 0.5, y: mid.offsetTop + mid.offsetHeight * 0.5, r: Math.max(70, Math.min(W * 0.3, mid.offsetHeight * 0.36)) };
+      }
+    }
+
+    const wave = (s, t) =>
+        0.62 * Math.sin(s * 5.2  + t * 0.32)
+      + 0.38 * Math.sin(s * 11.3 - t * 0.47 + 1.7)
+      + 0.18 * Math.sin(s * 2.1  + t * 0.19 + 4.0);
+
+    /* ── WEBGL FIELD ──
+       ink potential = soft half-plane behind the wavy edge
+                     + signed metaballs (+ black, - white).
+       Thresholded at 0.5, so blobs merge with whatever they touch. */
+
+    const MAX_BLOBS = 56;
+    const cv = document.getElementById('field');
+    const gl = cv.getContext('webgl', { premultipliedAlpha: true, antialias: false });
+    let U = null;
+
+    if (gl) {
+      gl.getExtension('OES_standard_derivatives');
+      const vs = `attribute vec2 p; void main(){ gl_Position = vec4(p, 0.0, 1.0); }`;
+      const fs = `
+        #extension GL_OES_standard_derivatives : enable
+        precision highp float;
+        uniform vec2  uView;      // viewport, css px
+        uniform float uDpr;
+        uniform vec2  uScroll;
+        uniform float uTime, uVertical, uCenter, uAmp, uLen, uSoft;
+        uniform float uPull, uPullAt, uReach;
+        uniform vec4  uBlobs[${MAX_BLOBS}];   // x, y, radius, signed weight
+        uniform vec4  uLens;                  // x, y, radius, strength
+        uniform vec3  uPaper, uInk;
+        uniform float uInkAlpha;
+
+        float wave(float s){
+          return 0.62 * sin(s * 5.2  + uTime * 0.32)
+               + 0.38 * sin(s * 11.3 - uTime * 0.47 + 1.7)
+               + 0.18 * sin(s * 2.1  + uTime * 0.19 + 4.0);
+        }
+        float tanh_(float x){ x = clamp(x, -9.0, 9.0); float e = exp(2.0 * x); return (e - 1.0) / (e + 1.0); }
+
+        void main(){
+          vec2 p = vec2(gl_FragCoord.x, uView.y * uDpr - gl_FragCoord.y) / uDpr + uScroll;
+          float along = mix(p.x, p.y, uVertical);
+          float cross = mix(p.y, p.x, uVertical);
+
+          float g = exp(-pow((along - uPullAt) / uReach, 2.0));
+          float edge = uCenter + uAmp * wave(along / uLen) + uPull * g;
+          float I = 0.5 + 0.5 * tanh_((cross - edge) / uSoft);
+
+          for (int i = 0; i < ${MAX_BLOBS}; i++) {
+            vec4 b = uBlobs[i];
+            if (b.z <= 0.0) continue;
+            vec2 q = (p - b.xy) / b.z;
+            float x = dot(q, q);
+            if (x < 1.0) { float k = 1.0 - x; I += b.w * k * k; }
+          }
+
+          #ifdef GL_OES_standard_derivatives
+            float w = max(fwidth(I), 1e-4) * 0.8;
+          #else
+            float w = 0.03;
+          #endif
+          float a = smoothstep(0.5 - w, 0.5 + w, I);
+
+          // projects side: the cursor works as a lens into the reel
+          vec2 lv = p - uLens.xy;
+          float lens = uLens.w * exp(-dot(lv, lv) / (uLens.z * uLens.z));
+
+          float ink = a * uInkAlpha * (1.0 - lens);
+          gl_FragColor = vec4(uPaper * (1.0 - a) + uInk * ink, (1.0 - a) + ink);
+        }`;
+
+      const sh = (type, src) => {
+        const s = gl.createShader(type);
+        gl.shaderSource(s, src); gl.compileShader(s);
+        if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw gl.getShaderInfoLog(s);
+        return s;
+      };
+      try {
+        const prog = gl.createProgram();
+        gl.attachShader(prog, sh(gl.VERTEX_SHADER, vs));
+        gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, fs));
+        gl.linkProgram(prog);
+        gl.useProgram(prog);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 3,-1, -1,3]), gl.STATIC_DRAW);
+        gl.enableVertexAttribArray(0);
+        gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+
+        U = {};
+        ['uView','uDpr','uScroll','uTime','uVertical','uCenter','uAmp','uLen','uSoft',
+         'uPull','uPullAt','uReach','uBlobs','uLens','uPaper','uInk','uInkAlpha']
+          .forEach(n => U[n] = gl.getUniformLocation(prog, n));
+
+        const hex = h => [1,3,5].map(i => parseInt(h.substr(i, 2), 16) / 255);
+        gl.uniform3fv(U.uPaper, hex('#eeebe5'));
+        gl.uniform3fv(U.uInk,   hex('#0c0c0c'));
+      } catch (err) {
+        console.warn(err);
+        U = null;
+      }
+    }
+    if (!U) document.body.classList.add('nogl');
+
+    let dpr = 1;
+    function resize() {
+      measure();
+      dpr = Math.min(devicePixelRatio || 1, 1.25);
+      cv.width  = Math.round(innerWidth  * dpr);
+      cv.height = Math.round(innerHeight * dpr);
+      if (U) gl.viewport(0, 0, cv.width, cv.height);
+    }
+    resize();
+    addEventListener('resize', resize);
+    new ResizeObserver(measure).observe(page);
+    document.fonts && document.fonts.ready.then(measure);
+
+    /* ── POINTER ── */
+    const ptr = { x: -1e4, y: -1e4, hx: -1e4, hy: -1e4, vx: 0, vy: 0, k: 0, kT: 0, seen: false, overUI: false };
+    let lastX = 0, lastY = 0, speed = 0;
+
+    addEventListener('pointermove', e => {
+      if (e.pointerType !== 'mouse') return;
+      const x = e.clientX + scrollX, y = e.clientY + scrollY;
+      if (!ptr.seen) { ptr.hx = lastX = x; ptr.hy = lastY = y; ptr.seen = true; }
+      ptr.x = x; ptr.y = y; ptr.kT = 1;
+      ptr.overUI = !!e.target.closest('a, button, #face');
+    });
+    document.addEventListener('pointerleave', () => { ptr.kT = 0; setZone(null); });
+
+    /* ── ZONES: which half is the cursor in ── */
+    let zone = null, dwell = 0, hintRoom = 1;
+    function setZone(z) {
+      if (z === zone) return;
+      zone = z;
+      document.body.classList.toggle('zone', !!z);
+      document.body.classList.toggle('on-paper', z === 'paper');
+      document.body.classList.toggle('on-ink', z === 'ink');
+      dwell = 0;
+      if (z) hint.textContent = HINTS[z];
+    }
+    page.addEventListener('click', e => {
+      if (zone && !e.target.closest('a, button, #face')) location.href = LINKS[zone];
+    });
+
+    let reveal = false;
+    playEl.addEventListener('pointerenter', () => { reveal = true;  document.body.classList.add('reel-hover'); });
+    playEl.addEventListener('pointerleave', () => { reveal = false; document.body.classList.remove('reel-hover'); });
+
+    // keep the window in step with the background reel
+    setInterval(() => {
+      if (!reelBg.paused && Math.abs(reelWin.currentTime - reelBg.currentTime) > 0.12) reelWin.currentTime = reelBg.currentTime;
+    }, 1000);
+
+    /* ── SOCIALS: one shared label after the icon row ──
+       the icons stay put, so moving from one to the next never chases a moving target.
+       The label stays open while the pointer is anywhere in the row. */
+    {
+      const row = document.querySelector('.soc-profile .icons');
+      const lab = row.querySelector('.lab'), txt = lab.firstElementChild;
+      let says = [], i = 0, cycle = null, swap = null, active = null;
+      const fit = () => { lab.style.width = txt.offsetWidth + 'px'; };
+      const say = text => {
+        clearTimeout(swap);
+        if (!lab.style.width || lab.style.width === '0px') {     // opening: no fade needed
+          txt.textContent = text; txt.classList.remove('out'); fit(); return;
+        }
+        txt.classList.add('out');
+        swap = setTimeout(() => { txt.textContent = text; fit(); txt.classList.remove('out'); }, 220);
+      };
+      row.querySelectorAll('a[data-say]').forEach(a => {
+        a.addEventListener('pointerenter', () => {
+          if (active === a) return;
+          active?.classList.remove('on');
+          active = a; a.classList.add('on');
+          says = a.dataset.say.split('|'); i = 0;
+          say(says[0]);
+          clearInterval(cycle);
+          cycle = setInterval(() => say(says[++i % says.length]), 1700);
+        });
+      });
+      row.addEventListener('pointerleave', () => {
+        clearInterval(cycle); clearTimeout(swap);
+        active?.classList.remove('on'); active = null;
+        lab.style.width = '0px';
+      });
+    }
+
+    /* ── PORTRAIT: colours up, leans toward the cursor and tilts a little ── */
+    face.addEventListener('pointermove', e => {
+      const r = face.getBoundingClientRect();
+      const dx = (e.clientX - r.left) / r.width - 0.5;
+      const dy = (e.clientY - r.top) / r.height - 0.5;
+      faceImg.style.setProperty('--fx', (dx * 16).toFixed(1) + 'px');
+      faceImg.style.setProperty('--fy', (dy * 16).toFixed(1) + 'px');
+      faceImg.style.setProperty('--fr', (dx * 10).toFixed(1) + 'deg');
+    });
+    face.addEventListener('pointerleave', () => {
+      ['--fx', '--fy', '--fr'].forEach(p => faceImg.style.removeProperty(p));
+    });
+
+    /* ── QUOTES: one at a time ── */
+    let qi = 0;
+    if (!still) setInterval(() => {
+      quoteEl.classList.add('out');
+      setTimeout(() => {
+        qi = (qi + 1) % QUOTES.length;
+        quoteEl.textContent = `“${QUOTES[qi]}”`;
+        quoteEl.classList.remove('out');
+      }, 500);
+    }, 4500);
+
+    /* ── CURIOSITIES: moving over the paper leaves sketches that float off ── */
+    let stampDist = 0, stampIdx = Math.floor(Math.random() * SKETCHES.length);
+    // keep sketches clear of the text: a stamp may not land on (or near) any of these
+    const TEXT = ['.tl > *', '.soc-profile', '#face', '.nl h1', '.fl .foot', '.tr > *', '.nr span'];
+    // boxes around the text itself — not the (full-column-wide) block it sits in
+    const range = document.createRange();
+    function textRects() {
+      const out = [];
+      TEXT.forEach(sel => document.querySelectorAll(sel).forEach(el => {
+        let r = el.getBoundingClientRect();
+        if (el.tagName !== 'IMG' && el.id !== 'face') {
+          range.selectNodeContents(el);
+          const t = range.getBoundingClientRect();
+          if (t.width) r = t;
+        }
+        if (r.width) out.push(r);
+      }));
+      return out;
+    }
+    // distance from a viewport point to the nearest bit of text
+    function textDistance(x, y) {
+      let best = Infinity;
+      for (const r of textRects()) {
+        const dx = Math.max(r.left - x, 0, x - r.right), dy = Math.max(r.top - y, 0, y - r.bottom);
+        best = Math.min(best, Math.hypot(dx, dy));
+      }
+      return best;
+    }
+    function overlapsText(x, y) {
+      const half = stamps.firstElementChild?.offsetWidth / 2 || 75, m = half + 24;
+      return textRects().some(r => x > r.left - m && x < r.right + m && y > r.top - m && y < r.bottom + m);
+    }
+    function stamp(x, y) {
+      if (stamps.childElementCount > 1 || overlapsText(x, y)) return;
+      const img = new Image();
+      img.src = SKETCHES[stampIdx++ % SKETCHES.length];
+      img.alt = '';
+      img.style.left = x + 'px';
+      img.style.top  = y + 'px';
+      img.style.setProperty('--rot', (Math.random() * 16 - 8).toFixed(1) + 'deg');
+      img.addEventListener('animationend', () => img.remove());
+      stamps.appendChild(img);
+    }
+
+    /* ── LAVA ──
+       charge = the colour the cursor carries (+1 black, -1 white). It only slowly
+       takes on the colour underneath, so crossing the divide drags a strand of it along.
+       Every bit of that strand is a blob with buoyancy: it rises, pinches off, shrinks. */
+
+    let charge = 0;
+    const blobs = [];
+    const blobData = new Float32Array(MAX_BLOBS * 4);
+    let spawnX = 0, spawnY = 0;
+    let nextBubble = 2.5;
+    const rand = (a, b) => a + Math.random() * (b - a);
+
+    function addBlob(b) {
+      if (blobs.length >= MAX_BLOBS - 1) return;     // slot 0 = cursor head
+      blobs.push(Object.assign({ vx: 0, vy: 0, grow: 0, life: 1, span: rand(5, 8) }, b));
+    }
+
+    const play = { x: 0, y: 0, vx: 0, vy: 0, r: 0, init: false };
+    let bias = 0, lens = 0;
+    let inkAlpha = 0.72;
+    const t0 = performance.now();
+    let prev = t0;
+    const ease = x => 1 - Math.pow(1 - x, 4);
+
+    // wobbly outline of the bubble, in viewport px, for clip-path
+    function bubblePath(cx, cy, r, t) {
+      let d = '';
+      for (let i = 0; i < 72; i++) {
+        const a = i / 72 * Math.PI * 2;
+        const rr = r * (1 + 0.035 * Math.sin(3 * a + t * 0.9) + 0.025 * Math.sin(5 * a - t * 1.3));
+        d += (i ? 'L' : 'M') + (cx + Math.cos(a) * rr).toFixed(1) + ' ' + (cy + Math.sin(a) * rr).toFixed(1);
+      }
+      return `path('${d}Z')`;
+    }
+
+    function frame(now) {
+      const dt = Math.min(0.05, (now - prev) / 1000); prev = now;
+      const t = still ? 0 : (now - t0) / 1000;
+      const intro = still ? 1 : ease(Math.min(1, Math.max(0, (t - 0.15) / 1.6)));
+
+      // the half you're in opens up toward you
+      const biasT = projectOn ? -2.6 : zone === 'ink' ? -1.1 : zone === 'paper' ? 1.1 : 0;
+      bias  += (biasT - bias) * 0.05;
+      ptr.k += (ptr.kT - ptr.k) * 0.06;
+      inkAlpha += ((projectOn ? 0 : reveal ? 0.08 : 0.72) - inkAlpha) * (projectOn ? 0.09 : 0.05);
+
+      const span   = vertical ? W : H;
+      const start  = span * 1.04;                       // intro: black slides in
+      const center = start + (base - start) * intro + bias * span * 0.045;
+
+      // the edge leans toward the cursor a little
+      const pAlong = vertical ? ptr.y : ptr.x;
+      const pCross = vertical ? ptr.x : ptr.y;
+      const pull   = Math.max(-1, Math.min(1, (pCross - center) / (span * 0.35))) * span * 0.03 * ptr.k;
+      const reach  = len * (vertical ? 0.22 : 0.35);
+      const edgeAt = a => center + amp * wave(a / len, t) * (0.4 + 0.6 * intro)
+                        + pull * Math.exp(-Math.pow((a - pAlong) / reach, 2));
+      // signed distance to the edge, positive on the black side
+      const sideDist = (x, y) => vertical ? x - edgeAt(y) : y - edgeAt(x);
+
+      // zone under the cursor (ignoring links/buttons and the bubble)
+      const onBubble = Math.hypot(ptr.x - play.x, ptr.y - play.y) < play.r + 10;
+      if (ptr.kT && !ptr.overUI && !onBubble && intro > 0.9) setZone(sideDist(ptr.x, ptr.y) > 0 ? 'ink' : 'paper');
+      else setZone(null);
+      lens += ((zone === 'ink' ? 0.55 : 0) - lens) * 0.08;
+
+      /* cursor hint: starts small, grows the longer you stay on one side,
+         and shrinks away again as you get close to text */
+      if (zone) {
+        dwell += dt;
+        const cx = ptr.x - scrollX, cy = ptr.y - scrollY;
+        const room = Math.min(1, Math.max(0, (textDistance(cx, cy) - 12) / 88));    // 0 at text → 1 from ~100px away
+        hintRoom += (room - hintRoom) * 0.12;
+        const g = 1 - Math.pow(1 - Math.min(1, dwell / 7), 2);   // slow, steady growth
+        hint.style.fontSize = (13 + 51 * g * hintRoom).toFixed(1) + 'px';
+        hint.style.opacity = Math.min(1, hintRoom * 1.6).toFixed(2);
+        const w = hint.offsetWidth, h = hint.offsetHeight;
+        const off = 16 + 10 * g;
+        // flip to the other side of the cursor when it would run off screen
+        const hx = cx + off + w > innerWidth - 12 ? cx - off - w : cx + off;
+        const hy = Math.min(innerHeight - h - 12, cy + off);
+        hint.style.transform = `translate3d(${hx}px, ${hy}px, 0)`;
+      } else {
+        hint.style.opacity = '';
+      }
+
+      if (!still) {
+        /* cursor drags a strand */
+        if (ptr.seen) {
+          const dx = ptr.x - lastX, dy = ptr.y - lastY;
+          const d = Math.hypot(dx, dy);
+          lastX = ptr.x; lastY = ptr.y;
+          ptr.vx += (dx / Math.max(dt, 1e-3) - ptr.vx) * 0.25;
+          ptr.vy += (dy / Math.max(dt, 1e-3) - ptr.vy) * 0.25;
+          speed = Math.hypot(ptr.vx, ptr.vy);
+
+          const under = sideDist(ptr.x, ptr.y) > 0 ? 1 : -1;
+          if (charge === 0) charge = under;
+          charge += (under - charge) * (1 - Math.exp(-(d * 0.0016 + dt * 0.45)));
+
+          ptr.hx += (ptr.x - ptr.hx) * 0.3;
+          ptr.hy += (ptr.y - ptr.hy) * 0.3;
+
+          // only drop blobs where they'd actually show (carrying the other colour)
+          if (Math.hypot(ptr.x - spawnX, ptr.y - spawnY) > 15 && ptr.k > 0.5 && charge * under < 0.6) {
+            spawnX = ptr.x; spawnY = ptr.y;
+            addBlob({
+              x: ptr.x, y: ptr.y,
+              vx: ptr.vx * 0.12, vy: ptr.vy * 0.12,
+              r: 44 + Math.min(30, speed * 0.025),
+              s: charge, grow: 1,
+              lift: rand(25, 70),                // buoyancy, px/s²
+              drift: rand(-6, 6),
+            });
+          }
+
+          // curiosities side: leave a sketch every so often
+          if (zone === 'paper') {
+            stampDist += d;
+            if (stampDist > 380) { stampDist = 0; stamp(ptr.x - scrollX, ptr.y - scrollY); }
+          }
+        }
+
+        /* ambient: every few seconds a bubble swells out of the edge */
+        if (t > nextBubble && intro > 0.99) {
+          nextBubble = t + rand(2.2, 4.5);
+          if (vertical) {
+            const y = rand(0.45, 1.0) * H;
+            const s = Math.random() < 0.5 ? 1 : -1;            // black pushes into white or vice versa
+            addBlob({ x: edgeAt(y) - s * 18, y, r: rand(38, 60), s,
+                      lift: rand(12, 26), drift: -s * rand(8, 16) });
+          } else {
+            const x = rand(0.1, 0.9) * W;                      // mobile: black rises into the white
+            addBlob({ x, y: edgeAt(x) - 12, r: rand(30, 46), s: 1, lift: rand(10, 22), drift: rand(-4, 4) });
+          }
+        }
+
+        /* move the lava */
+        for (let i = blobs.length - 1; i >= 0; i--) {
+          const b = blobs[i];
+          b.grow = Math.min(1, b.grow + dt / 1.6);
+          b.vx += b.drift * dt;
+          b.vy -= b.lift * dt;
+          const drag = Math.exp(-dt * 1.4);
+          b.vx *= drag; b.vy *= drag;
+          b.vx += Math.sin(t * 0.9 + i * 1.7) * 4 * dt;          // a little wobble
+          b.x += b.vx * dt;
+          b.y += b.vy * dt;
+
+          // shrinks as it rises; blobs that ended up in their own colour fade quickly
+          const sd = sideDist(b.x, b.y);
+          let decay = dt / b.span;
+          if (Math.sign(sd) === Math.sign(b.s) && Math.abs(sd) > b.r) decay *= 4;
+          if (b.y < scrollY - b.r) decay = 1;
+          b.life -= decay;
+          if (b.life <= 0) blobs.splice(i, 1);
+        }
+      }
+
+      /* showreel bubble: rides the seam, leans toward the cursor */
+      {
+        let tx = vertical ? edgeAt(bub.y) : bub.x;
+        let ty = bub.y + Math.sin(t * 0.31) * 6;
+        const dx = ptr.x - tx, dy = ptr.y - ty, dd = Math.hypot(dx, dy);
+        const lean = ptr.k * Math.max(0, 1 - dd / (bub.r * 3)) * 0.15;
+        tx += dx * lean; ty += dy * lean;
+        if (!play.init || still) { play.x = tx; play.y = ty; play.init = true; }
+        play.vx += ((tx - play.x) * 22 - play.vx * 6) * dt;    // springy
+        play.vy += ((ty - play.y) * 22 - play.vy * 6) * dt;
+        play.x += play.vx * dt;
+        play.y += play.vy * dt;
+        const rT = (reveal ? bub.r * 1.12 : bub.r) * Math.min(1, 0.6 + 0.4 * intro);
+        play.r += (rT - play.r) * 0.1;
+
+        playEl.style.transform = `translate3d(${play.x}px,${play.y}px,0)`;
+        playEl.style.setProperty('--d', Math.round(play.r * 2) + 'px');
+        reelWin.style.clipPath = bubblePath(play.x - scrollX, play.y - scrollY, play.r, t);
+      }
+
+      if (U) {
+        blobData.fill(0);
+        // slot 0: head under the cursor
+        blobData[0] = ptr.hx; blobData[1] = ptr.hy;
+        blobData[2] = 58 + Math.min(40, speed * 0.04);
+        blobData[3] = still ? 0 : charge * 1.4 * ptr.k;
+        blobs.forEach((b, i) => {
+          const o = (i + 1) * 4;
+          const fade = Math.min(1, b.life * 3);
+          blobData[o]     = b.x;
+          blobData[o + 1] = b.y;
+          blobData[o + 2] = b.r * (0.45 + 0.55 * b.life) * (0.3 + 0.7 * ease(b.grow));
+          blobData[o + 3] = b.s * 1.5 * fade;
+        });
+
+        gl.uniform2f(U.uView, innerWidth, innerHeight);
+        gl.uniform1f(U.uDpr, dpr);
+        gl.uniform2f(U.uScroll, scrollX, scrollY);
+        gl.uniform1f(U.uTime, t);
+        gl.uniform1f(U.uVertical, vertical ? 1 : 0);
+        gl.uniform1f(U.uCenter, center);
+        gl.uniform1f(U.uAmp, amp * (0.4 + 0.6 * intro));
+        gl.uniform1f(U.uLen, len);
+        gl.uniform1f(U.uSoft, 70);
+        gl.uniform1f(U.uPull, pull);
+        gl.uniform1f(U.uPullAt, pAlong);
+        gl.uniform1f(U.uReach, reach);
+        gl.uniform4fv(U.uBlobs, blobData);
+        gl.uniform4f(U.uLens, ptr.x, ptr.y, 240, lens);
+        gl.uniform1f(U.uInkAlpha, inkAlpha);
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+      }
+
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+    requestAnimationFrame(() => document.body.classList.add('ready'));
+
+    /* ── PROJECT SLIDESHOW: hovering a project replaces the reel with its stills ── */
+    const projBg = document.getElementById('project-bg');
+    const slots  = projBg.querySelectorAll('img');
+    let projectOn = false, slideTimer = null, slot = 0;
+
+    // Two stacked images (Web Animations, so each phase hands over its speed).
+    //   in:    punches in fast (1.34 → 1.2), then drifts slowly (→ 1.16) — never stops
+    //   out:   from that drift it shoots away (→ 1.0), staying fully opaque underneath
+    //          while the next one fades in quickly on top — a true crossfade, no dip in brightness
+    // Images never go below scale 1, so the shrinking one never shows its edges.
+    const SLIDE_MS = 2600;
+    // the outgoing one finishes its run exactly as the incoming one becomes opaque
+    const OUT_MS = 660, IN_DELAY = 360, IN_FADE = 300;
+    let showToken = 0;
+    function showSlide(src) {
+      const token = ++showToken;
+      const next = slots[slot ^ 1], cur = slots[slot];
+      const go = () => {
+        if (token !== showToken) return;              // a newer slide was requested meanwhile
+        slot ^= 1;
+
+        // (read the values now: computed style is live and resets once the animation is cancelled)
+        const cs = getComputedStyle(cur);
+        const op = cs.opacity, tf = cs.transform === 'none' ? 'scale(1.16)' : cs.transform;
+        cur.getAnimations().forEach(an => an.cancel());
+        cur.animate([
+          { transform: tf, opacity: op, easing: 'cubic-bezier(.5,0,.8,.45)' },    // accelerates hard
+          { transform: 'scale(1)', opacity: op, offset: 0.999 },
+          { transform: 'scale(1)', opacity: 0 },                                 // gone once covered
+        ], { duration: OUT_MS, fill: 'forwards' });
+
+        next.getAnimations().forEach(an => an.cancel());
+        next.style.zIndex = 2; cur.style.zIndex = 1;
+        const len = SLIDE_MS * 2.2;
+        next.animate([
+          // decelerates, but keeps a little speed so it flows into the drift
+          { transform: 'scale(1.34)', opacity: 0, easing: 'cubic-bezier(.2,.75,.45,.95)' },
+          { opacity: 1, offset: IN_FADE / len },
+          { transform: 'scale(1.2)', offset: 0.13, easing: 'linear' },
+          { transform: 'scale(1.16)', opacity: 1 },
+        ], { duration: len, delay: IN_DELAY, fill: 'both' });
+      };
+      if (next.getAttribute('src') !== src) next.src = src;
+      (next.decode ? next.decode() : Promise.resolve()).then(go, go);
+    }
+
+    const projVid = projBg.querySelector('video');
+    document.querySelectorAll('[data-video]').forEach(el => {
+      el.addEventListener('pointerenter', e => {
+        if (e.pointerType !== 'mouse') return;
+        clearInterval(slideTimer);
+        if (projVid.getAttribute('src') !== el.dataset.video) projVid.src = el.dataset.video;
+        projVid.currentTime = 0;
+        projVid.play().catch(() => {});
+        projectOn = true;
+        document.body.classList.add('project-on', 'video-on');
+      });
+      el.addEventListener('pointerleave', () => {
+        projVid.pause();
+        projectOn = false;
+        document.body.classList.remove('project-on', 'video-on');
+      });
+    });
+
+    document.querySelectorAll('[data-slides]').forEach(el => {
+      const list = el.dataset.slides.split('|');
+      el.addEventListener('pointerenter', e => {
+        if (e.pointerType !== 'mouse') return;
+        list.forEach(src => { const im = new Image(); im.src = src; im.decode && im.decode().catch(() => {}); });   // warm the cache
+        let i = 0;
+        clearInterval(slideTimer);
+        showSlide(list[0]);
+        slideTimer = setInterval(() => showSlide(list[++i % list.length]), SLIDE_MS);
+        projectOn = true;
+        document.body.classList.add('project-on');
+      });
+      el.addEventListener('pointerleave', () => {
+        clearInterval(slideTimer);
+        projectOn = false;
+        document.body.classList.remove('project-on');
+      });
+    });
+
+    /* ── SHOWREEL ── */
+    const VIMEO_ID = '1188999678';
+    const reel  = document.getElementById('reel');
+    const frameEl = reel.querySelector('iframe');
+    function openReel() {
+      frameEl.src = `https://player.vimeo.com/video/${VIMEO_ID}?autoplay=1&color=ffffff&title=0&byline=0&portrait=0`;
+      reel.classList.add('open');
+      reelBg.pause(); reelWin.pause();
+    }
+    function closeReel() {
+      reel.classList.remove('open');
+      setTimeout(() => frameEl.src = '', 400);
+      reelBg.play().catch(() => {});
+      reelWin.play().catch(() => {});
+    }
+    playEl.addEventListener('click', openReel);
+    document.getElementById('reel-close').addEventListener('click', closeReel);
+    reel.addEventListener('click', e => { if (e.target === reel) closeReel(); });
+    addEventListener('keydown', e => { if (e.key === 'Escape') closeReel(); });
+  })();
+  </script>
+</body>
+</html>
