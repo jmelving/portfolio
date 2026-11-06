@@ -221,7 +221,7 @@ const PROJECTS_DATA = {
     },
     {
       type:  "video",
-      src:   "../img/random_for_lab/Dailies_ColorfulHair_Small.mp4",
+      src:   "../img/random_for_lab/Dailies_ColorfulHair_small.mp4",
       title: "Colorful Hair",
       sub:   "Houdini · Grooming · Daily",
       desc:  "Just a fun daily to test out some colorful hair looks using Houdini's grooming tools.",
