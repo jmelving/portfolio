@@ -376,3 +376,18 @@ footer { display:flex; justify-content:space-between; padding:var(--pad); font-s
 
 /* consecutive blocks of work keep the same 3px seam as the cards inside them */
 .work > .gallery + .gallery, .work > .stack + .gallery, .work > .gallery + .stack, .work > .stack + .stack { margin-top:3px; }
+
+/* ── LIGHTBOX ON PHONES: picture on top, its words right under it (not pinned to the bottom, where they
+   ran into tall pictures), arrows in the bottom corners off the picture and its video controls ── */
+@media (max-width:1024px), (hover:none) and (pointer:coarse) {
+  #lightbox { background:var(--ink); flex-direction:column; justify-content:flex-start; overflow-y:auto; overscroll-behavior:contain; padding:64px 0 96px; }
+  #lb-stage { width:100%; height:auto; margin:0; }
+  #lb-media img, #lb-media video { width:100%; max-width:100%; height:auto; max-height:58svh; }
+  #lightbox.has-desc #lb-media img, #lightbox.has-desc #lb-media video { max-height:58svh; }
+  #lightbox.has-desc #lb-stage { margin:0; }
+  #lb-stage, #lightbox.has-desc #lb-stage { margin-top:auto; }   /* (with the caption's margin-bottom:auto: centred while it fits, scrolls when it doesn't) */
+  #lb-caption { position:static; translate:none; max-width:none; width:100%; margin-top:18px; margin-bottom:auto; padding:0 20px; }
+  #lb-desc { width:auto; }
+  .lb-arrow, #lb-prev, #lb-next { position:fixed; top:auto; bottom:22px; translate:none; }
+  #lb-prev { left:20px; } #lb-next { right:20px; }
+}
