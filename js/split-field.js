@@ -18,6 +18,8 @@
    wavy edge and gets cut by it; white lava flows over images, and black lava
    opens the paper up to reveal what lies beneath.
    Text (.ink-text) sits above both and inverts against whatever passes.
+   Option inkOver: true is the opposite, for pages whose work sits on the paper:
+   the overlay draws only the black, so ink pulled across flows over the images.
 
      const show = SplitField.slideshow(document.getElementById('project-bg'));
      show.images([...]); show.video(src); show.stop();
@@ -42,7 +44,7 @@
     uniform vec4  uBlobs[${MAX_BLOBS}];   // x, y, radius, signed weight
     uniform vec3  uPaper, uInk;
     uniform float uInkAlpha;
-    uniform float uMode;      // 0 = seam only, 1 = seam + lava, 2 = lava only (overlay)
+    uniform float uMode;      // 0 = seam only, 1 = seam + lava, 2 = paper-only overlay, 3 = ink-only overlay
     uniform float uHoriz;     // 1 = horizontal seam (paper above, ink below), used on mobile
 
     float wave(float s){
@@ -79,6 +81,12 @@
       #endif
       float a = smoothstep(0.5 - w, 0.5 + w, I);
 
+      if (uMode > 2.5) {
+        // overlay, drawn above the page content: only the ink.
+        // For pages whose work sits on the paper: black pulled across flows over it.
+        gl_FragColor = vec4(uInk * a, a);
+        return;
+      }
       if (uMode > 1.5) {
         // overlay, drawn above the page content: only the paper.
         // Black is the background here, so black lava doesn't paint over anything —
@@ -99,6 +107,7 @@
       inkAlpha: 1,
       lava: true, ambient: true,
       lavaOver: false,                // draw the lava above the page content
+      inkOver: false,                 // draw the black (seam + black lava) above the page content instead
     }, opts);
     const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -141,6 +150,7 @@
     // original edge left underneath to shimmer through; the overlay only adds it over content
     const layers = [layer('field', 1)];
     if (o.lavaOver && o.lava) layers.push(layer('field over', 2));
+    else if (o.inkOver) layers.push(layer('field over', 3));
     const U = layers.every(Boolean) ? layers[0].U : null;
     if (!U) document.body.classList.add('nogl');
 

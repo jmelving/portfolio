@@ -87,13 +87,17 @@
       max-width:36ch;
     }
 
-    .feature video, .feature img { width:100%; aspect-ratio:4/5; object-fit:cover; }
+    .feature video, .feature img { width:100%; aspect-ratio:4/5; object-fit:cover; border-radius:6px; }
     .feature figcaption { margin-top:14px; }
     .feature .ey { font-size:13px; opacity:.5; }
     .feature h3 { font-weight:600; font-size:clamp(20px, 1.7vw, 28px); letter-spacing:-0.02em; margin-top:2px; }
     .feature h3 span { font-weight:400; }
     .feature p { margin-top:8px; font-size:clamp(14px, 1vw, 16px); opacity:.7; max-width:52ch; }
 
+    /* the closing line: what all the chapters add up to */
+    .outro { padding-top:clamp(120px, 22vh, 240px); }
+    .outro p { max-width:24ch; font-size:clamp(26px, 2.6vw, 44px); font-weight:500; line-height:1.2; letter-spacing:-0.02em; }
+    .outro:has(p:empty) { display:none; }
     footer { display:flex; justify-content:space-between; padding-block:clamp(80px, 14vh, 160px) 0; font-size:12px; opacity:.45; }
 
     #m-top, .m-head, .m-mark { display:none; }
@@ -127,6 +131,8 @@
       .m-mark { display:block; position:absolute; left:0; width:1px; height:1px; }
       .m-focus { will-change:filter, transform, opacity; transform-origin:50% 50%; }
       footer { position:relative; z-index:2; padding:40px var(--pad) var(--pad); }
+      .outro { position:relative; z-index:2; padding:18svh var(--pad) 0; }
+      .outro p { font-size:24px; }
 
       #m-top {
         display:block; position:fixed; top:0; left:0; right:0; z-index:5;
@@ -190,6 +196,7 @@
         <p class="tags" id="tags"></p>
       </header>
       <div id="chapters"></div>
+      <section class="outro ink-text"><p id="outro"></p></section>
       <footer class="ink-text">
         <a href="../impressum/" style="text-decoration:none">Impressum</a>
         <span>© 2026 JMG</span>
@@ -204,7 +211,7 @@
   <script>
   (() => {
     const D = CURIOSITIES_DATA;
-    const field = SplitField.init({ split: 0.76, splitMobile: 0.58, mobileAxis: 'y', enterFrom: 0.5, lavaOver: PHONE_LAYOUT() });   // desktop: the work sits on the paper, so no paper overlay over it
+    const field = SplitField.init({ split: 0.76, splitMobile: 0.58, mobileAxis: 'y', enterFrom: 0.5, lavaOver: PHONE_LAYOUT(), inkOver: !PHONE_LAYOUT() });   // desktop: the work sits on the paper, so black pulled over it flows above it
 
     /* hero */
     document.getElementById('title').innerHTML = `${D.hero.titleLine1}<br>${D.hero.titleLine2}`;
@@ -214,6 +221,7 @@
     /* chapters + rail */
     const host = document.getElementById('chapters'), rail = document.getElementById('rail');
     const clean = s => (s || '').replace(/\s+/g, ' ').trim();
+    document.getElementById('outro').textContent = clean(D.outro);
     D.sections.filter(s => s.enabled).forEach((s, i) => {
       const f = s.featureCard;
       const el = document.createElement('section');

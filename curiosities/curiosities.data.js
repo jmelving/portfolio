@@ -24,6 +24,9 @@ const CURIOSITIES_DATA = {
     backLabel: "Home",
   },
 
+  /* ─── CLOSING LINE (after all chapters) ─────── */
+  outro: `All of these fascinations feed back into my work, helping me stay connected to being an artist, while building the tools to empower me at the same time.`,
+
   /* ─── HERO ──────────────────────────────────── */
   hero: {
     eyebrow:    "Beyond the Brief",
@@ -193,11 +196,6 @@ from a single image, or offering a suggestion that involves just enough random
 chance to land somewhere you wouldn't have gone yourself. That's where it stops
 feeling like a shortcut and starts feeling like a tool with its own character.`,
       ],
-
-      pullQuote: {
-        text: `"All of these fascinations feed back into my work, helping me stay connected to being an artist, while building the tools to empower me at the same time."`,
-        cite: "",
-      },
 
       featureCard: {
         videoSrc:    "./vid/ComfyUI_AI_Curiosity.mp4",

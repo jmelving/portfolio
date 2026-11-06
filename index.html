@@ -51,7 +51,7 @@
     /* plain links to the sub-pages: invisible, but there for search engines and screen readers (shown when tabbed to) */
     .site-nav { position:fixed; left:12px; top:12px; z-index:200; display:flex; gap:14px; clip-path:inset(50%); width:1px; height:1px; overflow:hidden; }
     .site-nav:focus-within { clip-path:none; width:auto; height:auto; overflow:visible; padding:8px 12px; background:var(--paper); color:var(--ink); }
-    body.zone.near-text { cursor:auto; }        /* close to the text the hint fades out, and a click there goes nowhere */
+    body.zone.near-text, body.cv-on.on-paper { cursor:auto; }        /* close to the text the hint fades out, and a click there goes nowhere */
     a { color:inherit; }
 
     /* ── PAGE ── */
@@ -959,6 +959,7 @@
     const NEAR = 0.3;                                           // below this the hint has (nearly) faded out
     page.addEventListener('click', e => {
       // only a click out in the open goes to the other page — a near-miss on a link or line of text does nothing
+      if (cvOn) return;                                         // while the CV is open, the halves don't lead anywhere
       if (zone && !e.target.closest('a, button, #face') && hintRoom > NEAR && roomAt(e.clientX, e.clientY) > NEAR) location.href = LINKS[zone];
     });
 
