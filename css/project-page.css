@@ -1,0 +1,378 @@
+/* ─────────────────────────────────────────────────────────
+   project-page.css — the project page layout (desktop split + phone stack).
+   Rendered by js/project-page.js from a project's project.data.js.
+   Pairs with css/split.css + js/split-field.js.
+   ───────────────────────────────────────────────────────── */
+html { scrollbar-gutter:stable; }   /* the scrollbar's room stays reserved: opening the lightbox (no scrolling) doesn't widen the page and shift everything */
+
+
+/* every section: text column on the paper, media column in the ink */
+.split {
+  display:grid;
+  grid-template-columns:var(--seam) 1fr;
+}
+.split > .words {
+  padding:var(--pad);
+  padding-right:clamp(28px, 4vw, 72px);
+}
+.split > .work {
+  padding:var(--pad);
+  padding-left:clamp(28px, 4vw, 72px);
+}
+/* words stay in view while the work scrolls past */
+.sticky { position:sticky; top:var(--pad); }
+
+/* ── hero ── */
+.hero { min-height:100svh; }
+.hero .words { display:flex; flex-direction:column; min-height:100svh; }
+.hero .meta { margin-top:auto; font-size:14px; opacity:.55; }
+.hero h1 {
+  margin-top:10px;
+  font-weight:700;
+  font-size:clamp(64px, min(9.5vw, 17vh), 190px);
+  line-height:.86; letter-spacing:-0.05em;
+}
+.hero .sub { margin-top:clamp(24px, 2.3vw, 40px); font-size:clamp(16px, 1.3vw, 21px); }
+/* a tagline instead of keywords: same place as the subtitle, quieter, like a remark */
+.hero .tagline { margin-top:clamp(24px, 2.3vw, 40px); font-style:italic; font-size:clamp(16px, 1.3vw, 21px); opacity:.6; }
+.facts {
+  display:grid; grid-template-columns:auto 1fr; gap:6px 24px;
+  margin-top:clamp(28px, 5vh, 56px);
+  font-size:clamp(14px, 1vw, 16px);
+}
+.facts dt { opacity:.5; }
+.facts a { text-decoration:none; }
+.facts a:hover { text-decoration:underline; text-underline-offset:3px; }
+
+/* film button riding the seam */
+#watch {
+  position:fixed; top:0; left:0; z-index:7;
+  width:var(--d, 240px); height:var(--d, 240px);
+  margin:calc(var(--d, 240px) / -2) 0 0 calc(var(--d, 240px) / -2);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
+  border:0; border-radius:50%; cursor:pointer;
+  background:none; color:#fff;
+  font:inherit; font-weight:700; font-size:clamp(17px, 1.4vw, 24px); letter-spacing:-0.02em;
+  text-shadow:0 1px 18px rgba(0,0,0,.4);
+  transition:opacity .5s;
+}
+#watch svg { width:24px; height:27px; fill:currentColor; margin-left:5px; filter:drop-shadow(0 1px 12px rgba(0,0,0,.4)); transition:transform .5s cubic-bezier(.2,.7,.2,1); }
+#watch:hover svg { transform:scale(1.2); }
+#watch.gone { opacity:0; pointer-events:none; }
+/* the bubble's content: the same stills in full colour, clipped to a wobbly circle (set by JS) */
+#watch-window {
+  position:fixed; inset:0; z-index:6;          /* above the paper overlay and the text, so nothing cuts through the bubble */
+  clip-path:circle(0 at 50% 50%);
+  transition:opacity .5s;
+}
+#watch-window.gone { opacity:0; }
+/* hero stills: held back (darker, a little desaturated, vignetted) until you go for "Watch" */
+/* same treatment inside the bubble, so the whole image side reads as one continuous picture */
+#backdrop img, #watch-window img { filter:brightness(.72) saturate(.75); transition:filter .7s ease; }
+#backdrop::after, #watch-window::after {
+  content:''; position:absolute; inset:0; z-index:4; pointer-events:none;
+  background:radial-gradient(ellipse 75% 70% at 60% 50%, transparent 40%, rgba(0,0,0,.55) 100%);
+  transition:opacity .7s ease;
+}
+body.watch-hover #backdrop img, body.watch-hover #watch-window img { filter:none; }
+body.watch-hover #backdrop::after, body.watch-hover #watch-window::after { opacity:0; }
+/* collaborator card: takes over the ink side while a name is hovered */
+#person {
+  position:fixed; inset:0; z-index:3; pointer-events:none;     /* under the paper overlay (4): only the ink side shows it */
+  opacity:0; transition:opacity .45s ease;
+  background:var(--ink);
+}
+body.person-on #person { opacity:1; }
+#person img {
+  position:absolute; inset:0; width:100%; height:100%; max-width:none; object-fit:cover;
+  transform:scale(1.04); transition:transform 1.4s cubic-bezier(.16,1,.3,1);
+}
+body.person-on #person img { transform:none; }
+#person img[src=""], #person img:not([src]) { display:none; }
+#person .card {
+  position:absolute; left:calc(var(--seam) + clamp(28px, 4vw, 72px)); right:var(--pad); bottom:var(--pad);
+  color:var(--paper);
+  transform:translateY(10px); transition:transform .6s cubic-bezier(.16,1,.3,1);
+}
+body.person-on #person .card { transform:none; }
+#person.has-photo .card { text-shadow:0 1px 20px rgba(0,0,0,.5); }
+#person small { display:block; font-size:13px; opacity:.6; }
+#person b { display:block; margin-top:6px; font-weight:700; font-size:clamp(44px, 5.4vw, 104px); line-height:.92; letter-spacing:-0.045em; }
+#person span { display:block; margin-top:14px; font-size:clamp(15px, 1.1vw, 18px); opacity:.75; }
+/* the bubble is a lens into the stills: same picture, a touch closer */
+.hero-still { display:none; }             /* mobile only: the ink strip is too thin to show the stills */
+@keyframes blob {
+  0%   { border-radius:46% 54% 51% 49% / 55% 45% 55% 45%; }
+  50%  { border-radius:55% 45% 43% 57% / 47% 56% 44% 53%; }
+  100% { border-radius:49% 51% 58% 42% / 42% 52% 48% 58%; }
+}
+
+/* ── sections ── */
+/* sections touch: the text column carries the spacing, the media column fills the full height,
+   so the work side reads as one continuous strip with no black gaps */
+section.split > .words { padding-block:clamp(60px, 12vh, 140px); }
+section.split > .work { padding-block:0; margin-bottom:3px; display:flex; flex-direction:column; }
+section.split > .work > * { flex:1 0 auto; }
+.stack { display:flex; flex-direction:column; }
+.stack .media-card, .work > .poster { flex:1 0 auto; aspect-ratio:16/9; }
+.stack .media-card video, .work > .poster img { position:absolute; inset:0; width:100%; height:100%; aspect-ratio:auto; }
+.work > .poster { position:relative; }
+#learnings > .work { padding-block:clamp(60px, 12vh, 140px); }
+.eyebrow { margin-bottom:12px; }
+h2 {
+  font-weight:700;
+  font-size:clamp(38px, 4.4vw, 84px);
+  line-height:.92; letter-spacing:-0.04em;
+}
+.words p { max-width:44ch; margin-top:18px; font-size:clamp(15px, 1.1vw, 18px); opacity:.8; }
+.words h3 { margin-top:34px; font-size:clamp(17px, 1.3vw, 21px); font-weight:600; }
+.words h3 small { display:block; font-weight:400; font-size:13px; opacity:.55; }
+
+.gallery { display:grid; grid-template-columns:1fr 1fr; gap:clamp(14px, 1.6vw, 26px); }
+.gallery figure:first-of-type { grid-column:1 / -1; }
+.gallery figure:last-of-type:nth-of-type(even) { grid-column:1 / -1; }   /* never leave one alone in the last row */
+/* media cards — same as the current project pages: grey, colour + title on hover, click to enlarge */
+.media-card { position:relative; overflow:hidden; background:#0d0d0d; cursor:zoom-in; }
+.media-card img, .media-card video {
+  width:100%; height:auto; aspect-ratio:16/9; object-fit:cover;
+  filter:brightness(.88);
+  transition:filter .45s ease, transform .55s cubic-bezier(.16,1,.3,1);
+}
+.media-card:hover img, .media-card:hover video { filter:brightness(1) saturate(1.08); transform:scale(1.04); }
+.media-card::after { content:''; position:absolute; inset:0; z-index:4; pointer-events:none; border:1px solid rgba(238,235,229,.04); transition:border-color .3s; }
+.media-card:hover::after { border-color:rgba(238,235,229,.18); }
+.mc-overlay { position:absolute; inset:0; z-index:2; pointer-events:none; background:linear-gradient(180deg, transparent 45%, rgba(12,12,12,.88) 100%); opacity:0; transition:opacity .35s; }
+.media-card:hover .mc-overlay { opacity:1; }
+.mc-info { position:absolute; left:0; right:0; bottom:0; z-index:3; padding:12px 15px 15px; color:var(--paper); transform:translateY(6px); opacity:0; transition:transform .32s cubic-bezier(.16,1,.3,1), opacity .28s; }
+.media-card:hover .mc-info { transform:none; opacity:1; }
+.mc-title { font-weight:600; font-size:15px; line-height:1.2; }
+.mc-sub { font-size:12px; opacity:.6; margin-top:2px; }
+.gallery, .stack { gap:3px !important; }
+
+/* the gap between wave and work: each image in the first column is mirrored into it,
+   edge to edge, blurred — so the strip reflects exactly what sits next to it */
+/* above the black field (z 1) so the echo isn't covered once the ink closes; below the paper/lava overlay (z 4) */
+.split > .work { position:relative; z-index:2; }
+/* reaches well under the paper and fades into the black, so pulling the paper away
+   with the lava reveals a soft falloff instead of an edge */
+.echo {
+  position:absolute; overflow:hidden; pointer-events:none; z-index:0;
+  -webkit-mask-image:linear-gradient(to left, #000 0, #000 22%, rgba(0,0,0,.45) 55%, transparent 100%);
+          mask-image:linear-gradient(to left, #000 0, #000 22%, rgba(0,0,0,.45) 55%, transparent 100%);
+}
+.echo > img, .echo > video {
+  position:absolute; top:0; right:0; height:100%; max-width:none;
+  object-fit:cover; transform:scaleX(-1);
+  filter:blur(16px) brightness(.6);
+}
+.work > *:not(.echo) { position:relative; z-index:1; }
+
+/* lightbox */
+#lightbox { position:fixed; inset:0; z-index:500; display:flex; align-items:center; justify-content:center; background:rgba(12,12,12,.96); opacity:0; pointer-events:none; transition:opacity .38s cubic-bezier(.16,1,.3,1); color:var(--paper); }
+#lightbox.open { opacity:1; pointer-events:all; }
+#lb-stage { display:flex; align-items:center; justify-content:center; margin-top:-5vh; }
+#lb-media img, #lb-media video { display:block; max-width:min(86vw, 1300px); max-height:min(70vh, 900px); width:auto; height:auto; object-fit:contain; opacity:0; transition:opacity .3s; }
+#lb-media .ready { opacity:1; }
+.lb-arrow { position:fixed; top:50%; translate:0 -50%; width:44px; height:44px; border-radius:50%; border:1px solid rgba(238,235,229,.2); background:none; color:inherit; font:inherit; font-size:18px; cursor:pointer; opacity:.6; }
+.lb-arrow:hover { opacity:1; }
+#lb-prev { left:var(--pad); } #lb-next { right:var(--pad); }
+#lb-close { position:fixed; top:var(--pad); right:var(--pad); background:none; border:0; color:inherit; font:inherit; font-size:15px; cursor:pointer; border-bottom:1px solid currentColor; }
+#lb-count { position:fixed; top:var(--pad); left:50%; translate:-50% 0; font-size:13px; opacity:.45; }
+#lb-caption { position:fixed; bottom:40px; left:50%; translate:-50% 0; text-align:center; }
+#lb-title { font-weight:600; font-size:18px; }
+#lb-sub { font-size:13px; opacity:.55; margin-top:2px; }
+#lb-desc { width:min(88vw, 620px); margin:12px auto 0; font-size:14px; line-height:1.5; opacity:.85; }
+#lb-desc:empty { display:none; }
+#lightbox.has-desc #lb-media img, #lightbox.has-desc #lb-media video { max-height:min(60vh, 820px); }
+#lightbox.has-desc #lb-stage { margin-top:-12vh; }
+.stack { display:flex; flex-direction:column; gap:clamp(22px, 3vw, 44px); }
+
+.poster { position:relative; display:block; cursor:pointer; border:0; padding:0; background:none; width:100%; }
+.poster img { width:100%; aspect-ratio:16/9; object-fit:cover; filter:grayscale(1) brightness(.75); transition:filter .5s; }
+.poster:hover img { filter:none; }
+/* no caption on the film: the section heading next to it already names it */
+/* a quiet round play mark in the middle, the caption in the gallery's own style */
+.poster .pbtn {
+  position:absolute; left:50%; top:50%; z-index:2;
+  width:clamp(52px, 4.4vw, 72px); aspect-ratio:1; translate:-50% -50%;
+  display:flex; align-items:center; justify-content:center;
+  border-radius:50%; border:1.5px solid rgba(255,255,255,.85); color:#fff;
+  background:rgba(12,12,12,.18);
+  transition:scale .45s cubic-bezier(.2,.9,.25,1.4), background .3s, color .3s;
+}
+.poster .pbtn svg { width:30%; height:30%; fill:currentColor; margin-left:8%; }
+.poster:hover .pbtn { scale:1.45; background:#fff; color:var(--ink); }   /* grows and fills on hover */
+.poster .pcap {
+  position:absolute; left:0; right:0; top:0; z-index:2;
+  padding:16px 18px; text-align:left; color:var(--paper); font:inherit;
+}
+.poster .pcap b { display:block; font-weight:600; font-size:clamp(16px, 1.2vw, 20px); line-height:1.2; }
+
+.learn { display:grid; grid-template-columns:1fr 1fr; gap:clamp(24px, 3vw, 48px); }
+.learn h4 { font-size:13px; font-weight:400; opacity:.55; }
+.learn h4 b { display:block; font-size:clamp(20px, 1.7vw, 28px); font-weight:600; opacity:1; color:var(--paper); margin-bottom:2px; }
+.learn ul { list-style:none; margin-top:14px; }
+.learn li { padding:8px 0; border-top:1px solid color-mix(in srgb, currentColor 18%, transparent); font-size:clamp(15px, 1.05vw, 17px); }
+
+/* ── next ── */
+.next { padding-block:clamp(60px, 14vh, 160px) var(--pad); }
+.next a { text-decoration:none; display:inline-block; }
+.next .eyebrow { display:block; }
+.next b {
+  display:block; font-weight:700;
+  font-size:clamp(46px, 6.4vw, 130px);
+  line-height:.9; letter-spacing:-0.045em;
+  transition:transform .6s cubic-bezier(.2,.8,.2,1);
+}
+.next a:hover b { transform:translateX(.12em); }
+footer { display:flex; justify-content:space-between; padding:var(--pad); font-size:12px; opacity:.45; }
+
+/* ── MOBILE: the split turns horizontal ──
+   paper on top holds the words of whatever section you're looking at,
+   the ink below is where the work scrolls (and slides under the paper as it goes up) */
+#m-top, .m-sep { display:none; }
+@media (max-width:1024px), (hover:none) and (pointer:coarse) {
+  .split { grid-template-columns:1fr; }
+  .split > .words { display:none; }
+  .hero { min-height:100svh; }
+  .hero > .work { display:none; }
+  .split > .work { padding:0; }
+  section.split > .work { margin-bottom:3px; }
+  #learnings > .work { padding:28px var(--pad) 40px; }
+  .next { padding:40px var(--pad) 0; }
+  .next .work { padding:0; }
+  footer { padding-top:28px; }
+  html { background:var(--ink); }          /* the canvas draws the paper; under the sliding stills it's black, not paper */
+  html, body { overflow-x:clip; max-width:100%; }   /* no sideways wiggle (clip, so sticky/fixed keep working) */
+  .field { width:100%; }
+  .gallery, .learn { grid-template-columns:1fr; }
+  .gallery figure:last-of-type:nth-of-type(even) { grid-column:auto; }
+  .mc-info, .mc-overlay { opacity:1; transform:none; }       /* no hover on touch: captions always on */
+  #person .card { left:var(--pad); }
+  /* the stills live in the ink half only, so they aren't hidden behind the paper.
+     Both layers get the same box, so the lens bubble stays aligned */
+  #backdrop img, #watch-window img, #person img {
+    top:calc(var(--seam-y) - 40px); height:calc(100% - var(--seam-y) + 40px);
+  }
+
+  /* group markers between the work, and the group the words refer to stays bright */
+  .m-sep {
+    display:block !important; grid-column:1 / -1; flex:none;
+    padding:40px var(--pad) 10px;
+    font-size:clamp(28px, 8.5vw, 38px);           /* fitted to the full width by fitHeads() */
+    font-weight:700; letter-spacing:0.01em; line-height:.9;    /* a little air between the letters */
+    white-space:nowrap; text-align:center;
+    color:rgba(238,235,229,.11);                  /* huge and heavy, but barely there (colour, so the focus can still drive opacity) */
+  }
+  .learn .m-sep, #learnings .m-sep { padding-inline:0; }
+  #learnings .m-sep { padding-top:12px; margin-bottom:22px; }
+  #learnings .m-sep { margin-left:0; }
+  /* tilt-shift focus: driven per item by its distance to the middle of the ink area (see focusFlow) */
+  .m-item { will-change:filter, transform, opacity; transform-origin:50% 50%; }
+
+  #m-top {
+    display:block;
+    position:fixed; top:0; left:0; right:0; z-index:5;
+    height:calc(var(--seam-y) - 34px);                      /* clear of the wave */
+  }
+  #m-top .pane {
+    position:absolute; inset:0;
+    padding:calc(var(--pad) * 1.2) var(--pad) 26px;
+    overflow:hidden;                              /* fixed: a swipe up here scrolls the page, never the words */
+    -webkit-mask-image:linear-gradient(to bottom, #000 calc(100% - 26px), transparent);
+            mask-image:linear-gradient(to bottom, #000 calc(100% - 26px), transparent);
+    opacity:0; transform:translateY(-6px); pointer-events:none;
+    transition:opacity .22s ease, transform .3s ease;        /* outgoing: quick and quiet */
+  }
+  #m-top .pane.on {
+    opacity:1; transform:none; pointer-events:auto;
+    transition:opacity .5s ease .16s, transform .7s cubic-bezier(.16,1,.3,1) .16s;   /* incoming: after the old one has gone */
+  }
+  #m-top .pane:not(.on) { transform:translateY(-6px); }
+  #m-top .pane.enter { transform:translateY(14px); transition:none; }
+  #m-top .sticky { position:static; }
+  #m-top .eyebrow { margin-bottom:6px; }
+  #m-top h2 { font-size:clamp(34px, 10vw, 48px); }
+  #m-top p { margin-top:12px; font-size:15px; }
+  #m-top h3 { margin-top:6px; font-size:19px; font-weight:600; }
+  #m-top .cont p:first-of-type, #m-top .cont h3 + p { margin-top:10px; }
+  #m-top h3 small { display:block; font-weight:400; font-size:13px; opacity:.55; }
+  /* hero pane: everything about the project, compact */
+  #m-top .hero-pane { display:flex; flex-direction:column; padding-bottom:calc(min(64px, 16vw) - 6px); }   /* keeps the facts clear of the Watch bubble */
+  #m-top .hero-pane .meta { margin-top:auto; padding-top:12px; font-size:13px; }
+  #m-top .hero-pane h1 { font-size:clamp(44px, 13.5vw, 76px); margin-top:4px; }
+  #m-top .hero-pane .sub { margin-top:14px; font-size:15px; }
+  #m-top .hero-pane .tagline { margin-top:14px; font-size:15px; }
+  #m-top .hero-pane .facts { margin-top:16px; font-size:13px; gap:3px 16px; }
+}
+/* tablets: phone layout, bigger type */
+@media (min-width:600px) and (max-width:1024px), (min-width:600px) and (hover:none) and (pointer:coarse) {
+  :root { --pad:36px; }
+  #m-top p { font-size:19px; }
+  #m-top h2 { font-size:56px; }
+  #m-top .hero-pane .facts { font-size:16px; }
+  #m-top .hero-pane .sub { font-size:19px; }
+  .mc-title { font-size:18px; } .mc-sub { font-size:14px; }
+}
+
+/* phones: long titles wrap tidily in the top pane */
+@media (max-width:1024px), (hover:none) and (pointer:coarse) {
+  #m-top .hero-pane h1 { line-height:.9; overflow-wrap:anywhere; }
+  #m-top .hero-pane .facts dd { overflow-wrap:anywhere; }
+}
+
+/* desktop: the hero stills live in the ink side only, so they're centred in what you actually see
+   (a little overlap under the wave so its swing never reveals an edge) */
+@media (min-width:1025px) and (hover:hover), (min-width:1025px) and (pointer:fine) {
+  #person { left:calc(var(--seam) - 8vw); }
+  /* the stills are framed in that same box (sized by JS), but the ink layers stay full width:
+     a lava blob pulled far left still shows picture — or ink, where a picture fades out — never an edge */
+  #watch-window { overflow:visible; }
+  /* the vignette covers the full width too: same ellipse as before, centred on the framed box,
+     and fully dark beyond it — so a blob pulled far left is as dim as the slideshow (and lights up the same over Watch) */
+  #backdrop::after, #watch-window::after {
+    --fw:calc(100vw - var(--seam) + 8vw);
+    background:radial-gradient(calc(var(--fw) * .75) 70% at calc(100vw - var(--fw) * .4) 50%, transparent 40%, rgba(0,0,0,.55) 100%);
+  }
+  #backdrop img.framed, #watch-window img.framed { -webkit-mask-image:linear-gradient(to right, transparent, #000 180px); mask-image:linear-gradient(to right, transparent, #000 180px); }
+  /* #person itself now starts 8vw left of the seam, so the card is placed from its own edge */
+  #person .card { left:calc(8vw + clamp(28px, 4vw, 72px)); }
+  #person b { overflow-wrap:anywhere; }
+}
+
+/* ── rows: words beside the work they talk about ── */
+@media (min-width:1025px) and (hover:hover), (min-width:1025px) and (pointer:fine) {
+  /* a section opens with some air; its further rows follow tightly — no padding pile-up between rows */
+  section.split > .words { padding-block:clamp(48px, 8vh, 96px) 28px; }
+  section.split.cont > .words { padding-top:20px; }
+  section.split > .work { padding-block:clamp(48px, 8vh, 96px) 0; }   /* top is refined by alignWork() */
+  section.split.cont > .work { padding-top:20px; }
+  section.split.quiet > .work { padding-bottom:28px; }
+  /* the work sits still, level with its words — no sticky drifting */
+  section.split > .work > .gallery, section.split > .work > .stack,
+  section.split > .work > .poster { position:relative; flex:none; align-self:stretch; }
+  section.split > .work > .stack .media-card { flex:none; }
+  /* the words don't travel either — both columns scroll together, so they stay level */
+  .split > .words .sticky { position:static; }
+  section.split > .work > .spotify, section.split > .work > .learn { flex:none; }
+  /* three side by side */
+  /* the row keeps its own height: it mustn't stretch to the (taller) text column next to it */
+  .gallery.row3 { grid-template-columns:repeat(3, 1fr); align-items:start; align-content:start; flex:none; }
+  .gallery.row3 figure:first-of-type, .gallery.row3 figure:last-of-type:nth-of-type(even) { grid-column:auto; }
+  .gallery.row3 .media-card img, .gallery.row3 .media-card video { aspect-ratio:var(--ratio, 1/1); }
+  /* even sets: plain rows of three or two, no wide image — every row full */
+  .gallery.grid3 { grid-template-columns:repeat(3, 1fr); }
+  .gallery.grid2 { grid-template-columns:repeat(2, 1fr); }
+  .gallery.grid3 figure:first-of-type, .gallery.grid2 figure:first-of-type,
+  .gallery.grid3 figure:last-of-type:nth-of-type(even), .gallery.grid2 figure:last-of-type:nth-of-type(even) { grid-column:auto; }
+  .gallery:not(.row3)[style*="--ratio"] .media-card img { aspect-ratio:var(--ratio); }
+  /* single pictures keep their own shape instead of being cropped to 16:9 */
+  .stack .media-card:has(> img) { aspect-ratio:auto; flex:none; }
+  .stack .media-card > img { position:static; aspect-ratio:auto; height:auto; max-height:85vh; object-fit:contain; background:#0d0d0d; }
+  /* next project: "All projects" sits on the same line as the big link */
+  .split.next { align-items:end; }
+  .split.next > .words { padding-bottom:clamp(14px, 1.6vw, 26px); }
+}
+
+/* consecutive blocks of work keep the same 3px seam as the cards inside them */
+.work > .gallery + .gallery, .work > .stack + .gallery, .work > .gallery + .stack, .work > .stack + .stack { margin-top:3px; }

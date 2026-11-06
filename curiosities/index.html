@@ -3,67 +3,375 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Curiosities — Jona Melvin Grobe</title>
   <meta name="robots" content="index, follow">
-
-  <!-- Title + SEO meta tags are injected by main.js from data.js -->
-  <title>Curiosities</title>
-  <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
+  <meta name="description" content="Drawings, side projects and other curiosities by Jona Melvin Grobe.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Curiosities | Jona Melvin Grobe">
+  <meta property="og:description" content="Drawings, side projects and other curiosities by Jona Melvin Grobe.">
+  <meta property="og:url" content="https://jmelving.de/curiosities/">
+  <meta property="og:image" content="https://jmelving.de/curiosities/img/Curiosities_1.png">
+  <link rel="canonical" href="https://jmelving.de/curiosities/">
+  <link rel="icon" href="../img/logo/favicon.ico" sizes="48x48">
+  <link rel="icon" type="image/svg+xml" href="../img/logo/favicon.svg">
+  <link rel="apple-touch-icon" href="../img/logo/apple-touch-icon.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Syne:wght@400;600;700;800&family=Syne+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/split.css">
 
-  <link rel="stylesheet" href="../css/curiosities.css">
+  <!--
+    Draft — curiosities in the front-page style.
+    The paper half was "Curiosities" on the front page, so here the paper takes over:
+    the seam slides from the middle to a narrow ink strip on the right, which holds the chapters.
+    Content comes from curiosities.data.js (same file the current page uses).
+  -->
+
+  <style>
+    #page {
+      display:grid;
+      grid-template-columns:var(--seam) 1fr;
+    }
+    main { padding:var(--pad); padding-right:clamp(28px, 4vw, 72px); }
+
+    /* ── ink strip: chapters ── */
+    .rail {
+      position:sticky; top:0; height:100svh;
+      display:flex; flex-direction:column; justify-content:center;
+      padding:var(--pad); padding-left:clamp(28px, 3vw, 56px);
+    }
+    .rail ol { list-style:none; display:flex; flex-direction:column; gap:clamp(10px, 2vh, 20px); }
+    .rail a { display:block; text-decoration:none; opacity:.4; transition:opacity .3s, transform .5s cubic-bezier(.2,.8,.2,1); }
+    .rail a:hover { opacity:.8; }
+    .rail a.on { opacity:1; transform:translateX(6px); }
+    .rail small { display:block; font-size:12px; }
+    .rail b { display:block; font-weight:600; font-size:clamp(17px, 1.4vw, 24px); line-height:1.15; letter-spacing:-0.02em; }
+
+    /* ── hero ── */
+    .hero { min-height:100svh; display:flex; flex-direction:column; }
+    .hero h1 {
+      margin-top:auto;
+      font-weight:700;
+      font-size:clamp(70px, min(12vw, 22vh), 230px);
+      line-height:.82; letter-spacing:-0.055em;
+    }
+    .hero .desc { max-width:52ch; margin-top:clamp(20px, 4vh, 40px); font-size:clamp(16px, 1.3vw, 21px); }
+    .hero .tags { display:flex; flex-wrap:wrap; gap:6px 18px; margin-top:20px; font-size:14px; opacity:.55; }
+
+    /* ── chapters ── */
+    .chapter {
+      display:grid; grid-template-columns:1fr 1.15fr;
+      gap:clamp(28px, 4vw, 72px);
+      align-items:start;
+      padding-block:clamp(80px, 16vh, 180px) 0;
+    }
+    .chapter.rev .text { order:2; }
+    .chapter .no { font-size:13px; opacity:.5; }
+    .chapter h2 {
+      margin-top:8px;
+      font-weight:700;
+      font-size:clamp(40px, 4.6vw, 88px);
+      line-height:.92; letter-spacing:-0.045em;
+    }
+    .chapter h2 span { font-weight:400; }
+    .chapter .subtitle { margin-top:12px; font-size:14px; opacity:.55; }
+    .chapter p.body { max-width:46ch; margin-top:18px; font-size:clamp(15px, 1.1vw, 18px); opacity:.8; }
+    .stats { display:flex; gap:32px; margin-top:28px; }
+    .stats b { display:block; font-weight:700; font-size:clamp(24px, 2vw, 34px); letter-spacing:-0.02em; }
+    .stats span { font-size:13px; opacity:.55; }
+    blockquote {
+      margin-top:32px; padding-left:18px;
+      border-left:2px solid currentColor;
+      font-size:clamp(18px, 1.5vw, 24px); line-height:1.35;
+      max-width:36ch;
+    }
+
+    .feature video, .feature img { width:100%; aspect-ratio:4/5; object-fit:cover; }
+    .feature figcaption { margin-top:14px; }
+    .feature .ey { font-size:13px; opacity:.5; }
+    .feature h3 { font-weight:600; font-size:clamp(20px, 1.7vw, 28px); letter-spacing:-0.02em; margin-top:2px; }
+    .feature h3 span { font-weight:400; }
+    .feature p { margin-top:8px; font-size:clamp(14px, 1vw, 16px); opacity:.7; max-width:52ch; }
+
+    footer { display:flex; justify-content:space-between; padding-block:clamp(80px, 14vh, 160px) 0; font-size:12px; opacity:.45; }
+
+    #m-top, .m-head, .m-mark { display:none; }
+    /* ── MOBILE: horizontal split, like the project pages ──
+       paper on top holds the words (one short chunk at a time), the ink below holds the work:
+       per chapter a huge faint heading, then its video, which stays put while the words advance */
+    @media (max-width:1024px), (hover:none) and (pointer:coarse) {
+      html { background:var(--ink); }
+      html, body { overflow-x:clip; max-width:100%; }
+      #page { grid-template-columns:1fr; }
+      .rail, .hero, .chapter .text, .feature figcaption { display:none; }
+      main { padding:calc(var(--seam-y) + 18svh) 0 0; }
+      .chapter {
+        display:block; position:relative; padding:0;
+        height:calc(var(--n, 2) * 42svh + 36svh);      /* scroll room: one step per chunk of words */
+      }
+      .m-head {
+        display:block; position:relative; z-index:2;  /* under the paper overlay (z 4) */
+        padding:24px 14px 12px; text-align:center;
+        font-weight:700; letter-spacing:0.01em; line-height:.9; white-space:nowrap;
+        color:rgba(238,235,229,.11);
+      }
+      /* the video fills most of the ink and sits centred in it, whatever height the paper takes */
+      .feature { position:sticky; top:calc(var(--seam-y) + (100svh - var(--seam-y)) * .1); margin:0; z-index:3; }
+      .feature video, .feature img { aspect-ratio:auto; height:min(calc((100svh - var(--seam-y)) * .8), 135vw); filter:grayscale(calc(1 - var(--col, 1))) brightness(calc(.62 + .38 * var(--col, 1))); }
+      /* no hard rectangle: the video melts into the ink at top and bottom */
+      .feature video, .feature img {
+        -webkit-mask-image:linear-gradient(to bottom, transparent 0, #000 22%, #000 78%, transparent 100%);
+                mask-image:linear-gradient(to bottom, transparent 0, #000 22%, #000 78%, transparent 100%);
+      }
+      .m-mark { display:block; position:absolute; left:0; width:1px; height:1px; }
+      .m-focus { will-change:filter, transform, opacity; transform-origin:50% 50%; }
+      footer { position:relative; z-index:2; padding:40px var(--pad) var(--pad); }
+
+      #m-top {
+        display:block; position:fixed; top:0; left:0; right:0; z-index:5;
+        height:calc(var(--seam-y) - 30px);
+      }
+      #m-top .pane {
+        position:absolute; inset:0; overflow:hidden;
+        padding:calc(var(--pad) * 1.1) var(--pad) 18px;
+        display:flex; flex-direction:column;
+        opacity:0; transform:translateY(-6px); pointer-events:none;
+        transition:opacity .22s ease, transform .3s ease;
+      }
+      #m-top .pane.on {
+        opacity:1; transform:none; pointer-events:auto;
+        transition:opacity .5s ease .16s, transform .7s cubic-bezier(.16,1,.3,1) .16s;
+      }
+      #m-top .pane.enter { transform:translateY(14px); transition:none; }
+      #m-top .pane > :first-child { margin-top:auto; }
+      #m-top .back { position:absolute; top:calc(var(--pad) * 1.1); left:var(--pad); }
+      #m-top .hero-pane { padding-top:calc(var(--pad) * 1.1 + 34px); }   /* room for "← Back" */
+      #m-top .hero-pane h1 { font-weight:700; font-size:clamp(50px, 16vw, 96px); line-height:.84; letter-spacing:-0.055em; }
+      #m-top .hero-pane .desc { margin-top:14px; font-size:14px; }
+      #m-top .hero-pane .tags { display:flex; flex-wrap:wrap; gap:4px 14px; margin-top:12px; font-size:13px; opacity:.55; }
+      #m-top .eyebrow { font-size:13px; opacity:.5; }
+      #m-top h2 { margin-top:4px; font-weight:700; font-size:clamp(32px, 10vw, 46px); line-height:.92; letter-spacing:-0.04em; }
+      #m-top h2 span { font-weight:400; }
+      #m-top h3 { margin-top:4px; font-weight:600; font-size:19px; letter-spacing:-0.02em; }
+      #m-top h3 span { font-weight:400; }
+      #m-top p { margin-top:10px; font-size:15px; line-height:1.5; max-width:46ch; }
+      #m-top .stats { display:flex; gap:28px; margin-top:14px; }
+      #m-top .stats b { display:block; font-weight:700; font-size:26px; letter-spacing:-0.02em; }
+      #m-top .stats span { font-size:13px; opacity:.55; }
+      #m-top blockquote { margin-top:12px; font-size:18px; line-height:1.35; padding-left:14px; border-left:2px solid currentColor; }
+    }
+    /* tall phones (Pro Max etc.): a little more type */
+    @media (max-width:600px) and (min-height:860px) {
+      #m-top p { font-size:16.5px; }
+      #m-top h2 { font-size:clamp(36px, 11vw, 50px); }
+      #m-top .hero-pane .desc { font-size:16px; }
+      #m-top .hero-pane h1 { font-size:clamp(56px, 17.5vw, 96px); }
+    }
+    @media (min-width:600px) and (max-width:1024px), (min-width:600px) and (hover:none) and (pointer:coarse) {
+      :root { --pad:36px; }
+      #m-top p { font-size:19px; }
+      #m-top h2 { font-size:56px; }
+      #m-top .hero-pane .desc { font-size:18px; }
+    }
+  </style>
 </head>
+
 <body>
+  <div class="grain"></div>
+  <div id="m-top" class="ink-text"></div>
 
-<!-- ── BACKGROUND FX ── -->
-<div id="grain"></div>
-<canvas id="bg-canvas"></canvas>
-<div id="cur-dot"></div>
-<div id="cur-ring"></div>
+  <div id="page">
+    <main>
+      <header class="hero ink-text fade-in">
+        <a class="back" href="../">← Back</a>
+        <h1 id="title"></h1>
+        <p class="desc" id="desc"></p>
+        <p class="tags" id="tags"></p>
+      </header>
+      <div id="chapters"></div>
+      <footer class="ink-text">
+        <a href="../impressum/" style="text-decoration:none">Impressum</a>
+        <span>© 2026 JMG</span>
+      </footer>
+    </main>
 
-<!-- ── SIDE RAIL — populated by main.js ── -->
-<nav id="side-rail"></nav>
-
-<!-- ── HEADER — populated by main.js ── -->
-<header></header>
-
-<!-- ── MAIN CONTENT — populated by main.js ── -->
-<div class="page-content" id="main-content"></div>
-
-<!-- ── LIGHTBOX — static shell, wired up by main.js ── -->
-<div id="lightbox">
-  <button id="lb-close">
-    <svg viewBox="0 0 14 14"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
-  </button>
-  <div id="lb-stage">
-    <button class="lb-arrow" id="lb-prev">
-      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-    </button>
-    <div id="lb-media-wrap"></div>
-    <button class="lb-arrow" id="lb-next">
-      <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
-    </button>
+    <aside class="rail ink-text fade-in" aria-label="Chapters"><ol id="rail"></ol></aside>
   </div>
-  <div id="lb-counter"></div>
-  <div id="lb-caption">
-    <div id="lb-dots"></div>
-    <div id="lb-title-wrap">
-      <div id="lb-title"></div>
-      <div id="lb-sub"></div>
-      <div id="lb-desc"></div>
-    </div>
-  </div>
-</div>
 
-<!-- ══════════════════════════════════════════════
-     SCRIPTS  —  load order matters:
-     1. data.js  → defines CURIOSITIES_DATA
-     2. main.js  → reads it and builds everything
-     ══════════════════════════════════════════════ -->
-<script src="./curiosities.data.js"></script>
-<script src="../js/curiosities.js"></script>
+  <script src="./curiosities.data.js"></script>
+  <script src="../js/split-field.js"></script>
+  <script>
+  (() => {
+    const D = CURIOSITIES_DATA;
+    const field = SplitField.init({ split: 0.76, splitMobile: 0.58, mobileAxis: 'y', enterFrom: 0.5, lavaOver: PHONE_LAYOUT() });   // desktop: the work sits on the paper, so no paper overlay over it
 
+    /* hero */
+    document.getElementById('title').innerHTML = `${D.hero.titleLine1}<br>${D.hero.titleLine2}`;
+    document.getElementById('desc').textContent = D.hero.desc.replace(/\s+/g, ' ').trim();
+    document.getElementById('tags').innerHTML = D.hero.tags.map(t => `<span>${t}</span>`).join('');
+
+    /* chapters + rail */
+    const host = document.getElementById('chapters'), rail = document.getElementById('rail');
+    const clean = s => (s || '').replace(/\s+/g, ' ').trim();
+    D.sections.filter(s => s.enabled).forEach((s, i) => {
+      const f = s.featureCard;
+      const el = document.createElement('section');
+      el.className = 'chapter' + (i % 2 ? ' rev' : '');
+      el.id = s.id;
+      el.innerHTML = `
+        <div class="text ink-text">
+          <p class="no">${s.num}</p>
+          <h2>${s.titlePlain} <span>${s.titleItalic}</span></h2>
+          <p class="subtitle">${s.subtitle || ''}</p>
+          <p class="body">${clean(s.intro)}</p>
+          ${(s.textParagraphs || []).map(p => `<p class="body">${clean(p)}</p>`).join('')}
+          ${s.stats ? `<div class="stats">${s.stats.map(x => `<div><b>${x.num}</b><span>${x.label}</span></div>`).join('')}</div>` : ''}
+          ${s.pullQuote && s.pullQuote.text ? `<blockquote>${clean(s.pullQuote.text)}</blockquote>` : ''}
+        </div>
+        ${f ? `<figure class="feature">
+          ${f.videoSrc
+            ? `<video class="media" src="${f.videoSrc}" muted loop playsinline preload="metadata"></video>`
+            : `<img class="media" src="${f.imgSrc}" alt="${f.imgAlt || ''}" loading="lazy">`}
+          <figcaption class="ink-text">
+            <p class="ey">${f.eyebrow || ''}</p>
+            <h3>${f.titlePlain} <span>${f.titleItalic}</span></h3>
+            <p>${clean(f.desc)}</p>
+          </figcaption>
+        </figure>` : ''}`;
+      host.appendChild(el);
+
+      const li = document.createElement('li');
+      li.innerHTML = `<a href="#${s.id}"><small>${s.num}</small><b>${s.navLabel}</b></a>`;
+      rail.appendChild(li);
+    });
+
+    /* highlight the chapter in view; play its video only while visible */
+    const links = [...rail.querySelectorAll('a')];
+    const spy = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) links.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + e.target.id));
+    }), { rootMargin: '-45% 0px -45% 0px' });
+    document.querySelectorAll('.chapter').forEach(c => spy.observe(c));
+
+    const vio = new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? e.target.play().catch(() => {}) : e.target.pause()), { threshold: 0.25 });
+    document.querySelectorAll('.feature video').forEach(v => vio.observe(v));
+
+    /* ── mobile: words on top in short chunks, work below ── */
+    const mTop = document.getElementById('m-top');
+    const makePane = (html, cls = '') => {
+      const pane = document.createElement('div');
+      pane.className = 'pane ' + cls;
+      pane.innerHTML = html;
+      mTop.appendChild(pane);
+      return pane;
+    };
+    const MAX = 210;
+    const sentences = t => {
+      const parts = [];
+      (clean(t).match(/[^.!?]+[.!?]+(\s|$)|[^.!?]+$/g) || [clean(t)]).forEach(sn => {
+        if (parts.length && (parts[parts.length - 1] + sn).length <= MAX) parts[parts.length - 1] += sn;
+        else parts.push(sn);
+      });
+      return parts.map(x => x.trim());
+    };
+    const heroPane = makePane(`<a class="back" href="../">← Back</a>
+      <h1>${D.hero.titleLine1}<br>${D.hero.titleLine2}</h1>
+      <p class="desc">${clean(D.hero.desc)}</p>
+      <p class="tags">${D.hero.tags.map(t => `<span>${t}</span>`).join('')}</p>`, 'hero-pane');
+    const triggers = [];
+    D.sections.filter(s => s.enabled).forEach(s => {
+      const sec = document.getElementById(s.id);
+      const f = s.featureCard;
+      const title = `${s.titlePlain} <span>${s.titleItalic}</span>`;
+      const label = `<p class="eyebrow">${s.navLabel}</p>`;
+      // chunks: heading + first sentences, the rest of the text, then the feature's own words
+      const chunks = [];
+      const intro = sentences(s.intro);
+      chunks.push(`<p class="eyebrow">${s.subtitle || ''}</p><h2>${title}</h2><p>${intro[0]}</p>`);
+      intro.slice(1).forEach(t => chunks.push(label + `<p>${t}</p>`));
+      (s.textParagraphs || []).forEach(tp => sentences(tp).forEach(t => chunks.push(label + `<p>${t}</p>`)));
+      if (s.stats) chunks.push(label + `<div class="stats">${s.stats.map(x => `<div><b>${x.num}</b><span>${x.label}</span></div>`).join('')}</div>`);
+      if (s.pullQuote && s.pullQuote.text) chunks.push(label + `<blockquote>${clean(s.pullQuote.text)}</blockquote>`);
+      if (f) sentences(f.desc).forEach((t, i) => chunks.push(`<p class="eyebrow">${f.eyebrow || s.navLabel}</p>${i === 0 ? `<h3>${f.titlePlain} <span>${f.titleItalic}</span></h3>` : ''}<p>${t}</p>`));
+
+      sec.style.setProperty('--n', chunks.length);
+      const head = document.createElement('div');
+      head.className = 'm-head m-focus';
+      head.textContent = s.navLabel;
+      sec.prepend(head);
+      chunks.forEach((html, i) => {
+        const mark = document.createElement('div');
+        mark.className = 'm-mark';
+        mark.style.top = `calc(${i} * 42svh)`;
+        sec.appendChild(mark);
+        triggers.push({ el: mark, pane: makePane(html) });
+      });
+    });
+
+    function fitHeads() {
+      document.querySelectorAll('.m-head').forEach(h => {
+        if (!PHONE_LAYOUT()) return;
+        const cs = getComputedStyle(h);
+        const avail = h.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+        const tf = h.style.transform; h.style.transform = 'none';
+        h.style.fontSize = '100px';
+        const rg = document.createRange(); rg.selectNodeContents(h);
+        h.style.fontSize = Math.floor(100 * avail / rg.getBoundingClientRect().width * 0.97) + 'px';
+        h.style.transform = tf;
+      });
+    }
+    fitHeads(); addEventListener('resize', fitHeads);
+    document.fonts && document.fonts.ready.then(fitHeads);
+
+    let activePane = null;
+    function syncPane() {
+      if (!PHONE_LAYOUT()) return;
+      let cur = heroPane;
+      triggers.forEach(t => { if (t.el.getBoundingClientRect().top < innerHeight * 0.7) cur = t.pane; });
+      if (scrollY < innerHeight * 0.12) cur = heroPane;
+      // the paper is exactly as tall as the words it holds — no empty paper, the rest goes to the work
+      const kids = [...cur.children].filter(k => !k.classList.contains('back'));
+      if (kids.length) {
+        const prev = cur.style.transform; cur.style.transform = 'none';
+        const textH = kids[kids.length - 1].getBoundingClientRect().bottom - kids[0].getBoundingClientRect().top;
+        cur.style.transform = prev;
+        const padTop = parseFloat(getComputedStyle(cur).paddingTop);
+        const want = (padTop + textH + 18 + 30 + 22) / innerHeight;          // pane padding, gap to the wave
+        field.setSplitMobile(Math.min(0.66, Math.max(0.26, want)));
+      }
+      if (cur !== activePane) {
+        activePane?.classList.remove('on');
+        activePane = cur;
+        activePane.classList.add('enter'); void activePane.offsetWidth; activePane.classList.remove('enter');
+        activePane.classList.add('on');
+      }
+    }
+
+    // focus: the video / heading in the middle of the ink is sharp and in colour, the rest sinks back
+    let fq = false;
+    function focusFlow() {
+      fq = false;
+      const items = [...document.querySelectorAll('.feature, .m-head')];
+      if (!PHONE_LAYOUT()) { items.forEach(el => { el.style.filter = el.style.opacity = el.style.transform = ''; }); return; }
+      const top = field.edgeAt(innerWidth / 2), half = (innerHeight - top) / 2, mid = top + half;
+      items.forEach(el => {
+        const r = el.getBoundingClientRect();
+        if (r.bottom < -200 || r.top > innerHeight + 200) return;
+        const c = (r.top + r.bottom) / 2;
+        const d = Math.max(0, Math.abs(c - mid) - Math.max(r.height * 0.22, r.height / 2 - half * 0.35));
+        let fv = Math.min(1, d / (half * 0.8)); fv = fv * fv * (3 - 2 * fv);
+        if (el.classList.contains('feature')) el.style.setProperty('--col', (1 - fv).toFixed(3));
+        const g = fv * 0.5;
+        el.style.filter = g < 0.01 ? '' : `blur(${(g * 4).toFixed(2)}px)`;
+        el.style.opacity = (1 - g * 0.5).toFixed(3);
+        el.style.transform = `scale(${(1 - g * 0.03).toFixed(4)})`;
+      });
+    }
+    const tick = () => { if (!fq) { fq = true; requestAnimationFrame(() => { syncPane(); focusFlow(); }); } };
+    addEventListener('scroll', tick, { passive: true });
+    addEventListener('resize', tick);
+    (function keep() { tick(); setTimeout(keep, 200); })();
+  })();
+  </script>
 </body>
 </html>

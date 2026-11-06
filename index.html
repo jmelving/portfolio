@@ -1,1129 +1,1729 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-<!--Metadata-->
-    <!-- Basic Metadata -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jona Melvin Grobe — Creative Generalist &amp; Technical Artist</title>
+  <meta name="description" content="Portfolio of Jona Melvin Grobe, Creative Generalist &amp; Technical Artist: short films, VFX, 3D, compositing and editing, and the technical side in between.">
+  <meta name="keywords" content="Jona Melvin Grobe, 3D generalist portfolio, Houdini artist, procedural art, VFX simulations, realtime FX, technical artist">
+  <meta name="author" content="Jona Melvin Grobe">
+  <meta name="robots" content="index, follow">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Jona Melvin Grobe | Creative Generalist &amp; Technical Artist">
+  <meta property="og:description" content="Portfolio of Jona Melvin Grobe, Creative Generalist &amp; Technical Artist: short films, VFX, 3D, compositing and editing, and the technical side in between.">
+  <meta property="og:image" content="https://mir-s3-cdn-cf.behance.net/projects/404/881ee8164415761.Y3JvcCw5OTksNzgyLDAsOTQ.png">
+  <meta property="og:url" content="https://jmelving.de/">
+  <link rel="canonical" href="https://jmelving.de/">
 
-    <title>Jona Melvin Grobe — Tech Art</title>
+  <link rel="icon" href="./img/logo/favicon.ico" sizes="48x48">
+  <link rel="icon" type="image/svg+xml" href="./img/logo/favicon.svg">
+  <link rel="apple-touch-icon" href="./img/logo/apple-touch-icon.png">
 
-    <meta name="description" content="Dive into the world of Jona Melvin Grobe: Where art meets code, efficiency meets creativity, and 3D gets weird!">
-    <meta name="keywords" content="Jona Melvin Grobe, 3D generalist portfolio, Houdini artist, procedural art, VFX simulations, realtime FX, technical artist">
-    <meta name="author" content="Jona Melvin Grobe">
-    <meta name="robots" content="index, follow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
 
-    <!-- Open Graph (Social Sharing) -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Jona Melvin Grobe | Technical Artist">
-    <meta property="og:description" content="Where art meets code, efficiency meets creativity, and 3D gets weird.">
-    <meta property="og:image" content="https://mir-s3-cdn-cf.behance.net/projects/404/881ee8164415761.Y3JvcCw5OTksNzgyLDAsOTQ.png">
-    <meta property="og:url" content="https://jmelving.de">
+  <!--
+    Draft C — white half = Curiosities (left), black half = Projects (right),
+    a showreel bubble sits on the seam as a window into the reel,
+    the name stands on the bottom edge, flush left / flush right.
+  -->
 
-    <!-- Favicons -->
-    <link rel="icon" type="image/png" href="/img/favicon.png">
-    <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
-    <link rel="shortcut icon" href="/img/favicon.ico">
+  <style>
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Syne:wght@400;600;700;800&family=Syne+Mono&display=swap" rel="stylesheet">
+    :root {
+      --paper: #eeebe5;
+      --ink:   #0c0c0c;
+      --pad:   clamp(20px, 3.2vw, 56px);
+      --gap:   clamp(28px, 4vw, 72px);   /* clearance from the divide */
+      --face:  clamp(84px, 7.6vw, 128px);
+    }
 
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="../css/reset.css">
-    <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/homegallery.css">
-    <link rel="stylesheet" href="../css/effects.css">
-    <link rel="stylesheet" href="./css/mainpage.css">
-<style>
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { background:var(--paper); }
+    body {
+      font-family:'DM Sans', system-ui, sans-serif;
+      font-size:15px; line-height:1.5;
+      color:var(--paper);
+      -webkit-font-smoothing:antialiased;
+    }
+    body.zone { cursor:pointer; }
+    /* plain links to the sub-pages: invisible, but there for search engines and screen readers (shown when tabbed to) */
+    .site-nav { position:fixed; left:12px; top:12px; z-index:200; display:flex; gap:14px; clip-path:inset(50%); width:1px; height:1px; overflow:hidden; }
+    .site-nav:focus-within { clip-path:none; width:auto; height:auto; overflow:visible; padding:8px 12px; background:var(--paper); color:var(--ink); }
+    body.zone.near-text { cursor:auto; }        /* close to the text the hint fades out, and a click there goes nowhere */
+    a { color:inherit; }
 
-:root {
-  --bg:     #080808;
-  --fg:     #EDEAE4;
-  --dim:    rgba(237,234,228,0.36);
-  --dimmer: rgba(237,234,228,0.12);
-  --border: rgba(237,234,228,0.07);
-}
+    /* ── PAGE ── */
+    #page {
+      position:relative;
+      min-height:100svh;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      grid-template-rows:auto minmax(200px, 1fr) auto auto;
+      grid-template-areas:
+        "tl tr"
+        "md md"
+        "nl nr"
+        "fl fr";
+      overflow:hidden;
+    }
+    #mid { grid-area:md; }
 
-html, body {
-  width:100%; height:100%;
-  background:var(--bg);
-  color:var(--fg);
-  font-family:'Syne', sans-serif;
-  overflow:hidden;
-  cursor:none;
-}
+    /* the liquid black/white field (WebGL), fixed to the viewport */
+    #field {
+      position:fixed; inset:0;
+      width:100vw; height:100vh;
+      z-index:1;
+      pointer-events:none;
+    }
+    body.nogl #page { background:linear-gradient(90deg, var(--paper) 50%, var(--ink) 50%); }
+    @media (max-width:1024px), (hover:none) and (pointer:coarse) {
+      body.nogl #page { background:linear-gradient(180deg, var(--paper) 50%, var(--ink) 50%); }
+    }
 
-/* ── VIDEO + CRT ── */
-#video-bg {
-  position:fixed; z-index:-1;
-  top:0; left:-380px;
-  width:calc(100vw + 380px); height:100vh;
-  object-fit:cover; object-position:center center;
-  opacity:0; pointer-events:none;
-}
-#crt-canvas {
-  position:fixed; z-index:0;
-  top:0; left:0;
-  width:100vw; height:100vh;
-  pointer-events:none;
-}
-#video-overlay {
-  position:fixed; inset:0; z-index:0;
-  background: radial-gradient(ellipse 60% 80% at calc((100vw - 380px) / 2) 50%,
-    rgba(8,8,8,0.0)  0%,
-    rgba(8,8,8,0.52) 58%,
-    rgba(8,8,8,0.92) 100%);
-  pointer-events:none;
-}
+    /* the reel lives inside the black liquid … */
+    #reel-mirror { display:none; }
+    .reel-layer {
+      position:fixed; top:0; left:var(--reel-left, 25vw);   /* desktop: the reel is centred on the black half (3/4 across), not on the seam */
+      width:100vw; height:100vh;
+      object-fit:cover;
+      pointer-events:none;
+    }
+    #reel-bg {
+      z-index:0;
+      /* its left edge sits under the paper; fade it out, so pulling the paper away never shows a hard line */
+      -webkit-mask-image:linear-gradient(to right, transparent 0, #000 18vw); mask-image:linear-gradient(to right, transparent 0, #000 18vw);
+      filter:grayscale(1) contrast(1.2);
+      transition:filter .8s ease;
+    }
+    body.reel-hover #reel-bg { filter:none; }
+    /* … and the bubble is a window onto the same reel, in colour (clip set by JS) */
+    #reel-window {
+      z-index:2;
+      clip-path:circle(0 at 50% 50%);
+      opacity:0; transition:opacity 1s .6s;
+    }
+    body.ready #reel-window { opacity:1; }
 
-/* ── CURSOR ── */
-#cur-dot {
-  position:fixed; width:24px; height:24px;
-  background:var(--fg); border-radius:50%;
-  pointer-events:none; z-index:9999;
-  transform:translate(-50%,-50%) scale(0.167);
-  will-change:left,top,transform;
-}
-#cur-ring {
-  position:fixed; width:26px; height:26px;
-  border:1px solid rgba(237,234,228,0.3);
-  border-radius:50%; pointer-events:none; z-index:9998;
-  transform:translate(-50%,-50%);
-  will-change:left,top,transform;
-}
-body.hovering #cur-dot  { transform:translate(-50%,-50%) scale(0); }
-body.hovering #cur-ring { border-color:rgba(237,234,228,0.62); }
+    /* curiosities: sketches the cursor leaves on the paper, printed on with multiply */
+    #stamps {
+      position:fixed; inset:0; z-index:1;
+      pointer-events:none;
+      mix-blend-mode:multiply;
+      overflow:hidden;
+    }
+    #stamps img {
+      position:absolute;
+      width:clamp(100px, 8.5vw, 150px); height:auto;
+      animation:stamp 3.2s cubic-bezier(.3,.6,.3,1) forwards;
+    }
+    @keyframes stamp {
+      0%   { opacity:0;   transform:translate(-50%,-50%) rotate(var(--rot)) scale(.96); }
+      22%  { opacity:.85; transform:translate(-50%, calc(-50% - 10px)) rotate(var(--rot)) scale(1); }
+      70%  { opacity:.85; }
+      100% { opacity:0; transform:translate(-50%, calc(-50% - 90px)) rotate(calc(var(--rot) * -1)) scale(.8); }
+    }
 
-/* ── LAYOUT ── */
-#layout {
-  position:relative; z-index:1;
-  display:flex; width:100vw; height:100vh;
-  background:transparent;
-}
+    #grain {
+      position:fixed; inset:0; z-index:6; pointer-events:none;
+      background:url('./img/effects/Noise.png');
+      opacity:0.07;
+      mix-blend-mode:overlay;
+    }
 
-/* ── LEFT ── */
-#left {
-  flex:1; position:relative; overflow:hidden; min-width:0;
-}
-#canvas {
-  position:absolute; inset:0; z-index:1; pointer-events:none;
-}
-#left::before {
-  content:''; position:absolute; left:50%; top:0; bottom:0;
-  width:1px; background:rgba(237,234,228,0.05); z-index:2; pointer-events:none;
-}
-#left::after {
-  content:''; position:absolute; top:50%; left:0; right:0;
-  height:1px; background:rgba(237,234,228,0.05); z-index:2; pointer-events:none;
-}
+    /* all text inverts against whatever is underneath, including the slime */
+    .cell {
+      position:relative; z-index:3;
+      padding:var(--pad);
+      color:var(--paper);
+      mix-blend-mode:difference;
+    }
+    .paper-side { padding-right:var(--gap); }
+    .ink-side   { padding-left:var(--gap); text-align:right; }
 
-/* ── CENTER STAGE ── */
-#stage {
-  position:absolute; inset:0; z-index:10;
-  display:flex; align-items:center; justify-content:center;
-  pointer-events:none;
-}
+    .tl { grid-area:tl; padding-top:calc(var(--pad) + var(--face) + 18px); }
+    .tr { grid-area:tr; }
+    .nl { grid-area:nl; padding-top:0; padding-bottom:0; }
+    .nr { grid-area:nr; padding-top:0; padding-bottom:0; }
+    .fl { grid-area:fl; }
+    .fr { grid-area:fr; }
 
-#nav-svg { overflow:visible; pointer-events:none; }
+    .label { font-size:clamp(13px, 0.9vw, 15px); opacity:0.5; margin-bottom:10px; }
 
-.nav-line {
-  stroke:rgba(237,234,228,0.18);
-  stroke-width:0.75;
-  stroke-dasharray:500;
-  stroke-dashoffset:500;
-  animation:drawLine 1.2s 0.5s cubic-bezier(0.76,0,0.24,1) forwards;
-}
-.nav-line.l2 { animation-delay:0.65s; }
-@keyframes drawLine { to { stroke-dashoffset:0; } }
-
-.dot-group { pointer-events:all; cursor:pointer; }
-
-.dot-glow {
-  fill:none; stroke:rgba(237,234,228,0.1); stroke-width:1; r:22;
-  transition:r 0.45s cubic-bezier(0.16,1,0.3,1), stroke 0.3s, opacity 0.3s;
-  opacity:0; animation:fadeEl 0.5s 1.5s ease forwards;
-}
-.dot-group:hover .dot-glow { r:52; stroke:rgba(237,234,228,0.14); opacity:1; }
-
-.dot-main {
-  fill:rgba(237,234,228,0.82); r:7;
-  transition:r 0.45s cubic-bezier(0.16,1,0.3,1), fill 0.3s;
-  opacity:0; animation:fadeEl 0.5s 1.5s ease forwards;
-}
-.dot-group.l2 .dot-main { animation-delay:1.65s; }
-.dot-group.l2 .dot-glow { animation-delay:1.65s; }
-.dot-group:hover .dot-main { r:22; fill:rgba(237,234,228,0.95); }
-
-@keyframes fadeEl { to { opacity:1; } }
-
-.nav-lbl {
-  font-family:'Cormorant Garamond', serif;
-  font-size:26px; font-weight:300; font-style:italic;
-  letter-spacing:1px;
-  fill:rgba(237,234,228,0.45);
-  opacity:0; animation:fadeEl 0.5s 1.7s ease forwards;
-  pointer-events:none; transition:fill 0.3s, font-size 0.4s cubic-bezier(0.16,1,0.3,1);
-}
-.nav-lbl.l2 { animation-delay:1.8s; }
-.nav-lbl.hovered { fill:rgba(237,234,228,0.92); font-size:36px; cursor:pointer; }
-
-/* ── PLAY BUTTON ── */
-#play-group { pointer-events:all; cursor:pointer; }
-
-#play-outer {
-  fill:none; stroke:rgba(237,234,228,0.08); stroke-width:1;
-  animation:spin 28s linear infinite; transform-origin:0 0;
-}
-#play-inner {
-  fill:none; stroke:rgba(237,234,228,0.05); stroke-width:1;
-  animation:spin 18s linear infinite reverse; transform-origin:0 0;
-}
-@keyframes spin { to { transform:rotate(360deg); } }
-
-#play-circle {
-  fill:rgba(237,234,228,0.03); stroke:rgba(237,234,228,0.22); stroke-width:1;
-  transition:fill 0.35s, stroke 0.35s;
-}
-#play-group:hover #play-circle { fill:rgba(237,234,228,0.07); stroke:rgba(237,234,228,0.58); }
-#play-tri { fill:rgba(237,234,228,0.7); transition:fill 0.3s; }
-#play-group:hover #play-tri { fill:rgba(237,234,228,0.95); }
-#pause-bars { display:none; }
-#pause-bar1, #pause-bar2 { fill:rgba(237,234,228,0.78); }
-#play-sub {
-  font-family:'Syne Mono',monospace;
-  font-size:11px; letter-spacing:3px; text-transform:uppercase;
-  fill:rgba(237,234,228,0.22); text-anchor:middle; pointer-events:none;
-}
-
-/* ── RIGHT PANEL ── */
-#right {
-  width:380px; flex-shrink:0;
-  border-left:1px solid var(--border);
-  padding:44px 40px 28px;
-  display:flex; flex-direction:column;
-  background:rgba(8,8,8,0.72);
-  backdrop-filter:blur(20px);
-  position:relative; z-index:10;
-  overflow-y:auto; scrollbar-width:none;
-}
-#right::-webkit-scrollbar { display:none; }
-
-#avatar {
-  width:110px; height:110px;
-  min-width:110px; min-height:110px;
-  aspect-ratio:1/1;
-  border-radius:50%;
-  border:1px solid var(--border);
-  display:flex; align-items:center; justify-content:center;
-  flex-shrink:0;
-  margin-bottom:26px; background:rgba(237,234,228,0.025);
-  overflow:hidden;
-}
-#avatar span { font-size:1.1rem; font-weight:700; letter-spacing:0.12em; color:rgba(237,234,228,0.38); }
-#avatar img {
-  width:100%; height:100%;
-  object-fit:cover; object-position:center top;
-  display:block;
-  border-radius:50%;
-}
+    /* ── SOCIALS: handle + icons beside the portrait ──
+       the icons never move; hovering one opens a shared label after the row
+       that cycles through what you'll find there */
+    .soc-profile {
+      position:absolute; z-index:5;
+      top:var(--pad); left:calc(var(--pad) + var(--face) + 22px);
+      height:var(--face);
+      padding:0;
+      display:flex; flex-direction:column; justify-content:center; gap:10px;
+    }
+    .soc-profile .handle { font-size:clamp(15px, 1.1vw, 18px); font-weight:500; }
+    .soc-profile .icons { display:flex; align-items:center; gap:16px; }
+    .soc-profile a {
+      display:inline-flex; align-items:center;
+      text-decoration:none; opacity:0.55;
+      transition:opacity .25s;
+    }
+    .soc-profile a:hover, .soc-profile a.on { opacity:1; }
+    .soc-profile a.yt { opacity:0.85; }
+    .soc-profile svg { width:clamp(18px, 1.3vw, 22px); height:clamp(18px, 1.3vw, 22px); fill:currentColor; flex:none; }
+    .soc-profile .lab {
+      display:inline-block; overflow:hidden;
+      width:0; margin-left:-6px;          /* sits tight after the last icon */
+      white-space:nowrap;
+      font-size:clamp(14px, 1vw, 16px);
+      transition:width .45s cubic-bezier(.2,.8,.2,1);
+    }
+    .soc-profile .lab span {
+      display:inline-block; padding-left:8px;
+      transition:opacity .3s, transform .3s;
+    }
+    .soc-profile .lab span.out { opacity:0; transform:translateY(4px); }
 
 
-#name {
-  font-family:'Cormorant Garamond', serif;
-  font-size:clamp(2rem, 2.8vw, 3rem);
-  font-weight:300; letter-spacing:0.04em;
-  line-height:1.08; margin-bottom:6px; color:var(--fg);
-}
-#name b { font-weight:700; }
-#role-line {
-  font-family:'Cormorant Garamond', serif;
-  font-size:1.25rem; font-weight:300; font-style:italic;
-  color:var(--dim); letter-spacing:0.04em;
-}
+    /* ── PORTRAIT (outside the blended cells so it isn't inverted) ── */
+    #face {
+      position:absolute; z-index:5;      /* above .tl, whose padding covers it */
+      top:var(--pad); left:var(--pad);
+      width:var(--face); height:var(--face);
+      opacity:0;
+      transition:opacity 1s .5s;
+      cursor:pointer;
+    }
+    body.ready #face { opacity:1; }
+    #face img {
+      display:block; width:100%; height:100%;
+      object-fit:cover; object-position:center 30%;
+      filter:grayscale(1) contrast(1.08);
+      border-radius:46% 54% 51% 49% / 55% 45% 55% 45%;
+      animation:blob 9s ease-in-out infinite alternate;
+      transform:translate(var(--fx, 0), var(--fy, 0)) rotate(var(--fr, 0deg)) scale(var(--fs, 1));
+      transition:filter .5s, transform .5s cubic-bezier(.2,.9,.25,1.4);
+    }
+    /* hit flash: a pure-white copy of the portrait on top, faded out (no grey in between) */
+    #face img.flash {
+      position:absolute; inset:0;
+      filter:brightness(0) invert(1) !important;
+      opacity:0; pointer-events:none;
+    }
+    #face:hover img {
+      filter:none;
+      --fs:1.18;
+      animation-duration:1.6s;            /* gets wobbly when you touch it */
+    }
+    /* speech bubble when you hit the portrait: a soft blob that wobbles, rides along with the knockback */
+    #ouch {
+      position:fixed; left:0; top:0; z-index:60; pointer-events:none;
+      will-change:transform;
+    }
+    #ouch span {
+      position:relative; display:block;
+      padding:9px 17px 10px;
+      background:var(--ink); color:var(--paper);
+      font-size:14px; font-weight:600; letter-spacing:-0.01em; white-space:nowrap;
+      border-radius:24px 30px 22px 28px / 22px 26px 24px 18px;      /* px, not %: long lines stay a soft blob, not a thin oval */
+      animation:ouch-wobble 1.6s ease-in-out infinite alternate;
+      opacity:0; transform:translateY(8px) rotate(-6deg) scale(.6); transform-origin:12% 100%;
+      transition:opacity .18s ease, transform .5s cubic-bezier(.2,1.1,.3,1.35);
+    }
+    /* the tail: two little drops toward the portrait */
+    #ouch span::before, #ouch span::after {
+      content:''; position:absolute; background:inherit; border-radius:50%;
+    }
+    #ouch span::before { width:11px; height:10px; left:9px; bottom:-5px; border-radius:60% 40% 55% 45%; }
+    #ouch span::after  { width:6px; height:6px; left:2px; bottom:-11px; }
+    #ouch.on span { opacity:1; transform:rotate(-2deg); }
+    @keyframes ouch-wobble {
+      0%   { border-radius:24px 30px 22px 28px / 22px 26px 24px 18px; }
+      100% { border-radius:30px 22px 28px 20px / 26px 20px 18px 25px; }
+    }
+    @media (prefers-reduced-motion:reduce) { #ouch span { transform:none; transition:opacity .2s; animation:none; } }
+    @keyframes blob {
+      0%   { border-radius:46% 54% 51% 49% / 55% 45% 55% 45%; }
+      50%  { border-radius:55% 45% 43% 57% / 47% 56% 44% 53%; }
+      100% { border-radius:49% 51% 58% 42% / 42% 52% 48% 58%; }
+    }
 
-.rule { height:1px; background:var(--border); margin:24px 0; flex-shrink:0; }
+    /* ── TOP LEFT: who ── */
+    .role { font-size:clamp(19px, 1.6vw, 27px); line-height:1.25; }
+    .bio { max-width:42ch; margin-top:12px; font-size:clamp(15px, 1.12vw, 19px); opacity:0.7; }
+    .quote {
+      margin-top:12px; min-height:1.5em;
+      font-size:clamp(15px, 1.12vw, 19px);
+      transition:opacity .5s;
+    }
+    .quote.out { opacity:0; }
+    .tl .mail {
+      display:inline-block; margin-top:16px;
+      font-size:clamp(17px, 1.35vw, 22px);
+      text-decoration:none;
+      border-bottom:1px solid currentColor;
+    }
 
-#bio { font-size:0.9rem; line-height:1.86; color:rgba(237,234,228,0.48); }
+    /* ── TOP RIGHT: selected projects ── */
+    .work { list-style:none; }
+    .work a {
+      display:inline-block;
+      text-decoration:none;
+      font-size:clamp(16px, 1.25vw, 21px);
+      padding:2px 0;
+      opacity:0.75;
+      transition:opacity .25s;
+    }
+    .work a:hover { opacity:1; }
 
-#tags { display:flex; flex-wrap:wrap; gap:6px 13px; margin-top:20px; }
-.tag {
-  font-family:'Syne Mono',monospace;
-  font-size:0.65rem; letter-spacing:0.17em;
-  text-transform:uppercase; color:rgba(237,234,228,0.22);
-}
 
-#socials { display:flex; gap:9px; margin-top:28px; }
-.soc-wrap { display:flex; flex-direction:column; align-items:center; gap:5px; }
-.soc-mob-label {
-  display:none;
-  font-family:'Syne Mono', monospace;
-  font-size:0.6rem; letter-spacing:0.08em; text-transform:uppercase;
-  color:rgba(237,234,228,0.45); text-align:center; white-space:nowrap;
-}
-@media (max-width:700px) {
-  #socials { gap:0; justify-content:space-between; }
-  .soc-mob-label { display:block; }
-  #soc-tip { display:none; }
-}
-.soc {
-  width:34px; height:34px; border-radius:50%;
-  border:1px solid var(--border);
-  display:flex; align-items:center; justify-content:center;
-  color:var(--dim); text-decoration:none;
-  transition:border-color 0.22s, color 0.22s, background 0.22s;
-}
-.soc:hover { border-color:rgba(237,234,228,0.3); color:var(--fg); background:rgba(237,234,228,0.04); }
-.soc svg { width:14px; height:14px; fill:currentColor; }
+    /* ── NAME: stands on the bottom edge, flush left / flush right ── */
+    .nl h1, .nr span {
+      display:block;
+      font-weight:700;
+      font-size:clamp(40px, min(8.4vw, 13vh), 170px);
+      line-height:0.82;
+      letter-spacing:-0.035em;
+      white-space:nowrap;
+      user-select:none;
+    }
+    .nl h1 { margin-left:-0.04em; }      /* optical: J's hook sits on the margin */
 
-#cta {
-  display:inline-flex; align-items:center; gap:8px;
-  padding:13px 24px; border-radius:100px;
-  border:1px solid rgba(237,234,228,0.16);
-  font-size:0.7rem; font-weight:700;
-  letter-spacing:0.2em; text-transform:uppercase;
-  background:none; color:var(--fg);
-  font-family:'Syne',sans-serif; cursor:pointer;
-  text-decoration:none;
-  transition:background 0.28s, border-color 0.28s; width:fit-content;
-}
-#cta:hover { background:rgba(237,234,228,0.05); border-color:rgba(237,234,228,0.35); }
+    /* ── FOOTER: one line, both sides on the same height ── */
+    .fl, .fr { padding-top:24px; }
+    .foot { display:flex; flex-wrap:wrap; gap:6px 20px; font-size:12px; }
+    .fr .foot { justify-content:flex-end; }
+    .foot a { text-decoration:none; opacity:0.75; }
+    .foot a:hover { opacity:1; }
+    .foot .small { opacity:0.45; }
 
-/* ── SOCIAL TOOLTIP ── */
-#soc-tip {
-  font-family:'Syne Mono', monospace;
-  font-size:0.72rem; letter-spacing:0.06em; line-height:1.6;
-  color:rgba(237,234,228,0.65);
-  margin-top:10px;
-  min-height:1.6em;
-  transition:opacity 0.2s;
-  opacity:0;
-}
-#soc-tip.visible { opacity:1; }
+    /* ── SHOWREEL BUBBLE ── */
+    #play {
+      position:absolute; top:0; left:0; z-index:4;
+      width:var(--d, 240px); height:var(--d, 240px);
+      margin:calc(var(--d, 240px) / -2) 0 0 calc(var(--d, 240px) / -2);
+      border:0; border-radius:50%;
+      background:none; cursor:pointer;
+      color:#fff;
+      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
+      font:inherit;
+      text-shadow:0 1px 18px rgba(0,0,0,.35);
+      opacity:0; transition:opacity .8s 1.2s;
+    }
+    body.ready #play { opacity:1; }
+    #play svg {
+      width:24px; height:27px; margin-left:5px;
+      fill:currentColor;
+      filter:drop-shadow(0 1px 12px rgba(0,0,0,.35));
+      transition:transform .5s cubic-bezier(.2,.7,.2,1);
+    }
+    #play:hover svg { transform:scale(1.2); }
+    #play em {
+      font-style:normal; font-weight:700;
+      font-size:clamp(17px, 1.4vw, 24px);
+      letter-spacing:-0.02em;
+    }
 
-/* ── RIGHT PANEL FOOTER ── */
-#right-footer {
-  margin-top:auto;
-  padding-top:20px;
-  border-top:1px solid var(--border);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  flex-shrink:0;
-}
-#impressum-link {
-  font-family:'Syne Mono', monospace;
-  font-size:0.6rem;
-  letter-spacing:0.18em;
-  text-transform:uppercase;
-  color:rgba(237,234,228,0.2);
-  text-decoration:none;
-  transition:color 0.22s;
-}
-#impressum-link:hover { color:rgba(237,234,228,0.55); }
-#right-footer-copy {
-  font-family:'Syne Mono', monospace;
-  font-size:0.6rem;
-  letter-spacing:0.14em;
-  color:rgba(237,234,228,0.12);
-}
+    /* ── CURSOR HINT ── */
+    #hint {
+      position:fixed; top:0; left:0; z-index:7;
+      pointer-events:none;
+      color:var(--paper);
+      mix-blend-mode:difference;
+      font-size:13px;
+      font-weight:600;
+      letter-spacing:-0.02em;
+      line-height:1;
+      white-space:nowrap;
+      opacity:0; transition:opacity .25s;
+    }
+    body.zone #hint { opacity:1; }
+    @media (hover:none) { #hint { display:none; } }
 
-/* Hide mobile nav on desktop */
-#mobile-nav { display:none; }
+    /* ── HOVER PREVIEW ── */
+    /* hovering a project swaps the reel for that project's stills, in full colour */
+    #project-bg {
+      position:fixed; inset:0; z-index:0;
+      overflow:hidden;
+      pointer-events:none;
+      opacity:0; transition:opacity .5s ease;
+      background:var(--ink);
+    }
+    body.project-on #project-bg { opacity:1; }
+    #project-bg > img {
+      position:absolute; inset:0;
+      width:100%; height:100%;
+      object-fit:cover;
+      opacity:0;
+      will-change:opacity, transform;   /* fades + slow zoom are driven from JS */
+      backface-visibility:hidden;
+    }
+    #project-bg video {
+      position:absolute; inset:0; z-index:3;
+      width:100%; height:100%;
+      object-fit:cover;
+      opacity:0; transition:opacity .4s ease;
+    }
+    body.video-on #project-bg video { opacity:1; }
+    /* the showreel steps back while a project is showing */
+    #reel-window, #play { transition:opacity .5s; }
+    body.project-on #reel-window, body.project-on #play { opacity:0 !important; pointer-events:none; }
 
-/* ── MOBILE ── */
-@media (max-width: 700px) {
-  #right {
-    width:100vw;
-    border-left:none;
-    padding: 36px 24px 36px;
-    overflow-y:auto;
-    height:100vh;
+    /* ── SHOWREEL MODAL ── */
+    #reel {
+      position:fixed; inset:0; z-index:100;
+      background:var(--ink);
+      display:flex; align-items:center; justify-content:center;
+      opacity:0; pointer-events:none;
+      transition:opacity .4s;
+    }
+    #reel.open { opacity:1; pointer-events:all; }
+    #reel-wrap { width:min(88vw, 156vh); aspect-ratio:16/9; }
+    #reel iframe { width:100%; height:100%; border:0; display:block; }
+    #reel-close {
+      position:absolute; top:var(--pad); right:var(--pad);
+      font:inherit; font-size:15px; color:var(--paper);
+      background:none; border:0; cursor:pointer;
+      border-bottom:1px solid currentColor;
+    }
+
+    /* ── CV in the preview window (desktop): the ink opens up like for a project, and the CV sits in it.
+       It opens showing the whole page; the wheel zooms in at the cursor, dragging moves it ── */
+    #cv-window {
+      position:absolute; top:var(--cv-top, 60px); bottom:0; right:0; left:25vw; z-index:5;      /* reaches under the paper, so the wavy edge cuts it, not a straight line */
+      overflow:hidden;
+      opacity:0; transition:opacity .45s ease;
+    }
+    #cv-window img {
+      position:absolute; left:0; top:0;
+      width:1406px; height:auto; max-width:none;
+      transform-origin:0 0;
+      box-shadow:0 30px 80px rgba(0,0,0,.55);
+      will-change:transform;
+    }
+    body.cv-on #cv-window { opacity:1; }
+    #cv-bar {
+      position:fixed; top:0; right:0; left:40vw; z-index:20;
+      display:flex; justify-content:space-between; align-items:center; gap:24px;
+      padding:calc(var(--pad) * .6) var(--pad);
+      color:var(--paper); font-size:14px;
+      mix-blend-mode:difference;                   /* reads on the ink and on any paper that flows over it */
+      opacity:0; pointer-events:none; transition:opacity .4s;
+    }
+    body.cv-on #cv-bar { opacity:1; pointer-events:auto; }
+    #cv-bar .hint { opacity:.55; }
+    #cv-bar .acts { display:flex; gap:22px; }
+    #cv-bar a, #cv-bar button {
+      font:inherit; color:inherit; background:none; border:0; padding:0; cursor:pointer;
+      text-decoration:none; border-bottom:1px solid currentColor;
+    }
+    body.cv-grab, body.cv-grab * { cursor:grab !important; }
+    body.cv-drag, body.cv-drag * { cursor:grabbing !important; }
+    body.cv-grab.cv-point, body.cv-grab.cv-point * { cursor:pointer !important; }   /* over one of the CV's links */
+    body.cv-on .tr, body.cv-on .nr, body.cv-on .fr, body.cv-on #hint { opacity:0 !important; pointer-events:none; transition:opacity .4s; }
+
+    /* ── CV: a quieter link beside "Get in touch", opens the CV right here ── */
+    .tl .cv-link {
+      display:inline-block; margin-top:16px; margin-left:clamp(16px, 1.6vw, 26px);
+      font-size:clamp(15px, 1.12vw, 19px);
+      text-decoration:none; opacity:.6;
+      border-bottom:1px solid transparent; transition:opacity .25s, border-color .25s;
+    }
+    .tl .cv-link:hover, body.cv-on .tl .cv-link { opacity:1; border-bottom-color:currentColor; }
+    #cv {
+      position:fixed; inset:0; z-index:100;
+      background:var(--ink); color:var(--paper);
+      overflow-y:auto; overscroll-behavior:contain; touch-action:pan-y pinch-zoom;
+      opacity:0; pointer-events:none; visibility:hidden;
+      transition:opacity .4s, visibility 0s .4s;
+    }
+    #cv.open { opacity:1; pointer-events:all; visibility:visible; transition:opacity .4s; }
+    #cv .cv-bar {
+      position:sticky; top:0; z-index:1;
+      display:flex; justify-content:space-between; align-items:center;
+      padding:var(--pad);
+      background:linear-gradient(var(--ink) 55%, transparent);
+    }
+    #cv .cv-bar a, #cv .cv-bar button {
+      font:inherit; font-size:15px; color:inherit; background:none; border:0; padding:0; cursor:pointer;
+      text-decoration:none; border-bottom:1px solid currentColor;
+    }
+    #cv .cv-pdf { opacity:.6; transition:opacity .25s; }
+    #cv .cv-pdf:hover { opacity:1; }
+    #cv .cv-page {
+      position:relative; width:min(92vw, 860px); margin:0 auto calc(var(--pad) * 2);
+      transform:translateY(14px); transition:transform .7s cubic-bezier(.16,1,.3,1);
+    }
+    #cv img { display:block; width:100%; height:auto; }
+    #cv .cv-page a { position:absolute; }             /* the PDF's links, laid over the picture */
+    #cv.open .cv-page { transform:none; }
+    @media (prefers-reduced-motion:reduce) { #cv .cv-page { transform:none; transition:none; } }
+
+    /* intro fade */
+    .cell { opacity:0; transition:opacity 1s ease; }
+    body.ready .cell { opacity:1; }
+    body.ready .paper-side { transition-delay:.5s; }
+    body.ready .ink-side   { transition-delay:.8s; }
+
+    /* short laptop screens */
+    @media (min-width:1025px) and (max-height:900px) and (hover:hover) {
+      :root { --pad:28px; --face:88px; }
+    }
+
+    /* ── MOBILE: split becomes horizontal, between "Jona Melvin" and "Grobe" ── */
+    .m-only, .m-pull, .m-pull-in { display:none; }
+    /* ── MOBILE: one screen, no scrolling ──
+       paper on top: who (photo, socials, role, bio, quote, contact, curiosities)
+       the seam runs through the name: "Jona Melvin" above, "Grobe" below
+       ink below: showreel bubble, selected work, all projects */
+    @media (max-width:1024px), (hover:none) and (pointer:coarse) {
+      :root { --face:76px; --pad:20px; --nameS:min(10.4vw, 7.2vh); }   /* landscape tablets: the name mustn't eat the screen */
+      #face img { filter:none; }                 /* no hover on phones: always in colour */
+      /* the showreel (and its lens in the bubble) lives in the ink half too */
+      .reel-layer { --reel-left:0px; top:var(--ink-top, 0px); height:calc(100svh - var(--ink-top, 0px)); }
+      html { background:var(--ink); }          /* above the reel, black lava blobs read as black, not grey */
+      /* above the reel's top edge: a mirrored, blurred continuation that fades out, so pulling the paper
+         away (lava, pull-up) never reveals a hard edge */
+      /* the reel's own top 40px fades into the mirror underneath it */
+      #reel-bg { -webkit-mask-image:linear-gradient(to bottom, transparent 0, #000 40px); mask-image:linear-gradient(to bottom, transparent 0, #000 40px); }
+      #reel-mirror {
+        display:block; z-index:0;
+        /* tucked 40px under the reel, so the blur's soft rim is hidden and the join is seamless */
+        transform:translateY(calc(-100% + 40px)) scaleY(-1);
+        filter:blur(10px) grayscale(1) contrast(1.2);
+        width:100vw;
+        -webkit-mask-image:linear-gradient(to bottom, #000 0, #000 22%, rgba(0,0,0,.45) 45%, transparent 75%);
+                mask-image:linear-gradient(to bottom, #000 0, #000 22%, rgba(0,0,0,.45) 45%, transparent 75%);
+      }
+      /* previews live in the ink half only, so the whole picture is visible */
+      #project-bg > img, #project-bg > video { top:var(--ink-top, 0px); height:calc(100% - var(--ink-top, 0px)); }
+      /* behind the paper: a blurred, dimmed echo of the current slide instead of the showreel */
+      #project-bg::before {
+        content:''; position:absolute; inset:-40px; z-index:0;
+        background:var(--echo, none) center / cover no-repeat;
+        filter:blur(28px) brightness(.45);
+        transition:background-image .6s ease;
+      }
+      /* caption while a preview is up — same voice as the gallery captions / "All projects →" */
+      .m-open {
+        position:fixed; left:var(--pad); right:var(--pad); z-index:9;
+        display:block; color:#fff; text-decoration:none;
+        text-shadow:0 1px 16px rgba(0,0,0,.55);
+        opacity:0; pointer-events:none; transform:translateY(8px);
+        transition:opacity .35s ease, transform .5s cubic-bezier(.16,1,.3,1);
+      }
+      .m-open.on { opacity:1; pointer-events:auto; transform:none; }
+      .m-open b { display:block; font-weight:700; font-size:clamp(30px, 9.5vw, 40px); letter-spacing:-0.03em; line-height:1; }
+      .m-open span { display:inline-block; margin-top:10px; padding:6px 0; font-size:19px; font-weight:600; border-bottom:1.5px solid currentColor; }
+      .m-open em { display:block; margin-top:6px; font-style:normal; font-size:12px; opacity:.6; }
+      .m-open.drag { transition:opacity .35s ease; }
+      .m-swipe {
+        position:fixed; left:50%; top:50%; z-index:9; pointer-events:none;
+        transform:translate(-50%, -50%);
+        font-weight:700; font-size:clamp(40px, 13vw, 60px); letter-spacing:-0.04em; white-space:nowrap;
+        opacity:0; transition:opacity .25s ease;
+      }
+      .m-swipe.to-paper { color:var(--ink); }
+      /* pull hints: one at the foot of the paper, one at the foot of the ink */
+      .m-pull {
+        display:block !important; position:fixed; left:0; right:0; z-index:9;
+        text-align:center; font-size:13px; pointer-events:none;
+        color:var(--paper); mix-blend-mode:difference; opacity:.55;
+        transition:opacity .25s;
+      }
+      .m-pull.bottom { top:calc(var(--seam-px, 50vh) + var(--amp, 12px) * 1.3 + 12px); }   /* just under the seam, mirroring the paper's hint */
+      .m-pull i { display:inline-block; font-style:normal; margin-right:4px; animation:pull-nudge 2.4s ease-in-out infinite; }
+      .m-pull.bottom i { --dir:-1; }
+      @keyframes pull-nudge { 0%, 60%, 100% { transform:none; } 30% { transform:translateY(calc(var(--dir) * 4px)); } }
+      body.m-swiping .m-pull, body.m-swiping .m-pull-in { opacity:0; }
+      /* the paper's content fades as the ink is pulled up over it (driven from the gesture) */
+      .tl, .nl, .nr, .soc-profile, #face { transition:opacity .25s ease; }
+      body.m-swiping .tl, body.m-swiping .nl, body.m-swiping .nr,
+      body.m-swiping .soc-profile, body.m-swiping #face { opacity:var(--top-fade, 1) !important; transition:none; }
+      /* the paper's hint is part of the text block, well clear of the wave */
+      .m-pull-in { display:block; margin-top:16px; font-size:13px; opacity:.5; text-align:center; transition:opacity .25s; }
+      .m-pull-in i { display:inline-block; font-style:normal; margin-right:4px; --dir:1; animation:pull-nudge 2.4s ease-in-out infinite; }
+      /* less clutter: no selected list / all-projects link on phones — pull up instead */
+      .tr { display:none; }
+      body { touch-action:none; }               /* the pulls are ours; nothing scrolls here anyway */
+      /* the showreel steps aside while a page swipe is happening */
+      #play, #reel-window { transition:opacity .3s ease; }
+      body.m-swiping #play, body.m-swiping #reel-window { opacity:0 !important; }
+      .m-swipe.to-ink { color:var(--paper); }
+      html, body { overflow-x:clip; max-width:100%; overscroll-behavior:none; }   /* horizontal swipes belong to the page, not to browser back/forward */
+      body { touch-action:pan-y pinch-zoom; }
+      #page {
+        height:100svh; min-height:0; overflow:hidden;
+        grid-template-columns:1fr auto;
+        grid-template-rows:auto auto minmax(0, 1fr) auto auto;
+        grid-template-areas: "nm nm" "tl tl" "md md" "tr tr" "fl fr";   /* name as one line across the top */
+      }
+      #mid { grid-area:md; }
+      .paper-side { padding-right:var(--pad); }
+      .ink-side   { padding-left:var(--pad); text-align:left; }
+      #face, .soc-profile { top:calc(var(--pad) * 1.1 + var(--nameS) + 18px); }
+      .tl { padding-top:calc(var(--face) + 34px); padding-bottom:10px; }
+      .role { font-size:17px; }
+      .bio { font-size:14px; margin-top:6px; }
+      .quote { font-size:14px; margin-top:6px; }
+      .tl .mail { font-size:15px; margin-top:10px; margin-right:18px; }
+      .tl .cv-link { font-size:14px; margin-top:10px; margin-left:0; margin-right:18px; }
+      .m-only { display:inline-block; }
+      .m-link { font-size:15px; text-decoration:none; border-bottom:1px solid currentColor; }
+      .tl .m-link { margin-top:10px; }
+      .nl { padding-bottom:0; padding-top:0; }
+      .nr { padding-top:2px; padding-bottom:0; }
+      /* both halves share one row, set as a single line: "Jona Melvin Grobe" */
+      .nl, .nr { grid-area:nm; padding-top:calc(var(--pad) * 1.1); padding-bottom:0; }
+      .nl h1, .nr span { font-size:var(--nameS); line-height:.9; letter-spacing:-0.045em; }
+      .nl h1 { display:inline; }
+      .nl, .nr { align-self:start; }
+      .nl h1 { display:block; }
+      .nr { justify-self:start; padding-left:calc(var(--pad) + var(--nameW, 0px) + .26em); }
+      .nr span { display:block; }
+      /* selected work: one quiet line instead of a list */
+      .tr { padding-top:4px; padding-bottom:4px; }
+      .tr .label { display:inline; margin:0 10px 0 0; }
+      .work { display:inline; }
+      .work li { display:inline; }
+      .work li + li::before { content:'·'; margin:0 8px; opacity:.4; }
+      .work a { font-size:15px; padding:0; }
+      .tr .m-link { display:block; width:max-content; margin-top:12px; }
+      .fl, .fr { padding-top:12px; padding-bottom:calc(var(--pad) * .8); }
+      .fr .foot { justify-content:flex-end; }
+      #hint { display:none; }
+      /* the label grows with the bubble, so their proportion holds on every screen */
+      #play em { font-size:max(17px, calc(var(--d, 240px) * .085)); }
+      #play svg { width:max(20px, calc(var(--d, 240px) * .1)); height:max(22px, calc(var(--d, 240px) * .112)); }
+    }
+
+    /* short phones (iPhone SE etc.): a tighter top block, so the ink keeps its room */
+    @media (max-width:600px) and (max-height:720px) {
+      :root { --face:60px; --pad:16px; }
+      .role { font-size:16px; }
+      .bio, .quote { font-size:13px; margin-top:4px; }
+      .tl .mail { font-size:14px; margin-top:8px; }
+      .tl .cv-link { font-size:13px; margin-top:8px; }
+      .m-pull-in { margin-top:12px; font-size:12px; }
+    }
+
+    /* tablets (iPad portrait): same layout as phones, type scaled up for the bigger screen */
+    @media (min-width:600px) and (max-width:1024px), (min-width:600px) and (hover:none) and (pointer:coarse) {
+      :root { --face:108px; --pad:36px; }
+      .role { font-size:26px; }
+      .bio, .quote { font-size:19px; max-width:46ch; }
+      .tl .mail { font-size:21px; }
+      .tl .cv-link { font-size:18px; }
+      .soc-profile .handle { font-size:20px; }
+      .soc-profile svg { width:24px; height:24px; }
+      .m-pull, .m-pull-in { font-size:16px; }
+      .foot { font-size:14px; }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      .cell { transition:none; }
+      #face img { animation:none; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      { "@type": "WebSite", "name": "Jona Melvin Grobe", "url": "https://jmelving.de/" },
+      { "@type": "Person", "name": "Jona Melvin Grobe", "jobTitle": "Creative Generalist & Technical Artist",
+        "url": "https://jmelving.de/", "image": "https://jmelving.de/img/ProfilePic.png",
+        "sameAs": ["https://www.youtube.com/@jmeIving", "https://www.instagram.com/j.melvin.g/", "https://github.com/jmelving", "https://linkedin.com/in/jmelving"] }
+    ]
   }
-  #left { display:none; }
-  #name { font-size: clamp(1.7rem, 7vw, 2.4rem); }
-
-  #mobile-nav {
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-    margin-bottom:28px;
-  }
-  .mob-btn {
-    display:flex; align-items:center; gap:16px;
-    padding:20px 22px;
-    border:1px solid var(--border);
-    border-radius:12px;
-    background:rgba(237,234,228,0.03);
-    color:var(--fg);
-    font-family:'Syne', sans-serif;
-    text-decoration:none; cursor:pointer;
-    transition:background 0.22s, border-color 0.22s;
-    width:100%; text-align:left;
-  }
-  .mob-btn:active { background:rgba(237,234,228,0.07); border-color:rgba(237,234,228,0.25); }
-  .mob-btn-icon {
-    width:46px; height:46px; border-radius:50%;
-    border:1px solid rgba(237,234,228,0.14);
-    display:flex; align-items:center; justify-content:center;
-    flex-shrink:0;
-    color:var(--dim);
-  }
-  .mob-btn-icon svg { width:20px; height:20px; }
-  .mob-btn-text { display:flex; flex-direction:column; gap:4px; }
-  .mob-btn-title { font-size:1.05rem; font-weight:700; letter-spacing:0.02em; color:var(--fg); }
-  .mob-btn-sub {
-    font-family:'Syne Mono', monospace;
-    font-size:0.55rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--dim);
-  }
-
-  #right-footer { margin-top:28px; padding-top:16px; }
-}
-
-#bubbles { position:fixed; top:0; left:0; pointer-events:none; z-index:50; }
-.bubble {
-  position:absolute;
-  width:140px; height:140px;
-  border-radius:50%;
-  border:1px solid rgba(237,234,228,0.22);
-  opacity:0;
-  background:transparent;
-  pointer-events:none;
-  cursor:pointer;
-  transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1), border-color 0.3s;
-  will-change:transform,opacity;
-}
-.bubble.visible  { opacity:1; pointer-events:all; }
-.bubble:hover    { border-color:rgba(237,234,228,0.65); }
-.bubble-inner {
-  position:absolute; inset:0;
-  border-radius:50%; overflow:hidden;
-  background:#111;
-}
-
-.bubble img {
-  width:100%; height:100%; object-fit:cover;
-  filter:brightness(0.7) saturate(0.85);
-  transition:filter 0.35s, transform 0.5s cubic-bezier(0.16,1,0.3,1);
-  display:block;
-}
-.bubble:hover img { filter:brightness(0.92) saturate(1.05); }
-.bubble-lbl {
-  position:absolute; bottom:0; left:0; right:0;
-  padding:10px 10px 12px;
-  font-family:'Cormorant Garamond',serif;
-  font-size:15px; font-weight:300; font-style:italic;
-  letter-spacing:0.4px;
-  color:rgba(237,234,228,0.9);
-  background:linear-gradient(transparent, rgba(8,8,8,0.78));
-  text-align:center; line-height:1.3;
-}
-
-/* ── VIMEO MODAL ── */
-#vimeo-modal {
-  display:none; position:fixed; inset:0; z-index:1000;
-  background:rgba(8,8,8,0.92); backdrop-filter:blur(18px);
-  align-items:center; justify-content:center; flex-direction:column; gap:20px;
-}
-#vimeo-modal.open { display:flex; }
-#vimeo-wrap {
-  position:relative; width:min(82vw, 1100px); aspect-ratio:16/9; background:#000;
-}
-#vimeo-wrap iframe { position:absolute; inset:0; width:100%; height:100%; border:none; }
-#vimeo-close {
-  width:34px; height:34px; border-radius:50%;
-  border:1px solid rgba(237,234,228,0.18);
-  background:none; color:var(--dim); font-size:0.75rem; cursor:pointer;
-  display:flex; align-items:center; justify-content:center;
-  font-family:inherit; align-self:flex-end;
-  margin-right: calc((100vw - min(82vw, 1100px)) / 2);
-  transition:border-color 0.2s, color 0.2s;
-}
-#vimeo-close:hover { border-color:rgba(237,234,228,0.4); color:var(--fg); }
-
-#grain {
-  position:fixed; inset:0; z-index:200; pointer-events:none; opacity:0.025;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size:200px;
-}
-</style>
-
-<!-- Structured Data for Google -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Person",
-  "name": "Jona Melvin Grobe",
-  "url": "https://jmelving.de",
-  "image": {
-    "@type": "ImageObject",
-    "url": "https://jmelving.de/img/ProfilePic.png",
-    "width": 800,
-    "height": 800
-  },
-  "jobTitle": "CG Generalist & Technical Artist",
-  "description": "Self-driven cg generalist and technical artist crafting tools and automating tasks to supercharge project creation.",
-  "sameAs": [
-    "https://www.linkedin.com/in/jmelving/",
-    "https://www.instagram.com/j.melvin.g/",
-    "https://www.youtube.com/@jmeIving"
-  ]
-}
-</script>
-
+  </script>
 </head>
+
 <body>
+  <nav class="site-nav" aria-label="Site">
+    <a href="./projects/">Projects</a>
+    <a href="./curiosities/">Curiosities</a>
+    <a href="./documents/CV_Jona_Melvin_Grobe.pdf">CV</a>
+    <a href="./impressum/">Impressum</a>
+  </nav>
+  <canvas id="reel-mirror" class="reel-layer" width="64" height="36" aria-hidden="true"></canvas>
+  <video id="reel-bg"     class="reel-layer" src="./vid/SHOWREEL2025_Low.mp4" muted loop playsinline autoplay></video>
+  <div id="project-bg" aria-hidden="true"><img alt=""><img alt=""><video muted loop playsinline preload="none"></video><div id="cv-window"><img data-src="./documents/cv/CV_Jona_Melvin_Grobe.webp" alt="" width="1406" height="1988" decoding="async"></div></div>
+  <canvas id="field" aria-hidden="true"></canvas>
+  <div id="cv-bar"><span class="hint">Scroll to zoom · drag to move</span><span class="acts"><a href="./documents/CV_Jona_Melvin_Grobe.pdf" download>Download PDF</a><button type="button" id="cv-bar-close">Close</button></span></div>
+  <video id="reel-window" class="reel-layer" src="./vid/SHOWREEL2025_Low.mp4" muted loop playsinline autoplay></video>
+  <div id="stamps"></div>
+  <div id="grain"></div>
 
-<video id="video-bg" src="../vid/SHOWREEL2025_Low.mp4" autoplay muted loop playsinline preload="auto" crossorigin="anonymous"></video>
-<canvas id="crt-canvas"></canvas>
-<div id="video-overlay"></div>
+  <div id="page">
+    <div id="face"><img src="./img/ProfilePic.png" alt="Portrait of Jona Melvin Grobe"><img class="flash" src="./img/ProfilePic.png" alt="" aria-hidden="true"></div>
+    <div id="ouch" aria-live="polite"><span></span></div>
 
-<div id="grain"></div>
-<div id="cur-dot"></div>
-<div id="cur-ring"></div>
-
-<div id="layout">
-  <div id="left">
-    <canvas id="canvas"></canvas>
-    <div id="stage">
-      <svg id="nav-svg" viewBox="-280 -230 560 460" width="560" height="460">
-        <circle id="play-outer" cx="0" cy="0" r="82"/>
-        <circle id="play-inner" cx="0" cy="0" r="64"/>
-        <line class="nav-line l1" x1="-48" y1="-48" x2="-200" y2="-168"/>
-        <line class="nav-line l2" x1="48"  y1="48"  x2="200"  y2="168"/>
-
-        <g class="dot-group l1" id="dot-projects">
-          <circle class="dot-glow" cx="-200" cy="-168"/>
-          <circle class="dot-main" cx="-200" cy="-168"/>
-        </g>
-        <text class="nav-lbl l1" id="lbl-projects"
-              x="-200" y="-168" dx="-28" dy="-24" text-anchor="end">Projects</text>
-
-        <g class="dot-group l2" id="dot-curiosities">
-          <circle class="dot-glow" cx="200" cy="168"/>
-          <circle class="dot-main" cx="200" cy="168"/>
-        </g>
-        <text class="nav-lbl l2" id="lbl-curiosities"
-              x="200" y="168" dx="28" dy="-20" text-anchor="start">Curiosities</text>
-
-        <g id="play-group">
-          <circle id="play-circle" cx="0" cy="0" r="46"/>
-          <polygon id="play-tri" points="-11,-17 24,0 -11,17"/>
-          <g id="pause-bars">
-            <rect id="pause-bar1" x="-15" y="-16" width="11" height="32" rx="2"/>
-            <rect id="pause-bar2" x="4"   y="-16" width="11" height="32" rx="2"/>
-          </g>
-          <text id="play-sub" x="0" y="66">Showreel</text>
-        </g>
-      </svg>
+    <!-- socials: handle + small icons beside the portrait
+         (placeholders: swap data-video for your own clips; data-slides="a.webp|b.webp" works too) -->
+    <div class="cell soc-profile">
+      <span class="handle">@jmeIving</span>
+      <span class="icons">
+        <a class="yt" data-say="Tutorials|Behind the scenes|Breakdowns" data-video="./img/random_for_lab/Houdini_BreakdownTool_SortingSolver.mp4" href="https://www.youtube.com/@jmeIving" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+        <a data-say="Behind the scenes|Real-life pics|Work in progress" data-video="./img/random_for_lab/Dailies_ColorfulHair_small.mp4" href="https://www.instagram.com/j.melvin.g/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+        <a data-say="Tools|Scripts|Houdini utilities" data-video="./img/random_for_lab/Houdini_Automated_Turntable Tool_Broken_Statuette_ugtkfevhw.mp4" href="https://github.com/jmelving" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+        <span class="lab" aria-hidden="true"><span></span></span>
+      </span>
     </div>
+
+    <!-- white side: about + curiosities -->
+    <section class="cell paper-side tl">
+      <p class="role">Creative Generalist &amp; Technical Artist.</p>
+      <p class="bio">I’m self-driven, love every step of a project, and like making things work a little better each time. I’m just as comfortable in the technical details as in the creative&nbsp;ones.</p>
+      <p class="quote" aria-live="polite">“Done is better than perfect.”</p>
+      <a class="mail"
+         href="mailto:jonamelvingrobe@gmail.com?subject=Project%20Inquiry&body=Hi%20Melvin,%0A%0AI'd%20like%20to%20reach%20out%20regarding%20a%20project%20or%20a%20possible%20collaboration.%0A%0APlease%20find%20some%20details%20below:%0A%0AProject%20type:%0ATimeline:%0ABudget:%0A%0ABest,%0A">Get in touch</a>
+      <a class="cv-link" href="./documents/CV_Jona_Melvin_Grobe.pdf">View CV</a>
+      <p class="m-pull-in"><i>↓</i> pull down for Curiosities</p>
+    </section>
+
+    <!-- black side: projects -->
+    <section class="cell ink-side tr">
+      <p class="label">Selected</p>
+      <ul class="work">
+        <li><a data-slides="./projects/Echoes/img/ECHOES_Hero.webp|./projects/Echoes/img/ECHOES_1.webp|./projects/Echoes/img/ECHOES_2.webp|./projects/Echoes/img/ECHOES_3.webp|./projects/Echoes/img/ECHOES_4.webp|./projects/Echoes/img/ECHOES_5.webp" href="./projects/Echoes">Echoes</a></li>
+        <li><a data-slides="./projects/DontPushMyButtons/img/Still_3.webp|./projects/DontPushMyButtons/img/Still_1.webp|./projects/DontPushMyButtons/img/Still_5.webp|./projects/DontPushMyButtons/img/Still_6.webp|./projects/DontPushMyButtons/img/Still_8.webp|./projects/DontPushMyButtons/img/Still_9.webp" href="./projects/DontPushMyButtons#terrain">Don't Push My Buttons</a></li>
+        <li><a data-slides="./projects/PaintingGreys/img/PaintingGreys_1.webp|./projects/PaintingGreys/img/PaintingGreys_2.webp|./projects/PaintingGreys/img/PaintingGreys_6.webp|./projects/PaintingGreys/img/PaintingGreys_8.webp|./projects/PaintingGreys/img/PaintingGreys_10.webp|./projects/PaintingGreys/img/PaintingGreys_14.webp" href="./projects/PaintingGreys#ocean">Painting Greys</a></li>
+      </ul>
+      <a class="m-only m-link" href="./projects/">All projects →</a>
+    </section>
+
+    <!-- the showreel bubble is positioned over this by JS -->
+    <div id="mid"></div>
+
+    <div class="cell paper-side nl"><h1 aria-label="Jona Melvin Grobe">Jona Melvin</h1></div>
+    <div class="cell ink-side nr"><span aria-hidden="true">Grobe</span></div>
+
+    <section class="cell paper-side fl">
+      <div class="foot"><a class="small" href="./impressum/">Impressum</a></div>
+    </section>
+
+    <section class="cell ink-side fr">
+      <div class="foot"><span class="small">© 2026 JMG</span></div>
+    </section>
+
+    <button id="play" aria-label="Play showreel">
+      <svg viewBox="0 0 20 22" aria-hidden="true"><path d="M2 1.5 L18.5 11 L2 20.5 Z"/></svg>
+      <em>Showreel</em>
+    </button>
   </div>
 
-  <div id="right">
-    <div id="avatar">
-      <img id="avatar-img" src="../img/ProfilePic.png" alt="Jona Melvin Grobe">
-      <span id="avatar-initials">JMG</span>
-    </div>
+  <!-- mobile: pull the seam — down on the paper for Curiosities, up on the ink for Projects -->
+  <p class="m-pull bottom"><i>↑</i> pull up for Projects</p>
+  <div id="hint"></div>
 
-    <div id="name">Jona Melvin <b>Grobe</b>.</div>
-    <div id="role-line">CG Generalist & Technical Artist.</div>
-    <a id="cta" style="margin-top:18px;" href="mailto:jonamelvingrobe@gmail.com?subject=Project%20Inquiry&body=Hi%20Melvin,%0A%0AI'd%20like%20to%20reach%20out%20regarding%20a%20project%20or%20a%20possible%20collaboration.%0A%0APlease%20find%20some%20details%20below:%0A%0AProject%20type:%0ATimeline:%0ABudget:%0A%0ABest,%0A">Get in Touch &nbsp;→</a>
-    <div class="rule"></div>
-
-    <div id="mobile-nav">
-      <button class="mob-btn" id="mob-showreel">
-        <div class="mob-btn-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="9"/><polygon points="10,8 17,12 10,16" fill="currentColor" stroke="none"/></svg>
-        </div>
-        <div class="mob-btn-text">
-          <span class="mob-btn-title">Watch Showreel</span>
-          <span class="mob-btn-sub">2025 · Houdini &amp; FX</span>
-        </div>
-      </button>
-      <a class="mob-btn" href="../projects/index.html">
-        <div class="mob-btn-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-        </div>
-        <div class="mob-btn-text">
-          <span class="mob-btn-title">Projects</span>
-          <span class="mob-btn-sub">Work &amp; Case Studies</span>
-        </div>
-      </a>
-      <a class="mob-btn" href="../projects/index.html#lab-section">
-        <div class="mob-btn-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <div class="mob-btn-text">
-          <span class="mob-btn-title">Curiosities</span>
-          <span class="mob-btn-sub">Experiments &amp; Side Work</span>
-        </div>
-      </a>
+  <!-- CV viewer: the CV as a picture, so it shows everywhere (phones download PDFs instead of showing them) -->
+  <div id="cv" role="dialog" aria-label="CV" aria-hidden="true">
+    <div class="cv-bar">
+      <a class="cv-pdf" href="./documents/CV_Jona_Melvin_Grobe.pdf" download>Download PDF</a>
+      <button id="cv-close" type="button">Close</button>
     </div>
-
-    <div id="bio">
-      Self-driven technical artist & generalist crafting tools and automating tasks to supercharge project creation. <br> <br>
-        🎸 Music fuels my creativity. <br>
-        🧠 Curious mind, always experimenting. <br>
-        ✨ Done is better than perfect. <br>
-    </div>
-    <div id="tags">
-      <span class="tag">Houdini</span>
-      <span class="tag">Tools</span>
-      <span class="tag">Procedural</span>
-      <span class="tag">FX</span>
-      <span class="tag">Compositing</span>
-      <span class="tag">Pipeline</span>
-      <span class="tag">Lookdev</span>
-      <span class="tag">USD</span>
-      <span class="tag">Blender</span>
-      
-    </div>
-    <div id="socials">
-      <div class="soc-wrap">
-        <a class="soc" href="https://www.instagram.com/j.melvin.g/" target="_blank" data-tip="Instagram — work-in-progress shots, behind the scenes &amp; daily FX experiments.">
-          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-        </a>
-        <span class="soc-mob-label">BTS</span>
-      </div>
-      <div class="soc-wrap">
-        <a class="soc" href="https://www.youtube.com/@jmeIving" target="_blank" data-tip="YouTube — tutorials, process breakdowns &amp; deep-dives into Houdini &amp; FX pipelines.">
-          <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-        </a>
-        <span class="soc-mob-label">Tutorials &amp; projects</span>
-      </div>
-      <div class="soc-wrap">
-        <a class="soc" href="https://github.com/jmelving" target="_blank" data-tip="GitHub — tools, pipeline scripts &amp; open-source Houdini utilities.">
-          <svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-        </a>
-        <span class="soc-mob-label">Tools &amp; scripts</span>
-      </div>
-    </div>
-    <div id="soc-tip"></div>
-
-    <!-- ── RIGHT PANEL FOOTER ── -->
-    <div id="right-footer">
-      <a id="impressum-link" href="./impressum/index.html">Impressum</a>
-      <span id="right-footer-copy">© 2025 JMG</span>
-    </div>
-
-  </div>
-</div>
-
-<!-- PROJECT BUBBLES -->
-<div id="bubbles">
-
-  <div class="bubble" id="bubble-0"
-    style="--dur:4.2s;--delay:0s;--fx:7px;--fy:-9px;--fx2:-5px;--fy2:7px;--fx3:9px;--fy3:2px"
-    onclick="window.open('../projects/Echoes','_self')">
-    <div class="bubble-inner">
-        <img src="../projects/Echoes/img/ECHOES_1.webp">
-      <div class="bubble-lbl">ECHOES</div>
-    </div>
+    <div class="cv-page"><img src="./documents/cv/CV_Jona_Melvin_Grobe.webp" alt="CV of Jona Melvin Grobe" width="1406" height="1988" loading="lazy" decoding="async"></div>
   </div>
 
-  <div class="bubble" id="bubble-1"
-    style="--dur:3.8s;--delay:-1.4s;--fx:-6px;--fy:-7px;--fx2:8px;--fy2:5px;--fx3:-4px;--fy3:-9px"
-    onclick="window.open('../projects/DontPushMyButtons#terrain','_self')">
-    <div class="bubble-inner">
-        <img src="../projects/DontPushMyButtons/img/Still_3.webp">
-      <div class="bubble-lbl">DPMB</div>
-    </div>
+  <div id="reel" role="dialog" aria-label="Showreel">
+    <button id="reel-close">Close</button>
+    <div id="reel-wrap"><iframe allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>
   </div>
 
-  <div class="bubble" id="bubble-2"
-    style="--dur:4.6s;--delay:-2.8s;--fx:5px;--fy:8px;--fx2:-8px;--fy2:-6px;--fx3:6px;--fy3:-8px"
-    onclick="window.open('../projects/PaintingGreys#ocean','_self')">
-    <div class="bubble-inner">
-      <img src="../projects/PaintingGreys/img/Thumbnail.webp">
-      <div class="bubble-lbl">PAINTING <br> GREYS</div>
-    </div>
-  </div>
+  <script>
+  // phones, tablets and anything touch-only get the stacked layout, whatever its width
+  window.PHONE_LAYOUT = window.PHONE_LAYOUT || (() => matchMedia('(max-width:1024px), (hover:none) and (pointer:coarse)').matches);
+  (() => {
+    const LINKS = { paper: './curiosities/', ink: './projects/' };
+    const HINTS = { paper: '← Curiosities', ink: 'Projects →' };
+    const QUOTES = [
+      'Done is better than perfect.',
+      'Music fuels my creativity.',
+      'Experimenting long before it paid.',
+      'Man who does stuff.',
+      'Optional is a suggestion.'
+    ];
+    const SKETCHES = ['1','2','3','4','4.5','5'].map(i => `./curiosities/img/Curiosities_${i}.png`);
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-</div>
+    const page     = document.getElementById('page');
+    const mid      = document.getElementById('mid');
+    const nameR    = document.querySelector('.nr');
+    const reelBg   = document.getElementById('reel-bg');
+    const reelWin  = document.getElementById('reel-window');
+    // mirror above the reel's top edge: a tiny canvas copy of the current frame (64×36, a few times a second),
+    // stretched and blurred by CSS — no second video decode
+    const reelMirror = document.getElementById('reel-mirror');
+    const mirrorCtx = reelMirror.getContext('2d');
+    setInterval(() => {
+      if (!PHONE_LAYOUT() || reelBg.paused || reelBg.readyState < 2) return;
+      const vw = reelBg.videoWidth, vh = reelBg.videoHeight, bw = reelMirror.clientWidth, bh = reelMirror.clientHeight;
+      if (!vw || !bw) return;
+      // same "cover" crop as the video element, so the copy lines up with it
+      const sc = Math.max(bw / vw, bh / vh), sw = bw / sc, sh = bh / sc;
+      mirrorCtx.drawImage(reelBg, (vw - sw) / 2, (vh - sh) / 2, sw, sh, 0, 0, 64, 36);
+    }, 250);
+    const playEl   = document.getElementById('play');
+    const hint     = document.getElementById('hint');
+    const stamps   = document.getElementById('stamps');
+    const face     = document.getElementById('face');
+    const faceImg  = face.querySelector('img');
+    const quoteEl  = document.querySelector('.quote');
 
-<div id="vimeo-modal">
-  <button id="vimeo-close" onclick="closeVimeo()">✕</button>
-  <div id="vimeo-wrap">
-    <iframe id="vimeo-iframe" src="" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
-  </div>
-</div>
+    /* ── LAYOUT ──
+       Desktop: vertical divide around 50% width, black to the right.
+       Mobile:  horizontal divide between "Jona Melvin" and "Grobe", black below.
+       "cross" is the axis across the divide; larger cross = black side. */
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-// SOCIAL TOOLTIPS
-const socTip = document.getElementById('soc-tip');
-document.querySelectorAll('.soc[data-tip]').forEach(el => {
-  el.addEventListener('mouseenter', () => {
-    socTip.textContent = el.dataset.tip;
-    socTip.classList.add('visible');
-  });
-  el.addEventListener('mouseleave', () => socTip.classList.remove('visible'));
-});
+    let inkTopPx = 0;                    // mobile: where the ink (and the media living in it) starts
+    let reelLeft = 0;                    // desktop: where the reel's box starts (it's shifted to centre on the black half)
+    const measureReel = () => { reelLeft = reelWin.getBoundingClientRect().left; };
+    measureReel(); addEventListener('resize', measureReel);
+    let W, H, vertical, base, len, amp, bub = { x: 0, y: 0, r: 120 };
+    function placeName() {
+      if (!PHONE_LAYOUT()) { document.documentElement.style.removeProperty('--nameW'); return; }
+      const h = document.querySelector('.nl h1');
+      const rg = document.createRange(); rg.selectNodeContents(h);              // the words, not the full-width block
+      document.documentElement.style.setProperty('--nameW', rg.getBoundingClientRect().width + 'px');
+    }
+    placeName();
+    addEventListener('resize', placeName);
+    document.fonts && document.fonts.ready.then(placeName);
+    function measure() {
+      W = page.clientWidth;
+      H = page.scrollHeight;
+      vertical = !PHONE_LAYOUT();
+      base = vertical ? W * 0.5 : document.querySelector('.tl').offsetTop + document.querySelector('.tl').offsetHeight + 14 + Math.min(W, innerHeight) * 0.028 * 1.3;   // just clear of the wave's swing   // mobile: right under the paper text
+      inkTopPx = vertical ? 0 : base - scrollY - 30;
+      document.documentElement.style.setProperty('--seam-px', (base - scrollY) + 'px');
+      document.documentElement.style.setProperty('--amp', Math.min(W, innerHeight) * 0.028 + 'px');
+      document.documentElement.style.setProperty('--ink-top', inkTopPx + 'px');
+      len  = vertical ? H : W;
+      amp  = Math.min(W, innerHeight) * 0.028;
 
-// CURSOR
-const curDot  = document.getElementById('cur-dot');
-const curRing = document.getElementById('cur-ring');
-let mX = window.innerWidth/2, mY = window.innerHeight/2, rX = mX, rY = mY;
-let lastMX = mX, lastMY = mY, mouseVel = 0, dotScale = 0.167, ringScale = 1;
-document.addEventListener('mousemove', e => { mX = e.clientX; mY = e.clientY; });
-document.addEventListener('mouseover', e => {
-  document.body.classList.toggle('hovering', !!e.target.closest('#play-group, .dot-group, .soc, #cta, #impressum-link'));
-});
-(function animRing(t){
-  const dx = mX - lastMX, dy = mY - lastMY;
-  const speed = Math.sqrt(dx*dx + dy*dy);
-  lastMX = mX; lastMY = mY;
-  mouseVel += (speed - mouseVel) * 0.18;
-
-  const targetDotScale = 0.167 + Math.min(mouseVel * 0.055, 0.833);
-  dotScale += (targetDotScale - dotScale) * 0.10;
-
-  const idlePulse = 1 + Math.sin(t * 0.0018) * 0.18;
-  const velScale  = 1 + Math.min(mouseVel * 0.06, 0.7);
-  const targetRingScale = mouseVel > 0.5 ? velScale : idlePulse;
-  ringScale += (targetRingScale - ringScale) * 0.07;
-
-  rX += (mX-rX)*0.11; rY += (mY-rY)*0.11;
-  curDot.style.left  = mX+'px'; curDot.style.top  = mY+'px';
-  curDot.style.transform  = `translate(-50%,-50%) scale(${dotScale.toFixed(3)})`;
-  curRing.style.left = rX+'px'; curRing.style.top = rY+'px';
-  curRing.style.transform = `translate(-50%,-50%) scale(${ringScale.toFixed(3)})`;
-  requestAnimationFrame(animRing);
-})(performance.now());
-
-// AVATAR — hide initials if a photo/gif is present
-const avatarImg = document.getElementById('avatar-img');
-if (avatarImg) {
-  document.getElementById('avatar-initials').style.display = 'none';
-  avatarImg.addEventListener('error', () => {
-    avatarImg.style.display = 'none';
-    document.getElementById('avatar-initials').style.display = '';
-  });
-}
-
-
-// LABEL + BUBBLES
-const lblProjects = document.getElementById('lbl-projects');
-const lblCurios   = document.getElementById('lbl-curiosities');
-const dotCurios   = document.getElementById('dot-curiosities');
-dotCurios.addEventListener('mouseenter', () => lblCurios.classList.add('hovered'));
-dotCurios.addEventListener('mouseleave', () => lblCurios.classList.remove('hovered'));
-
-function getPlayCenter() {
-  const rect = document.getElementById('stage').getBoundingClientRect();
-  return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
-}
-function getPlayRadius() {
-  const svg = document.getElementById('nav-svg');
-  return 46 * ((svg.clientWidth || 560) / 560);
-}
-
-const BUBBLE_R   = 70;
-const BUBBLE_CNT = 3;
-const bubbleEls  = [0,1,2].map(i => document.getElementById('bubble-'+i));
-
-const bubs = Array.from({length: BUBBLE_CNT}, (_, i) => ({
-  x: 0, y: 0, vx: 0, vy: 0,
-  orbitAngle: (Math.PI * 2 / BUBBLE_CNT) * i,
-  alive: false,
-  scale: 0,
-  suckScale: 1,
-  hovered: false,
-}));
-
-let bubblesActive  = false;
-let isSuckingIn    = false;
-
-function spawnBubbles() {
-  if (bubblesActive) return;
-  bubblesActive = true;
-  isSuckingIn   = false;
-  const c = getPlayCenter();
-  const pr = getPlayRadius();
-  const orbitR = pr + BUBBLE_R + 30;
-  bubs.forEach((b, i) => {
-    b.orbitAngle = (Math.PI * 2 / BUBBLE_CNT) * i - Math.PI / 2;
-    b.x  = c.x + Math.cos(b.orbitAngle) * orbitR;
-    b.y  = c.y + Math.sin(b.orbitAngle) * orbitR;
-    b.vx = (Math.random() - 0.5) * 1.5;
-    b.vy = (Math.random() - 0.5) * 1.5;
-    b.alive = true;
-    b.scale = 0;
-    b.suckScale = 1;
-    const el = bubbleEls[i];
-    el.style.transition = 'opacity 0.5s ease, border-color 0.3s';
-    setTimeout(() => el.classList.add('visible'), i * 120);
-  });
-  lblProjects.classList.add('hovered');
-  lblProjects.textContent = 'Show all Projects →';
-}
-
-function despawnBubbles() {
-  if (!bubblesActive) return;
-  isSuckingIn = true;
-  bubbleEls.forEach((el, i) => {
-    el.style.transition = `transform 0.45s ${i * 0.07}s cubic-bezier(0.4,0,0.6,1), opacity 0.4s ${i * 0.07}s ease, border-color 0.3s`;
-    el.style.transform = el.style.transform.replace(/scale\([^)]*\)/, '') + ' scale(0)';
-  });
-  setTimeout(() => {
-    bubblesActive = false;
-    isSuckingIn   = false;
-    bubs.forEach(b => b.alive = false);
-    bubbleEls.forEach(el => el.classList.remove('visible'));
-    lblProjects.classList.remove('hovered');
-    lblProjects.textContent = 'Projects';
-  }, 550);
-}
-
-const DAMPING  = 0.88;
-const NOISE_F  = 0.0008;
-let   noiseT   = 0;
-
-function noise(seed, t) {
-  return Math.sin(t * 0.7 + seed * 2.3) * Math.cos(t * 0.4 + seed * 1.1);
-}
-
-function updateBubbles(dt) {
-  if (!bubblesActive && !isSuckingIn) return;
-  noiseT += dt;
-
-  const c  = getPlayCenter();
-  const pr = getPlayRadius();
-  const PUSH_DIST = pr + BUBBLE_R + 6;
-
-  bubs.forEach((b, i) => {
-    if (!b.alive) return;
-    if (isSuckingIn) return;
-
-    b.vx += noise(i,       noiseT * NOISE_F) * 0.12;
-    b.vy += noise(i + 10,  noiseT * NOISE_F) * 0.12;
-
-    const orbitR  = pr + BUBBLE_R + 40;
-    b.orbitAngle += 0.00015 * dt;
-    const tx = c.x + Math.cos(b.orbitAngle) * orbitR;
-    const ty = c.y + Math.sin(b.orbitAngle) * orbitR;
-    b.vx += (tx - b.x) * 0.003;
-    b.vy += (ty - b.y) * 0.003;
-
-    const dcx = b.x - c.x;
-    const dcy = b.y - c.y;
-    const dc  = Math.sqrt(dcx * dcx + dcy * dcy);
-    if (dc < PUSH_DIST && dc > 0.1) {
-      const nx = dcx / dc;
-      const ny = dcy / dc;
-      const overlap = PUSH_DIST - dc;
-      b.x += nx * overlap * 0.5;
-      b.y += ny * overlap * 0.5;
-      const dot = b.vx * nx + b.vy * ny;
-      if (dot < 0) {
-        b.vx -= dot * nx * 1.4;
-        b.vy -= dot * ny * 1.4;
+      if (vertical) {
+        // dead centre of the screen
+        bub = { x: W * 0.5, y: Math.min(innerHeight, H) * 0.5, r: Math.max(70, Math.min(W * 0.085, innerHeight * 0.17, 150)) };
+      } else {
+        const hint = document.querySelector('.m-pull.bottom');
+        // centred in the black between the "pull up" hint (under the seam) and the footer
+        const top = hint ? hint.getBoundingClientRect().bottom + scrollY + 16 : base + 60;
+        const bottom = document.querySelector('.fl').getBoundingClientRect().top + scrollY - 8;
+        const room = Math.max(120, bottom - top);
+        bub = { x: W * 0.5, y: top + room / 2, r: Math.max(56, Math.min(W * 0.32, room * 0.46, 170)) };
       }
     }
 
-    for (let j = i + 1; j < BUBBLE_CNT; j++) {
-      const o = bubs[j];
-      if (!o.alive) continue;
-      const ddx = b.x - o.x;
-      const ddy = b.y - o.y;
-      const dd  = Math.sqrt(ddx * ddx + ddy * ddy);
-      const MIN = BUBBLE_R * 2 + 4;
-      if (dd < MIN && dd > 0.1) {
-        const nx = ddx / dd;
-        const ny = ddy / dd;
-        const push = (MIN - dd) * 0.35;
-        b.x += nx * push; b.y += ny * push;
-        o.x -= nx * push; o.y -= ny * push;
-        const dv = (b.vx - o.vx) * nx + (b.vy - o.vy) * ny;
-        if (dv < 0) {
-          b.vx -= dv * nx * 0.6; b.vy -= dv * ny * 0.6;
-          o.vx += dv * nx * 0.6; o.vy += dv * ny * 0.6;
+    const wave = (s, t) =>
+        0.62 * Math.sin(s * 5.2  + t * 0.32)
+      + 0.38 * Math.sin(s * 11.3 - t * 0.47 + 1.7)
+      + 0.18 * Math.sin(s * 2.1  + t * 0.19 + 4.0);
+
+    /* ── WEBGL FIELD ──
+       ink potential = soft half-plane behind the wavy edge
+                     + signed metaballs (+ black, - white).
+       Thresholded at 0.5, so blobs merge with whatever they touch. */
+
+    const MAX_BLOBS = 56;
+    const cv = document.getElementById('field');
+    const gl = cv.getContext('webgl', { premultipliedAlpha: true, antialias: false });
+    let U = null;
+
+    if (gl) {
+      gl.getExtension('OES_standard_derivatives');
+      const vs = `attribute vec2 p; void main(){ gl_Position = vec4(p, 0.0, 1.0); }`;
+      const fs = `
+        #extension GL_OES_standard_derivatives : enable
+        precision highp float;
+        uniform vec2  uView;      // viewport, css px
+        uniform float uDpr;
+        uniform vec2  uScroll;
+        uniform float uTime, uVertical, uCenter, uAmp, uLen, uSoft;
+        uniform float uPull, uPullAt, uReach;
+        uniform vec4  uBlobs[${MAX_BLOBS}];   // x, y, radius, signed weight
+        uniform vec4  uLens;                  // x, y, radius, strength
+        uniform vec3  uPaper, uInk;
+        uniform float uInkAlpha;
+
+        float wave(float s){
+          return 0.62 * sin(s * 5.2  + uTime * 0.32)
+               + 0.38 * sin(s * 11.3 - uTime * 0.47 + 1.7)
+               + 0.18 * sin(s * 2.1  + uTime * 0.19 + 4.0);
+        }
+        float tanh_(float x){ x = clamp(x, -9.0, 9.0); float e = exp(2.0 * x); return (e - 1.0) / (e + 1.0); }
+
+        void main(){
+          vec2 p = vec2(gl_FragCoord.x, uView.y * uDpr - gl_FragCoord.y) / uDpr + uScroll;
+          float along = mix(p.x, p.y, uVertical);
+          float cross = mix(p.y, p.x, uVertical);
+
+          float g = exp(-pow((along - uPullAt) / uReach, 2.0));
+          float edge = uCenter + uAmp * wave(along / uLen) + uPull * g;
+          float I = 0.5 + 0.5 * tanh_((cross - edge) / uSoft);
+
+          for (int i = 0; i < ${MAX_BLOBS}; i++) {
+            vec4 b = uBlobs[i];
+            if (b.z <= 0.0) continue;
+            vec2 q = (p - b.xy) / b.z;
+            float x = dot(q, q);
+            if (x < 1.0) { float k = 1.0 - x; I += b.w * k * k; }
+          }
+
+          #ifdef GL_OES_standard_derivatives
+            float w = max(fwidth(I), 1e-4) * 0.8;
+          #else
+            float w = 0.03;
+          #endif
+          float a = smoothstep(0.5 - w, 0.5 + w, I);
+
+          // projects side: the cursor works as a lens into the reel
+          vec2 lv = p - uLens.xy;
+          float lens = uLens.w * exp(-dot(lv, lv) / (uLens.z * uLens.z));
+
+          float ink = a * uInkAlpha * (1.0 - lens);
+          gl_FragColor = vec4(uPaper * (1.0 - a) + uInk * ink, (1.0 - a) + ink);
+        }`;
+
+      const sh = (type, src) => {
+        const s = gl.createShader(type);
+        gl.shaderSource(s, src); gl.compileShader(s);
+        if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw gl.getShaderInfoLog(s);
+        return s;
+      };
+      try {
+        const prog = gl.createProgram();
+        gl.attachShader(prog, sh(gl.VERTEX_SHADER, vs));
+        gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, fs));
+        gl.linkProgram(prog);
+        gl.useProgram(prog);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 3,-1, -1,3]), gl.STATIC_DRAW);
+        gl.enableVertexAttribArray(0);
+        gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+
+        U = {};
+        ['uView','uDpr','uScroll','uTime','uVertical','uCenter','uAmp','uLen','uSoft',
+         'uPull','uPullAt','uReach','uBlobs','uLens','uPaper','uInk','uInkAlpha']
+          .forEach(n => U[n] = gl.getUniformLocation(prog, n));
+
+        const hex = h => [1,3,5].map(i => parseInt(h.substr(i, 2), 16) / 255);
+        gl.uniform3fv(U.uPaper, hex('#eeebe5'));
+        gl.uniform3fv(U.uInk,   hex('#0c0c0c'));
+      } catch (err) {
+        console.warn(err);
+        U = null;
+      }
+    }
+    if (!U) document.body.classList.add('nogl');
+
+    let dpr = 1;
+    function resize() {
+      measure();
+      dpr = Math.min(devicePixelRatio || 1, 1.25);
+      cv.width  = Math.round(innerWidth  * dpr);
+      cv.height = Math.round(innerHeight * dpr);
+      if (U) gl.viewport(0, 0, cv.width, cv.height);
+    }
+    resize();
+    addEventListener('resize', resize);
+    new ResizeObserver(measure).observe(page);
+    document.fonts && document.fonts.ready.then(measure);
+
+    /* ── POINTER ── */
+    const ptr = { x: -1e4, y: -1e4, hx: -1e4, hy: -1e4, vx: 0, vy: 0, k: 0, kT: 0, seen: false, overUI: false };
+    let lastX = 0, lastY = 0, speed = 0;
+
+    addEventListener('pointermove', e => {
+      if (e.pointerType !== 'mouse') return;
+      const x = e.clientX + scrollX, y = e.clientY + scrollY;
+      if (!ptr.seen) { ptr.hx = lastX = x; ptr.hy = lastY = y; ptr.seen = true; }
+      ptr.x = x; ptr.y = y; ptr.kT = 1;
+      ptr.overUI = !!e.target.closest('a, button, #face');
+    });
+    document.addEventListener('pointerleave', () => { ptr.kT = 0; setZone(null); });
+
+    /* ── ZONES: which half is the cursor in ── */
+    let zone = null, dwell = 0, hintRoom = 1;
+    function setZone(z) {
+      if (z === zone) return;
+      zone = z;
+      document.body.classList.toggle('zone', !!z);
+      document.body.classList.toggle('on-paper', z === 'paper');
+      document.body.classList.toggle('on-ink', z === 'ink');
+      dwell = 0;
+      if (z) hint.textContent = HINTS[z];
+    }
+    // room for the hint at a point: 0 right at the text → 1 from ~100px away
+    const roomAt = (x, y) => Math.min(1, Math.max(0, (textDistance(x, y) - 12) / 88));
+    const NEAR = 0.3;                                           // below this the hint has (nearly) faded out
+    page.addEventListener('click', e => {
+      // only a click out in the open goes to the other page — a near-miss on a link or line of text does nothing
+      if (zone && !e.target.closest('a, button, #face') && hintRoom > NEAR && roomAt(e.clientX, e.clientY) > NEAR) location.href = LINKS[zone];
+    });
+
+    let reveal = false;
+    playEl.addEventListener('pointerenter', () => { reveal = true;  document.body.classList.add('reel-hover'); });
+    playEl.addEventListener('pointerleave', () => { reveal = false; document.body.classList.remove('reel-hover'); });
+
+    // keep the window in step with the background reel
+    setInterval(() => {
+      if (!reelBg.paused && Math.abs(reelWin.currentTime - reelBg.currentTime) > 0.12) reelWin.currentTime = reelBg.currentTime;
+    }, 1000);
+
+    /* ── SOCIALS: one shared label after the icon row ──
+       the icons stay put, so moving from one to the next never chases a moving target.
+       The label stays open while the pointer is anywhere in the row. */
+    {
+      const row = document.querySelector('.soc-profile .icons');
+      const lab = row.querySelector('.lab'), txt = lab.firstElementChild;
+      let says = [], i = 0, cycle = null, swap = null, active = null;
+      const fit = () => { lab.style.width = txt.offsetWidth + 'px'; };
+      const say = text => {
+        clearTimeout(swap);
+        if (!lab.style.width || lab.style.width === '0px') {     // opening: no fade needed
+          txt.textContent = text; txt.classList.remove('out'); fit(); return;
+        }
+        txt.classList.add('out');
+        swap = setTimeout(() => { txt.textContent = text; fit(); txt.classList.remove('out'); }, 220);
+      };
+      row.querySelectorAll('a[data-say]').forEach(a => {
+        a.addEventListener('pointerenter', () => {
+          if (active === a) return;
+          active?.classList.remove('on');
+          active = a; a.classList.add('on');
+          says = a.dataset.say.split('|'); i = 0;
+          say(says[0]);
+          clearInterval(cycle);
+          cycle = setInterval(() => say(says[++i % says.length]), 1700);
+        });
+      });
+      row.addEventListener('pointerleave', () => {
+        clearInterval(cycle); clearTimeout(swap);
+        active?.classList.remove('on'); active = null;
+        lab.style.width = '0px';
+      });
+    }
+
+    /* ── PORTRAIT: colours up, leans toward the cursor and tilts a little ── */
+    face.addEventListener('pointermove', e => {
+      const r = face.getBoundingClientRect();
+      const dx = (e.clientX - r.left) / r.width - 0.5;
+      const dy = (e.clientY - r.top) / r.height - 0.5;
+      face.style.setProperty('--fx', (dx * 16).toFixed(1) + 'px');
+      face.style.setProperty('--fy', (dy * 16).toFixed(1) + 'px');
+      face.style.setProperty('--fr', (dx * 10).toFixed(1) + 'deg');
+    });
+    face.addEventListener('pointerleave', () => {
+      ['--fx', '--fy', '--fr'].forEach(p => face.style.removeProperty(p));
+    });
+
+    /* ── PORTRAIT: hit it (like a Minecraft mob) — white flash, knocked back away from the click, a little hop ── */
+    let hurtUntil = 0, hits = 0, ouchT = 0, hitsT = 0;
+    const OUCH = ['Ouch!', 'Ow!', 'Hey!', 'Ow, ow.'];
+    const ouch = document.getElementById('ouch');
+    const ouchText = ouch.querySelector('span');
+    let ouchOn = false;
+    // the bubble sits at the portrait's top-right, tail pointing at it, and follows it every frame
+    // (so it flies along with the knockback)
+    function stickOuch() {
+      if (!ouchOn && !ouch.classList.contains('on')) return;
+      const r = face.getBoundingClientRect();
+      const x = r.right - r.width * 0.14, y = Math.max(8, r.top - ouch.offsetHeight + r.height * 0.06);
+      ouch.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`;
+      requestAnimationFrame(stickOuch);
+    }
+    function say(text, ms) {
+      ouchText.textContent = text;
+      ouch.classList.remove('on'); void ouch.offsetWidth; ouch.classList.add('on');
+      if (!ouchOn) { ouchOn = true; stickOuch(); }
+      clearTimeout(ouchT); ouchT = setTimeout(() => { ouch.classList.remove('on'); setTimeout(() => { ouchOn = false; }, 400); }, ms);
+      clearTimeout(hitsT); hitsT = setTimeout(() => { hits = 0; }, 6000);   // stop hitting for a while → starts over
+    }
+    face.addEventListener('pointerdown', e => {
+      const now = performance.now();
+      if (now < hurtUntil) return;                   // a short "invulnerable" moment, like in the game
+      hurtUntil = now + 450;
+      say(++hits >= 5 ? 'Okay, okay… just hire me already.' : OUCH[(hits - 1) % OUCH.length], hits >= 5 ? 2600 : 1000);
+      if (hits >= 5) hits = 0;
+      // a white flash: the white copy on top shows at once and fades out
+      face.querySelector('.flash').animate([
+        { opacity: .55 }, { opacity: .55, offset: 0.3 }, { opacity: 0 }      // a light veil, not a full white-out
+      ], { duration: 420, easing: 'ease-out' });
+      if (still) return;
+      const r = face.getBoundingClientRect();
+      let dx = r.left + r.width / 2 - e.clientX, dy = r.top + r.height / 2 - e.clientY;
+      const len = Math.hypot(dx, dy) || 1;
+      dx = dx / len * 18; dy = Math.max(-6, dy / len * 8);        // knocked away from where you hit, mostly sideways
+      face.animate([
+        { transform: 'translate(0, 0) rotate(0deg) scale(1)' },
+        { transform: `translate(${dx * .7}px, ${dy - 14}px) rotate(${dx * .5}deg) scale(1.04, .94)`, offset: 0.3 },   // up and away
+        { transform: `translate(${dx}px, ${dy}px) rotate(${dx * .25}deg) scale(.97, 1.03)`, offset: 0.6 },             // lands
+        { transform: 'translate(0, 0) rotate(0deg) scale(1)' }
+      ], { duration: 520, easing: 'cubic-bezier(.2,.7,.3,1)' });
+    });
+
+    /* ── QUOTES: one at a time ── */
+    let qi = 0;
+    if (!still) setInterval(() => {
+      quoteEl.classList.add('out');
+      setTimeout(() => {
+        qi = (qi + 1) % QUOTES.length;
+        quoteEl.textContent = `“${QUOTES[qi]}”`;
+        quoteEl.classList.remove('out');
+      }, 500);
+    }, 4500);
+
+    /* ── CURIOSITIES: moving over the paper leaves sketches that float off ── */
+    let stampDist = 0, stampIdx = Math.floor(Math.random() * SKETCHES.length);
+    // keep sketches clear of the text: a stamp may not land on (or near) any of these
+    const TEXT = ['.tl > *', '.soc-profile', '#face', '.nl h1', '.fl .foot', '.tr > *', '.nr span'];
+    // boxes around the text itself — not the (full-column-wide) block it sits in
+    const range = document.createRange();
+    function textRects() {
+      const out = [];
+      TEXT.forEach(sel => document.querySelectorAll(sel).forEach(el => {
+        let r = el.getBoundingClientRect();
+        if (el.tagName !== 'IMG' && el.id !== 'face') {
+          range.selectNodeContents(el);
+          const t = range.getBoundingClientRect();
+          if (t.width) r = t;
+        }
+        if (r.width) out.push(r);
+      }));
+      return out;
+    }
+    // distance from a viewport point to the nearest bit of text
+    function textDistance(x, y) {
+      let best = Infinity;
+      for (const r of textRects()) {
+        const dx = Math.max(r.left - x, 0, x - r.right), dy = Math.max(r.top - y, 0, y - r.bottom);
+        best = Math.min(best, Math.hypot(dx, dy));
+      }
+      return best;
+    }
+    function overlapsText(x, y) {
+      const half = stamps.firstElementChild?.offsetWidth / 2 || 75, m = half + 24;
+      return textRects().some(r => x > r.left - m && x < r.right + m && y > r.top - m && y < r.bottom + m);
+    }
+    function stamp(x, y) {
+      if (stamps.childElementCount > 1 || overlapsText(x, y)) return;
+      const img = new Image();
+      img.src = SKETCHES[stampIdx++ % SKETCHES.length];
+      img.alt = '';
+      img.style.left = x + 'px';
+      img.style.top  = y + 'px';
+      img.style.setProperty('--rot', (Math.random() * 16 - 8).toFixed(1) + 'deg');
+      img.addEventListener('animationend', () => img.remove());
+      stamps.appendChild(img);
+    }
+
+    /* ── LAVA ──
+       charge = the colour the cursor carries (+1 black, -1 white). It only slowly
+       takes on the colour underneath, so crossing the divide drags a strand of it along.
+       Every bit of that strand is a blob with buoyancy: it rises, pinches off, shrinks. */
+
+    let charge = 0;
+    const blobs = [];
+    const blobData = new Float32Array(MAX_BLOBS * 4);
+    let spawnX = 0, spawnY = 0;
+    let nextBubble = 2.5;
+    const rand = (a, b) => a + Math.random() * (b - a);
+
+    function addBlob(b) {
+      if (blobs.length >= MAX_BLOBS - 1) return;     // slot 0 = cursor head
+      blobs.push(Object.assign({ vx: 0, vy: 0, grow: 0, life: 1, span: rand(5, 8) }, b));
+    }
+
+    const play = { x: 0, y: 0, vx: 0, vy: 0, r: 0, init: false };
+    let bias = 0, lens = 0;
+    let swipeBias = null;                 // mobile: set while a page swipe drags the seam
+    let inkAlpha = 0.72;
+    const t0 = performance.now();
+    let prev = t0;
+    const ease = x => 1 - Math.pow(1 - x, 4);
+
+    // wobbly outline of the bubble, in viewport px, for clip-path
+    function bubblePath(cx, cy, r, t) {
+      let d = '';
+      for (let i = 0; i < 72; i++) {
+        const a = i / 72 * Math.PI * 2;
+        const rr = r * (1 + 0.035 * Math.sin(3 * a + t * 0.9) + 0.025 * Math.sin(5 * a - t * 1.3));
+        d += (i ? 'L' : 'M') + (cx + Math.cos(a) * rr).toFixed(1) + ' ' + (cy + Math.sin(a) * rr).toFixed(1);
+      }
+      return `path('${d}Z')`;
+    }
+
+    function frame(now) {
+      const dt = Math.min(0.05, (now - prev) / 1000); prev = now;
+      const t = still ? 0 : (now - t0) / 1000;
+      const intro = still ? 1 : ease(Math.min(1, Math.max(0, (t - 0.15) / 1.6)));
+
+      // the half you're in opens up toward you
+      const biasT = projectOn ? (vertical ? -2.6 : -0.3) : zone === 'ink' ? -1.1 : zone === 'paper' ? 1.1 : 0;
+      if (swipeBias != null) bias += (swipeBias - bias) * 0.35;   // follows the finger closely
+      else bias  += (biasT - bias) * 0.05;
+      ptr.k += (ptr.kT - ptr.k) * 0.06;
+      inkAlpha += ((projectOn ? 0 : reveal ? 0.08 : 0.72) - inkAlpha) * (projectOn ? 0.09 : 0.05);
+
+      const span   = vertical ? W : H;
+      const start  = span * 1.04;                       // intro: black slides in
+      const center = start + (base - start) * intro + bias * span * 0.045;
+
+      // the edge leans toward the cursor a little
+      const pAlong = vertical ? ptr.y : ptr.x;
+      const pCross = vertical ? ptr.x : ptr.y;
+      const pull   = Math.max(-1, Math.min(1, (pCross - center) / (span * 0.35))) * span * 0.03 * ptr.k;
+      const reach  = len * (vertical ? 0.22 : 0.35);
+      const edgeAt = a => center + amp * wave(a / len, t) * (0.4 + 0.6 * intro)
+                        + pull * Math.exp(-Math.pow((a - pAlong) / reach, 2));
+      // signed distance to the edge, positive on the black side
+      const sideDist = (x, y) => vertical ? x - edgeAt(y) : y - edgeAt(x);
+
+      // zone under the cursor (ignoring links/buttons and the bubble)
+      const onBubble = Math.hypot(ptr.x - play.x, ptr.y - play.y) < play.r + 10;
+      if (ptr.kT && !ptr.overUI && !onBubble && intro > 0.9) setZone(sideDist(ptr.x, ptr.y) > 0 ? 'ink' : 'paper');
+      else setZone(null);
+      lens += ((zone === 'ink' ? 0.55 : 0) - lens) * 0.08;
+
+      /* cursor hint: starts small, grows the longer you stay on one side,
+         and shrinks away again as you get close to text */
+      if (zone) {
+        dwell += dt;
+        const cx = ptr.x - scrollX, cy = ptr.y - scrollY;
+        hintRoom += (roomAt(cx, cy) - hintRoom) * 0.12;
+        document.body.classList.toggle('near-text', hintRoom < NEAR);
+        const g = 1 - Math.pow(1 - Math.min(1, dwell / 7), 2);   // slow, steady growth
+        hint.style.fontSize = (13 + 51 * g * hintRoom).toFixed(1) + 'px';
+        hint.style.opacity = Math.min(1, hintRoom * 1.6).toFixed(2);
+        const w = hint.offsetWidth, h = hint.offsetHeight;
+        const off = 16 + 10 * g;
+        // flip to the other side of the cursor when it would run off screen
+        const hx = cx + off + w > innerWidth - 12 ? cx - off - w : cx + off;
+        const hy = Math.min(innerHeight - h - 12, cy + off);
+        hint.style.transform = `translate3d(${hx}px, ${hy}px, 0)`;
+      } else {
+        hint.style.opacity = '';
+      }
+
+      if (!still) {
+        /* cursor drags a strand */
+        if (ptr.seen) {
+          const dx = ptr.x - lastX, dy = ptr.y - lastY;
+          const d = Math.hypot(dx, dy);
+          lastX = ptr.x; lastY = ptr.y;
+          ptr.vx += (dx / Math.max(dt, 1e-3) - ptr.vx) * 0.25;
+          ptr.vy += (dy / Math.max(dt, 1e-3) - ptr.vy) * 0.25;
+          speed = Math.hypot(ptr.vx, ptr.vy);
+
+          const under = sideDist(ptr.x, ptr.y) > 0 ? 1 : -1;
+          if (charge === 0) charge = under;
+          charge += (under - charge) * (1 - Math.exp(-(d * 0.0016 + dt * 0.45)));
+
+          ptr.hx += (ptr.x - ptr.hx) * 0.3;
+          ptr.hy += (ptr.y - ptr.hy) * 0.3;
+
+          // only drop blobs where they'd actually show (carrying the other colour)
+          if (Math.hypot(ptr.x - spawnX, ptr.y - spawnY) > 15 && ptr.k > 0.5 && charge * under < 0.6) {
+            spawnX = ptr.x; spawnY = ptr.y;
+            addBlob({
+              x: ptr.x, y: ptr.y,
+              vx: ptr.vx * 0.12, vy: ptr.vy * 0.12,
+              r: 44 + Math.min(30, speed * 0.025),
+              s: charge, grow: 1,
+              lift: rand(25, 70),                // buoyancy, px/s²
+              drift: rand(-6, 6),
+            });
+          }
+
+          // curiosities side: leave a sketch every so often
+          if (zone === 'paper') {
+            stampDist += d;
+            if (stampDist > 380) { stampDist = 0; stamp(ptr.x - scrollX, ptr.y - scrollY); }
+          }
+        }
+
+        /* ambient: every few seconds a bubble swells out of the edge */
+        if (t > nextBubble && intro > 0.99) {
+          nextBubble = t + rand(2.2, 4.5);
+          if (vertical) {
+            const y = rand(0.45, 1.0) * H;
+            const s = Math.random() < 0.5 ? 1 : -1;            // black pushes into white or vice versa
+            addBlob({ x: edgeAt(y) - s * 18, y, r: rand(38, 60), s,
+                      lift: rand(12, 26), drift: -s * rand(8, 16) });
+          } else {
+            const x = rand(0.1, 0.9) * W;                      // mobile: black rises into the white
+            addBlob({ x, y: edgeAt(x) - 12, r: rand(30, 46), s: 1, lift: rand(10, 22), drift: rand(-4, 4) });
+          }
+        }
+
+        /* move the lava */
+        for (let i = blobs.length - 1; i >= 0; i--) {
+          const b = blobs[i];
+          b.grow = Math.min(1, b.grow + dt / 1.6);
+          b.vx += b.drift * dt;
+          b.vy -= b.lift * dt;
+          const drag = Math.exp(-dt * 1.4);
+          b.vx *= drag; b.vy *= drag;
+          b.vx += Math.sin(t * 0.9 + i * 1.7) * 4 * dt;          // a little wobble
+          b.x += b.vx * dt;
+          b.y += b.vy * dt;
+
+          // shrinks as it rises; blobs that ended up in their own colour fade quickly
+          const sd = sideDist(b.x, b.y);
+          let decay = dt / b.span;
+          if (Math.sign(sd) === Math.sign(b.s) && Math.abs(sd) > b.r) decay *= 4;
+          if (b.y < scrollY - b.r) decay = 1;
+          b.life -= decay;
+          if (b.life <= 0) blobs.splice(i, 1);
         }
       }
+
+      /* showreel bubble: rides the seam, leans toward the cursor */
+      {
+        let tx = vertical ? edgeAt(bub.y) : bub.x;
+        let ty = bub.y + Math.sin(t * 0.31) * 6;
+        const dx = ptr.x - tx, dy = ptr.y - ty, dd = Math.hypot(dx, dy);
+        const lean = ptr.k * Math.max(0, 1 - dd / (bub.r * 3)) * 0.15;
+        tx += dx * lean; ty += dy * lean;
+        if (!play.init || still) { play.x = tx; play.y = ty; play.init = true; }
+        play.vx += ((tx - play.x) * 22 - play.vx * 6) * dt;    // springy
+        play.vy += ((ty - play.y) * 22 - play.vy * 6) * dt;
+        play.x += play.vx * dt;
+        play.y += play.vy * dt;
+        const rT = (reveal ? bub.r * 1.12 : bub.r) * Math.min(1, 0.6 + 0.4 * intro);
+        play.r += (rT - play.r) * 0.1;
+
+        playEl.style.transform = `translate3d(${play.x}px,${play.y}px,0)`;
+        playEl.style.setProperty('--d', Math.round(play.r * 2) + 'px');
+        reelWin.style.clipPath = bubblePath(play.x - scrollX - reelLeft, play.y - scrollY - inkTopPx, play.r, t);   // window's own box starts at the ink (and, on desktop, 1/4 across)
+      }
+
+      if (U) {
+        blobData.fill(0);
+        // slot 0: head under the cursor
+        blobData[0] = ptr.hx; blobData[1] = ptr.hy;
+        blobData[2] = 58 + Math.min(40, speed * 0.04);
+        blobData[3] = still ? 0 : charge * 1.4 * ptr.k;
+        blobs.forEach((b, i) => {
+          const o = (i + 1) * 4;
+          const fade = Math.min(1, b.life * 3);
+          blobData[o]     = b.x;
+          blobData[o + 1] = b.y;
+          blobData[o + 2] = b.r * (0.45 + 0.55 * b.life) * (0.3 + 0.7 * ease(b.grow));
+          blobData[o + 3] = b.s * 1.5 * fade;
+        });
+
+        gl.uniform2f(U.uView, innerWidth, innerHeight);
+        gl.uniform1f(U.uDpr, dpr);
+        gl.uniform2f(U.uScroll, scrollX, scrollY);
+        gl.uniform1f(U.uTime, t);
+        gl.uniform1f(U.uVertical, vertical ? 1 : 0);
+        gl.uniform1f(U.uCenter, center);
+        gl.uniform1f(U.uAmp, amp * (0.4 + 0.6 * intro));
+        gl.uniform1f(U.uLen, len);
+        gl.uniform1f(U.uSoft, 70);
+        gl.uniform1f(U.uPull, pull);
+        gl.uniform1f(U.uPullAt, pAlong);
+        gl.uniform1f(U.uReach, reach);
+        gl.uniform4fv(U.uBlobs, blobData);
+        gl.uniform4f(U.uLens, ptr.x, ptr.y, 240, lens);
+        gl.uniform1f(U.uInkAlpha, inkAlpha);
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+      }
+
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+    requestAnimationFrame(() => document.body.classList.add('ready'));
+
+    /* ── PROJECT SLIDESHOW: hovering a project replaces the reel with its stills ── */
+    const projBg = document.getElementById('project-bg');
+    const slots  = projBg.querySelectorAll(':scope > img');   // the two slideshow slots (not the CV picture)
+    let projectOn = false, slideTimer = null, slot = 0, cvOn = false;
+
+    // Two stacked images (Web Animations, so each phase hands over its speed).
+    //   in:    punches in fast (1.34 → 1.2), then drifts slowly (→ 1.16) — never stops
+    //   out:   from that drift it shoots away (→ 1.0), staying fully opaque underneath
+    //          while the next one fades in quickly on top — a true crossfade, no dip in brightness
+    // Images never go below scale 1, so the shrinking one never shows its edges.
+    const SLIDE_MS = 2600;
+    // the outgoing one finishes its run exactly as the incoming one becomes opaque
+    const OUT_MS = 660, IN_DELAY = 360, IN_FADE = 300;
+    let showToken = 0;
+    function showSlide(src) {
+      const token = ++showToken;
+      const next = slots[slot ^ 1], cur = slots[slot];
+      const go = () => {
+        if (token !== showToken) return;              // a newer slide was requested meanwhile
+        slot ^= 1;
+
+        // (read the values now: computed style is live and resets once the animation is cancelled)
+        const cs = getComputedStyle(cur);
+        const op = cs.opacity, tf = cs.transform === 'none' ? 'scale(1.16)' : cs.transform;
+        cur.getAnimations().forEach(an => an.cancel());
+        cur.animate([
+          { transform: tf, opacity: op, easing: 'cubic-bezier(.5,0,.8,.45)' },    // accelerates hard
+          { transform: 'scale(1)', opacity: op, offset: 0.999 },
+          { transform: 'scale(1)', opacity: 0 },                                 // gone once covered
+        ], { duration: OUT_MS, fill: 'forwards' });
+
+        next.getAnimations().forEach(an => an.cancel());
+        next.style.zIndex = 2; cur.style.zIndex = 1;
+        const len = SLIDE_MS * 2.2;
+        next.animate([
+          // decelerates, but keeps a little speed so it flows into the drift
+          { transform: 'scale(1.34)', opacity: 0, easing: 'cubic-bezier(.2,.75,.45,.95)' },
+          { opacity: 1, offset: IN_FADE / len },
+          { transform: 'scale(1.2)', offset: 0.13, easing: 'linear' },
+          { transform: 'scale(1.16)', opacity: 1 },
+        ], { duration: len, delay: IN_DELAY, fill: 'both' });
+      };
+      if (next.getAttribute('src') !== src) next.src = src;
+      projBg.style.setProperty('--echo', `url("${src}")`);
+      (next.decode ? next.decode() : Promise.resolve()).then(go, go);
     }
 
-    b.vx *= DAMPING;
-    b.vy *= DAMPING;
-    b.x += b.vx;
-    b.y += b.vy;
+    const projVid = projBg.querySelector('video');
+    document.querySelectorAll('[data-video]').forEach(el => {
+      el.addEventListener('pointerenter', e => {
+        if (e.pointerType !== 'mouse' || cvOn) return;
+        clearInterval(slideTimer);
+        if (projVid.getAttribute('src') !== el.dataset.video) projVid.src = el.dataset.video;
+        projBg.style.setProperty('--echo', 'none');
+        projVid.currentTime = 0;
+        projVid.loop = true;
+        let loops = 0, lastT = 0;
+        projVid.ontimeupdate = () => {
+          if (projVid.currentTime < lastT - 0.5 && ++loops >= 2) document.dispatchEvent(new Event('preview-done'));
+          lastT = projVid.currentTime;
+        };
+        projVid.play().catch(() => {});
+        projectOn = true;
+        document.body.classList.add('project-on', 'video-on');
+      });
+      el.addEventListener('pointerleave', () => {
+        projVid.ontimeupdate = null;
+        projVid.pause();
+        document.body.classList.remove('video-on');
+        if (cvOn) return;
+        projectOn = false;
+        document.body.classList.remove('project-on');
+      });
+    });
 
-    const targetScale = b.hovered ? 1.14 : 1.0;
-    b.drawScale = b.drawScale !== undefined
-      ? b.drawScale + (targetScale - b.drawScale) * 0.12
-      : 1.0;
-    bubbleEls[i].style.transform = `translate(${b.x - BUBBLE_R}px, ${b.y - BUBBLE_R}px) scale(${b.drawScale})`;
-  });
-}
+    document.querySelectorAll('[data-slides]').forEach(el => {
+      const list = el.dataset.slides.split('|');
+      el.addEventListener('pointerenter', e => {
+        if (e.pointerType !== 'mouse' || cvOn) return;
+        list.forEach(src => { const im = new Image(); im.src = src; im.decode && im.decode().catch(() => {}); });   // warm the cache
+        let i = 0;
+        clearInterval(slideTimer);
+        showSlide(list[0]);
+        slideTimer = setInterval(() => {
+          if (++i >= list.length * 2) document.dispatchEvent(new Event('preview-done'));   // two full rounds
+          showSlide(list[i % list.length]);
+        }, SLIDE_MS);
+        projectOn = true;
+        document.body.classList.add('project-on');
+      });
+      el.addEventListener('pointerleave', () => {
+        clearInterval(slideTimer);
+        if (cvOn) return;
+        projectOn = false;
+        document.body.classList.remove('project-on');
+      });
+    });
 
-let despawnTimer = null;
+    /* ── TOUCH: first tap previews, second tap opens ──
+       socials show their label + clip, selected projects show their slideshow.
+       A second tap on the same link (or, for a project, on the slideshow itself) follows it.
+       Everything else (All projects, Get in touch, Curiosities, Showreel) opens straight away. */
+    const isTouch = matchMedia('(hover: none)').matches;
+    if (isTouch) {
+      const fake = (el, type) => el.dispatchEvent(new PointerEvent(type, { pointerType: 'mouse', bubbles: type === 'pointerleave' ? false : false }));
+      const row = document.querySelector('.soc-profile .icons');
+      let armed = null;
+      const pill = Object.assign(document.createElement('a'), { className: 'm-open' });
+      document.body.appendChild(pill);
+      function showPill(a) {
+        const isProject = a.matches('[data-slides]');
+        const name = isProject ? a.textContent.trim() : a.getAttribute('aria-label');
+        pill.innerHTML = `<b>${name}</b><span>${isProject ? 'Open project →' : 'Open ' + name + ' ↗'}</span><em>or swipe</em>`;
+        pill.href = a.href;
+        pill.target = a.target || '';
+        pill.rel = a.rel || '';
+        // bottom-left of the picture, just above the "Selected" line
+        pill.style.top = '';
+        pill.style.bottom = (innerHeight - document.querySelector('.tr').getBoundingClientRect().top + 22) + 'px';
+        pill.classList.add('on');
+      }
+      // a preview falls back to the showreel once its slideshow (or clip) has run through twice
+      document.addEventListener('preview-done', () => { if (armed) disarm(); });
+      function disarm() {
+        pill.classList.remove('on');
+        if (!armed) return;
+        fake(armed, 'pointerleave');
+        if (row.contains(armed)) fake(row, 'pointerleave');
+        armed = null;
+      }
+      const previewable = [...document.querySelectorAll('.soc-profile a, .work a[data-slides]')];
+      previewable.forEach(a => a.addEventListener('click', e => {
+        if (armed === a) return;                       // second tap: let the link open
+        e.preventDefault();
+        disarm();
+        armed = a;
+        fake(a, 'pointerenter');
+        showPill(a);
+      }));
+      /* ── page swipes ──
+         pull the paper down → Curiosities, pull the ink up → Projects;
+         the seam follows the finger and the destination's name fades in.
+         preview open: a sideways swipe across the ink opens that link. */
+      const DEST = { paper: './curiosities/', ink: './projects/' };
+      const swipeLabel = Object.assign(document.createElement('div'), { className: 'm-swipe' });
+      document.body.appendChild(swipeLabel);
+      let sx = 0, sy = 0, swiping = false, axis = null, leaving = false, region = 'ink';
+      const seamY = () => document.querySelector('.tl').getBoundingClientRect().bottom + 14 + Math.min(innerWidth, innerHeight) * 0.028 * 1.3;
+      const W0 = () => innerWidth;
+      document.addEventListener('touchstart', e => {
+        if (leaving || document.body.classList.contains('cv-open')) return;
+        sx = e.touches[0].clientX; sy = e.touches[0].clientY; swiping = true; axis = null;
+        region = sy < seamY() ? 'paper' : 'ink';            // top half → Curiosities, bottom half → Projects
+        if (armed) pill.classList.add('drag');
+      }, { passive: true });
+      document.addEventListener('touchmove', e => {
+        if (!swiping) return;
+        const dx = e.touches[0].clientX - sx, dy = e.touches[0].clientY - sy;
+        if (!axis && Math.hypot(dx, dy) > 12) axis = Math.abs(dx) > Math.abs(dy) * 1.2 ? 'x' : 'y';
+        if (axis === 'x' && armed && region === 'ink') { pill.style.transform = `translateX(${(dx * 0.6).toFixed(1)}px)`; return; }
+        // pull the seam: down on the paper, up on the ink — it follows the finger 1:1
+        const pull = region === 'paper' ? Math.max(0, dy) : Math.max(0, -dy);
+        if (axis !== 'y' || !pull) { if (swipeBias != null) { swipeBias = 0; swipeLabel.style.opacity = '0'; } return; }
+        const k = Math.min(1, pull / (innerHeight * 0.35));
+        swipeBias = dy / (innerHeight * 0.045);                  // bias is in units of 4.5% screen height
+        swipeLabel.textContent = region === 'paper' ? 'Curiosities' : 'Projects';
+        swipeLabel.className = 'm-swipe on ' + (region === 'paper' ? 'to-paper' : 'to-ink');
+        swipeLabel.style.opacity = Math.min(1, Math.abs(k) * 1.6).toFixed(2);
+        document.body.classList.add('m-swiping');
+        // pulling the ink up: the paper's text gives way as the ink climbs over it
+        document.documentElement.style.setProperty('--top-fade', region === 'ink' ? Math.max(0, 1 - k * 2.2).toFixed(3) : '1');
+        swipeLabel.style.transform = `translate(-50%, calc(-50% + ${(dy * 0.3).toFixed(1)}px))`;
+      }, { passive: true });
+      document.addEventListener('touchend', e => {
+        if (!swiping) return;
+        swiping = false;
+        pill.classList.remove('drag');
+        const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+        pill.style.transform = '';
+        const horizontal = axis === 'x' && Math.abs(dx) > 70;
+        const pulled = axis === 'y' && (region === 'paper' ? dy > 90 : dy < -90);
+        if (armed && region === 'ink' && !pulled) {
+          if (horizontal) {
+            if (armed.target === '_blank') window.open(armed.href, '_blank', 'noopener'); else location.href = armed.href;
+          }
+          return;
+        }
+        if (pulled) {
+          // commit: let the winning side take the screen, then go
+          leaving = true;
+          swipeBias = region === 'paper' ? 16 : -12;
+          swipeLabel.style.opacity = '1';
+          if (region === 'ink') document.documentElement.style.setProperty('--top-fade', '0');
+          swipeLabel.style.transform = 'translate(-50%, -50%)';
+          setTimeout(() => { location.href = region === 'paper' ? DEST.paper : DEST.ink; }, 420);
+          addEventListener('pageshow', () => { leaving = false; swipeBias = null; swipeLabel.className = 'm-swipe'; document.body.classList.remove('m-swiping'); document.documentElement.style.setProperty('--top-fade', '1'); }, { once: true });
+        } else {
+          swipeBias = null;
+          swipeLabel.style.opacity = '0';
+          document.body.classList.remove('m-swiping');
+          document.documentElement.style.setProperty('--top-fade', '1');
+        }
+      });
 
-const dotProjects = document.getElementById('dot-projects');
-dotProjects.addEventListener('mouseenter', () => {
-  if (despawnTimer) { clearTimeout(despawnTimer); despawnTimer = null; }
-  spawnBubbles();
-});
-dotProjects.addEventListener('mouseleave', () => {
-  if (!bubblesActive && !isSuckingIn) return;
-  if (despawnTimer) clearTimeout(despawnTimer);
-  despawnTimer = setTimeout(despawnBubbles, 2000);
-});
-
-bubbleEls.forEach((el, i) => {
-  el.addEventListener('mouseenter', () => {
-    bubs[i].hovered = true;
-    if (despawnTimer) { clearTimeout(despawnTimer); despawnTimer = null; }
-  });
-  el.addEventListener('mouseleave', () => {
-    bubs[i].hovered = false;
-    if (!bubblesActive && !isSuckingIn) return;
-    if (despawnTimer) clearTimeout(despawnTimer);
-    despawnTimer = setTimeout(despawnBubbles, 2000);
-  });
-});
-
-lblProjects.addEventListener('mouseenter', () => {
-  if (despawnTimer) { clearTimeout(despawnTimer); despawnTimer = null; }
-});
-lblProjects.addEventListener('mouseleave', () => {
-  if (!bubblesActive && !isSuckingIn) return;
-  if (despawnTimer) clearTimeout(despawnTimer);
-  despawnTimer = setTimeout(despawnBubbles, 2000);
-});
-
-lblProjects.style.pointerEvents = 'all';
-lblProjects.addEventListener('click', () => window.open('../projects','_self'));
-document.getElementById('dot-projects').addEventListener('click', () => window.open('../projects','_self'));
-document.getElementById('dot-curiosities').addEventListener('click', () => window.open('../curiosities','_self'));
-
-// VIDEO + CRT SHADER
-const video = document.getElementById('video-bg');
-video.play().catch(()=>{});
-
-(function initCRT() {
-  const cv  = document.getElementById('crt-canvas');
-  const gl  = cv.getContext('webgl', { alpha: false });
-  if (!gl) {
-    video.style.opacity   = '0.45';
-    video.style.filter    = 'brightness(0.6) saturate(0.85)';
-    video.style.zIndex    = '0';
-    video.style.left      = '-380px';
-    video.style.width     = 'calc(100vw + 380px)';
-    return;
-  }
-
-  const VS = `
-    attribute vec2 a_pos;
-    varying vec2 v_uv;
-    void main(){
-      v_uv = vec2(a_pos.x * 0.5 + 0.5, 0.5 - a_pos.y * 0.5);
-      gl_Position = vec4(a_pos, 0.0, 1.0);
-    }`;
-
-  const FS = `
-    precision mediump float;
-    uniform sampler2D u_tex;
-    uniform float     u_t;
-    uniform float     u_vidScale;
-    uniform float     u_vidOff;
-    uniform vec2      u_res;
-    uniform vec2      u_mouse;
-    varying vec2      v_uv;
-
-    vec2 barrel(vec2 uv){
-      vec2 c = uv - 0.5;
-      float r = dot(c, c);
-      return uv + c * r * 0.22;
+      // a tap on the visible slideshow (the ink side) opens the project; a tap on the paper
+      // (name, bio, anywhere that isn't a link) closes the preview and brings the showreel back.
+      // Handled on touchend too: iOS doesn't send clicks for taps on plain text.
+      function tapAt(target, y) {
+        if (!armed || target.closest('.soc-profile a, .work a[data-slides], .m-open')) return;
+        if (target.closest('a, button')) return;               // real links do their own thing
+        const onPaper = y < document.querySelector('.tl').getBoundingClientRect().bottom + 20;
+        if (!onPaper && armed.matches('[data-slides]')) { location.href = armed.href; return; }
+        disarm();
+      }
+      document.addEventListener('click', e => tapAt(e.target, e.clientY));
+      document.addEventListener('touchend', e => {
+        const t = e.changedTouches[0];
+        if (Math.hypot(t.clientX - sx, t.clientY - sy) > 10) return;   // that was a swipe, not a tap
+        tapAt(document.elementFromPoint(t.clientX, t.clientY) || e.target, t.clientY);
+      });
     }
 
-    void main(){
-      vec2 uv = barrel(v_uv);
-      uv = clamp(uv, 0.0, 1.0);
-      vec2 vUV = vec2(uv.x * u_vidScale + u_vidOff, uv.y);
-
-      float ca  = 0.006;
-      vec2  dir = (uv - 0.5) * ca;
-      float r   = texture2D(u_tex, vUV + dir).r;
-      float g   = texture2D(u_tex, vUV      ).g;
-      float b   = texture2D(u_tex, vUV - dir).b;
-      vec3  col = vec3(r, g, b);
-
-      vec2  screenUV = uv * u_res;
-      float lineSize = 2.0;
-      float scan = mod(floor(screenUV.y / lineSize), 2.0);
-      col *= 0.78 + 0.22 * scan;
-
-      float px = mod(floor(screenUV.x / lineSize), 2.0);
-      col *= 0.92 + 0.08 * px;
-
-      float lum = dot(col, vec3(0.299, 0.587, 0.114));
-      col = mix(vec3(lum), col, 0.88);
-      col *= 0.62;
-
-      vec2  vc  = vec2(u_vidOff + u_vidScale * 0.5, 0.5);
-      float vd  = length((uv - vc) * vec2(0.9, 1.0));
-      float vig = smoothstep(0.0, 0.75, vd);
-      col *= 1.0 - vig * 0.72;
-
-      float aspect  = u_res.x / u_res.y;
-      vec2  mDelta  = (v_uv - u_mouse) * vec2(aspect, 1.0);
-      float cursor  = smoothstep(0.35, 0.0, length(mDelta));
-      col += col * cursor * 0.5;
-
-      gl_FragColor = vec4(col, 1.0);
-    }`;
-
-  function compile(type, src) {
-    const s = gl.createShader(type);
-    gl.shaderSource(s, src); gl.compileShader(s);
-    return s;
-  }
-  const prog = gl.createProgram();
-  gl.attachShader(prog, compile(gl.VERTEX_SHADER,   VS));
-  gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, FS));
-  gl.linkProgram(prog);
-  gl.useProgram(prog);
-
-  const buf = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-  gl.bufferData(gl.ARRAY_BUFFER,
-    new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
-  const aPos = gl.getAttribLocation(prog, 'a_pos');
-  gl.enableVertexAttribArray(aPos);
-  gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
-
-  const tex = gl.createTexture();
-  gl.bindTexture(gl.TEXTURE_2D, tex);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-  gl.uniform1i(gl.getUniformLocation(prog, 'u_tex'), 0);
-  const uT        = gl.getUniformLocation(prog, 'u_t');
-  const uVidScale = gl.getUniformLocation(prog, 'u_vidScale');
-  const uVidOff   = gl.getUniformLocation(prog, 'u_vidOff');
-  const uMouse    = gl.getUniformLocation(prog, 'u_mouse');
-  const uRes      = gl.getUniformLocation(prog, 'u_res');
-
-  function setVideoUniforms() {
-    const vw    = window.innerWidth;
-    const total = vw + 380;
-    gl.uniform1f(uVidScale, vw   / total);
-    gl.uniform1f(uVidOff,   380  / total);
-  }
-
-  function resize() {
-    cv.width  = window.innerWidth;
-    cv.height = window.innerHeight;
-    gl.viewport(0, 0, cv.width, cv.height);
-    gl.uniform2f(uRes, cv.width, cv.height);
-    setVideoUniforms();
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  function crtLoop(t) {
-    if (video.readyState >= 2) {
-      gl.bindTexture(gl.TEXTURE_2D, tex);
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, video);
-      gl.uniform1f(uT, t * 0.001);
-      gl.uniform2f(uMouse, mX / window.innerWidth, mY / window.innerHeight);
-      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    /* ── SHOWREEL ── */
+    const VIMEO_ID = '1188999678';
+    const reel  = document.getElementById('reel');
+    const frameEl = reel.querySelector('iframe');
+    function openReel() {
+      frameEl.src = `https://player.vimeo.com/video/${VIMEO_ID}?autoplay=1&color=ffffff&title=0&byline=0&portrait=0`;
+      reel.classList.add('open');
+      reelBg.pause(); reelWin.pause();
     }
-    requestAnimationFrame(crtLoop);
-  }
-  requestAnimationFrame(crtLoop);
-})();
-
-// VIMEO MODAL
-const VIMEO_ID = '1188999678';
-const vimeoModal  = document.getElementById('vimeo-modal');
-const vimeoIframe = document.getElementById('vimeo-iframe');
-function openVimeo(){
-  vimeoIframe.src = `https://player.vimeo.com/video/${VIMEO_ID}?autoplay=1&color=ffffff&title=0&byline=0&portrait=0`;
-  vimeoModal.classList.add('open');
-}
-function closeVimeo(){
-  vimeoModal.classList.remove('open');
-  vimeoIframe.src = '';
-}
-document.getElementById('play-group').addEventListener('click', openVimeo);
-const mobShowreel = document.getElementById('mob-showreel');
-if (mobShowreel) mobShowreel.addEventListener('click', openVimeo);
-vimeoModal.addEventListener('click', e => { if(e.target === vimeoModal) closeVimeo(); });
-document.addEventListener('keydown', e => { if(e.key === 'Escape') closeVimeo(); });
-
-// PARTICLES
-const canvas = document.getElementById('canvas');
-const ctx    = canvas.getContext('2d');
-let W, H, pcx, pcy;
-function resizeCanvas(){
-  const el = document.getElementById('left');
-  W = canvas.width  = el.offsetWidth;
-  H = canvas.height = el.offsetHeight;
-  pcx = W/2; pcy = H/2;
-}
-resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
-const TAU = Math.PI*2;
-class Particle {
-  constructor(i, total){
-    const t = i/total;
-    this.R     = 36 + t*280 + (Math.random()-.5)*54;
-    this.angle = Math.random()*TAU;
-    const dir  = Math.random()<.5 ? 1 : -1;
-    this.speed = dir*(0.000032 + Math.random()*0.000058);
-    this.ox=0; this.oy=0;
-    this.size  = .5  + Math.random()*1.05;
-    this.alpha = .05 + Math.random()*.42;
-    this.bright = Math.random()<.065;
-    if(this.bright){ this.size=.9+Math.random()*.7; this.alpha=.5+Math.random()*.38; }
-  }
-  update(dt){
-    this.angle += this.speed*dt;
-    const bx = pcx+Math.cos(this.angle)*this.R;
-    const by = pcy+Math.sin(this.angle)*this.R;
-    const wx=bx+this.ox, wy=by+this.oy;
-    const dx=wx-mX, dy=wy-mY, d2=dx*dx+dy*dy, PR=140;
-    if(d2<PR*PR && d2>.01){
-      const d=Math.sqrt(d2), f=(1-d/PR)*4.5;
-      this.ox+=(dx/d)*f; this.oy+=(dy/d)*f;
+    function closeReel() {
+      reel.classList.remove('open');
+      setTimeout(() => frameEl.src = '', 400);
+      reelBg.play().catch(() => {});
+      reelWin.play().catch(() => {});
     }
-    this.ox*=.968; this.oy*=.968;
-    this.x=bx+this.ox; this.y=by+this.oy;
-  }
-  draw(){
-    if(this.bright){
-      const g=ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.size*5);
-      g.addColorStop(0,`rgba(237,234,228,${this.alpha*.5})`);
-      g.addColorStop(1,'rgba(237,234,228,0)');
-      ctx.beginPath(); ctx.arc(this.x,this.y,this.size*5,0,TAU);
-      ctx.fillStyle=g; ctx.fill();
+    playEl.addEventListener('click', openReel);
+    document.getElementById('reel-close').addEventListener('click', closeReel);
+    reel.addEventListener('click', e => { if (e.target === reel) closeReel(); });
+    addEventListener('keydown', e => { if (e.key === 'Escape') closeReel(); });
+
+    /* ── CV: opens over the page, no download needed ── */
+    const cvBox = document.getElementById('cv');
+    const cvLink = document.querySelector('.cv-link');
+    const cvWin = document.getElementById('cv-window');
+    const cvImg = cvWin.querySelector('img');
+    // load the CV picture once the page has settled (not on first paint), or right away when asked for
+    const loadCv = () => { if (!cvImg.src) cvImg.src = cvImg.dataset.src; };
+    addEventListener('load', () => setTimeout(loadCv, 1500));
+    cvLink.addEventListener('pointerenter', loadCv);
+    // desktop: the CV shows in the preview window on the ink side; the link toggles it
+    function cvWindow(on) {
+      cvOn = on;
+      projectOn = on;
+      loadCv();
+      clearInterval(slideTimer);
+      document.body.classList.toggle('cv-on', on);
+      document.body.classList.toggle('project-on', on);
+      if (on) { slots.forEach(im => { im.getAnimations().forEach(an => an.cancel()); im.style.opacity = 0; }); projBg.style.setProperty('--echo', 'none'); cvFit(true); }
+      else document.body.classList.remove('cv-grab', 'cv-drag', 'cv-point');
+      cvLink.textContent = on ? 'Close CV' : 'View CV';
     }
-    ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,TAU);
-    ctx.fillStyle=`rgba(237,234,228,${this.alpha})`; ctx.fill();
-  }
-}
-const COUNT=200;
-const particles=Array.from({length:COUNT},(_,i)=>new Particle(i,COUNT));
-
-bubbleEls.forEach(el => {
-  el.style.left = '0px';
-  el.style.top  = '0px';
-});
-
-let lastT=performance.now();
-(function loop(now){
-  const dt=Math.min(now-lastT,50); lastT=now;
-  ctx.clearRect(0,0,W,H);
-  ctx.fillStyle='rgba(8,8,8,0.18)';
-  ctx.fillRect(0,0,W,H);
-  for(const p of particles){p.update(dt);p.draw();}
-  updateBubbles(dt);
-  requestAnimationFrame(loop);
-})(performance.now());
-</script>
-
+    // the PDF's links (left, top, right, bottom as a fraction of the page) — the picture can't carry them itself
+    const CV_LINKS = [
+      [0.0688, 0.1423, 0.2795, 0.1546, 'https://jmelving.de/'],
+      [0.2853, 0.1423, 0.3906, 0.1546, 'https://crossdot.studio/'],
+      [0.3955, 0.1423, 0.4548, 0.1546, 'https://linkedin.com/in/jmelving'],
+      [0.4642, 0.1423, 0.5265, 0.1546, 'https://youtube.com/@jmelving'],
+      [0.5359, 0.1423, 0.5874, 0.1546, 'https://github.com/jmelving'],
+      [0.7261, 0.4466, 0.9102, 0.4634, 'https://youtu.be/q30L3w7hWWc?si=x_KEnoPjezo7R547&t=79'],
+      [0.7254, 0.4634, 0.8884, 0.4796, 'https://www.instagram.com/p/DXGKvbekZQE/'],
+      [0.7347, 0.5063, 0.9170, 0.5187, 'https://www.imvawards.com/winners/winners-season-january-2025'],
+      [0.6498, 0.5311, 0.8257, 0.5452, 'https://cinemanext.at/screenings/tour-in-sbg-25'],
+      [0.7732, 0.5452, 0.8859, 0.5596, 'https://jmelving.de/projects/TheUSBParadox/'],
+      [0.6499, 0.6414, 0.7478, 0.6556, 'https://fmx.de/en/program/program-2025/schedule?day=2'],
+      [0.8037, 0.6414, 0.8698, 0.6556, 'https://fmx.de/en/program/program-2026/detail/event/35005'],
+      [0.6464, 0.6556, 0.8206, 0.6700, 'https://best-austrian-animation.at/artists/jona-melvin-grobe/'],
+      [0.7713, 0.6841, 0.8996, 0.6985, 'https://youtu.be/iKBs9l8jS6Q?si=mD52TJmOb2yRdvex&t=333'],
+    ];
+    const CV_PAD = 0.004;                                              // a little extra room around each, easier to hit
+    // phone: real links laid over the picture
+    const cvPage = cvBox.querySelector('.cv-page');
+    CV_LINKS.forEach(([l, t, r, b, href]) => {
+      const a = Object.assign(document.createElement('a'), { href, target: '_blank', rel: 'noopener' });
+      a.setAttribute('aria-label', href.replace(/^https?:\/\/(www\.)?/, '').split(/[/?]/)[0]);
+      Object.assign(a.style, { left: (l - CV_PAD) * 100 + '%', top: (t - CV_PAD) * 100 + '%',
+        width: (r - l + CV_PAD * 2) * 100 + '%', height: (b - t + CV_PAD * 2) * 100 + '%' });
+      cvPage.appendChild(a);
+    });
+    // viewer state: position (x, y) and scale (k) of the CV inside the window; *T = where it eases to
+    const CV_W = 1406, CV_H = 1988;
+    let cx = 0, cy = 0, ck = 0.3, cxT = 0, cyT = 0, ckT = 0.3, cFit = 0.3;
+    const cvRect = () => cvWin.getBoundingClientRect();
+    const cvOff = () => innerWidth * 0.15;                             // the window starts under the paper; the open ink begins this far in
+    const barH = () => 0;                                              // the window already starts below the bar
+    const cvBar = document.getElementById('cv-bar');
+    const setCvTop = () => document.documentElement.style.setProperty('--cv-top', cvBar.offsetHeight + 'px');
+    setCvTop(); addEventListener('resize', setCvTop);
+    // whole page in view, centred under the bar
+    function cvFit(jump) {
+      const b = cvRect(), top = barH(), pad = 24;
+      const off = cvOff(), aw = b.width - off;
+      cFit = Math.min((b.height - top - pad) / CV_H, (aw - pad * 2) / CV_W);   // (top is 0: the bar sits above the window)
+      ckT = cFit; cxT = off + (aw - CV_W * cFit) / 2; cyT = top;
+      if (jump) { ck = ckT; cx = cxT; cy = cyT; }
+    }
+    // keep it from wandering off: smaller than the window → centred, bigger → its edges can't come inside
+    function cvClamp() {
+      const b = cvRect(), top = barH(), w = CV_W * ckT, h = CV_H * ckT;
+      const off = cvOff(), aw = b.width - off;
+      cxT = w <= aw ? off + (aw - w) / 2 : Math.min(off, Math.max(b.width - w, cxT));
+      cyT = h <= b.height - top ? top : Math.min(top, Math.max(b.height - h - 24, cyT));
+    }
+    addEventListener('wheel', e => {
+      if (!cvOn) return;
+      e.preventDefault();
+      const b = cvRect();
+      const px = e.clientX - b.left, py = e.clientY - b.top;            // zoom toward the cursor
+      const k = Math.min(Math.max(cFit * 1.5, 1.5), Math.max(cFit, ckT * Math.exp(-e.deltaY * 0.0016)));   // up to about life size, where it's still sharp
+      cxT = px - (px - cxT) * (k / ckT); cyT = py - (py - cyT) * (k / ckT); ckT = k;
+      cvClamp();
+    }, { passive: false });
+    let drag = null, dragged = 0;
+    const overCv = e => cvOn && e.clientX > cvRect().left + cvOff() && !e.target.closest('a, button, #cv-bar');
+    // which of the CV's links is under the cursor (from where the picture is drawn right now)
+    function cvLinkAt(e) {
+      const b = cvRect();
+      const x = (e.clientX - b.left - cx) / ck / CV_W, y = (e.clientY - b.top - cy) / ck / CV_H;
+      const hit = CV_LINKS.find(([l, t, r, bt]) => x > l - CV_PAD && x < r + CV_PAD && y > t - CV_PAD && y < bt + CV_PAD);
+      return hit && hit[4];
+    }
+    document.addEventListener('pointerdown', e => {
+      if (!overCv(e) || e.button !== 0) return;
+      drag = { x: e.clientX, y: e.clientY, cx: cxT, cy: cyT }; dragged = 0;
+      document.body.classList.add('cv-drag');
+    });
+    addEventListener('pointermove', e => {
+      if (cvOn) {
+        const over = overCv(e);
+        document.body.classList.toggle('cv-grab', over);
+        document.body.classList.toggle('cv-point', over && !drag && !!cvLinkAt(e));
+      }
+      if (!drag) return;
+      dragged = Math.max(dragged, Math.hypot(e.clientX - drag.x, e.clientY - drag.y));
+      cxT = drag.cx + e.clientX - drag.x; cyT = drag.cy + e.clientY - drag.y;
+      cvClamp();
+    });
+    addEventListener('pointerup', () => { drag = null; document.body.classList.remove('cv-drag'); });
+    addEventListener('dblclick', e => { if (overCv(e)) cvFit(false); });   // double-click: whole page again
+    addEventListener('resize', () => { if (cvOn) cvFit(true); });
+    (function cvView() {
+      const f = drag ? 0.5 : 0.2;
+      cx += (cxT - cx) * f; cy += (cyT - cy) * f; ck += (ckT - ck) * 0.2;
+      if (cvOn) cvImg.style.transform = `translate(${cx.toFixed(1)}px, ${cy.toFixed(1)}px) scale(${ck.toFixed(4)})`;
+      requestAnimationFrame(cvView);
+    })();
+    document.getElementById('cv-bar-close').addEventListener('click', () => cvWindow(false));
+    // while the CV is up, a click on the ink is for the CV (drag / double-click), not "go to Projects"
+    window.addEventListener('click', e => {
+      if (!overCv(e)) return;
+      e.stopImmediatePropagation(); e.preventDefault();
+      const href = dragged < 5 && cvLinkAt(e);                        // a click (not the end of a drag) on one of its links opens it
+      if (href) window.open(href, '_blank', 'noopener');
+    }, true);
+    function openCv(e) {
+      e.preventDefault();
+      if (!PHONE_LAYOUT()) { cvWindow(!cvOn); return; }
+      cvBox.scrollTop = 0;
+      cvBox.classList.add('open'); cvBox.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('cv-open');
+      reelBg.pause(); reelWin.pause();
+      document.getElementById('cv-close').focus({ preventScroll: true });
+    }
+    function closeCv() {
+      if (cvOn) cvWindow(false);
+      if (!cvBox.classList.contains('open')) return;
+      cvBox.classList.remove('open'); cvBox.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('cv-open');
+      reelBg.play().catch(() => {}); reelWin.play().catch(() => {});
+      cvLink.focus({ preventScroll: true });
+    }
+    cvLink.addEventListener('click', openCv);
+    document.getElementById('cv-close').addEventListener('click', closeCv);
+    cvBox.addEventListener('click', e => { if (e.target === cvBox) closeCv(); });
+    addEventListener('keydown', e => { if (e.key === 'Escape') closeCv(); });
+  })();
+  </script>
 </body>
 </html>

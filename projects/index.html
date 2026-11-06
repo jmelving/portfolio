@@ -3,14 +3,731 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Projects — Jona Melvin Grobe</title><!-- overwritten by projects-core.js -->
-  <link rel="icon" href="../img/favicon.ico" type="image/x-icon">
+  <title>Projects — Jona Melvin Grobe</title>
+  <meta name="robots" content="index, follow">
+  <meta name="description" content="Selected projects by Jona Melvin Grobe: short films, music videos and VFX work, plus the Lab with experiments, tools and side work.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Projects | Jona Melvin Grobe">
+  <meta property="og:description" content="Selected projects by Jona Melvin Grobe: short films, music videos and VFX work, plus the Lab with experiments, tools and side work.">
+  <meta property="og:url" content="https://jmelving.de/projects/">
+  <meta property="og:image" content="https://jmelving.de/projects/Echoes/img/ECHOES_Hero.webp">
+  <link rel="canonical" href="https://jmelving.de/projects/">
+  <link rel="icon" href="../img/logo/favicon.ico" sizes="48x48">
+  <link rel="icon" type="image/svg+xml" href="../img/logo/favicon.svg">
+  <link rel="apple-touch-icon" href="../img/logo/apple-touch-icon.png">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Syne:wght@400;600;700;800&family=Syne+Mono&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/projects.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/split.css">
+
+  <!--
+    Draft — projects overview in the front-page style.
+    The black half was "Projects" on the front page, so here the black takes over:
+    the seam slides from the middle to a narrow paper strip on the left.
+    Thumbnails + the Lab library (masonry + lightbox) work like on the current page.
+    Content comes from projects.data.js (same file the current page uses).
+  -->
+
+  <style>
+    #page {
+      display:grid;
+      grid-template-columns:var(--seam) 1fr;
+      min-height:100svh;
+    }
+
+    /* ── paper strip: what / filters ── */
+    .strip {
+      position:sticky; top:0;
+      height:100svh;
+      display:flex; flex-direction:column;
+      padding:var(--pad);
+      padding-right:clamp(18px, 2vw, 36px);
+    }
+    .strip h1 {
+      margin-top:auto;
+      font-weight:700;
+      font-size:clamp(38px, min(4.6vw, 9vh), 92px);
+      line-height:.9;
+      letter-spacing:-0.04em;
+    }
+    .strip .count { margin-top:14px; font-size:14px; opacity:.55; }
+    .filters { list-style:none; margin-top:clamp(24px, 5vh, 56px); display:flex; flex-direction:column; gap:4px; }
+    .filters button {
+      font:inherit; font-size:clamp(15px, 1.1vw, 18px);
+      color:inherit; background:none; border:0; cursor:pointer;
+      text-align:left; padding:2px 0;
+      opacity:.45; transition:opacity .25s;
+    }
+    .filters button:hover { opacity:.8; }
+    .filters button.on { opacity:1; }
+    .filters button.on::before { content:'→ '; }
+    .to-lab { margin-top:auto; font-size:14px; text-decoration:none; opacity:.6; }
+    .to-lab:hover { opacity:1; }
+
+    /* the work runs edge to edge at the top and right; on the left it keeps clear of the wave */
+    /* --gap: breathing room between the wave and the gallery; the lab sits further in */
+    :root { --gap:2.6vw; --inset:clamp(28px, 4vw, 72px); }
+    main { padding-left:var(--gap); min-width:0; }
+    #lab { padding:0 var(--pad) 0 calc(var(--inset) - var(--gap) + 1vw); }
+
+    html { scrollbar-gutter:stable; }   /* the scrollbar's room stays reserved: opening the lightbox (no scrolling) doesn't widen the page and shift everything */
+    /* ── project gallery: same as the current page (3 columns, 2px gaps, title slides in) ── */
+    .gallery { display:grid; grid-template-columns:repeat(3, 1fr); gap:2px; align-content:start; }   /* (rows keep their height while the grid is held taller during a switch) */
+    /* fillers: quiet dark tiles that close the last row (not projects) */
+    .filler {
+      display:flex; flex-direction:column; justify-content:space-between;
+      aspect-ratio:16/9; padding:20px 22px;
+      background:#141414; color:var(--paper);
+      text-decoration:none;
+      opacity:0; animation:cardIn .7s cubic-bezier(.16,1,.3,1) forwards;
+      transition:background .35s;
+    }
+    .filler.hide { display:none; }
+    .gallery.settled .gallery-item, .gallery.settled .filler { animation:none; opacity:1; }
+    .gallery > .ghost { position:absolute; margin:0; z-index:3; pointer-events:none; animation:none; opacity:1; }   /* a tile's old picture, fading out over its slot */
+    .filler small { font-size:12px; opacity:.35; }
+    .filler b { font-weight:500; font-size:clamp(18px, 1.5vw, 26px); letter-spacing:-0.02em; line-height:1.1; opacity:.55; transition:opacity .35s; }
+    .filler:hover b { opacity:1; }
+    .filler b i { font-style:normal; display:inline-block; transition:transform .5s cubic-bezier(.2,.8,.2,1); }
+    .filler:hover { background:#1b1b1b; }
+    .filler:hover b i { transform:translate(4px, 2px); }
+    .gallery-item {
+      display:block; text-decoration:none; color:var(--paper);
+      opacity:0; animation:cardIn .7s cubic-bezier(.16,1,.3,1) forwards;
+    }
+    .gallery-item.hide { display:none; }
+    /* the gap between wave and grid: each row bleeds out as a blurred, dark echo of its first image */
+    .gallery-item { position:relative; }
+    .gallery-item.row-start::before {
+      content:''; position:absolute; top:0; bottom:0;
+      right:100%; width:calc(var(--gap) + 60px);
+      background:var(--bleed) center / cover no-repeat;
+      filter:blur(14px) brightness(.55) grayscale(1);
+      transition:filter .6s ease;
+      pointer-events:none;
+    }
+    /* the echo comes up in colour together with its project */
+    .gallery-item.row-start:hover::before { filter:blur(14px) brightness(.8) grayscale(0); }
+    @keyframes cardIn { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:none; } }
+    .project-container { position:relative; aspect-ratio:16/9; overflow:hidden; background:#0d0d0d; }
+    .project-container::after {
+      content:''; position:absolute; inset:0; z-index:4; pointer-events:none;
+      border:1px solid rgba(238,235,229,.04); transition:border-color .3s;
+    }
+    .project-container:hover::after { border-color:rgba(238,235,229,.14); }
+    .image-stack img {
+      position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+      opacity:0; z-index:1;
+      filter:grayscale(100%) brightness(.6);
+      transition:opacity .45s ease, transform .6s cubic-bezier(.16,1,.3,1), filter .45s ease;
+    }
+    .image-stack img.active { opacity:1; z-index:2; }
+    .project-container:hover .image-stack img.active { filter:grayscale(20%) brightness(.75); transform:scale(1.045); }
+    .img-overlay {
+      position:absolute; inset:0; z-index:3; pointer-events:none;
+      background:linear-gradient(180deg, rgba(12,12,12,0) 30%, rgba(12,12,12,.72) 100%);
+    }
+    .project-info {
+      position:absolute; left:0; right:0; bottom:0; z-index:5;
+      padding:18px 22px 20px;
+      transform:translateY(100%);
+      transition:transform .38s cubic-bezier(.16,1,.3,1);
+    }
+    .project-container:hover .project-info { transform:none; }
+    /* left column runs under the paper: keep its title clear of the seam */
+    .gallery-item:nth-child(3n+1) .project-info { padding-left:22px; }
+    @media (max-width:1200px) {
+      .gallery-item:nth-child(3n+1) .project-info { padding-left:22px; }
+      .gallery-item:nth-child(2n+1) .project-info { padding-left:22px; }
+    }
+    .project-title { font-weight:600; font-size:clamp(17px, 1.3vw, 22px); letter-spacing:-0.01em; line-height:1.15; margin-bottom:4px; }
+    .work-description { font-size:12px; opacity:.55; }
+    .cat-pill {
+      position:absolute; top:14px; right:14px; z-index:5;
+      font-size:11px; padding:3px 10px; border-radius:100px;
+      border:1px solid rgba(238,235,229,.18); color:rgba(238,235,229,.7);
+      background:rgba(12,12,12,.55);
+      opacity:0; transition:opacity .3s;
+    }
+    .project-container:hover .cat-pill { opacity:1; }
+
+    /* ── the lab (library from the current page, restyled) ── */
+    .lab-head { padding:clamp(90px, 16vh, 180px) 0 clamp(24px, 4vh, 44px); }
+    .lab-head h2 {
+      font-weight:700;
+      font-size:clamp(38px, 5vw, 96px);
+      line-height:.9; letter-spacing:-0.04em;
+    }
+    .lab-head p { max-width:46ch; margin-top:14px; opacity:.6; }
+
+    .lab-masonry { position:relative; visibility:hidden; }
+    .lab-masonry.laid-out { visibility:visible; }
+    .lm-wrap { position:absolute; }
+    .lab-card { position:relative; overflow:hidden; background:#151515; cursor:pointer; user-select:none; }
+    .lab-card img, .lab-card video {
+      display:block; width:100%; height:auto; max-height:70vh; object-fit:cover;
+      filter:grayscale(.8) brightness(.72) saturate(.8);
+      transition:filter .45s ease, transform .55s cubic-bezier(.16,1,.3,1);
+    }
+    .lab-card:hover img, .lab-card:hover video { filter:grayscale(.1) brightness(.92) saturate(1.1); transform:scale(1.04); }
+    .lab-overlay { position:absolute; inset:0; z-index:2; pointer-events:none; background:linear-gradient(180deg, transparent 45%, rgba(12,12,12,.88) 100%); opacity:0; transition:opacity .35s; }
+    .lab-card:hover .lab-overlay { opacity:1; }
+    .lab-info { position:absolute; left:0; right:0; bottom:0; z-index:3; padding:12px 14px 14px; color:var(--paper); transform:translateY(6px); opacity:0; transition:transform .32s cubic-bezier(.16,1,.3,1), opacity .28s; }
+    .lab-card:hover .lab-info { transform:none; opacity:1; }
+    .lab-title { font-weight:600; font-size:15px; line-height:1.2; }
+    .lab-sub { font-size:12px; opacity:.55; margin-top:2px; }
+    .lab-badge { position:absolute; top:10px; left:10px; z-index:3; font-size:11px; color:var(--paper); padding:2px 9px; border-radius:100px; background:rgba(12,12,12,.6); }
+
+    /* lightbox */
+    #lightbox { position:fixed; inset:0; z-index:500; display:flex; align-items:center; justify-content:center; background:rgba(12,12,12,.96); opacity:0; pointer-events:none; transition:opacity .38s cubic-bezier(.16,1,.3,1); color:var(--paper); }
+    #lightbox.open { opacity:1; pointer-events:all; }
+    #lb-stage { position:relative; width:min(88vw, 1200px); height:min(66vh, 780px); margin-top:-6vh; display:flex; align-items:center; justify-content:center; }
+    #lb-media img, #lb-media video { display:block; max-width:min(88vw, 1200px); max-height:min(62vh, 760px); width:auto; height:auto; object-fit:contain; opacity:0; transition:opacity .32s ease; }
+    #lb-media .ready { opacity:1; }
+    .lb-arrow { position:absolute; top:50%; translate:0 -50%; width:44px; height:44px; border-radius:50%; border:1px solid rgba(238,235,229,.2); background:none; color:inherit; font:inherit; font-size:18px; cursor:pointer; opacity:.6; transition:opacity .2s; }
+    .lb-arrow:hover { opacity:1; }
+    #lb-prev { left:-64px; } #lb-next { right:-64px; }
+    #lb-close { position:fixed; top:var(--pad); right:var(--pad); background:none; border:0; color:inherit; font:inherit; font-size:15px; cursor:pointer; border-bottom:1px solid currentColor; }
+    #lb-count { position:fixed; top:var(--pad); left:50%; translate:-50% 0; font-size:13px; opacity:.45; }
+    #lb-caption { position:fixed; bottom:40px; left:50%; translate:-50% 0; text-align:center; max-width:min(72vw, 860px); }
+    #lb-title { font-weight:600; font-size:18px; }
+    #lb-sub { font-size:13px; opacity:.55; margin-top:2px; }
+    #lb-desc { font-size:14px; opacity:.7; margin-top:8px; line-height:1.6; }
+    #lb-desc:empty { display:none; }
+
+    footer { display:flex; justify-content:space-between; padding:clamp(60px, 10vh, 120px) var(--pad) var(--pad) calc(var(--inset) + 1vw); font-size:12px; opacity:.45; }
+
+    @media (max-width:1200px) { .gallery { grid-template-columns:repeat(2, 1fr); } }
+    .strip .lab-state { display:none; }
+    .grid-wrap { position:relative; }
+    /* desktop: the grid starts a little way down, so it sits more in the middle; the first row bleeds up into that space
+       as a mirrored, blurred echo of its pictures (like each row bleeds out to the left) */
+    :root { --top-gap:clamp(56px, 12vh, 140px); }
+    .grid-wrap { padding-top:var(--top-gap); }
+    .gallery-item.row-top::after {
+      content:''; position:absolute; left:0; right:0; bottom:calc(100% + 2px); height:var(--top-gap);
+      background:var(--own) top center / 100% auto no-repeat;
+      transform:scaleY(-1);                                          /* mirrored: the picture's top edge meets the tile */
+      filter:blur(14px) brightness(.5) grayscale(1);
+      -webkit-mask-image:linear-gradient(to bottom, #000, transparent); mask-image:linear-gradient(to bottom, #000, transparent);
+      transition:filter .6s ease;
+      pointer-events:none;
+    }
+    .gallery-item.row-top:hover::after { filter:blur(14px) brightness(.8) grayscale(0); }
+    .grid-echo { display:none; }
+    .grid-wrap > .gallery { position:relative; }
+    .strip .sel-state { display:contents; }
+    /* ── MOBILE: horizontal split, like the project pages ──
+       paper on top holds what you're looking at (Selected work / The Lab) and the filters,
+       the ink below is where the work scrolls, with a tilt-shift focus */
+    @media (max-width:1024px), (hover:none) and (pointer:coarse) {
+      html { background:var(--ink); }
+      html, body { overflow-x:clip; max-width:100%; }
+      #page { grid-template-columns:1fr; }
+      .strip {
+        position:fixed; top:0; left:0; right:0; z-index:5;
+        height:calc(var(--seam-y) - 30px);
+        padding:calc(var(--pad) * 1.1) var(--pad) 0;
+      }
+      .strip h1 { margin-top:auto; font-size:clamp(40px, 12.5vw, 60px); }
+      .strip .count { margin-top:6px; font-size:13px; }
+      .filters { flex-direction:row; flex-wrap:wrap; gap:4px 16px; margin:12px 0 0; }
+      .filters button { font-size:15px; }
+      .to-lab { display:none; }
+      /* top swaps to the lab once you're there */
+      .strip .sel-state, .strip .lab-state { transition:opacity .35s ease; }
+      .strip .lab-state { display:flex; flex-direction:column; position:absolute; left:var(--pad); right:var(--pad); bottom:0; opacity:0; pointer-events:none; }
+      .strip .lab-state h1 { margin-top:0; }
+      .strip .lab-state p { margin-top:8px; font-size:14px; opacity:.6; max-width:34ch; }
+      .strip .lab-state .to-work { margin-top:12px; font-size:15px; text-decoration:none; border-bottom:1px solid currentColor; width:max-content; }
+      body.in-lab .strip .lab-state { pointer-events:auto; }
+      body.in-lab .strip .sel-state { opacity:0; pointer-events:none; }
+      body.in-lab .strip .lab-state { opacity:1; }
+      .strip .sel-state { display:flex; flex-direction:column; flex:1; }
+
+      main { padding:calc(var(--seam-y) + 6px) 0 0; margin:0; }
+      .grid-wrap { padding-top:0; }
+      .gallery-item.row-top::after { display:none; }
+      .gallery { grid-template-columns:1fr; gap:3px; }
+      /* above the first project: its picture mirrored and blurred, fading up into the black,
+         so the seam's swing never shows a hard top edge */
+      .grid-echo {
+        display:block; position:absolute; left:0; right:0; bottom:calc(100% - 30px);   /* tucked under the first card, so the blur's rim is hidden */
+        height:calc(var(--seam-y) + 70px);
+        transform:scaleY(-1);
+        filter:blur(14px) grayscale(calc(1 - var(--col, 1))) brightness(calc(.62 + .38 * var(--col, 1)));
+        -webkit-mask-image:linear-gradient(to bottom, #000 0, #000 18%, rgba(0,0,0,.4) 45%, transparent 80%);
+                mask-image:linear-gradient(to bottom, #000 0, #000 18%, rgba(0,0,0,.4) 45%, transparent 80%);
+        pointer-events:none;
+      }
+      /* two layers crossfading in step with the card's own images (.45s) */
+      .grid-echo i {
+        position:absolute; inset:0;
+        background:center top / cover no-repeat;   /* flipped: the picture's top edge meets the card */
+        opacity:0; transition:opacity .45s ease;
+      }
+      .grid-echo i.on { opacity:1; }
+      .gallery-item { opacity:1; animation:none; }
+      .project-info { transform:none; }
+      .gallery-item .project-info { padding-left:20px !important; }
+      #lab { padding:0 3px; }
+      /* lab heading: huge, faint, full width — like the section headings on project pages */
+      .lab-head { padding:44px 17px 14px; }
+      /* scrolls with the work, so it slides under the paper like the tiles do (overlay is z 4) */
+      .lab-head, main > footer { z-index:2; }
+      .lab-head h2 { white-space:nowrap; letter-spacing:0.01em; line-height:.9; text-align:center; color:rgba(238,235,229,.11); }
+      .lab-head p { display:none; }
+      footer { padding:40px var(--pad) var(--pad); }
+      #lb-prev { left:4px; } #lb-next { right:4px; }
+      .lab-info, .lab-overlay { opacity:1; transform:none; }
+      .m-focus { will-change:filter, transform, opacity; transform-origin:50% 50%; }
+      /* no hover on touch: colour is driven by focus (--col, 0 grey → 1 full colour) */
+      .gallery-item .image-stack img.active,
+      .lab-card img, .lab-card video {
+        filter:grayscale(calc(1 - var(--col, 0))) brightness(calc(.62 + .38 * var(--col, 0)));
+        transition:opacity .45s ease;
+      }
+    }
+    /* tablets: phone layout, bigger type; two columns of projects */
+    @media (min-width:600px) and (max-width:1024px), (min-width:600px) and (hover:none) and (pointer:coarse) {
+      :root { --pad:36px; }
+      .filters button { font-size:19px; }
+      .strip .count { font-size:15px; }
+      .gallery { grid-template-columns:1fr 1fr; }
+      .project-title { font-size:20px; }
+    }
+  </style>
 </head>
+
 <body>
+  <div class="grain"></div>
+
+  <div id="page">
+    <aside class="strip ink-text fade-in">
+      <a class="back" href="../">← Back</a>
+      <div class="sel-state">
+        <h1>Selected<br>work.</h1>
+        <p class="count" id="count"></p>
+        <ul class="filters" id="filters"></ul>
+      </div>
+      <div class="lab-state" aria-hidden="true">
+        <h1>The Lab.</h1>
+        <p>Experiments, dailies and tests that didn't become a project — yet.</p>
+        <a class="to-work" href="#top">↑ Back to projects</a>
+      </div>
+      <a class="to-lab" href="#lab">The Lab ↓</a>
+    </aside>
+
+    <main>
+      <div class="grid-wrap media"><div class="grid-echo" aria-hidden="true"><i></i><i></i></div><div class="gallery" id="grid"></div></div>
+
+      <section id="lab">
+        <div class="lab-head ink-text">
+          <h2>The Lab.</h2>
+          <p id="lab-sub">Experiments, dailies and tests that didn't become a project — yet.</p>
+        </div>
+        <div class="lab-masonry media" id="masonry"></div>
+      </section>
+
+      <footer class="ink-text">
+        <a href="../impressum/" style="text-decoration:none">Impressum</a>
+        <span>© 2026 JMG</span>
+      </footer>
+    </main>
+  </div>
+
+  <div id="lightbox" role="dialog" aria-label="Lab item">
+    <button id="lb-close" type="button">Close</button>
+    <div id="lb-count"></div>
+    <div id="lb-stage">
+      <button class="lb-arrow" id="lb-prev" type="button" aria-label="Previous">←</button>
+      <div id="lb-media"></div>
+      <button class="lb-arrow" id="lb-next" type="button" aria-label="Next">→</button>
+    </div>
+    <div id="lb-caption"><div id="lb-title"></div><div id="lb-sub"></div><div id="lb-desc"></div></div>
+  </div>
+
   <script src="./projects.data.js"></script>
-  <script src="../js/projects.js"></script>
+  <script src="../js/split-field.js"></script>
+  <script>
+  // phones, tablets and anything touch-only get the stacked layout, whatever its width
+  window.PHONE_LAYOUT = window.PHONE_LAYOUT || (() => matchMedia('(max-width:1024px), (hover:none) and (pointer:coarse)').matches);
+  (() => {
+    const D = PROJECTS_DATA;
+    const field = SplitField.init({ split: 0.22, splitMobile: 0.32, mobileAxis: 'y', enterFrom: 0.5, lavaOver: true });
+
+
+    /* ── project gallery (same markup + behaviour as the current page) ── */
+    const grid = document.getElementById('grid');
+    D.projects.forEach((p, i) => {
+      const a = document.createElement('a');
+      a.className = 'gallery-item';
+      a.href = p.href;
+      a.dataset.category = p.category || '';
+      a.style.animationDelay = (0.1 + i * 0.08).toFixed(2) + 's';
+      if (p.images?.[0]) { a.style.setProperty('--bleed', `url("${p.images[0].src}")`); a.style.setProperty('--own', `url("${p.images[0].src}")`); }
+      const imgs = (p.images || []).map((im, j) => `<img src="${im.src}" alt="${im.alt || ''}"${j === 0 ? ' class="active"' : ''}>`).join('');
+      a.innerHTML = `
+        <div class="project-container">
+          <div class="image-stack">${imgs}</div>
+          <div class="img-overlay"></div>
+          ${p.pill ? `<span class="cat-pill">${p.pill}</span>` : ''}
+          <div class="project-info">
+            <div class="project-title">${p.title || ''}</div>
+            <div class="work-description">${p.desc || ''}</div>
+          </div>
+        </div>`;
+      // flipbook: images step through while hovered
+      const stack = [...a.querySelectorAll('.image-stack img')];
+      let k = 0, iv = null;
+      a.addEventListener('mouseenter', () => {
+        if (stack.length < 2) return;
+        iv = setInterval(() => { stack[k].classList.remove('active'); k = (k + 1) % stack.length; stack[k].classList.add('active'); }, 800);
+      });
+      a.addEventListener('mouseleave', () => { clearInterval(iv); stack[k].classList.remove('active'); k = 0; stack[0]?.classList.add('active'); });
+      grid.appendChild(a);
+    });
+
+    /* ── filters ── */
+    const cards = [...grid.children];
+    const countEl = document.getElementById('count');
+    const setCount = () => {
+      const n = cards.filter(c => !c.classList.contains('hide')).length;
+      countEl.textContent = `${n} project${n === 1 ? '' : 's'}`;
+    };
+    const filters = document.getElementById('filters');
+    [{ label: 'All', value: 'all' }, ...D.filters].forEach((f, i) => {
+      const li = document.createElement('li');
+      const b = document.createElement('button');
+      b.textContent = f.label;
+      if (i === 0) b.classList.add('on');
+      b.addEventListener('click', () => {
+        if (b.classList.contains('on')) return;
+        filters.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+        switchTo(f.value);
+        // fewer projects shrink the list: start again at its top instead of landing in the lab
+        if (PHONE_LAYOUT()) scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      li.appendChild(b);
+      filters.appendChild(li);
+    });
+    setCount();
+
+    /* ── close the last row with paper tiles ── */
+    const FILLERS = [
+      { href: 'mailto:jonamelvingrobe@gmail.com?subject=Project%20Inquiry', small: 'Next one could be yours', title: 'Get in touch <i>→</i>' },
+    ];
+    const fillers = FILLERS.map(f => {
+      const a = document.createElement('a');
+      a.className = 'filler hide';
+      a.href = f.href;
+      a.innerHTML = `<small>${f.small}</small><b>${f.title}</b>`;
+      grid.appendChild(a);
+      return a;
+    });
+    function fillRows() {
+      const visCards = cards.filter(c => !c.classList.contains('hide'));
+      const vis = visCards.length;
+      const cols = getComputedStyle(grid).gridTemplateColumns.split(' ').length;
+      // first card of every row feeds the blurred bleed in the gap next to the wave
+      cards.forEach(c => c.classList.remove('row-start', 'row-top'));
+      if (cols > 1) visCards.forEach((c, i) => { if (i % cols === 0) c.classList.add('row-start'); if (i < cols) c.classList.add('row-top'); });
+      const empty = cols < 2 ? 0 : (cols - vis % cols) % cols;
+      fillers.forEach((f, i) => {
+        f.classList.toggle('hide', i >= empty);
+        const span = i === fillers.length - 1 ? empty - i : 1;       // the last one takes the rest of the row
+        f.style.gridColumn = span > 1 ? `span ${span}` : '';
+        f.style.aspectRatio = span > 1 ? 'auto' : '';                // (the row's height comes from the projects next to it)
+      });
+    }
+    fillRows();
+
+    /* ── switching category: a sliding puzzle. Tiles only ever move in straight lines —
+       what goes is pushed out sideways, what stays slides along its row and then up or down into place,
+       what comes drops in from above ── */
+    const stillMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isShown = t => !t.classList.contains('hide');
+    const SLIDE = 'cubic-bezier(.7,0,.25,1)';                         // a push: starts firm, lands soft
+    let switching = 0;
+    function apply(value) {
+      cards.forEach(c => c.classList.toggle('hide', value !== 'all' && !c.dataset.category.split(' ').includes(value)));
+      setCount();
+      fillRows();
+      syncEcho();                                                    // the blurred echo follows the new first project
+    }
+    async function switchTo(value) {
+      grid.classList.add('settled');                                 // the intro's CSS entrance must not replay
+      const tiles = [...cards, ...fillers];
+      tiles.forEach(t => t.getAnimations().forEach(an => an.cancel()));
+      grid.getAnimations().forEach(an => an.cancel()); grid.style.height = '';
+      grid.querySelectorAll(':scope > .ghost').forEach(c => c.remove());
+      if (stillMotion) { apply(value); return; }
+      const run = ++switching;
+      const before = new Map(tiles.filter(isShown).map(t => [t, t.getBoundingClientRect()]));
+      const stays = c => value === 'all' || c.dataset.category.split(' ').includes(value);
+      // more projects than before: no waiting for a push-out — what is there moves to its new slot, the rest drops in
+      if (cards.filter(stays).length > cards.filter(isShown).length) return grow(value, run, before);
+      const leaving = tiles.filter(t => isShown(t) && (fillers.includes(t) || !stays(t)));
+      // 1 · pushed out: one tile-width sideways, fading as it goes
+      await Promise.all(leaving.map((t, i) => t.animate(
+        [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateX(60%)' }],
+        { duration: 320, delay: i * 30, easing: 'cubic-bezier(.5,0,.9,.4)', fill: 'forwards' }).finished.catch(() => {})));
+      if (run !== switching) return;
+      const h0 = grid.offsetHeight;
+      apply(value);
+      leaving.forEach(t => t.getAnimations().forEach(an => an.cancel()));
+      // a shorter grid keeps its old height until every tile has landed — only then does the Lab move up,
+      // so nothing slides across it
+      const h1 = grid.offsetHeight;
+      if (h1 < h0) grid.style.height = h0 + 'px';
+      const moves = [];
+      // 2 · the rest slides into place, one tile after another
+      const T = 380;                                                 // one straight move
+      let k = 0;
+      tiles.filter(isShown).forEach(t => {
+        const was = before.get(t), now = t.getBoundingClientRect();
+        const delay = k++ * 45;
+        if (was && !leaving.includes(t)) {
+          const dx = was.left - now.left, dy = was.top - now.top;
+          if (!dx && !dy) return;
+          // along the row first, then up or down — never diagonally
+          const frames = dx && dy
+            ? [{ transform: `translate(${dx}px, ${dy}px)`, easing: SLIDE }, { transform: `translate(0px, ${dy}px)`, easing: SLIDE, offset: .5 }, { transform: 'none' }]
+            : [{ transform: `translate(${dx}px, ${dy}px)`, easing: SLIDE }, { transform: 'none' }];
+          t.style.zIndex = 2;                                        // sliding tiles pass over the resting ones
+          const an = t.animate(frames, { duration: dx && dy ? T * 2 : T, delay, fill: 'backwards' });
+          an.finished.then(() => { t.style.zIndex = ''; }, () => { t.style.zIndex = ''; });
+          moves.push(an.finished.catch(() => {}));
+        } else {
+          // drops in from above into its slot
+          moves.push(t.animate([{ opacity: 0, transform: 'translateY(-60%)', easing: SLIDE }, { opacity: 1, transform: 'none' }],
+            { duration: T + 120, delay: delay + 120, fill: 'backwards' }).finished.catch(() => {}));
+        }
+      });
+      if (h1 < h0) {
+        await Promise.all(moves);
+        if (run !== switching) return;
+        grid.style.height = h1 + 'px';                                 // (where it ends, so nothing jumps when the animation lets go)
+        await grid.animate([{ height: h0 + 'px' }, { height: h1 + 'px' }], { duration: 450, easing: 'cubic-bezier(.16,1,.3,1)' }).finished.catch(() => {});
+        if (run === switching) grid.style.height = '';
+      }
+    }
+    function grow(value, run, before) {
+      // only "Get in touch" leaves: it fades where it was (a copy of it), the real one gets re-laid
+      const g = grid.getBoundingClientRect();
+      const ghosts = fillers.filter(isShown).map(t => {
+        const r = before.get(t), c = t.cloneNode(true);
+        c.classList.add('ghost'); c.removeAttribute('href'); c.setAttribute('aria-hidden', 'true');
+        Object.assign(c.style, { left: (r.left - g.left) + 'px', top: (r.top - g.top) + 'px', width: r.width + 'px', height: r.height + 'px', gridColumn: '', aspectRatio: '' });
+        grid.appendChild(c);
+        return c;
+      });
+      apply(value);
+      ghosts.forEach(c => c.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, easing: 'ease', fill: 'forwards' })
+        .finished.then(() => c.remove(), () => c.remove()));
+      const T = 380;
+      let k = 0;
+      [...cards, ...fillers].filter(isShown).forEach(t => {
+        const was = before.get(t), now = t.getBoundingClientRect();
+        if (was && cards.includes(t)) {
+          // a project that was already there moves to its new slot: along the row, then up or down
+          const dx = was.left - now.left, dy = was.top - now.top;
+          if (!dx && !dy) return;
+          const frames = dx && dy
+            ? [{ transform: `translate(${dx}px, ${dy}px)`, easing: SLIDE }, { transform: `translate(0px, ${dy}px)`, easing: SLIDE, offset: .5 }, { transform: 'none' }]
+            : [{ transform: `translate(${dx}px, ${dy}px)`, easing: SLIDE }, { transform: 'none' }];
+          t.style.zIndex = 2;
+          t.animate(frames, { duration: dx && dy ? T * 2 : T, fill: 'backwards' })
+            .finished.then(() => { t.style.zIndex = ''; }, () => { t.style.zIndex = ''; });
+        } else {
+          // everything new drops into its slot from above, one after another
+          t.animate([{ opacity: 0, transform: 'translateY(-60%)', easing: SLIDE }, { opacity: 1, transform: 'none' }],
+            { duration: T + 120, delay: 120 + k++ * 55, fill: 'backwards' });
+        }
+      });
+    }
+    let fr; addEventListener('resize', () => { clearTimeout(fr); fr = setTimeout(fillRows, 80); });
+
+    /* ── the lab: masonry, lazy videos, lightbox (same behaviour as the current page) ── */
+    if (D.labDivider?.sub) document.getElementById('lab-sub').textContent = D.labDivider.sub;
+    const masonry = document.getElementById('masonry');
+    const items = (D.lab || []).filter(it => it.src);
+    masonry.innerHTML = items.map((it, i) => `
+      <div class="lm-wrap"><div class="lab-card" data-i="${i}">
+        ${it.type === 'video'
+          ? `<video data-src="${it.src}" autoplay muted loop playsinline></video><span class="lab-badge">Video</span>`
+          : `<img src="${it.src}" alt="${it.title || ''}" loading="lazy">`}
+        <div class="lab-overlay"></div>
+        <div class="lab-info"><div class="lab-title">${it.title || ''}</div><div class="lab-sub">${it.sub || ''}</div></div>
+      </div></div>`).join('');
+
+    const GAP = 3;
+    function layout() {
+      const wraps = [...masonry.children];
+      const w = innerWidth, cols = PHONE_LAYOUT() ? (w < 600 ? 1 : 2) : w <= 1100 ? 2 : w <= 1500 ? 3 : 4;
+      const colW = (masonry.offsetWidth - GAP * (cols - 1)) / cols, colY = new Array(cols).fill(0);
+      wraps.forEach(el => { el.style.width = colW + 'px'; });
+      wraps.forEach((el, i) => {
+        const c = colY.indexOf(Math.min(...colY));             // shortest column first
+        el.style.left = c * (colW + GAP) + 'px';
+        el.style.top = colY[c] + 'px';
+        colY[c] += el.offsetHeight + GAP;
+      });
+      masonry.style.height = Math.max(0, Math.max(...colY) - GAP) + 'px';
+      masonry.classList.add('laid-out');
+    }
+    let lt;
+    const relayout = () => { clearTimeout(lt); lt = setTimeout(layout, 60); };
+    layout(); setTimeout(layout, 300); setTimeout(layout, 900);
+    addEventListener('resize', relayout);
+    masonry.querySelectorAll('img').forEach(im => im.addEventListener('load', relayout));
+
+    const vids = masonry.querySelectorAll('video[data-src]');
+    const lazy = new IntersectionObserver(es => es.forEach(e => {
+      if (!e.isIntersecting) return;
+      const v = e.target; v.src = v.dataset.src; v.load();
+      v.addEventListener('loadedmetadata', relayout, { once: true });
+      lazy.unobserve(v);
+    }), { rootMargin: '400px' });
+    vids.forEach(v => lazy.observe(v));
+
+    const lb = document.getElementById('lightbox'), lbMedia = document.getElementById('lb-media');
+    let cur = 0;
+    function show(i) {
+      cur = (i + items.length) % items.length;
+      const it = items[cur];
+      lbMedia.innerHTML = '';
+      const el = it.type === 'video'
+        ? Object.assign(document.createElement('video'), { src: it.src, autoplay: true, loop: true, controls: true, playsInline: true })
+        : Object.assign(document.createElement('img'), { src: it.src, alt: it.title || '' });
+      el.addEventListener(it.type === 'video' ? 'canplay' : 'load', () => el.classList.add('ready'), { once: true });
+      if (el.complete) el.classList.add('ready');
+      lbMedia.appendChild(el);
+      document.getElementById('lb-title').textContent = it.title || '';
+      document.getElementById('lb-sub').textContent = it.sub || '';
+      document.getElementById('lb-desc').textContent = it.desc || '';
+      document.getElementById('lb-count').textContent = `${cur + 1} / ${items.length}`;
+      document.body.style.overflow = 'hidden';
+      lb.classList.add('open');
+    }
+    function close() {
+      lb.classList.remove('open'); document.body.style.overflow = '';
+      setTimeout(() => { lbMedia.innerHTML = ''; }, 350);
+    }
+    masonry.addEventListener('click', e => { const c = e.target.closest('.lab-card'); if (c) show(+c.dataset.i); });
+    document.getElementById('lb-prev').addEventListener('click', () => show(cur - 1));
+    document.getElementById('lb-next').addEventListener('click', () => show(cur + 1));
+    document.getElementById('lb-close').addEventListener('click', close);
+    lb.addEventListener('click', e => { if (e.target === lb) close(); });
+    addEventListener('keydown', e => {
+      if (!lb.classList.contains('open')) return;
+      if (e.key === 'ArrowLeft') show(cur - 1);
+      if (e.key === 'ArrowRight') show(cur + 1);
+      if (e.key === 'Escape') close();
+    });
+    let tx = 0;
+    lb.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+    lb.addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 40) show(dx < 0 ? cur + 1 : cur - 1); });
+
+    /* ── mobile ── */
+    const labEl = document.getElementById('lab');
+    const labH = labEl.querySelector('.lab-head h2');
+    function fitLab() {
+      if (!PHONE_LAYOUT()) { labH.style.fontSize = ''; return; }
+      const cs = getComputedStyle(labH.parentElement);
+      const avail = labH.parentElement.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+      const tf = labH.style.transform; labH.style.transform = 'none';
+      labH.style.fontSize = '100px';
+      const rg = document.createRange(); rg.selectNodeContents(labH);
+      labH.style.fontSize = Math.floor(100 * avail / rg.getBoundingClientRect().width * 0.97) + 'px';
+      labH.style.transform = tf;
+    }
+    fitLab();
+    addEventListener('resize', fitLab);
+    document.fonts && document.fonts.ready.then(fitLab);
+
+    // tilt-shift focus: sharp in the middle of the visible ink, softer with distance
+    let focusQueued = false;
+    function focusFlow() {
+      focusQueued = false;
+      const items = [...document.querySelectorAll('.gallery-item:not(.hide), .lm-wrap')];
+      if (!PHONE_LAYOUT()) { items.forEach(el => { el.style.filter = el.style.opacity = el.style.transform = ''; el.classList.remove('m-focus'); }); return; }
+      const top = field.edgeAt(innerWidth / 2);
+      const half = (innerHeight - top) / 2;
+      const mid = top + (innerHeight - top) * 0.42;
+      let best = null, bestF = 1;
+      items.forEach(el => {
+        el.classList.add('m-focus');
+        const r = el.getBoundingClientRect();
+        if (r.bottom < -200 || r.top > innerHeight + 200) return;
+        const c = (r.top + r.bottom) / 2;
+        const d = Math.max(0, Math.abs(c - mid) - Math.max(r.height * 0.22, r.height / 2 - half * 0.35));
+        let f = Math.min(1, d / (half * 0.9));
+        f = f * f * (3 - 2 * f);
+        if (r.top < top + 40) f = Math.min(f, Math.max(0, (scrollY - 40) / 300));   // the first rows are sharp on arrival
+        // colour follows focus: the piece in the middle comes up in full colour, the rest greys out
+        el.style.setProperty('--col', (1 - f).toFixed(3));
+        if (el.classList.contains('gallery-item') && f < bestF) { bestF = f; best = el; }
+        if (el.classList.contains('lm-wrap')) return;                              // the lab only changes colour, never blurs
+        const g = f * 0.45;                                                        // gentle: you should still see the projects around it
+        el.style.filter = g < 0.01 ? '' : `blur(${(g * 3).toFixed(2)}px)`;
+        el.style.opacity = (1 - g * 0.4).toFixed(3);
+        el.style.transform = `scale(${(1 - g * 0.03).toFixed(4)})`;
+      });
+      // top swaps to "The Lab." once the lab heading has come up
+      autoPlay(bestF < 0.15 ? best : null);
+      // only once the projects themselves have gone up — with a short filtered list the lab is close, but the filters must stay
+      document.body.classList.toggle('in-lab', labEl.getBoundingClientRect().top < innerHeight * 0.62 && document.getElementById('grid').getBoundingClientRect().bottom < innerHeight * 0.45);
+    }
+    /* the project sitting in focus starts its slideshow after a short moment, like a hover would */
+    let playing = null, pending = null, pendTimer = null;
+    function autoPlay(el) {
+      if (el === pending || (el === playing && !pending)) return;
+      clearTimeout(pendTimer);
+      pending = el;
+      if (playing && playing !== el) { playing.dispatchEvent(new MouseEvent('mouseleave')); playing = null; }
+      if (!el) return;
+      pendTimer = setTimeout(() => {
+        if (pending !== el) return;
+        el.dispatchEvent(new MouseEvent('mouseenter'));
+        playing = el; pending = null;
+      }, 1200);
+    }
+    const queueFocus = () => { if (!focusQueued) { focusQueued = true; requestAnimationFrame(focusFlow); } };
+    addEventListener('scroll', queueFocus, { passive: true });
+    addEventListener('resize', queueFocus);
+    (function keep() { queueFocus(); setTimeout(keep, 200); })();
+
+    document.querySelector('.to-work').addEventListener('click', e => { e.preventDefault(); scrollTo({ top: 0, behavior: 'smooth' }); });
+
+    /* keep the echo on the first visible project — updated the moment its picture changes */
+    const echo = document.querySelector('.grid-echo');
+    const layers = [...echo.children];
+    let shown = 0, echoSrc = null, watched = null;
+    function syncEcho() {
+      const first = [...grid.children].find(c => !c.classList.contains('hide'));
+      if (!first) return;
+      if (first !== watched) {                        // follow the first card (changes with filters)
+        watched = first;
+        echoObs.disconnect();
+        first.querySelectorAll('.image-stack img').forEach(im => echoObs.observe(im, { attributes: true, attributeFilter: ['class'] }));
+      }
+      const img = first.querySelector('.image-stack img.active');
+      const src = img && img.getAttribute('src');
+      if (src && src !== echoSrc) {
+        echoSrc = src;
+        shown ^= 1;
+        layers[shown].style.backgroundImage = `url("${src}")`;
+        layers[shown].classList.add('on');
+        layers[shown ^ 1].classList.remove('on');
+      }
+    }
+    const echoObs = new MutationObserver(syncEcho);
+    syncEcho();
+    // colour follows the card's focus (cheap, just a variable)
+    (function echoCol() { if (watched) echo.style.setProperty('--col', watched.style.getPropertyValue('--col') || '1'); requestAnimationFrame(echoCol); })();
+  })();
+  </script>
 </body>
 </html>

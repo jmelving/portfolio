@@ -24,6 +24,8 @@
    ───────────────────────────────────────────────────────── */
 
 (() => {
+  // phones, tablets and anything touch-only get the stacked layout, whatever its width
+  window.PHONE_LAYOUT = window.PHONE_LAYOUT || (() => matchMedia('(max-width:1024px), (hover:none) and (pointer:coarse)').matches);
   const PAPER = '#eeebe5', INK = '#0c0c0c';
   const MAX_BLOBS = 48;
 
@@ -41,6 +43,7 @@
     uniform vec3  uPaper, uInk;
     uniform float uInkAlpha;
     uniform float uMode;      // 0 = seam only, 1 = seam + lava, 2 = lava only (overlay)
+    uniform float uHoriz;     // 1 = horizontal seam (paper above, ink below), used on mobile
 
     float wave(float s){
       return 0.62 * sin(s * 5.2  + uTime * 0.32)
@@ -51,9 +54,12 @@
 
     void main(){
       vec2 p = vec2(gl_FragCoord.x, uView.y * uDpr - gl_FragCoord.y) / uDpr;
-      float g = exp(-pow((p.y - uPullAt) / uReach, 2.0));
-      float edge = uCenter + uAmp * wave(p.y / uView.y) + uPull * g;
-      float I0 = 0.5 + 0.5 * tanh_((p.x - edge) / uSoft);
+      float along = mix(p.y, p.x, uHoriz);
+      float cross = mix(p.x, p.y, uHoriz);
+      float len   = mix(uView.y, uView.x, uHoriz);
+      float g = exp(-pow((along - uPullAt) / uReach, 2.0));
+      float edge = uCenter + uAmp * wave(along / len) + uPull * g;
+      float I0 = 0.5 + 0.5 * tanh_((cross - edge) / uSoft);
       float I = I0;
 
       if (uMode > 0.5) {
@@ -88,6 +94,7 @@
   function init(opts = {}) {
     const o = Object.assign({
       split: 0.5, splitMobile: null,  // where the seam rests, as a fraction of viewport width
+      mobileAxis: 'x',                // 'y' = on mobile the seam runs horizontally; splitMobile is then a fraction of the height
       enterFrom: 0.5,                 // seam starts here and eases to `split` (feels like a page transition)
       inkAlpha: 1,
       lava: true, ambient: true,
@@ -121,7 +128,7 @@
         gl.enableVertexAttribArray(0);
         gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
         const U = {};
-        ['uView','uDpr','uTime','uCenter','uAmp','uSoft','uPull','uPullAt','uReach','uBlobs','uPaper','uInk','uInkAlpha','uMode']
+        ['uView','uDpr','uTime','uCenter','uAmp','uSoft','uPull','uPullAt','uReach','uBlobs','uPaper','uInk','uInkAlpha','uMode','uHoriz']
           .forEach(n => U[n] = gl.getUniformLocation(prog, n));
         const hex = h => [1,3,5].map(i => parseInt(h.substr(i, 2), 16) / 255);
         gl.uniform3fv(U.uPaper, hex(PAPER));
@@ -137,11 +144,16 @@
     const U = layers.every(Boolean) ? layers[0].U : null;
     if (!U) document.body.classList.add('nogl');
 
-    let W, H, dpr = 1, mobile = false;
-    const restFrac = () => (mobile && o.splitMobile != null) ? o.splitMobile : o.split;
+    let W, H, dpr = 1, mobile = false, horiz = false;
+    const restTarget = () => (mobile && o.splitMobile != null) ? o.splitMobile : o.split;
+    let restNow = null, seamYShown = -1;                // eases toward restTarget (setSplitMobile moves it)
+    const restFrac = () => restNow ?? restTarget();
     function resize() {
       W = innerWidth; H = innerHeight;
-      mobile = W <= 760;
+      mobile = PHONE_LAYOUT();
+      horiz = mobile && o.mobileAxis === 'y';
+      document.body.classList.toggle('seam-horizontal', horiz);
+      document.documentElement.style.setProperty('--seam-y', horiz ? (restFrac() * 100).toFixed(2) + 'svh' : '0px');
       dpr = Math.min(devicePixelRatio || 1, 1.25);
       if (U) layers.forEach(L => {
         L.cv.width = Math.round(W * dpr); L.cv.height = Math.round(H * dpr);
@@ -187,15 +199,23 @@
       ptr.k += (ptr.kT - ptr.k) * 0.06;
       inkA += (inkT - inkA) * (inkT < inkA ? 0.09 : 0.05);
 
+      // span = across the seam, len = along it
+      const span = horiz ? H : W, len = horiz ? W : H;
+      const pAlong = horiz ? ptr.x : ptr.y, pCross = horiz ? ptr.y : ptr.x;
+      restNow = restNow == null ? restTarget() : restNow + (restTarget() - restNow) * 0.07;
+      if (horiz) {
+        const sy = Math.round(restNow * H);
+        if (sy !== seamYShown) { seamYShown = sy; document.documentElement.style.setProperty('--seam-y', sy + 'px'); }
+      }
       const amp = Math.min(W, H) * 0.028;
-      const from = W * o.enterFrom, to = W * restFrac();
-      center = from + (to - from) * intro + bias * W * 0.045;
+      const from = span * o.enterFrom, to = span * restFrac();
+      center = from + (to - from) * intro + bias * span * 0.045;
 
-      const pull = Math.max(-1, Math.min(1, (ptr.x - center) / (W * 0.35))) * W * 0.03 * ptr.k;
-      const reach = H * 0.22;
-      const edgeAt = y => center + amp * wave(y / H, t) + pull * Math.exp(-Math.pow((y - ptr.y) / reach, 2));
+      const pull = Math.max(-1, Math.min(1, (pCross - center) / (span * 0.35))) * span * 0.03 * ptr.k;
+      const reach = len * 0.22;
+      const edgeAt = a => center + amp * wave(a / len, t) + pull * Math.exp(-Math.pow((a - pAlong) / reach, 2));
       state.edgeAt = edgeAt;
-      const sideDist = (x, y) => x - edgeAt(y);
+      const sideDist = (x, y) => horiz ? y - edgeAt(x) : x - edgeAt(y);
 
       if (!still && o.lava) {
         if (ptr.seen) {
@@ -218,8 +238,15 @@
         }
         if (o.ambient && t > nextBubble && intro > 0.99) {
           nextBubble = t + rand(2.4, 5);
-          const y = rand(0.45, 1.0) * H, s = Math.random() < 0.5 ? 1 : -1;
-          addBlob({ x: edgeAt(y) - s * 18, y, r: rand(34, 56), s, lift: rand(12, 26), drift: -s * rand(8, 16) });
+          const s = Math.random() < 0.5 ? 1 : -1;            // +1: black into the paper, -1: paper into the black
+          if (horiz) {
+            // horizontal seam: black rises up into the paper, paper sinks down into the black
+            const x = rand(0.08, 0.92) * W;
+            addBlob({ x, y: edgeAt(x) - s * 18, r: rand(26, 44), s, lift: s * rand(10, 22), drift: rand(-4, 4) });
+          } else {
+            const y = rand(0.45, 1.0) * H;
+            addBlob({ x: edgeAt(y) - s * 18, y, r: rand(34, 56), s, lift: rand(12, 26), drift: -s * rand(8, 16) });
+          }
         }
         for (let i = blobs.length - 1; i >= 0; i--) {
           const b = blobs[i];
@@ -232,7 +259,7 @@
           const sd = sideDist(b.x, b.y);
           let decay = dt / b.span;
           if (Math.sign(sd) === Math.sign(b.s) && Math.abs(sd) > b.r) decay *= 4;
-          if (b.y < -b.r) decay = 1;
+          if (b.y < -b.r || b.y > H + b.r) decay = 1;
           b.life -= decay;
           if (b.life <= 0) blobs.splice(i, 1);
         }
@@ -257,7 +284,8 @@
           gl.uniform1f(U.uAmp, amp * (0.4 + 0.6 * intro));
           gl.uniform1f(U.uSoft, 70);
           gl.uniform1f(U.uPull, pull);
-          gl.uniform1f(U.uPullAt, ptr.y);
+          gl.uniform1f(U.uPullAt, pAlong);
+          gl.uniform1f(U.uHoriz, horiz ? 1 : 0);
           gl.uniform1f(U.uReach, reach);
           gl.uniform4fv(U.uBlobs, blobData);
           gl.uniform1f(U.uInkAlpha, inkA);
@@ -272,8 +300,10 @@
     return {
       setBias: v => { biasT = v; },
       setInkAlpha: a => { inkT = a; },
-      side: (x, y) => (x - state.edgeAt(y) > 0 ? 'ink' : 'paper'),
-      edgeAt: y => state.edgeAt(y),
+      side: (x, y) => ((horiz ? y - state.edgeAt(x) : x - state.edgeAt(y)) > 0 ? 'ink' : 'paper'),
+      edgeAt: a => state.edgeAt(a),   // vertical seam: x at height a · horizontal seam: y at x = a
+      horizontal: () => horiz,
+      setSplitMobile: v => { o.splitMobile = v; },     // move the mobile seam (eases there)
     };
   }
 
