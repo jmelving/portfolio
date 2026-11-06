@@ -73,7 +73,8 @@
     /* the liquid black/white field (WebGL), fixed to the viewport */
     #field {
       position:fixed; inset:0;
-      width:100vw; height:100vh;
+      width:100%; height:100%;                 /* the visible viewport — the same box the shader draws into (innerWidth × innerHeight);
+                                                  100vh is taller on Android Chrome while its address bar shows, which stretched the seam down */
       z-index:1;
       pointer-events:none;
     }
@@ -1517,28 +1518,29 @@
         showPill(a);
       }));
       /* ── page swipes ──
-         pull the paper down → Curiosities, pull the ink up → Projects;
+         pull down (anywhere) → Curiosities, pull up (anywhere) → Projects — only the direction counts;
          the seam follows the finger and the destination's name fades in.
          preview open: a sideways swipe across the ink opens that link. */
       const DEST = { paper: './curiosities/', ink: './projects/' };
       const swipeLabel = Object.assign(document.createElement('div'), { className: 'm-swipe' });
       document.body.appendChild(swipeLabel);
-      let sx = 0, sy = 0, swiping = false, axis = null, leaving = false, region = 'ink';
+      let sx = 0, sy = 0, swiping = false, axis = null, leaving = false, region = 'ink', startRegion = 'ink';
       const seamY = () => document.querySelector('.tl').getBoundingClientRect().bottom + 14 + Math.min(innerWidth, innerHeight) * 0.028 * 1.3;
       const W0 = () => innerWidth;
       document.addEventListener('touchstart', e => {
         if (leaving || document.body.classList.contains('cv-open')) return;
         sx = e.touches[0].clientX; sy = e.touches[0].clientY; swiping = true; axis = null;
-        region = sy < seamY() ? 'paper' : 'ink';            // top half → Curiosities, bottom half → Projects
+        startRegion = sy < seamY() ? 'paper' : 'ink';       // (only matters for a sideways swipe on an open preview)
         if (armed) pill.classList.add('drag');
       }, { passive: true });
       document.addEventListener('touchmove', e => {
         if (!swiping) return;
         const dx = e.touches[0].clientX - sx, dy = e.touches[0].clientY - sy;
         if (!axis && Math.hypot(dx, dy) > 12) axis = Math.abs(dx) > Math.abs(dy) * 1.2 ? 'x' : 'y';
-        if (axis === 'x' && armed && region === 'ink') { pill.style.transform = `translateX(${(dx * 0.6).toFixed(1)}px)`; return; }
-        // pull the seam: down on the paper, up on the ink — it follows the finger 1:1
-        const pull = region === 'paper' ? Math.max(0, dy) : Math.max(0, -dy);
+        if (axis === 'x' && armed && startRegion === 'ink') { pill.style.transform = `translateX(${(dx * 0.6).toFixed(1)}px)`; return; }
+        // pull the seam wherever the finger is: down opens the paper (Curiosities), up the ink (Projects)
+        region = dy > 0 ? 'paper' : 'ink';
+        const pull = Math.abs(dy);
         if (axis !== 'y' || !pull) { if (swipeBias != null) { swipeBias = 0; swipeLabel.style.opacity = '0'; } return; }
         const k = Math.min(1, pull / (innerHeight * 0.35));
         swipeBias = dy / (innerHeight * 0.045);                  // bias is in units of 4.5% screen height
@@ -1557,8 +1559,9 @@
         const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
         pill.style.transform = '';
         const horizontal = axis === 'x' && Math.abs(dx) > 70;
-        const pulled = axis === 'y' && (region === 'paper' ? dy > 90 : dy < -90);
-        if (armed && region === 'ink' && !pulled) {
+        region = dy > 0 ? 'paper' : 'ink';
+        const pulled = axis === 'y' && Math.abs(dy) > 90;
+        if (armed && startRegion === 'ink' && !pulled) {
           if (horizontal) {
             if (armed.target === '_blank') window.open(armed.href, '_blank', 'noopener'); else location.href = armed.href;
           }
