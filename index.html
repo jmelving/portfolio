@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jona Melvin Grobe — Creative Generalist &amp; Technical Artist</title>
-  <meta name="description" content="Portfolio of Jona Melvin Grobe, Creative Generalist &amp; Technical Artist: short films, VFX, 3D, compositing and editing, and the technical side in between.">
+  <title>Jona Melvin Grobe — Creative Generalist · CG &amp; Motion Design</title>
+  <meta name="description" content="Portfolio of Jona Melvin Grobe, Creative Generalist in CG &amp; Motion Design: short films, VFX, 3D, compositing and editing, and the technical side in between.">
   <meta name="keywords" content="Jona Melvin Grobe, 3D generalist portfolio, Houdini artist, procedural art, VFX simulations, realtime FX, technical artist">
   <meta name="author" content="Jona Melvin Grobe">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Jona Melvin Grobe | Creative Generalist &amp; Technical Artist">
-  <meta property="og:description" content="Portfolio of Jona Melvin Grobe, Creative Generalist &amp; Technical Artist: short films, VFX, 3D, compositing and editing, and the technical side in between.">
+  <meta property="og:title" content="Jona Melvin Grobe | Creative Generalist · CG &amp; Motion Design">
+  <meta property="og:description" content="Portfolio of Jona Melvin Grobe, Creative Generalist in CG &amp; Motion Design: short films, VFX, 3D, compositing and editing, and the technical side in between.">
   <meta property="og:image" content="https://mir-s3-cdn-cf.behance.net/projects/404/881ee8164415761.Y3JvcCw5OTksNzgyLDAsOTQ.png">
   <meta property="og:url" content="https://jmelving.de/">
   <link rel="canonical" href="https://jmelving.de/">
@@ -19,9 +19,7 @@
   <link rel="icon" type="image/svg+xml" href="./img/logo/favicon.svg">
   <link rel="apple-touch-icon" href="./img/logo/apple-touch-icon.png">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/fonts.css">
 
   <!--
     Draft C — white half = Curiosities (left), black half = Projects (right),
@@ -253,6 +251,7 @@
     /* ── TOP LEFT: who ── */
     .role { font-size:clamp(19px, 1.6vw, 27px); line-height:1.25; }
     .bio { max-width:42ch; margin-top:12px; font-size:clamp(15px, 1.12vw, 19px); opacity:0.7; }
+    .bio .nowrap, .role .nowrap { white-space:nowrap; }   /* "Until then, you can ask me." never splits across lines */
     .quote {
       margin-top:12px; min-height:1.5em;
       font-size:clamp(15px, 1.12vw, 19px);
@@ -643,12 +642,13 @@
     "@context": "https://schema.org",
     "@graph": [
       { "@type": "WebSite", "name": "Jona Melvin Grobe", "url": "https://jmelving.de/" },
-      { "@type": "Person", "name": "Jona Melvin Grobe", "jobTitle": "Creative Generalist & Technical Artist",
+      { "@type": "Person", "name": "Jona Melvin Grobe", "jobTitle": "Creative Generalist · CG & Motion Design",
         "url": "https://jmelving.de/", "image": "https://jmelving.de/img/ProfilePic.png",
         "sameAs": ["https://www.youtube.com/@jmeIving", "https://www.instagram.com/j.melvin.g/", "https://github.com/jmelving", "https://linkedin.com/in/jmelving"] }
     ]
   }
   </script>
+  <script defer src="./js/mail-copy.js"></script>
 </head>
 
 <body>
@@ -657,6 +657,7 @@
     <a href="./curiosities/">Curiosities</a>
     <a href="./documents/CV_Jona_Melvin_Grobe.pdf">CV</a>
     <a href="./impressum/">Impressum</a>
+    <a href="./privacy/">Privacy</a>
   </nav>
   <canvas id="reel-mirror" class="reel-layer" width="64" height="36" aria-hidden="true"></canvas>
   <video id="reel-bg"     class="reel-layer" src="./vid/Showreel_2026.mp4" muted loop playsinline autoplay></video>
@@ -686,8 +687,8 @@
 
     <!-- white side: about + curiosities -->
     <section class="cell paper-side tl">
-      <p class="role">Creative Generalist &amp; Technical Artist.</p>
-      <p class="bio">I’m self-driven, love every step of a project, and like making things work a little better each time. I’m just as comfortable in the technical details as in the creative&nbsp;ones.</p>
+      <p class="role">Creative Generalist · <span class="nowrap">CG &amp; Motion Design.</span></p>
+      <p class="bio">I’m a bit of a domain hopper, the one who brings a prototype to the brainstorm and likes making things work a bit better each time, ideally before it’s due and a bit better than expected. Happy doing the creative part, happy building a tool to do it faster. Trained on a large dataset of my own mistakes. The useful learnings are on YouTube, the others should probably be a podcast. <span class="nowrap">Until then, you can ask me.</span></p>
       <p class="quote" aria-live="polite">“Done is better than perfect.”</p>
       <a class="mail"
          href="mailto:jonamelvingrobe@gmail.com?subject=Project%20Inquiry&body=Hi%20Melvin,%0A%0AI'd%20like%20to%20reach%20out%20regarding%20a%20project%20or%20a%20possible%20collaboration.%0A%0APlease%20find%20some%20details%20below:%0A%0AProject%20type:%0ATimeline:%0ABudget:%0A%0ABest,%0A">Get in touch</a>
@@ -713,7 +714,7 @@
     <div class="cell ink-side nr"><span aria-hidden="true">Grobe</span></div>
 
     <section class="cell paper-side fl">
-      <div class="foot"><a class="small" href="./impressum/">Impressum</a></div>
+      <div class="foot"><a class="small" href="./impressum/">Impressum</a><a class="small" href="./privacy/">Privacy</a></div>
     </section>
 
     <section class="cell ink-side fr">
@@ -1701,18 +1702,19 @@
     const CV_LINKS = [
       [0.7116, 0.0655, 0.9466, 0.0812, 'https://jmelving.de/'],
       [0.8296, 0.0812, 0.9466, 0.0969, 'https://crossdot.studio/'],
-      [0.8074, 0.0969, 0.8766, 0.1126, 'https://youtube.com/@jmelving'],
+      [0.7261, 0.0969, 0.7953, 0.1126, 'https://youtube.com/@jmelving'],
+      [0.7997, 0.0969, 0.8766, 0.1126, 'https://instagram.com/j.melvin.g'],
       [0.8810, 0.0969, 0.9466, 0.1126, 'https://linkedin.com/in/jmelving'],
-      [0.6452, 0.3857, 0.7539, 0.4010, 'https://fmx.de/en/program/program-2025/schedule?day=2'],
-      [0.8177, 0.3857, 0.8910, 0.4010, 'https://fmx.de/en/program/program-2026/detail/event/35005'],
-      [0.6396, 0.4234, 0.8343, 0.4387, 'https://best-austrian-animation.at/artists/jona-melvin-grobe/'],
-      [0.7404, 0.4918, 0.9466, 0.5071, 'https://www.imvawards.com/winners/winners-season-january-2025'],
-      [0.6228, 0.5071, 0.6879, 0.5224, 'https://www.imvawards.com/winners/winners-season-january-2025'],
-      [0.6703, 0.5224, 0.8663, 0.5448, 'https://cinemanext.at/screenings/tour-in-sbg-25'],
-      [0.7816, 0.5448, 0.9073, 0.5601, 'https://jmelving.de/projects/TheUSBParadox/'],
-      [0.7289, 0.5979, 0.9347, 0.6203, 'https://youtu.be/q30L3w7hWWc?si=x_KEnoPjezo7R547&t=79'],
-      [0.7281, 0.6203, 0.9099, 0.6428, 'https://www.instagram.com/p/DXGKvbekZQE/'],
-      [0.7796, 0.6958, 0.9225, 0.7111, 'https://youtu.be/iKBs9l8jS6Q?si=mD52TJmOb2yRdvex&t=333'],
+      [0.6452, 0.3859, 0.7539, 0.4012, 'https://fmx.de/en/program/program-2025/schedule?day=2'],
+      [0.8177, 0.3859, 0.8910, 0.4012, 'https://fmx.de/en/program/program-2026/detail/event/35005'],
+      [0.6396, 0.4237, 0.8343, 0.4390, 'https://best-austrian-animation.at/artists/jona-melvin-grobe/'],
+      [0.7404, 0.4920, 0.9466, 0.5073, 'https://www.imvawards.com/winners/winners-season-january-2025'],
+      [0.6228, 0.5073, 0.6879, 0.5227, 'https://www.imvawards.com/winners/winners-season-january-2025'],
+      [0.6703, 0.5227, 0.8663, 0.5451, 'https://cinemanext.at/screenings/tour-in-sbg-25'],
+      [0.7816, 0.5451, 0.9073, 0.5604, 'https://jmelving.de/projects/TheUSBParadox/'],
+      [0.7824, 0.5981, 0.9365, 0.6135, 'https://youtu.be/q30L3w7hWWc?si=x_KEnoPjezo7R547&t=79'],
+      [0.7251, 0.6135, 0.8523, 0.6359, 'https://www.instagram.com/p/DXGKvbekZQE/'],
+      [0.7796, 0.6889, 0.9225, 0.7043, 'https://youtu.be/iKBs9l8jS6Q?si=mD52TJmOb2yRdvex&t=333'],
     ];
     const CV_PAD = 0.004;                                              // a little extra room around each, easier to hit
     // phone: real links laid over the picture

@@ -9,9 +9,7 @@
   <link rel="icon" type="image/svg+xml" href="../img/logo/favicon.svg">
   <link rel="apple-touch-icon" href="../img/logo/apple-touch-icon.png">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/fonts.css">
   <link rel="stylesheet" href="../css/split.css">
 
   <!--
@@ -106,6 +104,7 @@
       .row { grid-template-columns:minmax(110px, 14ch) 1fr; gap:28px; }
     }
   </style>
+  <script defer src="../js/mail-copy.js"></script>
 </head>
 
 <body>
@@ -124,7 +123,7 @@
       <div id="rows"></div>
       <footer>
         <span>© 2026 Jona Melvin Grobe</span>
-        <span>jmelving.de/impressum</span>
+        <a href="../privacy/">Privacy</a>
       </footer>
     </main>
   </div>
@@ -142,29 +141,29 @@
       de: {
         title: 'Impressum.', doc: 'Impressum',
         rows: [
-          { label: 'Angaben gemäß § 5 TMG', html: `<address><strong>Jona Melvin Grobe</strong><br>Freiberuflicher 3D Generalist &amp; Technical Artist<br><br>${ADDRESS}<br>Deutschland</address>` },
+          { label: 'Angaben gemäß § 5 DDG', html: `<address><strong>Jona Melvin Grobe</strong><br>Freiberuflicher 3D Generalist &amp; Technical Artist<br><br>${ADDRESS}<br>Deutschland</address>` },
           { label: 'Kontakt', html: `<p>E-Mail: ${MAIL}<br>Web: ${WEB}</p>` },
           { label: 'Steuerliche Angaben', html: `<p>Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG:<br>Die Umsatzsteuer-Identifikationsnummer wird derzeit beim zuständigen Finanzamt beantragt und wird nach Erteilung hier ergänzt.</p>` },
           { label: 'Berufsbezeichnung', html: `<p>Berufsbezeichnung: <strong>Technical Artist / 3D-Generalist</strong><br>Freiberuflich tätig, nicht kammerpflichtig.</p>` },
-          { label: 'Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV', html: `<p>Jona Melvin Grobe<br>Ilzleite 33, 94034 Passau, Deutschland</p>` },
-          { label: 'Haftungsausschluss', h: 'Haftung für Inhalte', html: `<p>Die Inhalte dieser Seite wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte kann ich jedoch keine Gewähr übernehmen. Als Diensteanbieter bin ich gemäß § 7 Abs. 1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich.</p>` },
+          { label: 'Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV', html: `<p>Jona Melvin Grobe<br>Ilzleite 33, 94034 Passau, Deutschland</p>` },
+          { label: 'Haftungsausschluss', h: 'Haftung für Inhalte', html: `<p>Die Inhalte dieser Seite wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte kann ich jedoch keine Gewähr übernehmen. Als Diensteanbieter bin ich gemäß § 7 Abs. 1 DDG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich.</p>` },
           { label: '', h: 'Haftung für Links', html: `<p>Diese Webseite enthält Links zu externen Webseiten Dritter, auf deren Inhalte ich keinen Einfluss habe. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber verantwortlich.</p>` },
           { label: 'Urheberrecht', html: `<p>Die durch den Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechts bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers.</p>` },
-          { label: 'Datenschutz', html: `<p>Diese Website verwendet keine Cookies und erhebt keine personenbezogenen Daten. Das Hosting erfolgt über GitHub Pages (GitHub Inc., 88 Colin P. Kelly Jr. St., San Francisco, CA 94107, USA). Beim Aufruf der Seite können technisch bedingt IP-Adressen im Rahmen der Server-Logs temporär verarbeitet werden. Weitere Informationen finden sich in der <a href="${GH}" target="_blank" rel="noopener">Datenschutzerklärung von GitHub</a>. Bei Fragen wenden Sie sich bitte direkt per E-Mail an mich.</p>` }
+          { label: 'Datenschutz', html: `<p>Informationen zur Verarbeitung personenbezogener Daten finden Sie in der <a href="../privacy/#de">Datenschutzerklärung</a>.</p>` }
         ]
       },
       en: {
         title: 'Legal<br>Notice.', doc: 'Legal Notice',
         rows: [
-          { label: 'Details pursuant to § 5 TMG (German Telemedia Act)', html: `<address><strong>Jona Melvin Grobe</strong><br>Freelance 3D Generalist &amp; Technical Artist<br><br>${ADDRESS}<br>Germany</address>` },
+          { label: 'Details pursuant to § 5 DDG (German Digital Services Act)', html: `<address><strong>Jona Melvin Grobe</strong><br>Freelance 3D Generalist &amp; Technical Artist<br><br>${ADDRESS}<br>Germany</address>` },
           { label: 'Contact', html: `<p>Email: ${MAIL}<br>Web: ${WEB}</p>` },
           { label: 'Tax information', html: `<p>VAT identification number pursuant to § 27a UStG:<br>The VAT identification number is currently being processed by the responsible tax office (Finanzamt) and will be added here once issued.</p>` },
           { label: 'Professional title', html: `<p>Professional title: <strong>Technical Artist / 3D Generalist</strong><br>Freelance activity, not subject to a professional chamber.</p>` },
-          { label: 'Responsible for content pursuant to § 55 para. 2 RStV', html: `<p>Jona Melvin Grobe<br>Ilzleite 33, 94034 Passau, Germany</p>` },
-          { label: 'Disclaimer', h: 'Liability for content', html: `<p>The contents of these pages were prepared with the utmost care. However, I cannot guarantee the accuracy, completeness, or topicality of the content. As a service provider, I am responsible for my own content on these pages in accordance with general law pursuant to § 7 para. 1 TMG.</p>` },
+          { label: 'Responsible for content pursuant to § 18 para. 2 MStV', html: `<p>Jona Melvin Grobe<br>Ilzleite 33, 94034 Passau, Germany</p>` },
+          { label: 'Disclaimer', h: 'Liability for content', html: `<p>The contents of these pages were prepared with the utmost care. However, I cannot guarantee the accuracy, completeness, or topicality of the content. As a service provider, I am responsible for my own content on these pages in accordance with general law pursuant to § 7 para. 1 DDG.</p>` },
           { label: '', h: 'Liability for links', html: `<p>This website contains links to external websites of third parties whose content I have no influence over. The respective provider or operator is always responsible for the content of linked pages.</p>` },
           { label: 'Copyright', html: `<p>The content and works created by the site operator on these pages are subject to German copyright law. Reproduction, editing, distribution and any kind of use outside the limits of copyright law require the written consent of the respective author or creator.</p>` },
-          { label: 'Privacy', html: `<p>This website does not use cookies and does not collect personal data. Hosting is provided via GitHub Pages (GitHub Inc., 88 Colin P. Kelly Jr. St., San Francisco, CA 94107, USA). When visiting the site, IP addresses may be temporarily processed in server logs for technical reasons. For more information see <a href="${GH}" target="_blank" rel="noopener">GitHub's Privacy Statement</a>. For any privacy-related questions, please contact me directly by email.</p>` }
+          { label: 'Privacy', html: `<p>Information on how personal data is processed can be found in the <a href="../privacy/">Privacy Policy</a>.</p>` }
         ]
       }
     };

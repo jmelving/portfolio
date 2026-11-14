@@ -64,7 +64,9 @@ window.PHONE_LAYOUT = window.PHONE_LAYOUT || (() => matchMedia('(max-width:1024p
     if (w.video) return `<button class="poster media" data-video-id="${esc(w.video.id)}" data-platform="${esc(w.video.platform || 'youtube')}" aria-label="Play ${esc(text(w.video.label || sec.title))}">
         <img src="${esc(w.video.poster || poster)}" alt="" loading="lazy">
         <span class="pbtn" aria-hidden="true">${PLAY}</span></button>`;
-    if (w.spotify) return `<div class="media spotify"><iframe src="${esc(w.spotify)}" loading="lazy" allow="encrypted-media" style="width:100%;height:352px;border:0;border-radius:12px"></iframe></div>`;
+    // Spotify loads only on click (privacy: no connection to Spotify before the visitor asks for it)
+    if (w.spotify) return `<div class="media spotify"><button type="button" class="spotify-load" data-src="${esc(w.spotify)}">
+        <b>Play on Spotify</b><small>Loads the Spotify player. Spotify’s privacy policy applies.</small></button></div>`;
     if (w.learn) return `<div class="learn">${w.learn.map(b => `<div><h4><b>${esc(b.label)}</b>${esc(b.tag)}</h4><ul>${b.items.map(i => `<li>${esc(i)}</li>`).join('')}</ul></div>`).join('')}</div>`;
     return '';
   };
@@ -116,7 +118,7 @@ window.PHONE_LAYOUT = window.PHONE_LAYOUT || (() => matchMedia('(max-width:1024p
     <div class="work ink-text">${P.next ? `<a href="${esc(P.next.href)}"><span class="eyebrow">Next project</span><b>${esc(P.next.title)} →</b></a>` : ''}</div>
   </div>
   <footer class="ink-text">
-    <a href="../../impressum/" style="text-decoration:none">Impressum</a>
+    <span style="display:flex;gap:18px"><a href="../../impressum/" style="text-decoration:none">Impressum</a><a href="../../privacy/" style="text-decoration:none">Privacy</a></span>
     <span>© ${new Date().getFullYear()} JMG</span>
   </footer>
 
@@ -172,6 +174,7 @@ window.PHONE_LAYOUT = window.PHONE_LAYOUT || (() => matchMedia('(max-width:1024p
     const backdrop = document.getElementById('backdrop');
     const show = SplitField.slideshow(backdrop);
     const STILLS = stills;
+    const LOOP = P.hero && P.hero.loop;
 
     const hero = document.querySelector('.hero');
     const watch = document.getElementById('watch');
@@ -183,11 +186,12 @@ window.PHONE_LAYOUT = window.PHONE_LAYOUT || (() => matchMedia('(max-width:1024p
     const frame = document.getElementById('person');
     function fitStills() {
       const b = frame.getBoundingClientRect();
-      [backdrop, win].forEach(box => box.querySelectorAll('img').forEach(im => {
-        const off = PHONE_LAYOUT() || !im.naturalWidth;
+      [backdrop, win].forEach(box => box.querySelectorAll('img, video').forEach(im => {
+        const nw = im.naturalWidth || im.videoWidth, nh = im.naturalHeight || im.videoHeight;   // a hero.loop clip is framed like the stills
+        const off = PHONE_LAYOUT() || !nw;
         im.classList.toggle('framed', !off);
-        const s = off ? 0 : Math.max(b.width / im.naturalWidth, b.height / im.naturalHeight);
-        const w = im.naturalWidth * s, h = im.naturalHeight * s;
+        const s = off ? 0 : Math.max(b.width / nw, b.height / nh);
+        const w = nw * s, h = nh * s;
         Object.assign(im.style, off ? { inset: '', width: '', height: '', objectFit: '' } : {
           inset: 'auto', left: b.left + (b.width - w) / 2 + 'px', top: b.top + (b.height - h) / 2 + 'px',
           width: w + 'px', height: h + 'px', objectFit: 'fill'
@@ -195,10 +199,13 @@ window.PHONE_LAYOUT = window.PHONE_LAYOUT || (() => matchMedia('(max-width:1024p
       }));
     }
     [backdrop, win].forEach(box => box.querySelectorAll('img').forEach(im => im.addEventListener('load', fitStills)));
+    [backdrop, win].forEach(box => box.querySelectorAll('video').forEach(v => v.addEventListener('loadedmetadata', fitStills)));
     addEventListener('resize', fitStills);
     new IntersectionObserver(([e]) => {
       const inHero = e.isIntersecting;
-      if (inHero) { show.images(STILLS); winShow.images(STILLS); } else { show.stop(); winShow.stop(); }
+      if (!inHero) { show.stop(); winShow.stop(); }
+      else if (LOOP) { show.imagesThenVideo(STILLS, LOOP); winShow.imagesThenVideo(STILLS, LOOP); }   // hero.loop: stills until the clip is ready
+      else { show.images(STILLS); winShow.images(STILLS); }
     }).observe(hero);
 
     /* the film bubble rides the seam, halfway down the hero; wobbly outline like the front page */
@@ -292,9 +299,14 @@ window.PHONE_LAYOUT = window.PHONE_LAYOUT || (() => matchMedia('(max-width:1024p
       win.style.clipPath = `path('${d}Z')`;
       requestAnimationFrame(ride);
     })();
-    const play = (id, platform) => (platform === 'vimeo' ? modal.vimeo(id) : modal.youtube(id));
+    const play = (id, platform) => (platform === 'vimeo' ? modal.vimeo(id) : platform === 'file' ? modal.file(id) : modal.youtube(id));
     if (film) watch.addEventListener('click', () => play(film.id, film.platform));
     document.querySelectorAll('[data-video-id]').forEach(b => b.addEventListener('click', () => play(b.dataset.videoId, b.dataset.platform)));
+    document.querySelectorAll('.spotify-load').forEach(b => b.addEventListener('click', () => {
+      const f = Object.assign(document.createElement('iframe'), { src: b.dataset.src, allow: 'encrypted-media', title: 'Spotify player' });
+      f.style.cssText = 'width:100%;height:352px;border:0;border-radius:12px;display:block';
+      b.replaceWith(f);
+    }));
 
     /* videos only play while on screen */
     const io = new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? e.target.play().catch(() => {}) : e.target.pause()), { threshold: 0.2 });

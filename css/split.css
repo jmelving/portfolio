@@ -91,7 +91,8 @@ body.nogl { background:linear-gradient(90deg, var(--paper) var(--seam), var(--in
 }
 .split-modal.open { opacity:1; pointer-events:all; }
 .split-modal > div { width:min(88vw, 156vh); aspect-ratio:16/9; }
-.split-modal iframe { width:100%; height:100%; border:0; display:block; }
+.split-modal iframe, .split-modal video { width:100%; height:100%; border:0; display:block; background:#000; }
+.split-modal [hidden] { display:none; }
 .split-modal button {
   position:absolute; top:var(--pad); right:var(--pad);
   font:inherit; font-size:15px; color:var(--paper);

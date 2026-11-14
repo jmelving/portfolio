@@ -23,7 +23,7 @@ const PROJECTS_DATA = {
 
   /* ── Works hero ── */
   worksHero: {
-    number: "12",           // ghost number top-right — update when you add projects
+    number: "13",          // ghost number top-right — update when you add projects
     title:  "Selected<br><em>Works.</em>",
     sub:    "VFX · Short Films · Music Videos",
   },
@@ -67,6 +67,42 @@ const PROJECTS_DATA = {
         { src: "../projects/DecadesAhead/img/Still_1.webp", alt: "DPMB 1" },
         { src: "../projects/DecadesAhead/img/Still_0.webp", alt: "DPMB 2" },
         { src: "../projects/DecadesAhead/img/Still_2.webp", alt: "DPMB 3" },
+      ],
+    },
+    {
+      href:     "../projects/Zoom/",
+      category: "musicvideo",
+      pill:     "Music Video",
+      title:    "Zoom",
+      desc:     "Music Video · CrossDot Studio",
+      images: [
+        { src: "../projects/Zoom/img/Still_0.webp", alt: "Zoom 1" },
+        { src: "../projects/Zoom/img/Still_2.webp", alt: "Zoom 2" },
+        { src: "../projects/Zoom/img/Still_1.webp", alt: "Zoom 3" },
+      ],
+    },
+    {
+      href:     "../projects/DeltaT/",
+      category: "short",
+      pill:     "Short",
+      title:    "DELTA-T",
+      desc:     "Short · CrossDot Studio",
+      images: [
+        { src: "../projects/DeltaT/img/Still_07.webp", alt: "DELTA-T 1" },
+        { src: "../projects/DeltaT/img/Still_05.webp", alt: "DELTA-T 2" },
+        { src: "../projects/DeltaT/img/Still_04.webp", alt: "DELTA-T 3" },
+      ],
+    },
+    {
+      href:     "../projects/WellThatHappened/",
+      category: "short ad",
+      pill:     "Short",
+      title:    "Well That Happened",
+      desc:     "Short · CrossDot Studio",
+      images: [
+        { src: "../projects/WellThatHappened/img/Still_1.webp", alt: "Well That Happened 1" },
+        { src: "../projects/WellThatHappened/img/Still_2.webp", alt: "Well That Happened 2" },
+        { src: "../projects/WellThatHappened/img/Still_0.webp", alt: "Well That Happened 3" },
       ],
     },
     {

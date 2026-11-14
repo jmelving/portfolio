@@ -225,8 +225,8 @@ window.PROJECT = {
     }
   },
   "next": {
-    "href": "../Echoes/",
-    "title": "Echoes"
+    "href": "../Zoom/",
+    "title": "Zoom"
   },
   "back": "../"
 };

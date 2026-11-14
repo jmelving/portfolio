@@ -353,8 +353,10 @@
       (next.decode ? next.decode() : Promise.resolve()).then(go, go);
     }
 
-    return {
+    let gen = 0;                                        // bumped on every change, so a late 'canplay' can't override it
+    const api = {
       images(list) {
+        gen++;
         root.classList.remove('is-video');
         vid.pause();
         list.forEach(s => { const im = new Image(); im.src = s; im.decode && im.decode().catch(() => {}); });
@@ -370,24 +372,35 @@
         vid.play().catch(() => {});
         root.classList.add('is-video');
       },
-      stop() { clearInterval(timer); vid.pause(); },
+      // stills first, then fade to the clip once it can play — a slow connection just keeps the slideshow
+      imagesThenVideo(list, src) {
+        api.images(list);
+        const g = gen;
+        if (vid.getAttribute('src') !== src) { vid.preload = 'auto'; vid.src = src; vid.load(); }
+        const go = () => { if (g === gen) api.video(src); };
+        if (vid.readyState >= 3) go(); else vid.addEventListener('canplay', go, { once: true });
+      },
+      stop() { gen++; clearInterval(timer); vid.pause(); },
     };
+    return api;
   }
 
   /* ── Video modal (YouTube / Vimeo) ── */
   function modal() {
     const m = document.createElement('div');
     m.className = 'split-modal';
-    m.innerHTML = '<button type="button">Close</button><div><iframe allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>';
+    m.innerHTML = '<button type="button">Close</button><div><iframe allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><video controls playsinline hidden></video></div>';
     document.body.appendChild(m);
-    const frame = m.querySelector('iframe');
-    const close = () => { m.classList.remove('open'); setTimeout(() => frame.src = '', 400); };
+    const frame = m.querySelector('iframe'), film = m.querySelector('video');
+    const close = () => { m.classList.remove('open'); film.pause(); setTimeout(() => { frame.src = ''; film.removeAttribute('src'); film.load(); }, 400); };
     m.querySelector('button').addEventListener('click', close);
     m.addEventListener('click', e => { if (e.target === m) close(); });
     addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+    const embed = src => { film.hidden = true; frame.hidden = false; frame.src = src; m.classList.add('open'); };
     return {
-      youtube(id) { frame.src = `https://www.youtube.com/embed/${id}?autoplay=1`; m.classList.add('open'); },
-      vimeo(id)   { frame.src = `https://player.vimeo.com/video/${id}?autoplay=1&color=ffffff&title=0&byline=0&portrait=0`; m.classList.add('open'); },
+      youtube(id) { embed(`https://www.youtube-nocookie.com/embed/${id}?autoplay=1`); },
+      vimeo(id)   { embed(`https://player.vimeo.com/video/${id}?autoplay=1&color=ffffff&title=0&byline=0&portrait=0`); },
+      file(src)   { frame.hidden = true; film.hidden = false; film.src = src; m.classList.add('open'); film.play().catch(() => {}); },   // a video hosted on this site
       close,
     };
   }

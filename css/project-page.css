@@ -59,6 +59,7 @@ html { scrollbar-gutter:stable; }   /* the scrollbar's room stays reserved: open
 #watch svg { width:24px; height:27px; fill:currentColor; margin-left:5px; filter:drop-shadow(0 1px 12px rgba(0,0,0,.4)); transition:transform .5s cubic-bezier(.2,.7,.2,1); }
 #watch:hover svg { transform:scale(1.2); }
 #watch.gone { opacity:0; pointer-events:none; }
+#watch[hidden] { display:none; }   /* no film for this project */
 /* the bubble's content: the same stills in full colour, clipped to a wobbly circle (set by JS) */
 #watch-window {
   position:fixed; inset:0; z-index:6;          /* above the paper overlay and the text, so nothing cuts through the bubble */
@@ -334,7 +335,7 @@ footer { display:flex; justify-content:space-between; padding:var(--pad); font-s
     --fw:calc(100vw - var(--seam) + 8vw);
     background:radial-gradient(calc(var(--fw) * .75) 70% at calc(100vw - var(--fw) * .4) 50%, transparent 40%, rgba(0,0,0,.55) 100%);
   }
-  #backdrop img.framed, #watch-window img.framed { -webkit-mask-image:linear-gradient(to right, transparent, #000 180px); mask-image:linear-gradient(to right, transparent, #000 180px); }
+  #backdrop .framed, #watch-window .framed { -webkit-mask-image:linear-gradient(to right, transparent, #000 180px); mask-image:linear-gradient(to right, transparent, #000 180px); }
   /* #person itself now starts 8vw left of the seam, so the card is placed from its own edge */
   #person .card { left:calc(8vw + clamp(28px, 4vw, 72px)); }
   #person b { overflow-wrap:anywhere; }
@@ -355,6 +356,7 @@ footer { display:flex; justify-content:space-between; padding:var(--pad); font-s
   /* the words don't travel either — both columns scroll together, so they stay level */
   .split > .words .sticky { position:static; }
   section.split > .work > .spotify, section.split > .work > .learn { flex:none; }
+  .spotify-load { min-height:152px; }
   /* three side by side */
   /* the row keeps its own height: it mustn't stretch to the (taller) text column next to it */
   .gallery.row3 { grid-template-columns:repeat(3, 1fr); align-items:start; align-content:start; flex:none; }
@@ -365,7 +367,7 @@ footer { display:flex; justify-content:space-between; padding:var(--pad); font-s
   .gallery.grid2 { grid-template-columns:repeat(2, 1fr); }
   .gallery.grid3 figure:first-of-type, .gallery.grid2 figure:first-of-type,
   .gallery.grid3 figure:last-of-type:nth-of-type(even), .gallery.grid2 figure:last-of-type:nth-of-type(even) { grid-column:auto; }
-  .gallery:not(.row3)[style*="--ratio"] .media-card img { aspect-ratio:var(--ratio); }
+  .gallery:not(.row3)[style*="--ratio"] .media-card img, .gallery:not(.row3)[style*="--ratio"] .media-card video { aspect-ratio:var(--ratio); }
   /* single pictures keep their own shape instead of being cropped to 16:9 */
   .stack .media-card:has(> img) { aspect-ratio:auto; flex:none; }
   .stack .media-card > img { position:static; aspect-ratio:auto; height:auto; max-height:85vh; object-fit:contain; background:#0d0d0d; }
@@ -391,3 +393,15 @@ footer { display:flex; justify-content:space-between; padding:var(--pad); font-s
   .lb-arrow, #lb-prev, #lb-next { position:fixed; top:auto; bottom:22px; translate:none; }
   #lb-prev { left:20px; } #lb-next { right:20px; }
 }
+
+/* Spotify: a quiet tile until clicked; the real player (and the connection to Spotify) only loads then */
+.spotify-load {
+  display:flex; flex-direction:column; justify-content:space-between; gap:24px;
+  width:100%; min-height:152px; padding:20px 22px; border:0; border-radius:12px;
+  background:#161616; color:var(--paper, #eeebe5); font:inherit; text-align:left; cursor:pointer;
+  transition:background .3s;
+}
+.spotify-load:hover { background:#1b1b1b; }
+.spotify-load b { font-weight:500; font-size:clamp(18px, 1.5vw, 26px); letter-spacing:-0.02em; opacity:.7; transition:opacity .3s; }
+.spotify-load:hover b { opacity:1; }
+.spotify-load small { font-size:12px; opacity:.4; }
