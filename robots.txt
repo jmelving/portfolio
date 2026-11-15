@@ -26,6 +26,8 @@ Disallow: /
 User-agent: *
 Disallow: /tools/
 Disallow: /documents/
+Disallow: /postiz-terms.pdf
+Disallow: /postiz-privacy.pdf
 Allow: /
 
 Sitemap: https://jmelving.de/sitemap.xml
