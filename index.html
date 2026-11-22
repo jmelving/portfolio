@@ -1670,8 +1670,9 @@
     const VIMEO_ID = '1249034865';
     const reel  = document.getElementById('reel');
     const frameEl = reel.querySelector('iframe');
-    function openReel() {
-      frameEl.src = `https://player.vimeo.com/video/${VIMEO_ID}?autoplay=1&color=ffffff&title=0&byline=0&portrait=0`;
+    // autoplay only after a click on the site; a direct link (#showreel) waits for play, so it starts with sound
+    function openReel(auto = true) {
+      frameEl.src = `https://player.vimeo.com/video/${VIMEO_ID}?autoplay=${auto ? 1 : 0}&color=ffffff&title=0&byline=0&portrait=0`;
       reel.classList.add('open');
       reelBg.pause();
       if (location.hash !== '#showreel') history.replaceState(null, '', '#showreel');   // the address is now a direct link to the reel
@@ -1684,12 +1685,12 @@
       setTimeout(() => frameEl.src = '', 400);
       reelBg.play().catch(() => {});
     }
-    playEl.addEventListener('click', openReel);
+    playEl.addEventListener('click', () => openReel());
     document.getElementById('reel-close').addEventListener('click', closeReel);
     reel.addEventListener('click', e => { if (e.target === reel) closeReel(); });
     addEventListener('keydown', e => { if (e.key === 'Escape') closeReel(); });
-    if (location.hash === '#showreel') openReel();
-    addEventListener('hashchange', () => { if (location.hash === '#showreel') openReel(); });
+    if (location.hash === '#showreel') openReel(false);
+    addEventListener('hashchange', () => { if (location.hash === '#showreel') openReel(false); });
 
     /* ── CV: opens over the page, no download needed ── */
     const cvBox = document.getElementById('cv');
