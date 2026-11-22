@@ -1667,12 +1667,12 @@
     }
 
     /* ── SHOWREEL ── */
-    const VIMEO_ID = '1249034865';
+    const YT_ID = 'CVqxZDuYmfQ';
     const reel  = document.getElementById('reel');
     const frameEl = reel.querySelector('iframe');
     // autoplay only after a click on the site; a direct link (#showreel) waits for play, so it starts with sound
     function openReel(auto = true) {
-      frameEl.src = `https://player.vimeo.com/video/${VIMEO_ID}?autoplay=${auto ? 1 : 0}&color=ffffff&title=0&byline=0&portrait=0`;
+      frameEl.src = `https://www.youtube-nocookie.com/embed/${YT_ID}?autoplay=${auto ? 1 : 0}&rel=0&playsinline=1`;
       reel.classList.add('open');
       reelBg.pause();
       if (location.hash !== '#showreel') history.replaceState(null, '', '#showreel');   // the address is now a direct link to the reel
