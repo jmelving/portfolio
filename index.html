@@ -14,6 +14,8 @@
   <meta property="og:image" content="https://mir-s3-cdn-cf.behance.net/projects/404/881ee8164415761.Y3JvcCw5OTksNzgyLDAsOTQ.png">
   <meta property="og:url" content="https://jmelving.de/">
   <link rel="canonical" href="https://jmelving.de/">
+  <!-- jmelving.de/#showreel (or /showreel/) opens straight into the reel, before anything else is painted -->
+  <script>if (location.hash === '#showreel') document.documentElement.classList.add('reel-direct');</script>
 
   <link rel="icon" href="./img/logo/favicon.ico" sizes="48x48">
   <link rel="icon" type="image/svg+xml" href="./img/logo/favicon.svg">
@@ -389,6 +391,7 @@
       transition:opacity .4s;
     }
     #reel.open { opacity:1; pointer-events:all; }
+    .reel-direct #reel { opacity:1; pointer-events:all; transition:none; }   /* direct link: already open on arrival */
     #reel-wrap { width:min(88vw, 156vh); aspect-ratio:16/9; }
     #reel iframe { width:100%; height:100%; border:0; display:block; }
     #reel-close {
@@ -1657,15 +1660,19 @@
     }
 
     /* ── SHOWREEL ── */
-    const VIMEO_ID = '1188999678';
+    const VIMEO_ID = '1249034865';
     const reel  = document.getElementById('reel');
     const frameEl = reel.querySelector('iframe');
     function openReel() {
       frameEl.src = `https://player.vimeo.com/video/${VIMEO_ID}?autoplay=1&color=ffffff&title=0&byline=0&portrait=0`;
       reel.classList.add('open');
       reelBg.pause(); reelWin.pause();
+      if (location.hash !== '#showreel') history.replaceState(null, '', '#showreel');   // the address is now a direct link to the reel
     }
     function closeReel() {
+      if (!reel.classList.contains('open')) return;
+      document.documentElement.classList.remove('reel-direct');
+      history.replaceState(null, '', location.pathname + location.search);
       reel.classList.remove('open');
       setTimeout(() => frameEl.src = '', 400);
       reelBg.play().catch(() => {});
@@ -1675,6 +1682,8 @@
     document.getElementById('reel-close').addEventListener('click', closeReel);
     reel.addEventListener('click', e => { if (e.target === reel) closeReel(); });
     addEventListener('keydown', e => { if (e.key === 'Escape') closeReel(); });
+    if (location.hash === '#showreel') openReel();
+    addEventListener('hashchange', () => { if (location.hash === '#showreel') openReel(); });
 
     /* ── CV: opens over the page, no download needed ── */
     const cvBox = document.getElementById('cv');
