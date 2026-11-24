@@ -264,8 +264,26 @@
       display:inline-block; margin-top:16px;
       font-size:clamp(17px, 1.35vw, 22px);
       text-decoration:none;
-      border-bottom:1px solid currentColor;
+      font-family:inherit; color:inherit; background:none; border:0;
+      padding:0; line-height:inherit; cursor:pointer; border-radius:0;
     }
+    /* "Get in touch" opens a quiet row underneath: email and phone */
+    .tl .reach { display:flex; flex-wrap:wrap; gap:6px clamp(18px, 1.8vw, 30px); margin-top:12px; font-size:clamp(14px, 1vw, 17px); }
+    .tl .reach[hidden] { display:none; }
+    .tl .reach a { text-decoration:none; }
+    .tl .reach a span { opacity:.45; }                                   /* quiet label … */
+    .tl .reach a b { font-weight:inherit; margin-left:.35em; display:inline-block; opacity:.8; transition:opacity .25s; }   /* … the value itself */
+    .tl .reach a:hover b, .tl .reach a:focus-visible b { opacity:1; }
+    /* pressed / open: the underline lets go and an arrow points at what opened */
+    .tl .mail { transition:border-color .25s, opacity .15s; }
+    .tl .mail:active { opacity:.6; }
+    .tl .mail span { border-bottom:1px solid currentColor; transition:border-color .25s; }
+    .tl .mail::after { content:'↓'; display:inline-block; width:1em; margin-left:.2em; opacity:0; transition:opacity .25s; }
+    .tl .mail[aria-expanded="true"] span { border-bottom-color:transparent; }
+    .tl .mail[aria-expanded="true"]::after { opacity:.6; }
+    .tl .reach:not([hidden]) { animation:reach-in .35s ease both; }
+    @keyframes reach-in { from { opacity:0; } }
+    @media (prefers-reduced-motion: reduce) { .tl .reach:not([hidden]) { animation:none; } }
 
     /* ── TOP RIGHT: selected projects ── */
     .work { list-style:none; }
@@ -438,7 +456,7 @@
 
     /* ── CV: a quieter link beside "Get in touch", opens the CV right here ── */
     .tl .cv-link {
-      display:inline-block; margin-top:16px; margin-left:clamp(16px, 1.6vw, 26px);
+      display:inline-block; margin-top:16px; margin-left:clamp(4px, .5vw, 10px);
       font-size:clamp(15px, 1.12vw, 19px);
       text-decoration:none; opacity:.6;
       border-bottom:1px solid transparent; transition:opacity .25s, border-color .25s;
@@ -693,9 +711,12 @@
       <p class="role">Creative Generalist · <span class="nowrap">CG &amp; Motion Design.</span></p>
       <p class="bio">I’m a bit of a domain hopper, the one who brings a prototype to the brainstorm and likes making things work a bit better each time, ideally before it’s due and a bit better than expected. Happy doing the creative part, happy building a tool to do it faster. Trained on a large dataset of my own mistakes. The useful learnings are on YouTube, the others should probably be a podcast. <span class="nowrap">Until then, you can ask me.</span></p>
       <p class="quote" aria-live="polite">“Done is better than perfect.”</p>
-      <a class="mail"
-         href="mailto:jonamelvingrobe@gmail.com?subject=Project%20Inquiry&body=Hi%20Melvin,%0A%0AI'd%20like%20to%20reach%20out%20regarding%20a%20project%20or%20a%20possible%20collaboration.%0A%0APlease%20find%20some%20details%20below:%0A%0AProject%20type:%0ATimeline:%0ABudget:%0A%0ABest,%0A">Get in touch</a>
+      <button class="mail" type="button" aria-expanded="false" aria-controls="reach"><span>Get in touch</span></button>
       <a class="cv-link" href="./documents/CV_Jona_Melvin_Grobe.pdf">View CV</a>
+      <span class="reach" id="reach" hidden>
+        <a href="mailto:jonamelvingrobe@gmail.com?subject=Project%20Inquiry&body=Hi%20Melvin,%0A%0AI'd%20like%20to%20reach%20out%20regarding%20a%20project%20or%20a%20possible%20collaboration.%0A%0APlease%20find%20some%20details%20below:%0A%0AProject%20type:%0ATimeline:%0ABudget:%0A%0ABest,%0A"><span>Email</span> <b>jonamelvingrobe@gmail.com</b></a>
+        <a href="tel:+4915207729385"><span>Phone</span> <b>+49 152 07729385</b></a>
+      </span>
       <p class="m-pull-in"><i>↓</i> pull down for Curiosities</p>
     </section>
 
@@ -1691,6 +1712,15 @@
     addEventListener('keydown', e => { if (e.key === 'Escape') closeReel(); });
     if (location.hash === '#showreel') openReel(false);
     addEventListener('hashchange', () => { if (location.hash === '#showreel') openReel(false); });
+
+    /* ── GET IN TOUCH: shows email + phone underneath ── */
+    {
+      const btn = document.querySelector('.tl .mail'), reach = document.getElementById('reach');
+      const set = open => { reach.hidden = !open; btn.setAttribute('aria-expanded', open); };
+      btn.addEventListener('click', () => set(reach.hidden));
+      addEventListener('keydown', e => { if (e.key === 'Escape' && !reach.hidden) set(false); });
+      document.addEventListener('click', e => { if (!reach.hidden && !e.target.closest('.tl .mail, #reach')) set(false); });
+    }
 
     /* ── CV: opens over the page, no download needed ── */
     const cvBox = document.getElementById('cv');

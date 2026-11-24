@@ -77,7 +77,8 @@ window.PROJECT = {
                   "sub": "Decades Ahead · 2026",
                   "desc": ""
                 }
-              ]
+              ],
+              "ratio": "16/9"
             }
           ]
         }
@@ -111,53 +112,40 @@ window.PROJECT = {
               "p": "The biggest comp challenges were motion blur artifacts on simulated particles, which didn't behave cleanly in USD and needed a lot of troubleshooting and correction passes in Nuke before things came together. A significant amount of the comp work overall ended up being problem-solving rather than pure compositing."
             }
           ],
-          "work": []
-        }
-      ]
-    },
-    {
-      "id": "breakdown",
-      "eyebrow": "Full production breakdown",
-      "title": "Production<br/><em>Breakdown</em>",
-      "rows": [
-        {
-          "words": [
-            {
-              "p": "Some breakdown material that we gathered — rendering, compositing, shading, particle effects, and the combined effort of the team."
-            }
-          ],
           "work": [
             {
               "media": [
                 {
                   "type": "video",
                   "src": "./vid/BTS_1.mp4",
-                  "title": "BTS 1",
-                  "sub": "Decades Ahead · 2026",
-                  "desc": ""
+                  "title": "Shot Breakdown I",
+                  "sub": "Jona Melvin Grobe & Hannah Rampitsch",
+                  "desc": "Breakdown, shot layout, car remodeling and shading, and compositing by Jona Melvin Grobe. Particle trails by Hannah Rampitsch."
                 },
                 {
                   "type": "video",
                   "src": "./vid/BTS_2.mp4",
                   "title": "Particle Advection Effect",
-                  "sub": "Hannah Rampitsch · Decades Ahead",
+                  "sub": "Hannah Rampitsch · Particles",
                   "desc": ""
                 },
                 {
                   "type": "video",
                   "src": "./vid/BTS_3.mp4",
                   "title": "Particle Trail Streaks",
-                  "sub": "Hannah Rampitsch · Decades Ahead",
+                  "sub": "Hannah Rampitsch · Particles",
                   "desc": ""
                 },
                 {
                   "type": "video",
                   "src": "./vid/BTS_4.mp4",
-                  "title": "BTS 4",
-                  "sub": "Decades Ahead · 2026",
-                  "desc": ""
+                  "title": "Shot Breakdown II",
+                  "sub": "Jona Melvin Grobe & Hannah Rampitsch",
+                  "desc": "Breakdown, car remodeling and shading, and compositing by Jona Melvin Grobe. Shot layout and particle trails by Hannah Rampitsch."
                 }
-              ]
+              ],
+              "layout": "grid2",
+              "ratio": "16/9"
             }
           ]
         }

@@ -134,6 +134,8 @@
     const ADDRESS = 'Ilzleite 33<br>94034 Passau';
     const MAIL = '<a href="mailto:jonamelvingrobe@gmail.com">jonamelvingrobe@gmail.com</a>';
     const WEB = '<a href="https://jmelving.de">jmelving.de</a>';
+    const TEL = '<a href="tel:+4915207729385">+49 152 07729385</a>';
+    const VAT = 'DE461899398';
     const GH = 'https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement';
 
     // label (left) | optional heading + text (right)
@@ -141,28 +143,26 @@
       de: {
         title: 'Impressum.', doc: 'Impressum',
         rows: [
-          { label: 'Angaben gemäß § 5 DDG', html: `<address><strong>Jona Melvin Grobe</strong><br>Freiberuflicher 3D Generalist &amp; Technical Artist<br><br>${ADDRESS}<br>Deutschland</address>` },
-          { label: 'Kontakt', html: `<p>E-Mail: ${MAIL}<br>Web: ${WEB}</p>` },
-          { label: 'Steuerliche Angaben', html: `<p>Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG:<br>Die Umsatzsteuer-Identifikationsnummer wird derzeit beim zuständigen Finanzamt beantragt und wird nach Erteilung hier ergänzt.</p>` },
-          { label: 'Berufsbezeichnung', html: `<p>Berufsbezeichnung: <strong>Technical Artist / 3D-Generalist</strong><br>Freiberuflich tätig, nicht kammerpflichtig.</p>` },
+          { label: 'Angaben gemäß § 5 DDG', html: `<address><strong>Jona Melvin Grobe</strong><br>Creative Generalist · CG &amp; Motion Design<br><br>${ADDRESS}<br>Deutschland</address>` },
+          { label: 'Kontakt', html: `<p>E-Mail: ${MAIL}<br>Telefon: ${TEL}<br>Web: ${WEB}</p>` },
+          { label: 'Steuerliche Angaben', html: `<p>Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG:<br>${VAT}</p>` },
           { label: 'Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV', html: `<p>Jona Melvin Grobe<br>Ilzleite 33, 94034 Passau, Deutschland</p>` },
           { label: 'Haftungsausschluss', h: 'Haftung für Inhalte', html: `<p>Die Inhalte dieser Seite wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte kann ich jedoch keine Gewähr übernehmen. Als Diensteanbieter bin ich gemäß § 7 Abs. 1 DDG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich.</p>` },
           { label: '', h: 'Haftung für Links', html: `<p>Diese Webseite enthält Links zu externen Webseiten Dritter, auf deren Inhalte ich keinen Einfluss habe. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber verantwortlich.</p>` },
-          { label: 'Urheberrecht', html: `<p>Die durch den Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechts bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers.</p>` },
+          { label: 'Urheberrecht', html: `<p>Die durch den Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechts bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers.</p><p>Bildnachweis: © Jona Melvin Grobe, sofern nicht anders gekennzeichnet. Bei Gemeinschaftsprojekten liegen die Rechte bei den jeweiligen Beteiligten.</p>` },
           { label: 'Datenschutz', html: `<p>Informationen zur Verarbeitung personenbezogener Daten finden Sie in der <a href="../privacy/#de">Datenschutzerklärung</a>.</p>` }
         ]
       },
       en: {
         title: 'Legal<br>Notice.', doc: 'Legal Notice',
         rows: [
-          { label: 'Details pursuant to § 5 DDG (German Digital Services Act)', html: `<address><strong>Jona Melvin Grobe</strong><br>Freelance 3D Generalist &amp; Technical Artist<br><br>${ADDRESS}<br>Germany</address>` },
-          { label: 'Contact', html: `<p>Email: ${MAIL}<br>Web: ${WEB}</p>` },
-          { label: 'Tax information', html: `<p>VAT identification number pursuant to § 27a UStG:<br>The VAT identification number is currently being processed by the responsible tax office (Finanzamt) and will be added here once issued.</p>` },
-          { label: 'Professional title', html: `<p>Professional title: <strong>Technical Artist / 3D Generalist</strong><br>Freelance activity, not subject to a professional chamber.</p>` },
+          { label: 'Details pursuant to § 5 DDG (German Digital Services Act)', html: `<address><strong>Jona Melvin Grobe</strong><br>Creative Generalist · CG &amp; Motion Design<br><br>${ADDRESS}<br>Germany</address>` },
+          { label: 'Contact', html: `<p>Email: ${MAIL}<br>Phone: ${TEL}<br>Web: ${WEB}</p>` },
+          { label: 'Tax information', html: `<p>VAT identification number pursuant to § 27a UStG:<br>${VAT}</p>` },
           { label: 'Responsible for content pursuant to § 18 para. 2 MStV', html: `<p>Jona Melvin Grobe<br>Ilzleite 33, 94034 Passau, Germany</p>` },
           { label: 'Disclaimer', h: 'Liability for content', html: `<p>The contents of these pages were prepared with the utmost care. However, I cannot guarantee the accuracy, completeness, or topicality of the content. As a service provider, I am responsible for my own content on these pages in accordance with general law pursuant to § 7 para. 1 DDG.</p>` },
           { label: '', h: 'Liability for links', html: `<p>This website contains links to external websites of third parties whose content I have no influence over. The respective provider or operator is always responsible for the content of linked pages.</p>` },
-          { label: 'Copyright', html: `<p>The content and works created by the site operator on these pages are subject to German copyright law. Reproduction, editing, distribution and any kind of use outside the limits of copyright law require the written consent of the respective author or creator.</p>` },
+          { label: 'Copyright', html: `<p>The content and works created by the site operator on these pages are subject to German copyright law. Reproduction, editing, distribution and any kind of use outside the limits of copyright law require the written consent of the respective author or creator.</p><p>Image credits: © Jona Melvin Grobe, unless stated otherwise. For collaborative projects, the rights remain with the respective contributors.</p>` },
           { label: 'Privacy', html: `<p>Information on how personal data is processed can be found in the <a href="../privacy/">Privacy Policy</a>.</p>` }
         ]
       }

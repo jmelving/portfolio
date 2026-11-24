@@ -23,7 +23,7 @@ const PROJECTS_DATA = {
 
   /* ── Works hero ── */
   worksHero: {
-    number: "13",          // ghost number top-right — update when you add projects
+    number: "14",          // ghost number top-right — update when you add projects
     title:  "Selected<br><em>Works.</em>",
     sub:    "VFX · Short Films · Music Videos",
   },
@@ -45,7 +45,7 @@ const PROJECTS_DATA = {
      pill:     label shown on hover (top-right badge)
   ── */
   projects: [
-        {
+    {
       href:     "../projects/DontPushMyButtons/",
       category: "short",
       pill:     "Short",
@@ -57,28 +57,16 @@ const PROJECTS_DATA = {
         { src: "../projects/DontPushMyButtons/img/Still_3.webp", alt: "DPMB 3" },
       ],
     },
-            {
-      href:     "../projects/DecadesAhead/",
+    {
+      href:     "../projects/Echoes/",
       category: "short",
       pill:     "Short",
-      title:    "Decades Ahead",
-      desc:     "Short · CrossDot Studio",
+      title:    "Echoes",
+      desc:     "Short · Master Project 1",
       images: [
-        { src: "../projects/DecadesAhead/img/Still_1.webp", alt: "DPMB 1" },
-        { src: "../projects/DecadesAhead/img/Still_0.webp", alt: "DPMB 2" },
-        { src: "../projects/DecadesAhead/img/Still_2.webp", alt: "DPMB 3" },
-      ],
-    },
-    {
-      href:     "../projects/Zoom/",
-      category: "musicvideo",
-      pill:     "Music Video",
-      title:    "Zoom",
-      desc:     "Music Video · CrossDot Studio",
-      images: [
-        { src: "../projects/Zoom/img/Still_0.webp", alt: "Zoom 1" },
-        { src: "../projects/Zoom/img/Still_2.webp", alt: "Zoom 2" },
-        { src: "../projects/Zoom/img/Still_1.webp", alt: "Zoom 3" },
+        { src: "../projects/Echoes/img/ECHOES_4.webp", alt: "Echoes" },
+        { src: "../projects/Echoes/img/ECHOES_3.webp", alt: "Echoes 2" },
+        { src: "../projects/Echoes/img/ECHOES_5.webp", alt: "Echoes 3" },
       ],
     },
     {
@@ -98,7 +86,7 @@ const PROJECTS_DATA = {
       category: "short ad",
       pill:     "Short",
       title:    "Well That Happened",
-      desc:     "Short · CrossDot Studio",
+      desc:     "Short Ad · CrossDot Studio",
       images: [
         { src: "../projects/WellThatHappened/img/Still_1.webp", alt: "Well That Happened 1" },
         { src: "../projects/WellThatHappened/img/Still_2.webp", alt: "Well That Happened 2" },
@@ -106,15 +94,27 @@ const PROJECTS_DATA = {
       ],
     },
     {
-      href:     "../projects/Echoes/",
-      category: "short",
+      href:     "../projects/DecadesAhead/",
+      category: "short ad",
       pill:     "Short",
-      title:    "Echoes",
-      desc:     "Short · Master Project 1",
+      title:    "Decades Ahead",
+      desc:     "Short Ad · CrossDot Studio",
       images: [
-        { src: "../projects/Echoes/img/ECHOES_3.webp", alt: "Echoes" },
-        { src: "../projects/Echoes/img/ECHOES_4.webp", alt: "Echoes 2" },
-        { src: "../projects/Echoes/img/ECHOES_5.webp", alt: "Echoes 3" },
+        { src: "../projects/DecadesAhead/img/Still_1.webp", alt: "DPMB 1" },
+        { src: "../projects/DecadesAhead/img/Still_0.webp", alt: "DPMB 2" },
+        { src: "../projects/DecadesAhead/img/Still_2.webp", alt: "DPMB 3" },
+      ],
+    },
+    {
+      href:     "../projects/Zoom/",
+      category: "musicvideo",
+      pill:     "Music Video",
+      title:    "Zoom",
+      desc:     "Music Video · CrossDot Studio",
+      images: [
+        { src: "../projects/Zoom/img/Still_1.webp", alt: "Zoom 1" },
+        { src: "../projects/Zoom/img/Still_0.webp", alt: "Zoom 2" },
+        { src: "../projects/Zoom/img/Still_2.webp", alt: "Zoom 3" },
       ],
     },
     {
@@ -201,6 +201,18 @@ const PROJECTS_DATA = {
         { src: "../projects/WheelofSuffering/img/Thumbnail.webp", alt: "Wheel of Suffering" },
         { src: "../projects/WheelofSuffering/img/WOS_0.webp",     alt: "WOS 2" },
         { src: "../projects/WheelofSuffering/img/WOS_1.webp",     alt: "WOS 3" },
+      ],
+    },
+    {
+      href:     "../projects/Vestige/",
+      category: "misc",
+      pill:     "Environment",
+      title:    "Vestige",
+      desc:     "Realtime Environment · UE5",
+      images: [
+        { src: "../projects/Vestige/img/Thumbnail.webp",   alt: "Vestige" },
+        { src: "../projects/Vestige/img/Vestiege_03.webp", alt: "Vestige 2" },
+        { src: "../projects/Vestige/img/Vestiege_01.webp", alt: "Vestige 3" },
       ],
     },
   ],
@@ -430,34 +442,6 @@ const PROJECTS_DATA = {
       src:   "../img/random_for_lab/Houdini_BreakdownTool_SortingSolver.mp4",
       title: "Sorting Solver",
       sub:   "Houdini · Breakdown Tool",
-      desc:  "",
-    },
-    {
-      type:  "video",
-      src:   "../img/random_for_lab/UE5_OutdoorEnv_MakingOff_Vestiege_Indoor_1.mp4",
-      title: "Vestige, Indoor 01",
-      sub:   "UE5 · Making Of",
-      desc:  "",
-    },
-    {
-      type:  "video",
-      src:   "../img/random_for_lab/UE5_OutdoorEnv_MakingOff_Vestiege_Indoor_2.mp4",
-      title: "Vestige, Indoor 02",
-      sub:   "UE5 · Making Of",
-      desc:  "",
-    },
-    {
-      type:  "video",
-      src:   "../img/random_for_lab/UE5_OutdoorEnv_MakingOff_Vestiege_Outdoor_1.mp4",
-      title: "Vestige, Outdoor 01",
-      sub:   "UE5 · Making Of",
-      desc:  "",
-    },
-    {
-      type:  "video",
-      src:   "../img/random_for_lab/UE5_OutdoorEnv_MakingOff_Vestiege_Outdoor_2.mp4",
-      title: "Vestige, Outdoor 02",
-      sub:   "UE5 · Making Of",
       desc:  "",
     },
     {

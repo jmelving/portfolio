@@ -1,7 +1,8 @@
 /* mail-copy.js — "Get in touch" for everyone.
    A mailto: link does nothing when the visitor has no mail app set up (common on Linux, or with webmail only).
    So a click copies the address, the link's text reads "Copied!" for a moment (keeping its width, so nothing
-   around it moves), and the mail app opens right after. Works for links added later too. */
+   around it moves), and the mail app opens right after. Works for links added later too.
+   A tel: link does the same on a computer (copies, no call); on a phone it just dials. */
 (function () {
   const HOLD = 2500;          // ms "Copied!" stays
   const OPEN_DELAY = 350;     // ms before the mail app opens, so the change is seen first
@@ -37,10 +38,18 @@
   }
 
   document.addEventListener('click', e => {
-    const a = e.target.closest && e.target.closest('a[href^="mailto:"]');
+    const a = e.target.closest && e.target.closest('a[href^="mailto:"], a[href^="tel:"]');
     if (!a || e.defaultPrevented || e.button > 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-    e.preventDefault();
     const href = a.getAttribute('href');
+    if (href.startsWith('tel:')) {
+      if (matchMedia('(hover:none) and (pointer:coarse)').matches) return;   // phones: just call
+      e.preventDefault();                                                   // computers: copy the number
+      const el = label(a), num = el.textContent;
+      show(el, 'Copied!');
+      copy(num).then(ok => { if (!ok) show(el, num); });
+      return;
+    }
+    e.preventDefault();
     const addr = decodeURIComponent(href.slice(7).split('?')[0]);
     const el = label(a);
     show(el, 'Copied!');

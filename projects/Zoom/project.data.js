@@ -4,7 +4,7 @@ window.PROJECT = {
   "title": "Zoom",
   "meta": "Music Video · Research · 2026",
   "heading": "Zoom.",
-  "tagline": "Built to move on the beat.",
+  "tagline": "Hopping on the cybertrain.",
   "facts": [
     {
       "label": "Role",

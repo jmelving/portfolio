@@ -2,13 +2,13 @@
    See tools/PROJECT_DATA.md for every field. */
 window.PROJECT = {
   "title": "Well That Happened",
-  "meta": "Short · Experimental · 2026",
+  "meta": "Short Ad · 2026",
   "heading": "Well That<br/>Happened.",
-  "tagline": "It started with one penguin losing its balance.",
+  "tagline": "All because one caught a cold.",
   "facts": [
     {
       "label": "Role",
-      "value": "CG Generalist &amp; Technical Artist"
+      "value": "All aspects"
     },
     {
       "label": "Production",
@@ -25,7 +25,7 @@ window.PROJECT = {
     },
     {
       "label": "Tools",
-      "value": "Houdini, Karma XPU, COPs"
+      "value": "Houdini, Karma XPU, COPs, Nuke, DaVinci Resolve"
     }
   ],
   "sections": [
@@ -37,10 +37,10 @@ window.PROJECT = {
         {
           "words": [
             {
-              "p": "<em>Well That Happened</em> explores the creation of stylized assets and character-focused workflows in Houdini. The initial concept centered on a group of penguins gradually losing balance, falling over, and ultimately leading to the sinking of the Titanic. This idea served as a narrative foundation to experiment with visual storytelling through motion, staging, and progression."
+              "p": "<em>Well That Happened</em> started out much bigger: a colony of penguins losing their balance one after another, until the chain reaction ends up sinking the Titanic. With a presentation due at the same time, that idea got a little too tight, so I rewrote it into a short ad and cut the longer original, cross-references and all."
             },
             {
-              "p": "Overall, the project functioned as both a technical and creative exploration, combining character design, fur workflows, and procedural techniques within a single cohesive setup."
+              "p": "At its core it was a pipeline project: building a setup for stylized assets in Houdini that works as smoothly as possible for this kind of short, playful film, and a first proper go at fur generation. Add some snow, some ice and a look loosely inspired by <em>Ice Age</em>, and that was the style I had a lot of fun with."
             }
           ],
           "work": [
@@ -48,70 +48,27 @@ window.PROJECT = {
               "media": [
                 {
                   "type": "image",
-                  "src": "./img/Still_0.webp",
+                  "src": "./img/Still_1.webp",
                   "title": "Still 01",
                   "sub": "Houdini · Karma XPU",
                   "desc": ""
                 },
                 {
                   "type": "image",
-                  "src": "./img/Still_1.webp",
+                  "src": "./img/Still_2.webp",
                   "title": "Still 02",
                   "sub": "Houdini · Karma XPU",
                   "desc": ""
                 },
                 {
                   "type": "image",
-                  "src": "./img/Still_2.webp",
+                  "src": "./img/Still_0.webp",
                   "title": "Still 03",
                   "sub": "Houdini · Karma XPU",
                   "desc": ""
                 }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "focus",
-      "eyebrow": "Technical focus",
-      "title": "Penguins,<br/><em>Fur &amp; Sculpting</em>",
-      "rows": [
-        {
-          "words": [
-            {
-              "p": "The focus was on the creation of penguin characters, with particular attention given to fur generation and sculpting workflows in Houdini. A range of techniques was explored to develop stylized yet coherent character forms, from base modeling and procedural sculpting to the refinement of fur systems and surface details."
-            },
-            {
-              "p": "Rendering was carried out using Karma XPU, allowing for efficient look development and iteration, while COPs was used for stylized asset generation and texture-driven sculpting. Together, these tools supported a flexible, procedural workflow that enabled rapid experimentation and consistent results across assets."
-            }
-          ],
-          "work": [
-            {
-              "media": [
-                {
-                  "type": "video",
-                  "src": "./vid/Penguin_Model.mp4",
-                  "title": "Penguin Model",
-                  "sub": "Houdini",
-                  "desc": ""
-                },
-                {
-                  "type": "video",
-                  "src": "./vid/Penguin_Fur.mp4",
-                  "title": "Fur",
-                  "sub": "Houdini · Karma XPU",
-                  "desc": ""
-                },
-                {
-                  "type": "video",
-                  "src": "./vid/Sculpt_COPs.mp4",
-                  "title": "Procedural Sculpting",
-                  "sub": "Houdini · COPs",
-                  "desc": ""
-                }
-              ]
+              ],
+              "ratio": "16/9"
             }
           ]
         }
@@ -125,7 +82,10 @@ window.PROJECT = {
         {
           "words": [
             {
-              "p": "Asset creation and iteration were driven procedurally, allowing for efficient exploration of variations."
+              "p": "Almost everything happened in Houdini: modeling and procedural sculpting of the penguins, the fur, stylized textures and assets built in COPs, and look development and rendering in Karma XPU, which kept iterations fast. A little Nuke on top, and that was it."
+            },
+            {
+              "p": "Asset creation stayed procedural throughout, so variations of penguins, snow and ice were quick to explore. The edit and the sound design were done in DaVinci Resolve, by me as well."
             }
           ],
           "work": [
@@ -145,7 +105,9 @@ window.PROJECT = {
                   "sub": "Houdini · COPs",
                   "desc": ""
                 }
-              ]
+              ],
+              "layout": "row3",
+              "ratio": "4/5"
             }
           ]
         }
@@ -161,7 +123,8 @@ window.PROJECT = {
     "video": {
       "id": "./vid/WellThatHappened_Film.mp4",
       "platform": "file"
-    }
+    },
+    "loop": "./vid/Preview_Loop.mp4"
   },
   "next": {
     "href": "../Echoes/",
