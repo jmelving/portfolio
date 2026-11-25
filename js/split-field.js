@@ -111,6 +111,17 @@
     }, opts);
     const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    // arriving by a swipe on the front page (phones): start the seam exactly where it was left there,
+    // wave and all, and glide on to this page's own rest from that spot
+    let hand = null;
+    try {
+      const h = JSON.parse(sessionStorage.getItem('seam-handoff') || 'null');
+      sessionStorage.removeItem('seam-handoff');
+      if (h && Date.now() - h.at < 5000 && h.to === location.pathname && PHONE_LAYOUT() && o.mobileAxis === 'y') hand = h;
+    } catch {}
+    if (hand) o.enterFrom = Math.min(0.95, Math.max(0.05, hand.y));
+    const waveOff = hand ? hand.t + (Date.now() - hand.at) / 1000 : 0;
+
     // one WebGL layer per canvas; with lavaOver there are two (seam below, lava above the content)
     function layer(cls, mode) {
       const cv = document.createElement('canvas');
@@ -203,7 +214,8 @@
     function frame(now) {
       const dt = Math.min(0.05, (now - prev) / 1000); prev = now;
       const t = still ? 0 : (now - t0) / 1000;
-      const intro = still ? 1 : ease(Math.min(1, Math.max(0, (t - 0.1) / 1.4)));
+      const tw = still ? 0 : t + waveOff;                // the wave's clock (continues the front page's on a handoff)
+      const intro = still ? 1 : ease(Math.min(1, Math.max(0, (t - (hand ? 0 : 0.1)) / 1.4)));
 
       bias += (biasT - bias) * 0.05;
       ptr.k += (ptr.kT - ptr.k) * 0.06;
@@ -223,7 +235,8 @@
 
       const pull = Math.max(-1, Math.min(1, (pCross - center) / (span * 0.35))) * span * 0.03 * ptr.k;
       const reach = len * 0.22;
-      const edgeAt = a => center + amp * wave(a / len, t) + pull * Math.exp(-Math.pow((a - pAlong) / reach, 2));
+      const ampNow = amp * (hand ? 1 : 0.4 + 0.6 * intro);
+      const edgeAt = a => center + ampNow * wave(a / len, tw) + pull * Math.exp(-Math.pow((a - pAlong) / reach, 2));
       state.edgeAt = edgeAt;
       const sideDist = (x, y) => horiz ? y - edgeAt(x) : x - edgeAt(y);
 
@@ -289,9 +302,9 @@
         layers.forEach(({ gl, U }) => {
           gl.uniform2f(U.uView, W, H);
           gl.uniform1f(U.uDpr, dpr);
-          gl.uniform1f(U.uTime, t);
+          gl.uniform1f(U.uTime, tw);
           gl.uniform1f(U.uCenter, center);
-          gl.uniform1f(U.uAmp, amp * (0.4 + 0.6 * intro));
+          gl.uniform1f(U.uAmp, ampNow);
           gl.uniform1f(U.uSoft, 70);
           gl.uniform1f(U.uPull, pull);
           gl.uniform1f(U.uPullAt, pAlong);

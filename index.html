@@ -576,6 +576,9 @@
       /* the paper's hint is part of the text block, well clear of the wave */
       .m-pull-in { display:block; margin-top:16px; font-size:13px; opacity:.5; text-align:center; transition:opacity .25s; }
       .m-pull-in i { display:inline-block; font-style:normal; margin-right:4px; --dir:1; animation:pull-nudge 2.4s ease-in-out infinite; }
+      .tl .reach:not([hidden]) ~ .m-pull-in { display:none; }   /* contact open: less in the way, the seam stays close */
+      /* swiping to Projects / Curiosities: the two pages blend instead of cutting */
+      @view-transition { navigation:auto; }
       /* less clutter: no selected list / all-projects link on phones — pull up instead */
       .tr { display:none; }
       body { touch-action:none; }               /* the pulls are ours; nothing scrolls here anyway */
@@ -655,6 +658,7 @@
 
     @media (prefers-reduced-motion:reduce) {
       .cell { transition:none; }
+      @view-transition { navigation:none; }
       #face img { animation:none; }
     }
   </style>
@@ -849,15 +853,21 @@
     placeName();
     addEventListener('resize', placeName);
     document.fonts && document.fonts.ready.then(placeName);
-    function measure() {
+    // mobile: the seam glides when the paper text changes height (e.g. "Get in touch" opening) — baseNow eases to base
+    let baseNow = null;
+    function setSeamVars(b) {
+      inkTopPx = vertical ? 0 : b - scrollY - 30;
+      document.documentElement.style.setProperty('--seam-px', (b - scrollY) + 'px');
+      document.documentElement.style.setProperty('--ink-top', inkTopPx + 'px');
+    }
+    function measure(soft) {
       W = page.clientWidth;
       H = page.scrollHeight;
       vertical = !PHONE_LAYOUT();
       base = vertical ? W * 0.5 : document.querySelector('.tl').offsetTop + document.querySelector('.tl').offsetHeight + 14 + Math.min(W, innerHeight) * 0.028 * 1.3;   // just clear of the wave's swing   // mobile: right under the paper text
-      inkTopPx = vertical ? 0 : base - scrollY - 30;
-      document.documentElement.style.setProperty('--seam-px', (base - scrollY) + 'px');
+      if (!soft || baseNow == null || still) baseNow = base;
+      setSeamVars(baseNow);
       document.documentElement.style.setProperty('--amp', Math.min(W, innerHeight) * 0.028 + 'px');
-      document.documentElement.style.setProperty('--ink-top', inkTopPx + 'px');
       len  = vertical ? H : W;
       amp  = Math.min(W, innerHeight) * 0.028;
 
@@ -867,10 +877,10 @@
       } else {
         const hint = document.querySelector('.m-pull.bottom');
         // centred in the black between the "pull up" hint (under the seam) and the footer
-        const top = hint ? hint.getBoundingClientRect().bottom + scrollY + 16 : base + 60;
+        const top = hint ? hint.getBoundingClientRect().bottom + scrollY + 16 + (base - baseNow) : base + 60;   // the hint still sits at the old seam while it glides
         const bottom = document.querySelector('.fl').getBoundingClientRect().top + scrollY - 8;
-        const room = Math.max(120, bottom - top);
-        bub = { x: W * 0.5, y: top + room / 2, r: Math.max(56, Math.min(W * 0.32, room * 0.46, 170)) };
+        const room = Math.max(90, bottom - top);
+        bub = { x: W * 0.5, y: top + room / 2, r: Math.max(42, Math.min(W * 0.32, room * 0.46, 170)) };   // small phones: it shrinks rather than touching the footer
       }
     }
 
@@ -1195,6 +1205,7 @@
     const play = { x: 0, y: 0, vx: 0, vy: 0, r: 0, init: false };
     let bias = 0, lens = 0;
     let swipeBias = null;                 // mobile: set while a page swipe drags the seam
+    let seamNow = 0, waveT = 0;           // where the seam is drawn right now, and the wave's clock
     let inkAlpha = 0.72;
     const t0 = performance.now();
     let prev = t0;
@@ -1223,9 +1234,15 @@
       ptr.k += (ptr.kT - ptr.k) * 0.06;
       inkAlpha += ((projectOn ? 0 : reveal ? 0.08 : 0.72) - inkAlpha) * (projectOn ? 0.09 : 0.05);
 
+      if (baseNow !== base) {
+        baseNow += (base - baseNow) * 0.12;
+        if (Math.abs(base - baseNow) < 0.5) baseNow = base;
+        setSeamVars(baseNow);
+      }
       const span   = vertical ? W : H;
       const start  = span * 1.04;                       // intro: black slides in
-      const center = start + (base - start) * intro + bias * span * 0.045;
+      const center = start + (baseNow - start) * intro + bias * span * 0.045;
+      seamNow = center; waveT = t;                      // handed to the next page on a swipe
 
       // the edge leans toward the cursor a little
       const pAlong = vertical ? ptr.y : ptr.x;
@@ -1611,7 +1628,31 @@
       document.body.appendChild(swipeLabel);
       let sx = 0, sy = 0, swiping = false, axis = null, leaving = false, region = 'ink', startRegion = 'ink';
       const seamY = () => document.querySelector('.tl').getBoundingClientRect().bottom + 14 + Math.min(innerWidth, innerHeight) * 0.028 * 1.3;
-      const W0 = () => innerWidth;
+      /* the seam only travels as far as it sits on the page it leads to (Projects: 32% from the top),
+         gives a little past that, and the next page picks it up right where it was left */
+      const REST = { ink: 0.32, paper: 0.85 };                   // projects' splitMobile · paper: well down, curiosities eases it back up
+      const travel = r => r === 'ink' ? Math.max(40, (baseNow - scrollY) - innerHeight * REST.ink)
+                                      : Math.max(innerHeight * 0.12, innerHeight * REST.paper - (baseNow - scrollY));
+      const give = (d, max) => {                                 // 1:1 up to the limit, then a short elastic give
+        const a = Math.abs(d), over = a - max;
+        return Math.sign(d) * (over <= 0 ? a : max + 14 * (1 - Math.exp(-over / 70)));
+      };
+      const prefetched = new Set();
+      const prefetch = href => {
+        if (prefetched.has(href)) return; prefetched.add(href);
+        document.head.appendChild(Object.assign(document.createElement('link'), { rel: 'prefetch', href }));
+      };
+      let goingTo = null;
+      const handOff = () => {
+        if (!goingTo) return;
+        try {
+          sessionStorage.setItem('seam-handoff', JSON.stringify({
+            to: new URL(goingTo, location.href).pathname, at: Date.now(),
+            y: (seamNow - scrollY) / innerHeight, t: waveT }));
+        } catch {}
+      };
+      addEventListener('pageswap', handOff);                     // the moment the next page takes over…
+      addEventListener('pagehide', handOff);                     // …or, where that event doesn't exist, as this one goes
       document.addEventListener('touchstart', e => {
         if (leaving || document.body.classList.contains('cv-open')) return;
         sx = e.touches[0].clientX; sy = e.touches[0].clientY; swiping = true; axis = null;
@@ -1625,17 +1666,18 @@
         if (axis === 'x' && armed && startRegion === 'ink') { pill.style.transform = `translateX(${(dx * 0.6).toFixed(1)}px)`; return; }
         // pull the seam wherever the finger is: down opens the paper (Curiosities), up the ink (Projects)
         region = dy > 0 ? 'paper' : 'ink';
-        const pull = Math.abs(dy);
-        if (axis !== 'y' || !pull) { if (swipeBias != null) { swipeBias = 0; swipeLabel.style.opacity = '0'; } return; }
-        const k = Math.min(1, pull / (innerHeight * 0.35));
-        swipeBias = dy / (innerHeight * 0.045);                  // bias is in units of 4.5% screen height
+        if (axis !== 'y' || !dy) { if (swipeBias != null) { swipeBias = 0; swipeLabel.style.opacity = '0'; } return; }
+        prefetch(DEST[region]);
+        const max = travel(region), d = give(dy, max), pull = Math.abs(d);
+        const k = Math.min(1, pull / Math.min(max, innerHeight * 0.35));
+        swipeBias = d / (H * 0.045);                   // bias is in units of 4.5% screen height
         swipeLabel.textContent = region === 'paper' ? 'Curiosities' : 'Projects';
         swipeLabel.className = 'm-swipe on ' + (region === 'paper' ? 'to-paper' : 'to-ink');
         swipeLabel.style.opacity = Math.min(1, Math.abs(k) * 1.6).toFixed(2);
         document.body.classList.add('m-swiping');
-        // pulling the ink up: the paper's text gives way as the ink climbs over it
-        document.documentElement.style.setProperty('--top-fade', region === 'ink' ? Math.max(0, 1 - k * 2.2).toFixed(3) : '1');
-        swipeLabel.style.transform = `translate(-50%, calc(-50% + ${(dy * 0.3).toFixed(1)}px))`;
+        // either way the paper's text gives way, so only the destination's name is left
+        document.documentElement.style.setProperty('--top-fade', Math.max(0, 1 - k * 2.2).toFixed(3));
+        swipeLabel.style.transform = `translate(-50%, calc(-50% + ${(d * 0.3).toFixed(1)}px))`;
       }, { passive: true });
       document.addEventListener('touchend', e => {
         if (!swiping) return;
@@ -1645,7 +1687,7 @@
         pill.style.transform = '';
         const horizontal = axis === 'x' && Math.abs(dx) > 70;
         region = dy > 0 ? 'paper' : 'ink';
-        const pulled = axis === 'y' && Math.abs(dy) > 90;
+        const pulled = axis === 'y' && Math.abs(dy) > Math.min(90, travel(region) * 0.6);
         if (armed && startRegion === 'ink' && !pulled) {
           if (horizontal) {
             if (armed.target === '_blank') window.open(armed.href, '_blank', 'noopener'); else location.href = armed.href;
@@ -1654,13 +1696,15 @@
         }
         if (pulled) {
           // commit: let the winning side take the screen, then go
+          // commit: the seam settles exactly where the next page has it, then that page takes over from there
           leaving = true;
-          swipeBias = region === 'paper' ? 16 : -12;
+          swipeBias = (region === 'paper' ? travel('paper') : -travel('ink')) / (H * 0.045);
           swipeLabel.style.opacity = '1';
-          if (region === 'ink') document.documentElement.style.setProperty('--top-fade', '0');
+          document.documentElement.style.setProperty('--top-fade', '0');
           swipeLabel.style.transform = 'translate(-50%, -50%)';
-          setTimeout(() => { location.href = region === 'paper' ? DEST.paper : DEST.ink; }, 420);
-          addEventListener('pageshow', () => { leaving = false; swipeBias = null; swipeLabel.className = 'm-swipe'; document.body.classList.remove('m-swiping'); document.documentElement.style.setProperty('--top-fade', '1'); }, { once: true });
+          goingTo = DEST[region];
+          setTimeout(() => { handOff(); location.href = goingTo; }, 260);
+          addEventListener('pageshow', () => { leaving = false; goingTo = null; swipeBias = null; swipeLabel.className = 'm-swipe'; document.body.classList.remove('m-swiping'); document.documentElement.style.setProperty('--top-fade', '1'); }, { once: true });
         } else {
           swipeBias = null;
           swipeLabel.style.opacity = '0';
@@ -1716,7 +1760,10 @@
     /* ── GET IN TOUCH: shows email + phone underneath ── */
     {
       const btn = document.querySelector('.tl .mail'), reach = document.getElementById('reach');
-      const set = open => { reach.hidden = !open; btn.setAttribute('aria-expanded', open); };
+      const set = open => {
+        reach.hidden = !open; btn.setAttribute('aria-expanded', open);
+        if (PHONE_LAYOUT()) measure(true);           // phones: the seam (and the reel under it) makes room, gliding
+      };
       btn.addEventListener('click', () => set(reach.hidden));
       addEventListener('keydown', e => { if (e.key === 'Escape' && !reach.hidden) set(false); });
       document.addEventListener('click', e => { if (!reach.hidden && !e.target.closest('.tl .mail, #reach')) set(false); });

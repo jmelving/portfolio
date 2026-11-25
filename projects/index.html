@@ -221,6 +221,7 @@
        the ink below is where the work scrolls, with a tilt-shift focus */
     @media (max-width:1024px), (hover:none) and (pointer:coarse) {
       html { background:var(--ink); }
+      @view-transition { navigation:auto; }   /* a swipe from the front page blends in instead of cutting */
       html, body { overflow-x:clip; max-width:100%; }
       #page { grid-template-columns:1fr; }
       .strip {
