@@ -102,6 +102,7 @@ body.nogl { background:linear-gradient(90deg, var(--paper) var(--seam), var(--in
 
 /* intro fade */
 .fade-in { opacity:0; transition:opacity 1s ease .4s; }
+.seam-handoff .fade-in { transition:opacity .3s ease; }   /* arrived by a swipe: no second, delayed entrance */
 body.ready .fade-in { opacity:1; }
 
 @media (prefers-reduced-motion:reduce) {

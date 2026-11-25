@@ -574,7 +574,7 @@
       body.m-swiping .tl, body.m-swiping .nl, body.m-swiping .nr,
       body.m-swiping .soc-profile, body.m-swiping #face { opacity:var(--top-fade, 1) !important; transition:none; }
       /* the paper's hint is part of the text block, well clear of the wave */
-      .m-pull-in { display:block; margin-top:16px; font-size:13px; opacity:.5; text-align:center; transition:opacity .25s; }
+      .m-pull-in { display:block; margin-top:29px; margin-bottom:-13px; font-size:13px; /* closer to the wave than to the text, mirroring the pull-up hint below it */ opacity:.5; text-align:center; transition:opacity .25s; }
       .m-pull-in i { display:inline-block; font-style:normal; margin-right:4px; --dir:1; animation:pull-nudge 2.4s ease-in-out infinite; }
       .tl .reach:not([hidden]) ~ .m-pull-in { display:none; }   /* contact open: less in the way, the seam stays close */
       /* swiping to Projects / Curiosities: the two pages blend instead of cutting */
@@ -640,7 +640,7 @@
       .bio, .quote { font-size:13px; margin-top:4px; }
       .tl .mail { font-size:14px; margin-top:8px; }
       .tl .cv-link { font-size:13px; margin-top:8px; }
-      .m-pull-in { margin-top:12px; font-size:12px; }
+      .m-pull-in { margin-top:25px; font-size:12px; }
     }
 
     /* tablets (iPad portrait): same layout as phones, type scaled up for the bigger screen */
@@ -1701,9 +1701,8 @@
           swipeBias = (region === 'paper' ? travel('paper') : -travel('ink')) / (H * 0.045);
           swipeLabel.style.opacity = '1';
           document.documentElement.style.setProperty('--top-fade', '0');
-          swipeLabel.style.transform = 'translate(-50%, -50%)';
           goingTo = DEST[region];
-          setTimeout(() => { handOff(); location.href = goingTo; }, 260);
+          setTimeout(() => { handOff(); location.href = goingTo; }, 40);   // the seam is already at its limit: go straight away
           addEventListener('pageshow', () => { leaving = false; goingTo = null; swipeBias = null; swipeLabel.className = 'm-swipe'; document.body.classList.remove('m-swiping'); document.documentElement.style.setProperty('--top-fade', '1'); }, { once: true });
         } else {
           swipeBias = null;

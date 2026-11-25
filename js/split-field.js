@@ -120,6 +120,7 @@
       if (h && Date.now() - h.at < 5000 && h.to === location.pathname && PHONE_LAYOUT() && o.mobileAxis === 'y') hand = h;
     } catch {}
     if (hand) o.enterFrom = Math.min(0.95, Math.max(0.05, hand.y));
+    if (hand) document.documentElement.classList.add('seam-handoff');   // css: the page's words come in with it, not after
     const waveOff = hand ? hand.t + (Date.now() - hand.at) / 1000 : 0;
 
     // one WebGL layer per canvas; with lavaOver there are two (seam below, lava above the content)

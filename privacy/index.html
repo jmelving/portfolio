@@ -87,7 +87,17 @@
       }
       .side h1 { font-size:clamp(34px, min(calc(var(--seam-y) * .3), 15.5vw), 92px); }
       .side .who { display:none; }
-      #lang b { font-size:14px; }
+      /* phones: no bubble on the wave, a quiet link top right, level with "← Back" */
+      #lang {
+        top:calc(var(--pad) * 1.1); left:auto; right:var(--pad); width:auto; height:auto; margin:0;
+        translate:none !important; flex-direction:row; align-items:baseline; gap:.35em;
+        color:var(--ink) !important; font-size:14px; line-height:inherit;
+      }
+      #lang svg { display:none; }
+      #lang small { font-size:14px; line-height:inherit; margin:0; opacity:.5; }
+      #lang b { font-size:14px; font-weight:500; line-height:inherit; letter-spacing:0; border-bottom:1px solid currentColor; }
+      #lang:hover b { transform:none; }
+      body.ready #lang:active { opacity:.55; transition:none; }
       /* the text isn't blended here: it runs under the paper overlay, which covers it like a header */
       main.ink-text { position:relative; z-index:3; mix-blend-mode:normal; color:var(--paper); padding:calc(34svh + 28px) var(--pad) var(--pad); }
       .row { grid-template-columns:1fr; gap:8px; }
