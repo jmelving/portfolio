@@ -9,3 +9,6 @@ img/random_for_lab/lighting study/
 
 # full-size source stills (only the .webp versions go online)
 projects/*/img/jpg/
+
+# lab originals stay local; the site uses the compressed copies in img/lab/
+img/random_for_lab/

@@ -570,8 +570,8 @@
     masonry.innerHTML = items.map((it, i) => `
       <div class="lm-wrap"><div class="lab-card" data-i="${i}">
         ${it.type === 'video'
-          ? `<video data-src="${it.src}" autoplay muted loop playsinline></video><span class="lab-badge">Video</span>`
-          : `<img src="${it.src}" alt="${it.title || ''}" loading="lazy">`}
+          ? `<video data-src="${it.preview || it.src}"${it.poster ? ` poster="${it.poster}"` : ''} autoplay muted loop playsinline preload="none"></video><span class="lab-badge">Video</span>`
+          : `<img src="${it.preview || it.src}" alt="${it.title || ''}" loading="lazy">`}
         <div class="lab-overlay"></div>
         <div class="lab-info"><div class="lab-title">${it.title || ''}</div><div class="lab-sub">${it.sub || ''}</div></div>
       </div></div>`).join('');
@@ -612,11 +612,29 @@
       cur = (i + items.length) % items.length;
       const it = items[cur];
       lbMedia.innerHTML = '';
+      // the grid only ever loads the small previews; the full file is fetched here, when it's actually viewed
       const el = it.type === 'video'
-        ? Object.assign(document.createElement('video'), { src: it.src, autoplay: true, loop: true, controls: true, playsInline: true })
-        : Object.assign(document.createElement('img'), { src: it.src, alt: it.title || '' });
-      el.addEventListener(it.type === 'video' ? 'canplay' : 'load', () => el.classList.add('ready'), { once: true });
-      if (el.complete) el.classList.add('ready');
+        ? Object.assign(document.createElement('video'), { src: it.src, poster: it.poster || '', autoplay: true, loop: true, controls: true, playsInline: true })
+        : Object.assign(document.createElement('img'), { src: it.preview || it.src, alt: it.title || '' });
+      if (it.type === 'video') {
+        // full size from the start (taken from the preview's shape), so it doesn't sit at poster size and then jump
+        const pv = masonry.querySelector(`.lab-card[data-i="${cur}"] video`);
+        if (pv && pv.videoWidth) {
+          const a = pv.videoWidth / pv.videoHeight;
+          const w = PHONE_LAYOUT() ? Math.min(innerWidth, innerHeight * 0.58 * a)
+                                   : Math.min(innerWidth * 0.88, 1200, Math.min(innerHeight * 0.62, 760) * a);
+          el.style.width = Math.floor(w) + 'px'; el.style.aspectRatio = a;
+        }
+        el.addEventListener('canplay', () => el.classList.add('ready'), { once: true });
+        if (it.poster) el.classList.add('ready');                 // the still shows straight away while the clip streams in
+      } else {
+        el.addEventListener('load', () => el.classList.add('ready'), { once: true });
+        if (el.complete) el.classList.add('ready');
+        if (it.preview && it.preview !== it.src) {                // sharp version swaps in once it has arrived
+          const full = new Image(); full.src = it.src;
+          full.decode().then(() => { if (el.isConnected) el.src = it.src; }, () => {});
+        }
+      }
       lbMedia.appendChild(el);
       document.getElementById('lb-title').textContent = it.title || '';
       document.getElementById('lb-sub').textContent = it.sub || '';
