@@ -102,7 +102,15 @@ body.nogl { background:linear-gradient(90deg, var(--paper) var(--seam), var(--in
 
 /* intro fade */
 .fade-in { opacity:0; transition:opacity 1s ease .4s; }
-.seam-handoff .fade-in { transition:opacity .3s ease; }   /* arrived by a swipe: no second, delayed entrance */
+/* arrived by a swipe: the page starts as the front page left off (paper, wave, black)
+   and its words and work come in together, once */
+.seam-handoff .fade-in, .seam-handoff #m-top { opacity:0 !important; transition:opacity .55s ease; }
+.seam-handoff.handoff-in .fade-in, .seam-handoff.handoff-in #m-top { opacity:1 !important; }
+/* the work is covered by plain ink that fades away: the pictures underneath are already drawn,
+   so they come up evenly instead of popping in once a page-wide fade ends.
+   Above the work, below the paper overlay (4) and the words (5) */
+.handoff-veil { position:fixed; inset:0; z-index:3; background:var(--ink); pointer-events:none; transition:opacity .55s ease; }
+.handoff-in .handoff-veil { opacity:0; }
 body.ready .fade-in { opacity:1; }
 
 @media (prefers-reduced-motion:reduce) {

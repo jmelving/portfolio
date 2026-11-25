@@ -573,6 +573,7 @@
       .tl, .nl, .nr, .soc-profile, #face { transition:opacity .25s ease; }
       body.m-swiping .tl, body.m-swiping .nl, body.m-swiping .nr,
       body.m-swiping .soc-profile, body.m-swiping #face { opacity:var(--top-fade, 1) !important; transition:none; }
+      body.m-leaving .fl, body.m-leaving .fr, body.m-leaving #reel-mirror { opacity:0; transition:opacity .2s ease; }
       /* the paper's hint is part of the text block, well clear of the wave */
       .m-pull-in { display:block; margin-top:29px; margin-bottom:-13px; font-size:13px; /* closer to the wave than to the text, mirroring the pull-up hint below it */ opacity:.5; text-align:center; transition:opacity .25s; }
       .m-pull-in i { display:inline-block; font-style:normal; margin-right:4px; --dir:1; animation:pull-nudge 2.4s ease-in-out infinite; }
@@ -1006,12 +1007,28 @@
 
     addEventListener('pointermove', e => {
       if (e.pointerType !== 'mouse') return;
+      ptr.touch = false;
       const x = e.clientX + scrollX, y = e.clientY + scrollY;
       if (!ptr.seen) { ptr.hx = lastX = x; ptr.hy = lastY = y; ptr.seen = true; }
       ptr.x = x; ptr.y = y; ptr.kT = 1;
       ptr.overUI = !!e.target.closest('a, button, #face');
     });
     document.addEventListener('pointerleave', () => { ptr.kT = 0; setZone(null); });
+    // phones: the finger stirs the lava like the cursor does (also while it pulls the seam);
+    // it never picks a side, so a touch can't open a page by itself
+    const touchAt = e => {
+      const tp = e.touches[0]; if (!tp) return;
+      ptr.x = tp.clientX + scrollX; ptr.y = tp.clientY + scrollY; ptr.kT = 1; ptr.touch = true;
+    };
+    addEventListener('touchstart', e => {
+      const tp = e.touches[0]; if (!tp) return;
+      ptr.hx = lastX = tp.clientX + scrollX; ptr.hy = lastY = tp.clientY + scrollY; ptr.seen = true; charge = 0;
+      touchAt(e);
+    }, { passive: true });
+    addEventListener('touchmove', touchAt, { passive: true });
+    const touchOff = () => { ptr.kT = 0; };
+    addEventListener('touchend', touchOff, { passive: true });
+    addEventListener('touchcancel', touchOff, { passive: true });
 
     /* ── ZONES: which half is the cursor in ── */
     let zone = null, dwell = 0, hintRoom = 1;
@@ -1206,6 +1223,7 @@
     let bias = 0, lens = 0;
     let swipeBias = null;                 // mobile: set while a page swipe drags the seam
     let seamNow = 0, waveT = 0;           // where the seam is drawn right now, and the wave's clock
+    let exiting = false;                  // swiped away: the ink closes over the reel, so only paper, wave and black remain
     let inkAlpha = 0.72;
     const t0 = performance.now();
     let prev = t0;
@@ -1232,7 +1250,7 @@
       if (swipeBias != null) bias += (swipeBias - bias) * 0.35;   // follows the finger closely
       else bias  += (biasT - bias) * 0.05;
       ptr.k += (ptr.kT - ptr.k) * 0.06;
-      inkAlpha += ((projectOn ? 0 : reveal ? 0.08 : 0.72) - inkAlpha) * (projectOn ? 0.09 : 0.05);
+      inkAlpha += ((exiting ? 1 : projectOn ? 0 : reveal ? 0.08 : 0.72) - inkAlpha) * (exiting ? 0.2 : projectOn ? 0.09 : 0.05);
 
       if (baseNow !== base) {
         baseNow += (base - baseNow) * 0.12;
@@ -1256,7 +1274,7 @@
 
       // zone under the cursor (ignoring links/buttons and the bubble)
       const onBubble = Math.hypot(ptr.x - play.x, ptr.y - play.y) < play.r + 10;
-      if (ptr.kT && !ptr.overUI && !onBubble && intro > 0.9) setZone(sideDist(ptr.x, ptr.y) > 0 ? 'ink' : 'paper');
+      if (ptr.kT && !ptr.touch && !ptr.overUI && !onBubble && intro > 0.9) setZone(sideDist(ptr.x, ptr.y) > 0 ? 'ink' : 'paper');
       else setZone(null);
       lens += ((zone === 'ink' ? 0.55 : 0) - lens) * 0.08;
 
@@ -1699,11 +1717,12 @@
           // commit: the seam settles exactly where the next page has it, then that page takes over from there
           leaving = true;
           swipeBias = (region === 'paper' ? travel('paper') : -travel('ink')) / (H * 0.045);
-          swipeLabel.style.opacity = '1';
+          swipeLabel.style.opacity = '0';                        // the page empties to paper, wave and black…
+          exiting = true; document.body.classList.add('m-leaving');
           document.documentElement.style.setProperty('--top-fade', '0');
           goingTo = DEST[region];
-          setTimeout(() => { handOff(); location.href = goingTo; }, 40);   // the seam is already at its limit: go straight away
-          addEventListener('pageshow', () => { leaving = false; goingTo = null; swipeBias = null; swipeLabel.className = 'm-swipe'; document.body.classList.remove('m-swiping'); document.documentElement.style.setProperty('--top-fade', '1'); }, { once: true });
+          setTimeout(() => { handOff(); location.href = goingTo; }, 240);  // …which is exactly how the next page starts, so the swap itself can't be seen
+          addEventListener('pageshow', () => { leaving = false; goingTo = null; exiting = false; document.body.classList.remove('m-leaving'); swipeBias = null; swipeLabel.className = 'm-swipe'; document.body.classList.remove('m-swiping'); document.documentElement.style.setProperty('--top-fade', '1'); }, { once: true });
         } else {
           swipeBias = null;
           swipeLabel.style.opacity = '0';

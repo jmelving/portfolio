@@ -121,6 +121,25 @@
     } catch {}
     if (hand) o.enterFrom = Math.min(0.95, Math.max(0.05, hand.y));
     if (hand) document.documentElement.classList.add('seam-handoff');   // css: the page's words come in with it, not after
+    if (hand) {
+      // words and work come in together, once the pictures in view are ready (or after 0.8 s at most)
+      const veil = Object.assign(document.createElement('div'), { className: 'handoff-veil' });
+      document.body.appendChild(veil);
+      const reveal = () => {
+        document.documentElement.classList.add('handoff-in');
+        veil.addEventListener('transitionend', () => veil.remove(), { once: true });
+        setTimeout(() => veil.remove(), 1200);
+      };
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        const inView = [...document.querySelectorAll('main img')].filter(im => {
+          const r = im.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight && r.width;
+        });
+        Promise.race([
+          Promise.all(inView.map(im => (im.decode ? im.decode() : Promise.resolve()).catch(() => {}))),
+          new Promise(r => setTimeout(r, 800)),
+        ]).then(reveal);
+      }));
+    }
     const waveOff = hand ? hand.t + (Date.now() - hand.at) / 1000 : 0;
 
     // one WebGL layer per canvas; with lavaOver there are two (seam below, lava above the content)
@@ -195,6 +214,16 @@
       ptr.x = e.clientX; ptr.y = e.clientY; ptr.kT = 1;
     });
     document.addEventListener('pointerleave', () => ptr.kT = 0);
+    // phones: the finger stirs the lava like the cursor does; lifting it lets things settle
+    const touchAt = e => { const tp = e.touches[0]; if (tp) { ptr.x = tp.clientX; ptr.y = tp.clientY; ptr.kT = 1; } };
+    addEventListener('touchstart', e => {
+      const tp = e.touches[0]; if (!tp) return;
+      ptr.hx = lastX = tp.clientX; ptr.hy = lastY = tp.clientY; ptr.seen = true; charge = 0;
+      touchAt(e);
+    }, { passive: true });
+    addEventListener('touchmove', touchAt, { passive: true });
+    addEventListener('touchend', () => { ptr.kT = 0; }, { passive: true });
+    addEventListener('touchcancel', () => { ptr.kT = 0; }, { passive: true });
 
     /* lava */
     let charge = 0, spawnX = 0, spawnY = 0, nextBubble = 2.5;
