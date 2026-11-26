@@ -361,6 +361,22 @@
     body.zone #hint { opacity:1; }
     @media (hover:none) { #hint { display:none; } }
 
+    /* ── SIDE HINTS (desktop): what each half opens, quietly beside the wave — like the pull hints on phones ── */
+    .d-side {
+      position:fixed; top:0; left:0; z-index:6; pointer-events:none;
+      font-size:13px; line-height:1; white-space:nowrap;
+      opacity:0; transition:opacity .4s ease;
+    }
+    .d-side.paper { color:var(--ink); }
+    .d-side.ink { color:var(--paper); }
+    body.sides-on .d-side { opacity:.5; }
+    body.zone .d-side, body.reel-hover .d-side, body.cv-on .d-side, body.project-on .d-side { opacity:0; }   /* the cursor hint or a preview takes over */
+    .d-side i { display:inline-block; font-style:normal; animation:side-nudge 2.4s ease-in-out infinite; }
+    .d-side.paper i { --dir:-1; margin-right:4px; }
+    .d-side.ink i { --dir:1; margin-left:4px; }
+    @keyframes side-nudge { 0%, 60%, 100% { transform:none; } 30% { transform:translateX(calc(var(--dir) * 4px)); } }
+    @media (prefers-reduced-motion:reduce) { .d-side i { animation:none; } }
+
     /* ── HOVER PREVIEW ── */
     /* hovering a project swaps the reel for that project's stills, in full colour */
     #project-bg {
@@ -628,7 +644,7 @@
       .tr .m-link { display:block; width:max-content; margin-top:12px; }
       .fl, .fr { padding-top:12px; padding-bottom:calc(var(--pad) * .8); }
       .fr .foot { justify-content:flex-end; }
-      #hint { display:none; }
+      #hint, .d-side { display:none; }
       /* the label grows with the bubble, so their proportion holds on every screen */
       #play em { font-size:max(17px, calc(var(--d, 240px) * .085)); }
       #play svg { width:max(20px, calc(var(--d, 240px) * .1)); height:max(22px, calc(var(--d, 240px) * .112)); }
@@ -729,9 +745,9 @@
     <section class="cell ink-side tr">
       <p class="label">Selected</p>
       <ul class="work">
-        <li><a data-slides="./projects/Echoes/img/ECHOES_Hero.webp|./projects/Echoes/img/ECHOES_1.webp|./projects/Echoes/img/ECHOES_2.webp|./projects/Echoes/img/ECHOES_3.webp|./projects/Echoes/img/ECHOES_4.webp|./projects/Echoes/img/ECHOES_5.webp" href="./projects/Echoes">Echoes</a></li>
-        <li><a data-slides="./projects/DontPushMyButtons/img/Still_3.webp|./projects/DontPushMyButtons/img/Still_1.webp|./projects/DontPushMyButtons/img/Still_5.webp|./projects/DontPushMyButtons/img/Still_6.webp|./projects/DontPushMyButtons/img/Still_8.webp|./projects/DontPushMyButtons/img/Still_9.webp" href="./projects/DontPushMyButtons#terrain">Don't Push My Buttons</a></li>
-        <li><a data-slides="./projects/PaintingGreys/img/PaintingGreys_1.webp|./projects/PaintingGreys/img/PaintingGreys_2.webp|./projects/PaintingGreys/img/PaintingGreys_6.webp|./projects/PaintingGreys/img/PaintingGreys_8.webp|./projects/PaintingGreys/img/PaintingGreys_10.webp|./projects/PaintingGreys/img/PaintingGreys_14.webp" href="./projects/PaintingGreys#ocean">Painting Greys</a></li>
+        <li><a data-slides="./projects/DontPushMyButtons/img/Still_5.webp|./projects/DontPushMyButtons/img/Still_3.webp|./projects/DontPushMyButtons/img/Still_2.webp" href="./projects/DontPushMyButtons#terrain">Don't Push My Buttons</a></li>
+        <li><a data-slides="./projects/DeltaT/img/Still_07.webp|./projects/DeltaT/img/Still_05.webp|./projects/DeltaT/img/Still_04.webp|./projects/DeltaT/img/Still_11.webp|./projects/DeltaT/img/Still_01.webp|./projects/DeltaT/img/Still_09.webp" href="./projects/DeltaT/">DELTA-T</a></li>
+        <li><a data-slides="./projects/PaintingGreys/img/PaintingGreys_5.webp|./projects/PaintingGreys/img/PaintingGreys_4.webp|./projects/PaintingGreys/img/PaintingGreys_8.webp" href="./projects/PaintingGreys#ocean">Painting Greys</a></li>
       </ul>
       <a class="m-only m-link" href="./projects/">All projects →</a>
     </section>
@@ -759,6 +775,9 @@
   <!-- mobile: pull the seam — down on the paper for Curiosities, up on the ink for Projects -->
   <p class="m-pull bottom"><i>↑</i> pull up for Projects</p>
   <div id="hint"></div>
+  <!-- desktop: what each half opens, beside the wave -->
+  <p class="d-side paper" aria-hidden="true"><i>←</i> click for Curiosities</p>
+  <p class="d-side ink" aria-hidden="true">click for Projects <i>→</i></p>
 
   <!-- CV viewer: the CV as a picture, so it shows everywhere (phones download PDFs instead of showing them) -->
   <div id="cv" role="dialog" aria-label="CV" aria-hidden="true">
@@ -830,6 +849,7 @@
     }, 250);
     const playEl   = document.getElementById('play');
     const hint     = document.getElementById('hint');
+    const sidePaper = document.querySelector('.d-side.paper'), sideInk = document.querySelector('.d-side.ink');
     const stamps   = document.getElementById('stamps');
     const face     = document.getElementById('face');
     const faceImg  = face.querySelector('img');
@@ -1285,7 +1305,7 @@
         const cx = ptr.x - scrollX, cy = ptr.y - scrollY;
         hintRoom += (roomAt(cx, cy) - hintRoom) * 0.12;
         document.body.classList.toggle('near-text', hintRoom < NEAR);
-        const g = 1 - Math.pow(1 - Math.min(1, dwell / 7), 2);   // slow, steady growth
+        const g = 1 - Math.pow(1 - Math.min(1, dwell / 1.6), 2);   // comes up quickly, then holds
         hint.style.fontSize = (13 + 51 * g * hintRoom).toFixed(1) + 'px';
         hint.style.opacity = Math.min(1, hintRoom * 1.6).toFixed(2);
         const w = hint.offsetWidth, h = hint.offsetHeight;
@@ -1296,6 +1316,14 @@
         hint.style.transform = `translate3d(${hx}px, ${hy}px, 0)`;
       } else {
         hint.style.opacity = '';
+      }
+
+      /* side hints: low on the screen, one each side of the wave, riding it */
+      if (vertical) {
+        const hy = innerHeight * 0.74, sx = edgeAt(hy + scrollY) - scrollX, gap = 22;
+        sidePaper.style.transform = `translate3d(${(sx - gap - sidePaper.offsetWidth).toFixed(1)}px, ${hy.toFixed(1)}px, 0)`;
+        sideInk.style.transform = `translate3d(${(sx + gap).toFixed(1)}px, ${hy.toFixed(1)}px, 0)`;
+        document.body.classList.toggle('sides-on', intro > 0.95);
       }
 
       if (!still) {
