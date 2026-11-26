@@ -166,6 +166,28 @@ window.PROJECT = {
       ]
     },
     {
+      "id": "recognition",
+      "eyebrow": "Recognition",
+      "title": "Best Sound",
+      "words": [
+        {
+          "p": "Echoes won Best Sound at the Best Austrian Animation Festival 2025 (ASIFA Austria Award)."
+        }
+      ],
+      "work": [
+        {
+          "media": [
+            {
+              "type": "video",
+              "src": "./vid/ECHOES_ASIFA_Award_2025.mp4",
+              "title": "ASIFA Austria Award 2025",
+              "sub": "Photo © Fekry Helal"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "learnings",
       "eyebrow": "Takeaways",
       "title": "Learnings",

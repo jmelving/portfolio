@@ -1,0 +1,37 @@
+/* JMG Publisher pages (TikTok app review). Plain, static, same type and colours as the rest of the site. */
+:root { --paper:#eeebe5; --ink:#0c0c0c; --pad:clamp(20px, 3.2vw, 56px); }
+* { box-sizing:border-box; margin:0; padding:0; }
+html { background:var(--paper); }
+body {
+  font-family:'DM Sans', system-ui, sans-serif; font-size:16px; line-height:1.55;
+  color:var(--ink); background:var(--paper);
+  -webkit-font-smoothing:antialiased;
+}
+a { color:inherit; text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:3px; text-decoration-color:rgba(12,12,12,.35); transition:text-decoration-color .25s; overflow-wrap:anywhere; }
+a:hover { text-decoration-color:currentColor; }
+
+.wrap { max-width:760px; margin:0 auto; padding:var(--pad); padding-top:clamp(40px, 9vh, 110px); }
+.app { display:flex; align-items:center; gap:16px; margin-bottom:clamp(28px, 5vh, 56px); }
+.app img { width:80px; height:80px; border-radius:18px; display:block; }
+.app b { font-weight:600; font-size:20px; letter-spacing:-0.02em; line-height:1.2; display:block; }
+.app small { font-size:13px; opacity:.55; }
+
+h1 { font-weight:700; font-size:clamp(44px, 7vw, 88px); line-height:.9; letter-spacing:-0.055em; }
+.meta { margin-top:16px; font-size:14px; opacity:.55; }
+
+section { display:grid; grid-template-columns:minmax(110px, 14ch) minmax(0, 1fr); gap:clamp(16px, 3vw, 48px);
+          padding-block:clamp(18px, 3vh, 28px); border-top:1px solid rgba(12,12,12,.12); }
+.doc { margin-top:clamp(36px, 6vh, 64px); }
+section h2 { font-weight:600; font-size:15px; letter-spacing:-0.01em; line-height:1.5; }
+section p { font-size:clamp(15px, 1.05vw, 17px); line-height:1.6; opacity:.85; }
+section p + p { margin-top:10px; }
+
+.intro { margin-top:clamp(24px, 4vh, 40px); font-size:clamp(17px, 1.4vw, 21px); line-height:1.5; max-width:46ch; }
+.links { margin-top:clamp(28px, 5vh, 48px); display:flex; gap:24px; flex-wrap:wrap; font-weight:500; }
+
+footer { margin-top:clamp(56px, 10vh, 110px); display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; font-size:12px; opacity:.5; }
+
+@media (max-width:600px) {
+  section { grid-template-columns:1fr; gap:4px; }
+  .app img { width:64px; height:64px; border-radius:14px; }
+}
