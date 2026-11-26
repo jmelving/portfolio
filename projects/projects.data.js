@@ -52,7 +52,7 @@ const PROJECTS_DATA = {
       title:    "Don't Push My Buttons",
       desc:     "Short · CrossDot Studio",
       images: [
-        { src: "../projects/DontPushMyButtons/img/Still_5.webp", alt: "DPMB 1" },
+        { src: "../projects/DontPushMyButtons/img/Still_5.webp", depth: "../projects/DontPushMyButtons/img/Still_5_depth.webp", alt: "DPMB 1" },
         { src: "../projects/DontPushMyButtons/img/Still_2.webp", alt: "DPMB 2" },
         { src: "../projects/DontPushMyButtons/img/Still_3.webp", alt: "DPMB 3" },
       ],
@@ -64,7 +64,7 @@ const PROJECTS_DATA = {
       title:    "Echoes",
       desc:     "Short · Master Project 1",
       images: [
-        { src: "../projects/Echoes/img/ECHOES_4.webp", alt: "Echoes" },
+        { src: "../projects/Echoes/img/ECHOES_4.webp", depth: "../projects/Echoes/img/ECHOES_4_depth.webp", alt: "Echoes" },
         { src: "../projects/Echoes/img/ECHOES_3.webp", alt: "Echoes 2" },
         { src: "../projects/Echoes/img/ECHOES_5.webp", alt: "Echoes 3" },
       ],
@@ -76,7 +76,7 @@ const PROJECTS_DATA = {
       title:    "DELTA-T",
       desc:     "Short · CrossDot Studio",
       images: [
-        { src: "../projects/DeltaT/img/Still_07.webp", alt: "DELTA-T 1" },
+        { src: "../projects/DeltaT/img/Still_07.webp", depth: "../projects/DeltaT/img/Still_07_depth.webp", alt: "DELTA-T 1" },
         { src: "../projects/DeltaT/img/Still_05.webp", alt: "DELTA-T 2" },
         { src: "../projects/DeltaT/img/Still_04.webp", alt: "DELTA-T 3" },
       ],
@@ -88,7 +88,7 @@ const PROJECTS_DATA = {
       title:    "Well That Happened",
       desc:     "Short Ad · CrossDot Studio",
       images: [
-        { src: "../projects/WellThatHappened/img/Still_1.webp", alt: "Well That Happened 1" },
+        { src: "../projects/WellThatHappened/img/Still_1.webp", depth: "../projects/WellThatHappened/img/Still_1_depth.webp", alt: "Well That Happened 1" },
         { src: "../projects/WellThatHappened/img/Still_2.webp", alt: "Well That Happened 2" },
         { src: "../projects/WellThatHappened/img/Still_0.webp", alt: "Well That Happened 3" },
       ],
@@ -100,9 +100,9 @@ const PROJECTS_DATA = {
       title:    "Decades Ahead",
       desc:     "Short Ad · CrossDot Studio",
       images: [
-        { src: "../projects/DecadesAhead/img/Still_1.webp", alt: "DPMB 1" },
-        { src: "../projects/DecadesAhead/img/Still_0.webp", alt: "DPMB 2" },
-        { src: "../projects/DecadesAhead/img/Still_2.webp", alt: "DPMB 3" },
+        { src: "../projects/DecadesAhead/img/Still_2.webp", depth: "../projects/DecadesAhead/img/Still_2_depth.webp", alt: "Decades Ahead 1" },
+        { src: "../projects/DecadesAhead/img/Still_1.webp", alt: "Decades Ahead 2" },
+        { src: "../projects/DecadesAhead/img/Still_0.webp", alt: "Decades Ahead 3" },
       ],
     },
     {
@@ -112,7 +112,7 @@ const PROJECTS_DATA = {
       title:    "Zoom",
       desc:     "Music Video · CrossDot Studio",
       images: [
-        { src: "../projects/Zoom/img/Still_1.webp", alt: "Zoom 1" },
+        { src: "../projects/Zoom/img/Still_1.webp", depth: "../projects/Zoom/img/Still_1_depth.webp", alt: "Zoom 1" },
         { src: "../projects/Zoom/img/Still_0.webp", alt: "Zoom 2" },
         { src: "../projects/Zoom/img/Still_2.webp", alt: "Zoom 3" },
       ],
@@ -124,7 +124,7 @@ const PROJECTS_DATA = {
       title:    "Painting Greys",
       desc:     "Multimedia Music Video · Bachelor Project 3",
       images: [
-        { src: "../projects/PaintingGreys/img/Thumbnail.webp",        alt: "Painting Greys" },
+        { src: "../projects/PaintingGreys/img/Thumbnail.webp", depth: "../projects/PaintingGreys/img/Thumbnail_depth.webp",        alt: "Painting Greys" },
         { src: "../projects/PaintingGreys/img/PaintingGreys_11.webp",  alt: "PG 2" },
         { src: "../projects/PaintingGreys/img/PaintingGreys_4.webp",   alt: "PG 3" },
         { src: "../projects/PaintingGreys/img/PaintingGreys_8.webp",   alt: "PG 4" },
@@ -137,7 +137,7 @@ const PROJECTS_DATA = {
       title:    "Tinnitus",
       desc:     "Music Video",
       images: [
-        { src: "../projects/Tinnitus/img/Still_16.webp", alt: "Tinnitus" },
+        { src: "../projects/Tinnitus/img/Still_16.webp", depth: "../projects/Tinnitus/img/Still_16_depth.webp", depthFocus: 0.5, alt: "Tinnitus" },
         { src: "../projects/Tinnitus/img/Still_7.webp",  alt: "Tinnitus 2" },
         { src: "../projects/Tinnitus/img/Still_15.webp", alt: "Tinnitus 3" },
       ],
@@ -149,7 +149,7 @@ const PROJECTS_DATA = {
       title:    "The USB Paradox",
       desc:     "Advertisement",
       images: [
-        { src: "../projects/TheUSBParadox/img/thumbnail.webp", alt: "USB Paradox" },
+        { src: "../projects/TheUSBParadox/img/thumbnail.webp", depth: "../projects/TheUSBParadox/img/thumbnail_depth.webp", alt: "USB Paradox" },
         { src: "../projects/TheUSBParadox/img/USB_3.webp",     alt: "USB 2" },
         { src: "../projects/TheUSBParadox/img/USB_1.webp",     alt: "USB 3" },
         { src: "../projects/TheUSBParadox/img/USB_5.webp",     alt: "USB 4" },
@@ -162,7 +162,7 @@ const PROJECTS_DATA = {
       title:    "Without You",
       desc:     "Bachelor Project 2",
       images: [
-        { src: "../projects/WithoutYou/img/Still_4.webp", alt: "Without You" },
+        { src: "../projects/WithoutYou/img/Still_4.webp", depth: "../projects/WithoutYou/img/Still_4_depth.webp", alt: "Without You" },
         { src: "../projects/WithoutYou/img/Still_1.webp", alt: "WY 2" },
         { src: "../projects/WithoutYou/img/Still_0.webp", alt: "WY 3" },
       ],
@@ -174,7 +174,7 @@ const PROJECTS_DATA = {
       title:    "No Need To Rush Life",
       desc:     "Bachelor Project 1",
       images: [
-        { src: "../projects/NoNeedToRushLife/img/NO_NEED_TO_RUSH_LIFE_1.webp", alt: "NNTRL" },
+        { src: "../projects/NoNeedToRushLife/img/NO_NEED_TO_RUSH_LIFE_1.webp", depth: "../projects/NoNeedToRushLife/img/NO_NEED_TO_RUSH_LIFE_1_depth.webp", alt: "NNTRL" },
         { src: "../projects/NoNeedToRushLife/img/NO_NEED_TO_RUSH_LIFE_3.webp", alt: "NNTRL 2" },
         { src: "../projects/NoNeedToRushLife/img/NO_NEED_TO_RUSH_LIFE_2.webp", alt: "NNTRL 3" },
       ],
@@ -186,7 +186,7 @@ const PROJECTS_DATA = {
       title:    "Deviant",
       desc:     "Music Video Snippet",
       images: [
-        { src: "../projects/Deviant/img/Thumbnail.webp", alt: "Deviant" },
+        { src: "../projects/Deviant/img/Thumbnail.webp", depth: "../projects/Deviant/img/Thumbnail_depth.webp", alt: "Deviant" },
         { src: "../projects/Deviant/img/Deviant_4.webp", alt: "Deviant 2" },
         { src: "../projects/Deviant/img/Deviant_1.webp", alt: "Deviant 3" },
       ],
@@ -198,7 +198,7 @@ const PROJECTS_DATA = {
       title:    "Wheel of Suffering",
       desc:     "Pwnisher Challenge · Top 100",
       images: [
-        { src: "../projects/WheelofSuffering/img/Thumbnail.webp", alt: "Wheel of Suffering" },
+        { src: "../projects/WheelofSuffering/img/Thumbnail.webp", depth: "../projects/WheelofSuffering/img/Thumbnail_depth.webp", alt: "Wheel of Suffering" },
         { src: "../projects/WheelofSuffering/img/WOS_0.webp",     alt: "WOS 2" },
         { src: "../projects/WheelofSuffering/img/WOS_1.webp",     alt: "WOS 3" },
       ],
@@ -210,7 +210,7 @@ const PROJECTS_DATA = {
       title:    "Vestige",
       desc:     "Realtime Environment · UE5",
       images: [
-        { src: "../projects/Vestige/img/Thumbnail.webp",   alt: "Vestige" },
+        { src: "../projects/Vestige/img/Thumbnail.webp", depth: "../projects/Vestige/img/Thumbnail_depth.webp",   alt: "Vestige" },
         { src: "../projects/Vestige/img/Vestiege_03.webp", alt: "Vestige 2" },
         { src: "../projects/Vestige/img/Vestiege_01.webp", alt: "Vestige 3" },
       ],
@@ -222,7 +222,7 @@ const PROJECTS_DATA = {
       title:    "Neglect",
       desc:     "Data Visualisation · Houdini",
       images: [
-        { src: "../projects/Neglect/img/Thumbnail.webp",        alt: "Neglect" },
+        { src: "../projects/Neglect/img/Thumbnail.webp", depth: "../projects/Neglect/img/Thumbnail_depth.webp",        alt: "Neglect" },
         { src: "../projects/Neglect/img/Neglect_Germany.webp",  alt: "Neglect 2" },
         { src: "../projects/Neglect/img/Neglect_Overflow.webp", alt: "Neglect 3" },
       ],

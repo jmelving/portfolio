@@ -122,6 +122,20 @@
     }
     .image-stack img.active { opacity:1; z-index:2; }
     .project-container:hover .image-stack img.active { filter:grayscale(20%) brightness(.75); transform:scale(1.045); }
+    /* its own layer, so the leaving picture and the depth canvas can sit above the active one */
+    .image-stack { position:absolute; inset:0; z-index:1; }
+    /* hover slideshow: the picture that's leaving keeps pushing in while it fades — every change is a zoom forward */
+    .image-stack img.leaving { opacity:0; z-index:3; transform:scale(1.1); transition:opacity .45s ease, transform .45s cubic-bezier(.4,0,.6,1), filter .45s ease; }
+    .project-container:hover .image-stack img.leaving { filter:grayscale(20%) brightness(.75); }
+    /* the first picture, tilting through its depth map while hovered (js/depth-tilt.js) */
+    .depth-layer {
+      position:absolute; inset:0; width:100%; height:100%; z-index:3; pointer-events:none;
+      opacity:0; filter:grayscale(20%) brightness(.75); transform:scale(var(--fit, 1));
+      transition:opacity .45s ease, transform .45s cubic-bezier(.4,0,.6,1);
+    }
+    .depth-layer.on { opacity:1; }
+    .depth-layer.leaving { opacity:0; z-index:4; transform:scale(calc(var(--fit, 1) * 1.1)); }
+    @media (prefers-reduced-motion:reduce) { .image-stack img.leaving { transform:none; } }
     .img-overlay {
       position:absolute; inset:0; z-index:3; pointer-events:none;
       background:linear-gradient(180deg, rgba(12,12,12,0) 30%, rgba(12,12,12,.72) 100%);
@@ -287,6 +301,7 @@
         filter:grayscale(calc(1 - var(--col, 0))) brightness(calc(.62 + .38 * var(--col, 0)));
         transition:opacity .45s ease;
       }
+      .depth-layer { filter:grayscale(calc(1 - var(--col, 0))) brightness(calc(.62 + .38 * var(--col, 0))); }
     }
     /* tablets: phone layout, bigger type; two columns of projects */
     @media (min-width:600px) and (max-width:1024px), (min-width:600px) and (hover:none) and (pointer:coarse) {
@@ -364,6 +379,7 @@
 
   <script src="./projects.data.js"></script>
   <script src="../js/split-field.js"></script>
+  <script src="../js/depth-tilt.js"></script>
   <script>
   // phones, tablets and anything touch-only get the stacked layout, whatever its width
   window.PHONE_LAYOUT = window.PHONE_LAYOUT || (() => matchMedia('(max-width:1024px), (hover:none) and (pointer:coarse)').matches);
@@ -392,14 +408,32 @@
             <div class="work-description">${p.desc || ''}</div>
           </div>
         </div>`;
-      // flipbook: images step through while hovered
+      // flipbook: images step through while hovered, each change a short zoom forward.
+      // A first picture with a depth map tilts with the pointer for a moment before the show starts.
       const stack = [...a.querySelectorAll('.image-stack img')];
-      let k = 0, iv = null;
+      const first = p.images?.[0];
+      const depth = first?.depth ? DepthTilt.attach(a, first.src, first.depth, first.depthFocus) : null;
+      let k = 0, iv = null, wait = null;
+      const step = () => {
+        const out = stack[k];
+        out.classList.remove('active'); out.classList.add('leaving');
+        setTimeout(() => out.classList.remove('leaving'), 500);
+        if (k === 0) depth?.push();
+        k = (k + 1) % stack.length;
+        stack[k].classList.add('active');
+        if (k === 0) depth?.back();
+      };
       a.addEventListener('mouseenter', () => {
         if (stack.length < 2) return;
-        iv = setInterval(() => { stack[k].classList.remove('active'); k = (k + 1) % stack.length; stack[k].classList.add('active'); }, 800);
+        const run = () => { step(); iv = setInterval(step, 800); };
+        if (depth) wait = setTimeout(run, 2500); else iv = setInterval(step, 800);
       });
-      a.addEventListener('mouseleave', () => { clearInterval(iv); stack[k].classList.remove('active'); k = 0; stack[0]?.classList.add('active'); });
+      a.addEventListener('mouseleave', () => {
+        clearTimeout(wait); clearInterval(iv);
+        stack.forEach(im => im.classList.remove('active', 'leaving'));
+        k = 0; stack[0]?.classList.add('active');
+        depth?.back();                                  // (touch: the depth picture shows again)
+      });
       grid.appendChild(a);
     });
 
