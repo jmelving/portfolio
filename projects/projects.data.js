@@ -215,6 +215,18 @@ const PROJECTS_DATA = {
         { src: "../projects/Vestige/img/Vestiege_01.webp", alt: "Vestige 3" },
       ],
     },
+    {
+      href:     "../projects/Neglect/",
+      category: "misc",
+      pill:     "Data Viz",
+      title:    "Neglect",
+      desc:     "Data Visualisation · Houdini",
+      images: [
+        { src: "../projects/Neglect/img/Thumbnail.webp",        alt: "Neglect" },
+        { src: "../projects/Neglect/img/Neglect_Germany.webp",  alt: "Neglect 2" },
+        { src: "../projects/Neglect/img/Neglect_Overflow.webp", alt: "Neglect 3" },
+      ],
+    },
   ],
 
   /* ── Lab divider ── */

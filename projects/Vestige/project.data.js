@@ -200,8 +200,8 @@ window.PROJECT = {
     }
   },
   "next": {
-    "href": "../DontPushMyButtons/",
-    "title": "Don't Push My Buttons"
+    "href": "../Neglect/",
+    "title": "Neglect"
   },
   "back": "../"
 };
