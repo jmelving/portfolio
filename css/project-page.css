@@ -405,3 +405,79 @@ footer { display:flex; justify-content:space-between; padding:var(--pad); font-s
 .spotify-load b { font-weight:500; font-size:clamp(18px, 1.5vw, 26px); letter-spacing:-0.02em; opacity:.7; transition:opacity .3s; }
 .spotify-load:hover b { opacity:1; }
 .spotify-load small { font-size:12px; opacity:.4; }
+
+/* a data file shown as it came in (e.g. an API's JSON): read-only, scrolls inside its own box.
+   The fields the project reads are brighter; the entries it ends up using get a line on the left. */
+.data-file { display:flex; flex-direction:column; border-radius:12px; background:#121212; color:var(--paper, #eeebe5); overflow:hidden; }
+.df-head { display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 14px; padding:14px 18px; border-bottom:1px solid rgba(238,235,229,.08); font-size:12px; }
+.df-head b { font-weight:500; font-size:13px; overflow-wrap:anywhere; }
+.df-head span { opacity:.4; }
+.df-head a { margin-left:auto; color:inherit; opacity:.5; text-decoration:none; transition:opacity .3s; }
+.df-head a:hover { opacity:1; }
+.df-body {
+  margin:0; padding:12px 0; max-height:min(62vh, 560px); overflow:auto; overscroll-behavior:contain;
+  font:12px/1.6 ui-monospace, "SF Mono", Menlo, Consolas, monospace; tab-size:4;
+  color:rgba(238,235,229,.34); scrollbar-width:thin; scrollbar-color:rgba(238,235,229,.15) transparent;
+}
+.df-body:focus-visible { outline:1px solid rgba(238,235,229,.3); outline-offset:-1px; }
+.df-body .l { display:block; padding:0 18px; white-space:pre; }
+.df-body i { font-style:normal; }
+.df-body .k.f, .df-body .f { color:rgba(238,235,229,.9); }
+.df-body .u { background:rgba(238,235,229,.045); box-shadow:inset 2px 0 0 rgba(238,235,229,.55); }
+.df-body .u .n.f { color:#fff; font-weight:600; }
+.df-legend { display:flex; flex-wrap:wrap; gap:6px 20px; padding:12px 18px 14px; border-top:1px solid rgba(238,235,229,.08); font-size:12px; opacity:.55; }
+.df-legend span::before { content:""; display:inline-block; vertical-align:-1px; margin-right:8px; width:10px; height:10px; }
+.df-legend .lg-key::before { background:rgba(238,235,229,.9); border-radius:2px; width:6px; }
+.df-legend .lg-rec::before { background:rgba(238,235,229,.08); box-shadow:inset 2px 0 0 rgba(238,235,229,.55); }
+@media (min-width:1025px) and (hover:hover), (min-width:1025px) and (pointer:fine) {
+  section.split > .work > .data-file { flex:none; }
+}
+@media (max-width:1024px), (hover:none) and (pointer:coarse) {
+  .df-body { max-height:56svh; font-size:11px; overscroll-behavior:auto; }
+  .df-body .l { padding:0 14px; }
+}
+
+/* code shown as text, not as a screenshot: coloured like the editor it was written in */
+.code-block { margin:0; display:flex; flex-direction:column; border-radius:12px; overflow:hidden; color:#ccc; }
+.code-block .df-head { border-bottom-color:rgba(255,255,255,.06); color:var(--paper, #eeebe5); }
+.cb-body {
+  margin:0; padding:18px 0 20px; overflow-x:auto;
+  font:clamp(13px, .95vw, 15px)/1.65 ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
+  tab-size:4; scrollbar-width:thin; scrollbar-color:rgba(255,255,255,.15) transparent;
+}
+.cb-body:focus-visible { outline:1px solid rgba(238,235,229,.3); outline-offset:-1px; }
+/* long lines wrap, and their continuation sits a little further in */
+.cb-body .l { display:block; padding:0 22px 0 calc(22px + 4ch); text-indent:-4ch; white-space:pre-wrap; overflow-wrap:anywhere; }
+.cb-body i { font-style:normal; }
+.cb-body u { text-decoration-thickness:1px; text-underline-offset:3px; }
+/* VS Code, Dark Modern */
+.cb-vscode { background:#1f1f1f; }
+.cb-vscode .cb-body { color:#cccccc; }
+.cb-vscode .k { color:#c586c0; } .cb-vscode .b { color:#569cd6; }
+.cb-vscode .s { color:#ce9178; } .cb-vscode .c { color:#6a9955; }
+.cb-vscode .n { color:#b5cea8; } .cb-vscode .f { color:#dcdcaa; }
+.cb-vscode .t { color:#4ec9b0; } .cb-vscode .v { color:#9cdcfe; }
+.cb-vscode .p0 { color:#ffd700; } .cb-vscode .p1 { color:#da70d6; } .cb-vscode .p2 { color:#179fff; }
+/* Houdini's Python editor */
+.cb-houdini { background:#2b2b2b; }
+.cb-houdini .cb-body { color:#c8c8c8; }
+.cb-houdini .k { color:#e05ce0; } .cb-houdini .s { color:#62c862; }
+.cb-houdini .c { color:#e2e27a; } .cb-houdini .n, .cb-houdini .t, .cb-houdini .b { color:#4ec4d4; }
+@media (min-width:1025px) and (hover:hover), (min-width:1025px) and (pointer:fine) {
+  section.split > .work > .code-block { flex:none; }
+}
+@media (max-width:1024px), (hover:none) and (pointer:coarse) {
+  .cb-body { font-size:12.5px; }
+  .cb-body .l { padding:0 16px 0 calc(16px + 4ch); }
+}
+
+/* staticMedia pages (set in project.data.js): the pictures are part of the explanation, not artworks —
+   no hover zoom, no lightbox; the caption sits quietly under the picture */
+.static-media .media-card { cursor:default; }
+.static-media .media-card img, .static-media .media-card video { filter:none; transition:none; }
+.static-media .media-card:hover img, .static-media .media-card:hover video { filter:none; transform:none; }
+.static-media .media-card:hover::after { border-color:rgba(238,235,229,.04); }
+.static-media .mc-overlay { display:none; }
+.static-media .mc-info { position:static; transform:none; opacity:1; padding:10px 0 4px; background:var(--ink, #0c0c0c); transition:none; }
+.static-media .mc-title { font-size:13px; }
+.static-media .mc-sub { font-size:12px; opacity:.5; }

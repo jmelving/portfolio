@@ -131,10 +131,16 @@
     .depth-layer {
       position:absolute; inset:0; width:100%; height:100%; z-index:3; pointer-events:none;
       opacity:0; filter:grayscale(20%) brightness(.75); transform:scale(var(--fit, 1));
-      transition:opacity .45s ease, transform .45s cubic-bezier(.4,0,.6,1);
+      /* coming in: same timing as the hovered picture underneath, so the two stay one picture */
+      transition:opacity .25s ease, transform .6s cubic-bezier(.16,1,.3,1), filter .45s ease;
     }
     .depth-layer.on { opacity:1; }
-    .depth-layer.leaving { opacity:0; z-index:4; transform:scale(calc(var(--fit, 1) * 1.1)); }
+    .depth-layer.leaving { opacity:0; z-index:4; transform:scale(calc(var(--fit, 1) * 1.1)); transition:opacity .45s ease, transform .45s cubic-bezier(.4,0,.6,1); }
+    /* the pointer left: tilts back to rest (in JS) and settles with the picture underneath, then fades */
+    .depth-layer.out {
+      opacity:0; transform:scale(var(--rest, 1)); filter:grayscale(100%) brightness(.6);
+      transition:opacity .4s ease .2s, transform .6s cubic-bezier(.16,1,.3,1), filter .45s ease;
+    }
     @media (prefers-reduced-motion:reduce) { .image-stack img.leaving { transform:none; } }
     .img-overlay {
       position:absolute; inset:0; z-index:3; pointer-events:none;

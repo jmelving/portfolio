@@ -48,6 +48,34 @@ window.PHONE_LAYOUT = window.PHONE_LAYOUT || (() => matchMedia('(max-width:1024p
     return t.toLowerCase().startsWith(name.toLowerCase()) ? t.slice(name.length).replace(/^\s*[—–:-]\s*/, '') || t : t;
   };
 
+  // a small Python highlighter: enough to colour code the way VS Code (Dark Modern) or Houdini's editor shows it
+  const PY_KW = new Set('import from if elif else for in with as not and or return while def class try except pass break continue lambda is'.split(' '));
+  const PY_CONST = new Set(['True', 'False', 'None']);
+  const PY_TYPES = new Set(['float', 'int', 'str', 'list', 'dict', 'json', 'requests', 'hou']);
+  const highlight = (src, theme) => {
+    const code = String(src).replace(/^\n+|\s+$/g, '');
+    const re = /('''[\s\S]*?'''|"""[\s\S]*?"""|#[^\n]*|f?"(?:\\.|[^"\\\n])*"|f?'(?:\\.|[^'\\\n])*'|\b\d+(?:\.\d+)?\b|[A-Za-z_]\w*|[()[\]{}]|\n|[^\w\s'"#()[\]{}]+|[ \t]+)/g;
+    const url = t => t.replace(/https?:\/\/[^\s'")]+(?:\)[^\s'")]*)*/g, u => `<u>${u}</u>`);
+    let depth = 0, out = '', m;
+    while ((m = re.exec(code))) {
+      const t = m[0], rest = code.slice(re.lastIndex);
+      let cls = '';
+      if (t[0] === '#') cls = 'c';
+      else if (/^(f?["']|''')/.test(t) && t.length > 1) cls = 's';
+      else if (/^\d/.test(t)) cls = 'n';
+      else if (/^[A-Za-z_]/.test(t)) {
+        cls = PY_KW.has(t) ? 'k' : PY_CONST.has(t) ? 'b'
+            : theme === 'houdini' ? (t === 'float' || t === 'int' ? 't' : '')        // Houdini only colours a few built-ins
+            : PY_TYPES.has(t) ? 't' : /^\s*\(/.test(rest) ? 'f' : 'v';
+      } else if ('([{'.includes(t)) { cls = 'p' + (depth % 3); depth++; }
+      else if (')]}'.includes(t)) { depth = Math.max(0, depth - 1); cls = 'p' + (depth % 3); }
+      const h = esc(t);
+      // (a token over several lines is wrapped line by line, so the lines can be split below)
+      out += cls ? h.split('\n').map(x => `<i class="${cls}">${cls === 'c' || cls === 's' ? url(x) : x}</i>`).join('\n') : h;
+    }
+    return out.split('\n').map(l => `<span class="l">${l || ' '}</span>`).join('');
+  };
+
   const workBlock = (w, sec) => {
     if (w.media) {
       const n = w.media.length;
@@ -67,6 +95,17 @@ window.PHONE_LAYOUT = window.PHONE_LAYOUT || (() => matchMedia('(max-width:1024p
     // Spotify loads only on click (privacy: no connection to Spotify before the visitor asks for it)
     if (w.spotify) return `<div class="media spotify"><button type="button" class="spotify-load" data-src="${esc(w.spotify)}">
         <b>Play on Spotify</b><small>Loads the Spotify player. Spotify’s privacy policy applies.</small></button></div>`;
+    // code as text instead of a screenshot, coloured like the editor it was written in (theme: "vscode" or "houdini")
+    if (w.code) return `<figure class="code-block cb-${esc(w.code.theme || 'vscode')}">
+        <figcaption class="df-head"><b>${esc(w.code.title)}</b><span>${esc(w.code.sub || '')}</span></figcaption>
+        <pre class="cb-body" tabindex="0">${highlight(w.code.text, w.code.theme || 'vscode')}</pre>
+      </figure>`;
+    // a data file as it came in (JSON), filled in by renderData() below once it's loaded
+    if (w.data) return `<div class="data-file" data-src="${esc(w.data.src)}" data-fields="${esc((w.data.fields || []).join(','))}" data-used="${esc(JSON.stringify(w.data.used || []))}">
+        <div class="df-head"><b>${esc(w.data.src.split('/').pop())}</b><span>${esc(w.data.note || '')}</span><a href="${esc(w.data.src)}" target="_blank" rel="noopener">Raw file ↗</a></div>
+        <pre class="df-body" tabindex="0" aria-label="Contents of ${esc(w.data.src.split('/').pop())}"></pre>
+        ${w.data.legend ? `<div class="df-legend">${w.data.legend.map((l, i) => `<span class="${i ? 'lg-rec' : 'lg-key'}">${esc(l)}</span>`).join('')}</div>` : ''}
+      </div>`;
     if (w.learn) return `<div class="learn">${w.learn.map(b => `<div><h4><b>${esc(b.label)}</b>${esc(b.tag)}</h4><ul>${b.items.map(i => `<li>${esc(i)}</li>`).join('')}</ul></div>`).join('')}</div>`;
     return '';
   };
@@ -308,6 +347,40 @@ window.PHONE_LAYOUT = window.PHONE_LAYOUT || (() => matchMedia('(max-width:1024p
       b.replaceWith(f);
     }));
 
+    /* data files: pretty-printed line by line, so the fields that are read and the entries that are used can be marked */
+    document.querySelectorAll('.data-file').forEach(async box => {
+      const pre = box.querySelector('.df-body');
+      const fields = new Set(box.dataset.fields.split(',').filter(Boolean));
+      const used = JSON.parse(box.dataset.used || '[]');
+      let json;
+      try { json = await (await fetch(box.dataset.src)).json(); } catch { box.remove(); return; }
+      const lines = [];                                  // [html, used?]
+      const val = (v, f) => v === null ? `<i class="z">null</i>`
+        : typeof v === 'number' ? `<i class="n${f ? ' f' : ''}">${v}</i>`
+        : typeof v === 'string' ? `<i class="s${f ? ' f' : ''}">${esc(JSON.stringify(v))}</i>` : esc(String(v));
+      const isUsed = o => o && typeof o === 'object' && used.some(u => Object.entries(u).every(([k, x]) => o[k] === x));
+      const walk = (v, ind, lead, comma, mark) => {
+        const pad = '  '.repeat(ind);
+        if (v && typeof v === 'object') {
+          const arr = Array.isArray(v), ents = arr ? v.map(x => [null, x]) : Object.entries(v);
+          const m = mark || (!arr && isUsed(v));
+          lines.push([pad + lead + (arr ? '[' : '{'), m]);
+          ents.forEach(([k, x], i) => {
+            const key = k === null ? '' : `<i class="k${fields.has(k) ? ' f' : ''}">${esc(JSON.stringify(k))}</i>: `;
+            const c = i < ents.length - 1 ? ',' : '';
+            if (x && typeof x === 'object') walk(x, ind + 1, key, c, m);
+            else lines.push(['  '.repeat(ind + 1) + key + val(x, fields.has(k)) + c, m]);
+          });
+          lines.push([pad + (arr ? ']' : '}') + comma, m]);
+        } else lines.push([pad + lead + val(v) + comma, mark]);
+      };
+      walk(json, 0, '', '', false);
+      pre.innerHTML = lines.map(([h, m], i) => {
+        const a = m && !lines[i - 1]?.[1], z = m && !lines[i + 1]?.[1];
+        return `<span class="l${m ? ' u' : ''}${a ? ' ua' : ''}${z ? ' uz' : ''}">${h || ' '}</span>`;
+      }).join('');
+    });
+
     /* videos only play while on screen */
     const io = new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? e.target.play().catch(() => {}) : e.target.pause()), { threshold: 0.2 });
     document.querySelectorAll('video[data-autoplay]').forEach(v => io.observe(v));
@@ -519,7 +592,9 @@ window.PHONE_LAYOUT = window.PHONE_LAYOUT || (() => matchMedia('(max-width:1024p
       lb.classList.add('open');
     }
     function closeLb() { lb.classList.remove('open'); document.body.style.overflow = ''; setTimeout(() => lbMedia.innerHTML = '', 350); }
-    cards.forEach((c, i) => c.addEventListener('click', () => openLb(i)));
+    // staticMedia (a page that explains a process, not an artwork): pictures stay still, no lightbox
+    if (P.staticMedia) document.body.classList.add('static-media');
+    else cards.forEach((c, i) => c.addEventListener('click', () => openLb(i)));
     document.getElementById('lb-prev').addEventListener('click', () => openLb(cur - 1));
     document.getElementById('lb-next').addEventListener('click', () => openLb(cur + 1));
     document.getElementById('lb-close').addEventListener('click', closeLb);
