@@ -447,15 +447,6 @@ const PROJECTS_DATA = {
     },
     {
       type:  "video",
-      src:   "../img/lab/Neglect_JonaMelvinGrobe_FinalCreativeProject_API_DATAvisualiszation_Houdini_Small.mp4",
-      preview: "../img/lab/Neglect_JonaMelvinGrobe_FinalCreativeProject_API_DATAvisualiszation_Houdini_Small_prev.mp4",
-      poster:  "../img/lab/Neglect_JonaMelvinGrobe_FinalCreativeProject_API_DATAvisualiszation_Houdini_Small_poster.webp",
-      title: "Neglect",
-      sub:   "Houdini · Data Visualisation · Short Film",
-      desc:  "Tempered with the World Health Organization's API to create a data visualisation short film about drinking and driving related deaths.",
-    },
-    {
-      type:  "video",
       src:   "../img/lab/Just_some_ragdolltest_Houdiniv01.mp4",
       preview: "../img/lab/Just_some_ragdolltest_Houdiniv01_prev.mp4",
       poster:  "../img/lab/Just_some_ragdolltest_Houdiniv01_poster.webp",

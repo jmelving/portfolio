@@ -413,6 +413,7 @@
       const stack = [...a.querySelectorAll('.image-stack img')];
       const first = p.images?.[0];
       const depth = first?.depth ? DepthTilt.attach(a, first.src, first.depth, first.depthFocus) : null;
+      const TOUCH = !matchMedia('(hover:hover) and (pointer:fine)').matches;
       let k = 0, iv = null, wait = null;
       const step = () => {
         const out = stack[k];
@@ -426,7 +427,8 @@
       a.addEventListener('mouseenter', () => {
         if (stack.length < 2) return;
         const run = () => { step(); iv = setInterval(step, 800); };
-        if (depth) wait = setTimeout(run, 2500); else iv = setInterval(step, 800);
+        // touch: the depth picture first pans across on its own (≈3s), so it holds a little longer
+        if (depth) wait = setTimeout(run, TOUCH ? 3500 : 2500); else iv = setInterval(step, 800);
       });
       a.addEventListener('mouseleave', () => {
         clearTimeout(wait); clearInterval(iv);
