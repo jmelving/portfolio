@@ -409,7 +409,8 @@
           </div>
         </div>`;
       // flipbook: images step through while hovered, each change a short zoom forward.
-      // A first picture with a depth map tilts with the pointer for a moment before the show starts.
+      // A first picture with a depth map tilts with the pointer for a moment before the show starts;
+      // the show itself is only the plain pictures, the depth comes back once the card is left.
       const stack = [...a.querySelectorAll('.image-stack img')];
       const first = p.images?.[0];
       const depth = first?.depth ? DepthTilt.attach(a, first.src, first.depth, first.depthFocus) : null;
@@ -421,8 +422,7 @@
         setTimeout(() => out.classList.remove('leaving'), 500);
         if (k === 0) depth?.push();
         k = (k + 1) % stack.length;
-        stack[k].classList.add('active');
-        if (k === 0) depth?.back();
+        stack[k].classList.add('active');                // (the depth effect stays on the preview: once the show runs, it's plain pictures)
       };
       a.addEventListener('mouseenter', () => {
         if (stack.length < 2) return;
