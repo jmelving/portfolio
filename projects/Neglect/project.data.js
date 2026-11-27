@@ -15,11 +15,9 @@ window.PROJECT = {
   staticMedia: true,          // the pictures explain the process: no hover zoom, no lightbox
   hero: {
     slides: [
-      "./img/Neglect_USA.webp",
-      "./img/Neglect_Germany.webp",
-      "./img/Neglect_Austria.webp",
-      "./img/Neglect_Glass.webp",
-      "./img/Neglect_Overflow.webp"
+      { src: "./img/Neglect_USA_clean.webp", focus: [0.25, 0.5] },   // the number painted out: just the glass
+      { src: "./img/Neglect_Germany.webp",  focus: [0.33, 0.5]  },   // same: the glass on the city
+      { src: "./img/Neglect_Overflow.webp", focus: [0.18, 0.3]   }
     ],
     video: { id: "./vid/Neglect_Film.mp4", platform: "file" }
   },

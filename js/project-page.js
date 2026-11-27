@@ -24,7 +24,10 @@ window.PHONE_LAYOUT = window.PHONE_LAYOUT || (() => matchMedia('(max-width:1024p
   // a section is a list of rows (words + the work they talk about); old data with words/work counts as one row
   const rowsOf = s => s.rows || [{ words: s.words || [], work: s.work || [] }];
   const allMedia = (P.sections || []).flatMap(s => rowsOf(s).flatMap(r => r.work.flatMap(w => w.media || [])));
-  const stills = (P.hero && P.hero.slides && P.hero.slides.length ? P.hero.slides : allMedia.filter(m => m.type !== 'video').map(m => m.src)).slice(0, 8);
+  // a slide is a path, or { src, focus: [x, y] } (0…1) — the point the narrow hero frame centres on
+  const slideList = (P.hero && P.hero.slides && P.hero.slides.length ? P.hero.slides : allMedia.filter(m => m.type !== 'video').map(m => m.src)).slice(0, 8);
+  const focusOf = new Map(slideList.filter(s => s && s.focus).map(s => [s.src, s.focus]));
+  const stills = slideList.map(s => (typeof s === 'string' ? s : s.src));
   const poster = stills[0] || '';
   const film = P.hero && P.hero.video && P.hero.video.id ? P.hero.video : null;
 
@@ -229,11 +232,18 @@ window.PHONE_LAYOUT = window.PHONE_LAYOUT || (() => matchMedia('(max-width:1024p
         const nw = im.naturalWidth || im.videoWidth, nh = im.naturalHeight || im.videoHeight;   // a hero.loop clip is framed like the stills
         const off = PHONE_LAYOUT() || !nw;
         im.classList.toggle('framed', !off);
+        const [fx, fy] = focusOf.get(im.getAttribute('src')) || [0.5, 0.5];
         const s = off ? 0 : Math.max(b.width / nw, b.height / nh);
         const w = nw * s, h = nh * s;
-        Object.assign(im.style, off ? { inset: '', width: '', height: '', objectFit: '' } : {
-          inset: 'auto', left: b.left + (b.width - w) / 2 + 'px', top: b.top + (b.height - h) / 2 + 'px',
-          width: w + 'px', height: h + 'px', objectFit: 'fill'
+        // slide the picture so its focus sits mid-frame, but never so far that an edge shows
+        // the frame starts 8vw left of the seam, under the paper — the picture may slide into that strip
+        const dx = Math.min(off ? 0 : innerWidth * 0.08, Math.max(b.width - w, b.width / 2 - fx * w));
+        const dy = Math.min(0, Math.max(b.height - h, b.height / 2 - fy * h));
+        Object.assign(im.style, off ? { inset: '', width: '', height: '', objectFit: '',
+          objectPosition: `${fx * 100}% ${fy * 100}%`, transformOrigin: `${fx * 100}% ${fy * 100}%` } : {
+          inset: 'auto', left: b.left + dx + 'px', top: b.top + dy + 'px',
+          width: w + 'px', height: h + 'px', objectFit: 'fill', objectPosition: '',
+          transformOrigin: `${b.width / 2 - dx}px ${b.height / 2 - dy}px`    // the zoom pushes into the focus
         });
       }));
     }
