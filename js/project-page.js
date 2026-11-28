@@ -233,17 +233,21 @@ window.PHONE_LAYOUT = window.PHONE_LAYOUT || (() => matchMedia('(max-width:1024p
         const off = PHONE_LAYOUT() || !nw;
         im.classList.toggle('framed', !off);
         const [fx, fy] = focusOf.get(im.getAttribute('src')) || [0.5, 0.5];
-        const s = off ? 0 : Math.max(b.width / nw, b.height / nh);
+        // centred on the ink you actually see (from the seam to the right edge), not on the whole frame —
+        // and always wide enough to cover the strip under the wave's swing, the slit and the lava
+        const seamX = innerWidth * 0.42;                               // where the seam rests (SplitField split)
+        const cx = (seamX + innerWidth) / 2;                           // the middle of the visible ink
+        const coverL = Math.min(b.left, seamX - innerWidth * 0.08);    // left of this must stay covered
+        const s = off ? 0 : Math.max(b.width / nw, b.height / nh, (innerWidth - coverL) / nw);
         const w = nw * s, h = nh * s;
-        // slide the picture so its focus sits mid-frame, but never so far that an edge shows
-        // the frame starts 8vw left of the seam, under the paper — the picture may slide into that strip
-        const dx = Math.min(off ? 0 : innerWidth * 0.08, Math.max(b.width - w, b.width / 2 - fx * w));
+        // slide the picture so its focus sits mid-ink, but never so far that an edge shows
+        const left = Math.min(coverL, Math.max(innerWidth - w, cx - fx * w));
         const dy = Math.min(0, Math.max(b.height - h, b.height / 2 - fy * h));
         Object.assign(im.style, off ? { inset: '', width: '', height: '', objectFit: '',
           objectPosition: `${fx * 100}% ${fy * 100}%`, transformOrigin: `${fx * 100}% ${fy * 100}%` } : {
-          inset: 'auto', left: b.left + dx + 'px', top: b.top + dy + 'px',
+          inset: 'auto', left: left + 'px', top: b.top + dy + 'px',
           width: w + 'px', height: h + 'px', objectFit: 'fill', objectPosition: '',
-          transformOrigin: `${b.width / 2 - dx}px ${b.height / 2 - dy}px`    // the zoom pushes into the focus
+          transformOrigin: `${cx - left}px ${b.height / 2 - dy}px`      // the zoom pushes into the focus
         });
       }));
     }
@@ -259,6 +263,21 @@ window.PHONE_LAYOUT = window.PHONE_LAYOUT || (() => matchMedia('(max-width:1024p
 
     /* the film bubble rides the seam, halfway down the hero; wobbly outline like the front page */
     let hover = false, rad = 0, personOn = false, personFade = 1;
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // about to watch: open the connections to the player's servers early, so it loads faster
+    let warm = false;
+    const warmUp = () => {
+      if (warm || !film) return; warm = true;
+      const hosts = film.platform === 'vimeo' ? ['https://player.vimeo.com', 'https://i.vimeocdn.com', 'https://f.vimeocdn.com']
+        : film.platform === 'file' ? [] : ['https://www.youtube-nocookie.com', 'https://i.ytimg.com', 'https://www.google.com'];
+      hosts.forEach(h => document.head.appendChild(Object.assign(document.createElement('link'), { rel: 'preconnect', href: h, crossOrigin: '' })));
+    };
+    const portal = { t: 0, now: 0, from: 0, t0: 0, hand: 0 };   // 0 = the slit, 1 = the whole screen is the film's window
+    const PORTAL_OPEN = 1500, PORTAL_CLOSE = 900;
+    const drop = { x: 0, y: 0, vx: 0, vy: 0, init: false, last: 0 };     // the slit's drop, springing after its place
+    const cursor = { x: -1e4, y: -1e4, k: 0, on: false };
+    addEventListener('pointermove', e => { if (e.pointerType === 'mouse') { cursor.x = e.clientX; cursor.y = e.clientY; cursor.on = true; } });
+    document.addEventListener('pointerleave', () => { cursor.on = false; });
 
     /* collaborators: hovering a name shows their card (or photo, once data-photo is set) on the ink side */
     const person = document.getElementById('person');
@@ -279,7 +298,7 @@ window.PHONE_LAYOUT = window.PHONE_LAYOUT || (() => matchMedia('(max-width:1024p
         document.body.classList.remove('person-on');
       });
     });
-    watch.addEventListener('pointerenter', () => { hover = true;  document.body.classList.add('watch-hover'); });
+    watch.addEventListener('pointerenter', () => { hover = true;  document.body.classList.add('watch-hover'); warmUp(); if (film && !still) modal.prepare(film.id, film.platform); });
     watch.addEventListener('pointerleave', () => { hover = false; document.body.classList.remove('watch-hover'); });
     // phones: the hero's paper is as tall as its words (+ half the Watch bubble), so nothing ends up under the bubble
     let heroSplit = 0.52;
@@ -316,40 +335,91 @@ window.PHONE_LAYOUT = window.PHONE_LAYOUT || (() => matchMedia('(max-width:1024p
         : Math.min(1, Math.max(0, (hr.bottom - innerHeight * 0.4) / (innerHeight * 0.5)));
       field.setInkAlpha(1 - open);
       personFade += ((personOn ? 0 : 1) - personFade) * 0.15;      // bubble steps aside while a collaborator shows
-      // never fade the bubble's content (it straddles paper and ink, so half-transparent shows a seam);
+      // the portal: timed, eased in and out (slow start, a fast push, a soft landing)
+      {
+        const k = Math.min(1, Math.max(0, ((now || performance.now()) - portal.t0) / (portal.t ? PORTAL_OPEN : PORTAL_CLOSE)));   // (the first call has no timestamp)
+        const e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+        portal.now = still ? portal.t : portal.from + (portal.t - portal.from) * e;
+      }
+      const pe = portal.now;
+      // never fade the slit's content (it straddles paper and ink, so half-transparent shows a seam);
       // it shrinks away instead
-      const vis = open * personFade;
+      const vis = Math.max(open * personFade, pe);
       win.style.opacity = vis > 0.02 ? '1' : '0';
-      watch.style.opacity = (open * personFade).toFixed(3);
-      watch.style.pointerEvents = open > 0.3 && !personOn ? '' : 'none';
+      watch.style.opacity = (open * personFade * (1 - Math.min(1, pe * 4))).toFixed(3);
+      watch.style.pointerEvents = open > 0.3 && !personOn && !portal.t ? '' : 'none';
       const x = mobile ? mx : field.edgeAt(y);
       const base = mobile ? Math.min(64, innerWidth * 0.16) : Math.max(80, Math.min(innerWidth * 0.085, innerHeight * 0.17, 140));
-      rad += ((hover ? base * 1.1 : base) * Math.min(1, open * personFade) - rad) * 0.12;
+      rad += ((hover ? base * 1.1 : base) * Math.min(1, Math.max(open * personFade, pe)) - rad) * 0.12;
       watch.style.translate = `${x}px ${y}px`;
       watch.style.setProperty('--d', Math.round(rad * 2) + 'px');
-      let d = '';
-      for (let i = 0; i < 72; i++) {
-        const a = i / 72 * Math.PI * 2;
-        const rr = rad * (1 + 0.035 * Math.sin(3 * a + t * 0.9) + 0.025 * Math.sin(5 * a - t * 1.3));
-        d += (i ? 'L' : 'M') + (x + Math.cos(a) * rr).toFixed(1) + ' ' + (y + Math.sin(a) * rr).toFixed(1);
+      // a slit in the seam, like the front page's showreel. The field cuts it (see SplitField setSlit), from the
+      // very edge it draws — so it sits exactly on the line, whatever the wave, the cursor or the lava do.
+      // The film's window lies under the field: the slit shows it bright, the ink around it is veiled.
+      // Opening as a portal, the slit widens past the screen's corners and the picture pushes in.
+      const far = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y)) * 1.25;
+      const sr = rad * 0.62, sk = rad * 0.9, sth = rad * 0.2;       // drop, neck, smear (in slit radii, as on the front page)
+      // the drop itself isn't glued to the line: like on the front page it drifts a little, leans toward the cursor
+      // and springs after its place on the seam; the neck keeps it joined to the line
+      {
+        const dt = Math.min(0.05, ((now || performance.now()) - (drop.last || now || 0)) / 1000) || 0.016; drop.last = now || performance.now();
+        let tx = x + (mobile ? Math.sin(t * 0.31) * 6 : 0), tyy = y + (mobile ? 0 : Math.sin(t * 0.31) * 6);
+        const dx = cursor.x - tx, dy = cursor.y - tyy, dd = Math.hypot(dx, dy);
+        const lean = cursor.k * Math.max(0, 1 - dd / (rad * 3 || 1)) * 0.15;
+        tx += dx * lean; tyy += dy * lean;
+        cursor.k += ((cursor.on ? 1 : 0) - cursor.k) * 0.06;
+        if (!drop.init || still) { drop.x = tx; drop.y = tyy; drop.init = true; }
+        drop.vx += ((tx - drop.x) * 22 - drop.vx * 6) * dt;
+        drop.vy += ((tyy - drop.y) * 22 - drop.vy * 6) * dt;
+        drop.x += drop.vx * dt; drop.y += drop.vy * dt;
+        watch.style.translate = `${drop.x.toFixed(1)}px ${drop.y.toFixed(1)}px`;   // "Watch" rides with the drop
       }
-      // lens: scale the window around the bubble centre, clip stays the bubble's size
-      const Z = 1.14;
-      const ly = y - ty;
-      const lx = x - win.offsetLeft;                                  // the window may start at the seam (desktop)
-      win.style.transformOrigin = `${lx}px ${ly}px`;
+      field.setSlit({
+        x: drop.x, y: drop.y, snap: pe,                              // opening as a portal it settles onto the line
+        on: rad > 0.5 || pe > 0.001 ? 1 : 0,
+        r: sr + (far - sr) * Math.min(1, pe * 1.1),
+        k: sk * (1 + pe * 2), th: sth * (1 - pe),
+        wob: 1 + Math.sin(Math.PI * pe) * 3,                        // the rim boils while it tears open
+      });
+      // hover / portal: the whole picture comes up, like before; otherwise the ink keeps it held back around the slit
+      field.setVeil(vis > 0.02 && !hover && !portal.t ? 0.32 * Math.min(1, open * 1.2) : 0);
+      const Z = 1 + 0.4 * pe;                                       // the portal only ever pushes in, never back out
+      win.style.transformOrigin = `${x - win.offsetLeft}px ${y - ty}px`;
       win.style.transform = `translateY(${ty.toFixed(1)}px) scale(${Z})`;
-      d = '';
-      for (let i = 0; i < 72; i++) {
-        const a = i / 72 * Math.PI * 2;
-        const rr = rad / Z * (1 + 0.035 * Math.sin(3 * a + t * 0.9) + 0.025 * Math.sin(5 * a - t * 1.3));
-        d += (i ? 'L' : 'M') + (lx + Math.cos(a) * rr).toFixed(1) + ' ' + (ly + Math.sin(a) * rr).toFixed(1);
-      }
-      win.style.clipPath = `path('${d}Z')`;
+      win.style.clipPath = 'none';
       requestAnimationFrame(ride);
     })();
     const play = (id, platform) => (platform === 'vimeo' ? modal.vimeo(id) : platform === 'file' ? modal.file(id) : modal.youtube(id));
-    if (film) watch.addEventListener('click', () => play(film.id, film.platform));
+    // Watch: the slit opens like a portal over the whole screen, then the film takes over;
+    // closing the film draws it back into the slit
+    const modalEl = modal.element || document.querySelector('.split-modal');
+    if (film) watch.addEventListener('click', () => {
+      if (still) return play(film.id, film.platform);
+      show.stop(); winShow.stop();                                   // the slideshow holds on the picture you chose
+      portal.from = portal.now; portal.t = 1; portal.t0 = performance.now();
+      document.body.classList.add('portal', 'watch-hover');
+      modal.prepare(film.id, film.platform);                          // (usually already loaded, on the way to the button)
+      modal.start();                                                  // it starts, silently and out of sight…
+      clearTimeout(portal.hand);
+      portal.hand = setTimeout(() => { if (portal.t) modal.reveal(); }, PORTAL_OPEN - 150);   // …and comes in, from the top, as the portal lands
+    });
+    let modalWasOpen = false;
+    if (modalEl) new MutationObserver(() => {
+      const isOpen = modalEl.classList.contains('open'), closed = modalWasOpen && !isOpen;
+      modalWasOpen = isOpen;
+      if (!closed || !portal.t) return;                             // only the film actually closing draws the portal back
+      clearTimeout(portal.hand);
+      portal.from = portal.now; portal.t = 0; portal.t0 = performance.now() + 300;   // (the film steps back first)
+      // on the way back: the film fades over the picture, the portal closes into the slit, and only as it
+      // settles do the words come back; the slideshow then carries on from the same picture
+      clearTimeout(portal.back); clearTimeout(portal.words);
+      portal.words = setTimeout(() => { if (!portal.t) document.body.classList.remove('portal'); }, 300 + PORTAL_CLOSE * 0.6);   // (after the film's step back, as the slit settles)
+      portal.back = setTimeout(() => {
+        if (portal.t || hero.getBoundingClientRect().bottom <= 0) return;
+        show.resume(STILLS); winShow.resume(STILLS);
+      }, 300 + PORTAL_CLOSE + 200);
+      if (!hover) document.body.classList.remove('watch-hover');
+    }).observe(modalEl, { attributes: true, attributeFilter: ['class'] });
     document.querySelectorAll('[data-video-id]').forEach(b => b.addEventListener('click', () => play(b.dataset.videoId, b.dataset.platform)));
     document.querySelectorAll('.spotify-load').forEach(b => b.addEventListener('click', () => {
       const f = Object.assign(document.createElement('iframe'), { src: b.dataset.src, allow: 'encrypted-media', title: 'Spotify player' });

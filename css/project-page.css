@@ -62,10 +62,13 @@ html { scrollbar-gutter:stable; }   /* the scrollbar's room stays reserved: open
 #watch[hidden] { display:none; }   /* no film for this project */
 /* the bubble's content: the same stills in full colour, clipped to a wobbly circle (set by JS) */
 #watch-window {
-  position:fixed; inset:0; z-index:6;          /* above the paper overlay and the text, so nothing cuts through the bubble */
-  clip-path:circle(0 at 50% 50%);
+  position:fixed; inset:0; z-index:0;          /* under the field: the field cuts the slit, so it always sits exactly on the line */
   transition:opacity .5s;
 }
+#watch-window img { filter:none !important; }  /* the field's veil holds it back around the slit; inside the slit it's bright */
+/* while the portal opens, the words step back so only the picture is left */
+.split, .next, #person { transition:opacity .45s ease; }
+body.portal .split, body.portal .next, body.portal #person { opacity:0; pointer-events:none; }
 #watch-window.gone { opacity:0; }
 /* hero stills: held back (darker, a little desaturated, vignetted) until you go for "Watch" */
 /* same treatment inside the bubble, so the whole image side reads as one continuous picture */

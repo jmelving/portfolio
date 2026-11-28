@@ -93,6 +93,17 @@ body.nogl { background:linear-gradient(90deg, var(--paper) var(--seam), var(--in
 .split-modal > div { width:min(88vw, 156vh); aspect-ratio:16/9; }
 .split-modal iframe, .split-modal video { width:100%; height:100%; border:0; display:block; background:#000; }
 .split-modal [hidden] { display:none; }
+/* soft: the player comes in over what's already there (a portal's picture), blurred behind it — no cut to black */
+.split-modal.soft { background:rgba(12,12,12,.55); -webkit-backdrop-filter:blur(22px) brightness(.7); backdrop-filter:blur(22px) brightness(.7); transition:opacity .9s ease; }
+.split-modal.soft > div { transform:scale(1.04); opacity:0; transition:transform 1.1s cubic-bezier(.16,1,.3,1), opacity .8s ease; box-shadow:0 30px 120px rgba(0,0,0,.55); }
+.split-modal.soft:not(.open) > div { transform:scale(.97); transition:transform .7s ease, opacity .45s ease; }   /* closing: the film steps back first */
+.split-modal.soft:not(.open) { transition:opacity .7s ease .2s; }                                               /* …then the blur lets go of the picture */
+.split-modal.soft.open.playing > div { transform:none; opacity:1; }
+/* until the film actually runs: a quiet word, not a black box with a spinner */
+.split-modal.soft::after { content:'Loading'; position:absolute; left:50%; top:50%; transform:translate(-50%, -50%);
+  font-size:14px; letter-spacing:.02em; color:var(--paper); opacity:0; transition:opacity .4s ease; pointer-events:none; }
+.split-modal.soft.open:not(.playing)::after { opacity:.6; transition-delay:.5s; }
+@media (prefers-reduced-motion:reduce) { .split-modal.soft > div { transform:none; transition:opacity .3s; } }
 .split-modal button {
   position:absolute; top:var(--pad); right:var(--pad);
   font:inherit; font-size:15px; color:var(--paper);

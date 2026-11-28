@@ -46,6 +46,12 @@
     uniform float uInkAlpha;
     uniform float uMode;      // 0 = seam only, 1 = seam + lava, 2 = paper-only overlay, 3 = ink-only overlay
     uniform float uHoriz;     // 1 = horizontal seam (paper above, ink below), used on mobile
+    uniform vec4  uSlit;      // a slit cut into the seam (the film's window): x, y (viewport px), radius, neck width
+    uniform vec3  uSlit2;     // its smear along the line, rim wobble, on (0/1)
+    uniform float uSlitSnap;  // 0 = the drop sits where it's put (springing, leaning), 1 = pinned onto the line
+    uniform float uVeil;      // the ink side's dimming outside the slit (what shows through stays bright inside it)
+
+    float smin(float a, float b, float k){ if (k <= 0.0) return min(a, b); float h = clamp(0.5 + 0.5 * (b - a) / k, 0.0, 1.0); return mix(b, a, h) - k * h * (1.0 - h); }
 
     float wave(float s){
       return 0.62 * sin(s * 5.2  + uTime * 0.32)
@@ -81,6 +87,28 @@
       #endif
       float a = smoothstep(0.5 - w, 0.5 + w, I);
 
+      // the slit: a drop sitting on the line, joined to it by a smooth neck and a thin smear along it —
+      // computed from the same edge as the seam, so it can never drift off the line
+      float hole = 0.0;
+      if (uSlit2.z > 0.5) {
+        float bAlong = mix(uSlit.y, uSlit.x, uHoriz);
+        float bEdge = uCenter + uAmp * wave(bAlong / len) + uPull * exp(-pow((bAlong - uPullAt) / uReach, 2.0));
+        vec2 bc = mix(uSlit.xy, mix(vec2(bEdge, bAlong), vec2(bAlong, bEdge), uHoriz), uSlitSnap);
+        vec2 q = p - bc;
+        float an = atan(q.y, q.x);
+        float rr = uSlit.z * (1.0 + uSlit2.y * (0.035 * sin(3.0 * an + uTime * 0.9) + 0.025 * sin(5.0 * an - uTime * 1.3)));
+        float db = length(q) - rr;
+        float near = exp(-dot(q, q) / pow(max(uSlit.w, 1.0) * 3.2 + uSlit.z * 1.6, 2.0));
+        float ds = abs(cross - edge) - uSlit2.x * near;
+        float d = uSlit.w > 0.5 ? smin(db, ds + (1.0 - near) * 400.0, uSlit.w) : db;
+        #ifdef GL_OES_standard_derivatives
+          float aw = max(fwidth(d), 0.5);
+        #else
+          float aw = 1.0;
+        #endif
+        hole = smoothstep(aw, -aw, d);
+      }
+
       if (uMode > 2.5) {
         // overlay, drawn above the page content: only the ink.
         // For pages whose work sits on the paper: black pulled across flows over it.
@@ -91,12 +119,12 @@
         // overlay, drawn above the page content: only the paper.
         // Black is the background here, so black lava doesn't paint over anything —
         // it opens holes in the paper and shows whatever lies underneath.
-        float paper = 1.0 - a;
+        float paper = (1.0 - a) * (1.0 - hole);
         gl_FragColor = vec4(uPaper * paper, paper);
         return;
       }
-      float ink = a * uInkAlpha;
-      gl_FragColor = vec4(uPaper * (1.0 - a) + uInk * ink, (1.0 - a) + ink);
+      float ink = a * max(uInkAlpha, uVeil);
+      gl_FragColor = vec4(uPaper * (1.0 - a) + uInk * ink, (1.0 - a) + ink) * (1.0 - hole);
     }`;
 
   function init(opts = {}) {
@@ -168,7 +196,7 @@
         gl.enableVertexAttribArray(0);
         gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
         const U = {};
-        ['uView','uDpr','uTime','uCenter','uAmp','uSoft','uPull','uPullAt','uReach','uBlobs','uPaper','uInk','uInkAlpha','uMode','uHoriz']
+        ['uView','uDpr','uTime','uCenter','uAmp','uSoft','uPull','uPullAt','uReach','uBlobs','uPaper','uInk','uInkAlpha','uMode','uHoriz','uSlit','uSlit2','uVeil','uSlitSnap']
           .forEach(n => U[n] = gl.getUniformLocation(prog, n));
         const hex = h => [1,3,5].map(i => parseInt(h.substr(i, 2), 16) / 255);
         gl.uniform3fv(U.uPaper, hex(PAPER));
@@ -240,6 +268,7 @@
     let prev = t0;
     const ease = x => 1 - Math.pow(1 - x, 4);
     const state = { edgeAt: y => center };
+    const slit = { x: 0, y: 0, r: 0, k: 0, th: 0, wob: 1, on: 0, snap: 0 }; let veil = 0;   // set by the page (setSlit / setVeil)
 
     function frame(now) {
       const dt = Math.min(0.05, (now - prev) / 1000); prev = now;
@@ -342,6 +371,10 @@
           gl.uniform1f(U.uReach, reach);
           gl.uniform4fv(U.uBlobs, blobData);
           gl.uniform1f(U.uInkAlpha, inkA);
+          gl.uniform4f(U.uSlit, slit.x, slit.y, slit.r, slit.k);
+          gl.uniform3f(U.uSlit2, slit.th, slit.wob, slit.on && slit.r + slit.th > 0.5 ? 1 : 0);
+          gl.uniform1f(U.uVeil, veil);
+          gl.uniform1f(U.uSlitSnap, slit.snap);
           gl.drawArrays(gl.TRIANGLES, 0, 3);
         });
       }
@@ -357,6 +390,8 @@
       edgeAt: a => state.edgeAt(a),   // vertical seam: x at height a · horizontal seam: y at x = a
       horizontal: () => horiz,
       setSplitMobile: v => { o.splitMobile = v; },     // move the mobile seam (eases there)
+      setSlit: s => { Object.assign(slit, s); },        // cut a slit into the seam (x, y viewport px; snap 1 pins it onto the line)
+      setVeil: v => { veil = v; },
     };
   }
 
@@ -398,6 +433,13 @@
 
     let gen = 0;                                        // bumped on every change, so a late 'canplay' can't override it
     const api = {
+      resume(list) {                                    // carry on from the picture that's showing (no jump back to the first)
+        gen++; clearInterval(timer);
+        if (root.classList.contains('is-video')) return;
+        const cur = slots[slot].getAttribute('src');
+        let i = Math.max(0, list.indexOf(cur));
+        if (list.length > 1) timer = setInterval(() => show(list[++i % list.length]), slideMs);
+      },
       images(list) {
         gen++;
         root.classList.remove('is-video');
@@ -435,16 +477,93 @@
     m.innerHTML = '<button type="button">Close</button><div><iframe allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe><video controls playsinline hidden></video></div>';
     document.body.appendChild(m);
     const frame = m.querySelector('iframe'), film = m.querySelector('video');
-    const close = () => { m.classList.remove('open'); film.pause(); setTimeout(() => { frame.src = ''; film.removeAttribute('src'); film.load(); }, 400); };
+    // closing: the film freezes on the frame it's at and fades out like that; the player is only emptied once it's
+    // out of sight (emptying it earlier made it jump to a blank/first frame while still fading)
+    const close = () => {
+      if (!m.classList.contains('open')) return;
+      try { frame.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'pauseVideo', args: [] }), '*'); frame.contentWindow.postMessage({ method: 'pause' }, '*'); } catch {}
+      m.classList.remove('open'); film.pause();
+      setTimeout(() => {
+        if (m.classList.contains('open') || armed) return;              // (opened again meanwhile: leave the new film alone)
+        frame.src = ''; film.removeAttribute('src'); film.load();
+      }, 1300);
+    };
     m.querySelector('button').addEventListener('click', close);
     m.addEventListener('click', e => { if (e.target === m) close(); });
-    addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+    addEventListener('keydown', e => { if (e.key === 'Escape' && m.classList.contains('open')) { close(); disarm(); } });
     const embed = src => { film.hidden = true; frame.hidden = false; frame.src = src; m.classList.add('open'); };
+    // prepare → start → reveal: the player loads early (prepare: on the way to the button), starts playing silently
+    // and out of sight the moment it's chosen (start), and when it's shown (reveal) it goes back to the beginning
+    // and gets its sound — already running, so there is no black frame and no wait
+    let armed = null, armedId = null, kicks = [], isPlaying = false, revealed = false;
+    const send = (yt, vimeo) => {
+      if (!armed || armed === 'file') return;
+      try { frame.contentWindow.postMessage(armed === 'vimeo' ? vimeo : JSON.stringify({ event: 'command', func: yt[0], args: yt[1] || [] }), '*'); } catch {}
+    };
+    const play = () => send(['playVideo'], { method: 'play' });
+    const hush = () => send(['mute'], { method: 'setVolume', value: 0 });
+    const sound = () => send(['unMute'], { method: 'setVolume', value: 1 });
+    const repeat = (fn, ms) => { kicks.forEach(clearTimeout); kicks = ms.map(t => setTimeout(fn, t)); };
+    frame.addEventListener('load', () => {
+      // ask the player to tell us how it's doing (YouTube / Vimeo talk back through postMessage)
+      try { frame.contentWindow.postMessage(armed === 'vimeo' ? { method: 'addEventListener', value: 'play' } : JSON.stringify({ event: 'listening', id: 1 }), '*'); } catch {}
+    });
+    let showAnyway = 0;
+    const show = () => { clearTimeout(showAnyway); m.classList.add('playing'); };
+    const playing = () => {
+      if (isPlaying) return;
+      isPlaying = true; kicks.forEach(clearTimeout); kicks = [];
+      if (revealed) show();
+    };
+    addEventListener('message', e => {
+      if (!armed || e.source !== frame.contentWindow) return;
+      let d = e.data; if (typeof d === 'string') { try { d = JSON.parse(d); } catch { return; } }
+      if (!d) return;
+      if (d.event === 'infoDelivery' && d.info && d.info.playerState === 1) playing();   // YouTube: playing
+      if (d.event === 'onStateChange' && d.info === 1) playing();
+      if (d.event === 'play' || d.method === 'play') playing();                          // Vimeo
+    });
+    film.addEventListener('playing', () => { if (armed === 'file') playing(); });
+    const disarm = () => {
+      clearTimeout(showAnyway); kicks.forEach(clearTimeout); kicks = [];
+      armed = armedId = null; isPlaying = revealed = false;
+      setTimeout(() => { if (!m.classList.contains('open')) m.classList.remove('soft', 'playing'); }, 1100);   // (soft stays through the fade-out)
+    };
+    m.querySelector('button').addEventListener('click', disarm);
+    m.addEventListener('click', e => { if (e.target === m) disarm(); });
     return {
       youtube(id) { embed(`https://www.youtube-nocookie.com/embed/${id}?autoplay=1`); },
       vimeo(id)   { embed(`https://player.vimeo.com/video/${id}?autoplay=1&color=ffffff&title=0&byline=0&portrait=0`); },
       file(src)   { frame.hidden = true; film.hidden = false; film.src = src; m.classList.add('open'); film.play().catch(() => {}); },   // a video hosted on this site
-      close,
+      prepare(id, platform) {                      // load it, paused (does nothing if it's already loaded)
+        platform = platform || 'youtube';
+        if (armedId === id && armed) return;
+        disarm();
+        armedId = id;
+        if (platform === 'file') { frame.hidden = true; film.hidden = false; film.src = id; film.preload = 'auto'; armed = 'file'; return; }
+        film.hidden = true; frame.hidden = false; armed = platform === 'vimeo' ? 'vimeo' : 'youtube';
+        frame.src = armed === 'vimeo'
+          ? `https://player.vimeo.com/video/${id}?autoplay=0&api=1&muted=1&color=ffffff&title=0&byline=0&portrait=0`
+          : `https://www.youtube-nocookie.com/embed/${id}?autoplay=0&mute=1&enablejsapi=1&playsinline=1&rel=0&origin=${encodeURIComponent(location.origin)}`;
+      },
+      start() {                                    // chosen: play silently, out of sight, so it's running by the time it shows
+        if (armed === 'file') { film.muted = true; film.play().catch(() => {}); return; }
+        hush(); play();
+        repeat(() => { hush(); play(); }, [250, 600, 1000, 1500, 2200, 3000]);
+      },
+      reveal() {                                   // soft: over what's already on screen, not out of black
+        revealed = true;
+        m.classList.add('soft', 'open');
+        const fromTheTop = () => {
+          if (armed === 'file') { film.currentTime = 0; film.muted = false; film.play().catch(() => {}); return; }
+          send(['seekTo', [0, true]], { method: 'setCurrentTime', value: 0 }); sound(); play();
+        };
+        if (isPlaying) { fromTheTop(); setTimeout(show, 160); }      // already running: back to the start, sound on, show it
+        else repeat(() => { sound(); play(); }, [0, 300, 700, 1200, 1800, 2600]);   // still loading: it shows once it plays
+        showAnyway = setTimeout(show, 4500);       // (no word from the player: show it anyway, with its own play button)
+      },
+      close: () => { disarm(); close(); },
+      element: m,
     };
   }
 
