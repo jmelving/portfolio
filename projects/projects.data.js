@@ -227,6 +227,18 @@ const PROJECTS_DATA = {
         { src: "../projects/Neglect/img/Neglect_Overflow.webp", alt: "Neglect 3" },
       ],
     },
+    {
+      href:     "../projects/Storm/",
+      category: "short",
+      pill:     "Short",
+      title:    "STORM",
+      desc:     "Short · Personal Project",
+      images: [
+        { src: "../projects/Storm/img/Still_0.webp", depth: "../projects/Storm/img/Still_0_depth.webp", alt: "STORM" },
+        { src: "../projects/Storm/img/Still_1.webp", alt: "STORM 2" },
+        { src: "../projects/Storm/img/Still_2.webp", alt: "STORM 3" },
+      ],
+    },
   ],
 
   /* ── Lab divider ── */
