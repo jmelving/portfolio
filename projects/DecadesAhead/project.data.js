@@ -208,7 +208,7 @@ window.PROJECT = {
       "./img/Still_2.webp"
     ],
     "video": {
-      "id": "sCC0zAI1EqU",
+      "id": "iPZbGjM56nI",
       "platform": "youtube"
     }
   },
